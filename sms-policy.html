@@ -14,8 +14,8 @@
     header{
       background:#071f47;
       color:white;
-      padding:20px;
       text-align:center;
+      padding:20px;
     }
 
     .container{
@@ -29,18 +29,17 @@
       box-shadow:0 2px 10px rgba(0,0,0,0.1);
     }
 
-    button{
-      background:#071f47;
-      color:white;
-      border:none;
-      padding:12px 18px;
-      border-radius:6px;
-      cursor:pointer;
+    input{
       margin-top:10px;
     }
 
-    input{
+    button{
       margin-top:10px;
+      padding:10px;
+      background:#071f47;
+      color:white;
+      border:none;
+      cursor:pointer;
     }
 
     ul{
@@ -63,30 +62,24 @@
 
 <header>
   <h1>1.1 SMS Policy</h1>
-  <p>IOSA Based SMS Platform</p>
 </header>
 
 <div class="container">
 
   <div class="card">
 
-    <h2>SMS Policy Documents</h2>
+    <h3>SMS Policy Documents</h3>
 
-    <!-- Upload file -->
     <input type="file" id="fileInput">
 
-    <br>
-
-    <button onclick="uploadFile()">
-      Upload Document
-    </button>
+    <button onclick="uploadFile()">Upload Document</button>
 
     <ul id="fileList">
       <li>No documents uploaded yet.</li>
     </ul>
 
-    <!-- BACK BUTTON FIXED -->
-    <a href="index.html" class="back">
+    <!-- 🔥 FIX REAL DEL BOTÓN -->
+    <a class="back" href="/aviation-sms/index.html">
       Back to Home
     </a>
 
@@ -94,19 +87,18 @@
 
 </div>
 
-<!-- FIREBASE -->
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
-  authDomain: "aviation-sms.firebaseapp.com",
-  projectId: "aviation-sms",
-  storageBucket: "aviation-sms.appspot.com",
-  messagingSenderId: "147000937860",
-  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+  apiKey: "TU_API",
+  authDomain: "TU_AUTH",
+  projectId: "TU_PROJECT",
+  storageBucket: "TU_BUCKET",
+  messagingSenderId: "TU_ID",
+  appId: "TU_APP"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -117,34 +109,20 @@ window.uploadFile = async function(){
   const file = document.getElementById("fileInput").files[0];
 
   if(!file){
-    alert("Select a file first");
+    alert("Select a file");
     return;
   }
 
-  try {
+  const fileRef = ref(storage, "sms-policy/" + file.name);
 
-    const fileRef = ref(storage, "sms-policy/" + file.name);
+  await uploadBytes(fileRef, file);
 
-    await uploadBytes(fileRef, file);
+  const url = await getDownloadURL(fileRef);
 
-    const url = await getDownloadURL(fileRef);
+  document.getElementById("fileList").innerHTML =
+    `<li><a href="${url}" target="_blank">${file.name}</a></li>`;
 
-    const li = document.createElement("li");
-    li.innerHTML = `<a href="${url}" target="_blank">${file.name}</a>`;
-
-    const list = document.getElementById("fileList");
-
-    // remove placeholder text
-    list.innerHTML = "";
-
-    list.appendChild(li);
-
-    alert("Upload successful");
-
-  } catch(error){
-    console.log(error);
-    alert("Upload failed");
-  }
+  alert("Uploaded successfully");
 
 };
 
