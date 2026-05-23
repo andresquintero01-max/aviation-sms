@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Manual - SMS</title>
+<title>Policies and Documentation</title>
 
 <style>
 body{
@@ -33,16 +33,23 @@ header{
 
 h2{
   color:#071f47;
+  margin-bottom:20px;
 }
 
-a.button{
-  display:inline-block;
-  margin-top:15px;
-  padding:12px 18px;
+button{
   background:#071f47;
   color:white;
-  text-decoration:none;
+  padding:12px 18px;
+  border:none;
   border-radius:6px;
+  cursor:pointer;
+  margin:10px 5px;
+  display:block;
+  width:260px;
+}
+
+button:hover{
+  opacity:0.9;
 }
 
 .back{
@@ -61,22 +68,29 @@ a.button{
 <body>
 
 <header>
-  <h1>SMS Manual</h1>
+  <h1>1. Policies and Documentation</h1>
 </header>
 
 <div class="container">
 
   <div class="card">
 
-    <h2>Manual Document</h2>
+    <!-- BOTÓN MANUAL -->
+    <button onclick="openManual()">
+      Manual
+    </button>
 
-    <!-- 🔥 DRIVE ATTACHMENT -->
-    <a class="button" href="https://drive.google.com/file/d/1SVK_QhjkPSF4QDup9p0iXFGTDIeHQZBQ/view?usp=sharing" target="_blank">
-      Open Manual Document
-    </a>
+    <!-- BOTÓN POLICY -->
+    <button onclick="openPolicy()">
+      SMS Policy Documents
+    </button>
 
-    <br>
+    <!-- BOTÓN OBJECTIVES -->
+    <button onclick="openObjectives()">
+      SMS Objectives Documents
+    </button>
 
+    <!-- BACK -->
     <a class="back" href="index.html">
       Back to Home
     </a>
@@ -84,6 +98,25 @@ a.button{
   </div>
 
 </div>
+
+<script>
+
+// 🚀 MANUAL (YA CORREGIDO)
+function openManual(){
+  window.location.href = "manual.html";
+}
+
+// 📄 POLICY
+function openPolicy(){
+  window.location.href = "sms-policy.html";
+}
+
+// 🎯 OBJECTIVES
+function openObjectives(){
+  window.location.href = "sms-objectives.html";
+}
+
+</script>
 
 </body>
 </html>
