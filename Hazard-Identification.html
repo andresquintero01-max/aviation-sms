@@ -48,6 +48,11 @@ button{
 button:hover{
   background:#0b2a66;
 }
+
+/* BOTON LINK */
+a.btn{
+  text-decoration:none;
+}
 </style>
 
 </head>
@@ -70,19 +75,21 @@ button:hover{
   <!-- SUBTITULO 2 -->
   <div class="subtitle">Base de datos de SMS</div>
 
+  <!-- BOTON BASE DE DATOS -->
   <button onclick="openDatabase()">Abrir Base de Datos</button>
 
 </div>
 
 <script>
 function openReport(){
-  alert("Aquí conectaremos el Reporte SMS en el siguiente paso 👍");
+  window.location.href = "Reporte-de-SMS.html";
 }
 
 function openDatabase(){
-  alert("Aquí conectaremos la Base de Datos SMS en el siguiente paso 👍");
+  window.location.href = "SMS Database.html";
 }
 </script>
 
 </body>
 </html>
+
