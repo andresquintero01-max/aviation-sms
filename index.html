@@ -7,6 +7,7 @@
 <title>Aviation SMS</title>
 
 <style>
+
 body{
     margin:0;
     font-family:Arial, Helvetica, sans-serif;
@@ -43,7 +44,6 @@ header p{
 
 .card h2{
     color:#0b1f3a;
-    margin-top:0;
 }
 
 .module-grid{
@@ -62,15 +62,13 @@ header p{
 
 .module-card h3{
     margin-top:0;
-    font-size:20px;
 }
 
 .module-card p{
-    font-size:14px;
     color:#dce6f5;
 }
 
-.dropdown-btn{
+.button{
     width:100%;
     margin-top:15px;
     background:white;
@@ -82,14 +80,27 @@ header p{
     cursor:pointer;
 }
 
-.dropdown-content{
-    display:none;
-    margin-top:15px;
-    background:#132f55;
+.sub-button{
+    width:100%;
+    background:#0b1f3a;
+    color:white;
+    border:none;
     padding:15px;
     border-radius:10px;
-    font-size:14px;
-    line-height:1.8;
+    margin-top:15px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.back-button{
+    margin-top:30px;
+    background:#d62828;
+    color:white;
+    border:none;
+    padding:14px 25px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
 }
 
 footer{
@@ -101,10 +112,13 @@ footer{
 }
 
 @media(max-width:900px){
-    .module-grid{
-        grid-template-columns:1fr;
-    }
+
+.module-grid{
+    grid-template-columns:1fr;
 }
+
+}
+
 </style>
 </head>
 
@@ -115,62 +129,102 @@ footer{
 <p>IOSA Based SMS Platform</p>
 </header>
 
-<div class="container" id="mainContent">
+<!-- HOME PAGE -->
+
+<div class="container" id="homePage">
 
 <div class="card">
+
 <h2>SMS Main Functions</h2>
 
 <div class="module-grid">
 
 <div class="module-card">
 <h3>1. Policies & Documentation</h3>
-<p>Manage SMS policies, manuals, procedures, and controlled documents.</p>
-<button class="dropdown-btn" onclick="toggleBox('box1')">Open Details</button>
-<div class="dropdown-content" id="box1">
-• SMS Manual<br>
-• Safety Policy<br>
-• Procedures<br>
-• Controlled Documents
-</div>
+
+<p>
+Manage SMS policies, manuals, procedures, and controlled documents.
+</p>
+
+<button class="button" onclick="openPolicies()">
+Open Details
+</button>
+
 </div>
 
 <div class="module-card">
 <h3>2. Hazard Identification</h3>
-<p>Report hazards, unsafe conditions, events, and operational concerns.</p>
-<button class="dropdown-btn" onclick="toggleBox('box2')">Open Details</button>
-<div class="dropdown-content" id="box2">
-• Hazard Reports<br>
-• Occurrence Reports<br>
-• Risk Assessment<br>
-• Initial Classification
-</div>
+
+<p>
+Report hazards, unsafe conditions, events, and operational concerns.
+</p>
+
+<button class="button">
+Open Details
+</button>
+
 </div>
 
 <div class="module-card">
 <h3>3. Safety Assurance</h3>
-<p>Track audits, findings, corrective actions, investigations, and SPIs.</p>
-<button class="dropdown-btn" onclick="toggleBox('box3')">Open Details</button>
-<div class="dropdown-content" id="box3">
-• Audits<br>
-• Findings<br>
-• Corrective Actions<br>
-• Safety Performance Indicators
-</div>
+
+<p>
+Track audits, findings, corrective actions, investigations, and SPIs.
+</p>
+
+<button class="button">
+Open Details
+</button>
+
 </div>
 
 <div class="module-card">
 <h3>4. Safety Promotion & Culture</h3>
-<p>Support training, safety meetings, bulletins, and safety communication.</p>
-<button class="dropdown-btn" onclick="toggleBox('box4')">Open Details</button>
-<div class="dropdown-content" id="box4">
-• Training<br>
-• Safety Bulletins<br>
-• Safety Meetings<br>
-• Safety Culture
-</div>
+
+<p>
+Support training, safety meetings, bulletins, and safety communication.
+</p>
+
+<button class="button">
+Open Details
+</button>
+
 </div>
 
 </div>
+
+</div>
+
+</div>
+
+<!-- POLICIES PAGE -->
+
+<div class="container" id="policiesPage" style="display:none;">
+
+<div class="card">
+
+<h2>Policies & Documentation</h2>
+
+<button class="sub-button">
+1.1 SMS Policy
+</button>
+
+<button class="sub-button">
+1.2 Non-Punitive Policy
+</button>
+
+<button class="sub-button">
+1.3 Safety Objectives
+</button>
+
+<button class="sub-button">
+1.4 SPI & KPI
+</button>
+
+<button class="back-button" onclick="goHome()">
+Back to Home
+</button>
+
 </div>
 
 </div>
@@ -180,14 +234,23 @@ Aviation SMS Software © 2026
 </footer>
 
 <script>
-function toggleBox(id){
-    const box = document.getElementById(id);
-    if(box.style.display === "block"){
-        box.style.display = "none";
-    }else{
-        box.style.display = "block";
-    }
+
+function openPolicies(){
+
+document.getElementById("homePage").style.display = "none";
+
+document.getElementById("policiesPage").style.display = "block";
+
 }
+
+function goHome(){
+
+document.getElementById("policiesPage").style.display = "none";
+
+document.getElementById("homePage").style.display = "block";
+
+}
+
 </script>
 
 </body>
