@@ -84,7 +84,12 @@ get(child(ref(db), "smsReports")).then((snapshot) => {
       div.className = "record";
 
       div.innerHTML = `
-        <b>ID:</b> ${item.reportId} <br>
+        <b>ID:</b> 
+        <a href="Report-Detail.html?id=${item.reportId}">
+          ${item.reportId}
+        </a>
+        <br>
+
         <b>What Happened:</b> ${item.whatHappened} <br>
         <b>Date:</b> ${item.date} <br>
         <b>Solution:</b> ${item.solution}
