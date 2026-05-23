@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Aviation SMS</title>
+
   <style>
     body{
       font-family:Arial;
@@ -60,23 +61,37 @@
       text-decoration:none;
       border-radius:8px;
     }
+
+    .back{
+      display:inline-block;
+      margin-top:20px;
+      background:red;
+      color:white;
+      padding:10px 15px;
+      text-decoration:none;
+      border-radius:6px;
+    }
   </style>
 </head>
 
 <body>
 
 <header>
-  <h1>Aviation Safety Management System</h1>
+  <h1>Aviation SMS</h1>
 </header>
 
 <div class="container">
 
   <!-- LOGIN -->
   <div class="card" id="loginBox">
+
     <h3>Login</h3>
+
     <input id="email" placeholder="Email">
     <input id="password" type="password" placeholder="Password">
+
     <button onclick="login()">Login</button>
+
   </div>
 
   <!-- MENU -->
@@ -88,7 +103,7 @@
       1. Policies & Documentation
     </a>
 
-    <a class="btn" href="#">
+    <a class="btn" href="hazard.html">
       2. Hazard Identification
     </a>
 
@@ -105,17 +120,23 @@
 </div>
 
 <script>
+
 function login(){
+
   const email = document.getElementById("email").value;
   const pass = document.getElementById("password").value;
 
   if(email && pass){
+
     document.getElementById("loginBox").style.display = "none";
     document.getElementById("menu").style.display = "block";
+
   } else {
     alert("Fill all fields");
   }
+
 }
+
 </script>
 
 </body>
