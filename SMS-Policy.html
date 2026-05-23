@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Manual de SMS</title>
+<title>SMS Policy</title>
 
 <style>
 body{
@@ -19,27 +19,29 @@ body{
   text-align:center;
 }
 
-.title-row{
-  display:flex;
-  align-items:center;
-  gap:20px;
-  justify-content:center;
-}
-
+/* TITULO PRINCIPAL */
 h1{
-  font-size:50px;
+  font-size:60px;
   color:#071f47;
-  margin:0;
+  margin-bottom:20px;
 }
 
+/* TEXTO MANUAL */
+.manual{
+  font-size:22px;
+  color:#333;
+  margin-bottom:10px;
+}
+
+/* BOTON */
 button{
   background:#071f47;
   color:white;
   border:none;
-  padding:12px 18px;
+  padding:10px 15px;
   border-radius:8px;
   cursor:pointer;
-  font-size:16px;
+  font-size:14px;
 }
 
 button:hover{
@@ -53,23 +55,22 @@ button:hover{
 
 <div class="container">
 
-  <div class="title-row">
+  <!-- TITULO PRINCIPAL -->
+  <h1>SMS Policy</h1>
 
-    <!-- TITULO -->
-    <h1>Manual de SMS</h1>
+  <!-- MANUAL -->
+  <div class="manual">Manual</div>
 
-    <!-- BOTÓN -->
-    <button onclick="attachDocument()">
-      Adjuntar documento
-    </button>
-
-  </div>
+  <!-- BOTON -->
+  <button onclick="attachFile()">
+    Adjuntar archivo
+  </button>
 
 </div>
 
 <script>
-function attachDocument(){
-  alert("Aquí conectaremos el documento de Google Drive en el siguiente paso 👍");
+function attachFile(){
+  alert("Aquí conectaremos el documento de Drive en el siguiente paso 👍");
 }
 </script>
 
