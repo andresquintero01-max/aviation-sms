@@ -48,18 +48,6 @@ button{
 button:hover{
   background:#0b2a66;
 }
-
-/* BOTON ROJO REGRESAR */
-.back{
-  margin-top:20px;
-  background:red;
-  color:white;
-  border:none;
-  padding:10px 15px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:14px;
-}
 </style>
 
 </head>
@@ -73,15 +61,16 @@ button:hover{
 
   <!-- SUBTITULO 1 -->
   <div class="subtitle">Reporte de SMS</div>
-  <button onclick="openReport()">Abrir Reporte</button>
+
+  <!-- BOTON QUE ABRE NUEVA PAGINA -->
+  <a class="btn" href="Reporte-de-SMS.html">
+    <button>Abrir Reporte</button>
+  </a>
 
   <!-- SUBTITULO 2 -->
   <div class="subtitle">Base de datos de SMS</div>
-  <button onclick="openDatabase()">Abrir Base de Datos</button>
 
-  <!-- BOTON REGRESAR -->
-  <br><br>
-  <button class="back" onclick="goHome()">Regresar</button>
+  <button onclick="openDatabase()">Abrir Base de Datos</button>
 
 </div>
 
@@ -92,10 +81,6 @@ function openReport(){
 
 function openDatabase(){
   alert("Aquí conectaremos la Base de Datos SMS en el siguiente paso 👍");
-}
-
-function goHome(){
-  window.location.href = "index.html";
 }
 </script>
 
