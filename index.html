@@ -2,14 +2,12 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Aviation SMS</title>
 
 <style>
-
 body{
     margin:0;
     font-family:Arial, Helvetica, sans-serif;
@@ -25,12 +23,12 @@ header{
 
 header h1{
     margin:0;
-    font-size:50px;
+    font-size:46px;
 }
 
 header p{
     margin-top:10px;
-    font-size:20px;
+    font-size:18px;
 }
 
 .container{
@@ -51,10 +49,6 @@ header p{
 
 ul{
     line-height:2;
-}
-
-.login-box{
-    margin-top:20px;
 }
 
 input{
@@ -83,48 +77,36 @@ button:hover{
     font-weight:bold;
 }
 
+.module-box{
+    background:#0b1f3a;
+    color:white;
+    padding:22px;
+    margin-bottom:18px;
+    border-radius:12px;
+    font-size:22px;
+    font-weight:bold;
+}
+
 footer{
     text-align:center;
     padding:20px;
     background:#0b1f3a;
     color:white;
 }
-
-#dashboard{
-    display:none;
-}
-
-.sms-box{
-    background:#0b1f3a;
-    color:white;
-    padding:20px;
-    margin-bottom:20px;
-    border-radius:10px;
-    font-size:20px;
-}
-
 </style>
-
 </head>
 
 <body>
 
 <header>
-
 <h1>Aviation Safety Management System</h1>
-
 <p>IOSA Based SMS Platform</p>
-
 </header>
 
-<div class="container">
-
-<div id="login-section">
+<div class="container" id="mainContent">
 
 <div class="card">
-
 <h2>IOSA Modules</h2>
-
 <ul>
 <li>Organization and Management System (ORG)</li>
 <li>Flight Operations (FLT)</li>
@@ -135,13 +117,10 @@ footer{
 <li>Cargo Operations (CGO)</li>
 <li>Security Management (SEC)</li>
 </ul>
-
 </div>
 
 <div class="card">
-
 <h2>SMS Functions</h2>
-
 <ul>
 <li>Hazard Identification</li>
 <li>Risk Assessment</li>
@@ -151,65 +130,25 @@ footer{
 <li>Audit Findings Tracking</li>
 <li>Safety Performance Indicators (SPI)</li>
 </ul>
-
 </div>
 
 <div class="card">
-
 <h2>User Login</h2>
 
-<div class="login-box">
-
 <input type="email" id="email" placeholder="Email">
-
 <br>
-
 <input type="password" id="password" placeholder="Password">
-
 <br><br>
 
 <button onclick="login()">Login</button>
 
 <p id="message"></p>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="dashboard">
-
-<div class="card">
-
-<h2>SMS Main Functions</h2>
-
-<div class="sms-box">
-1. Policies & Documentation
-</div>
-
-<div class="sms-box">
-2. Hazard Identification
-</div>
-
-<div class="sms-box">
-3. Safety Assurance
-</div>
-
-<div class="sms-box">
-4. Safety Promotion & Culture
-</div>
-
-</div>
-
 </div>
 
 </div>
 
 <footer>
-
 Aviation SMS Software © 2026
-
 </footer>
 
 <script type="module">
@@ -238,26 +177,30 @@ const auth = getAuth(app);
 window.login = function(){
 
     const email = document.getElementById("email").value;
-
     const password = document.getElementById("password").value;
 
     signInWithEmailAndPassword(auth,email,password)
 
     .then(() => {
 
-        document.getElementById("message").innerHTML =
-        "Login successful";
+        document.getElementById("mainContent").innerHTML = `
 
-        document.getElementById("login-section").style.display = "none";
+        <div class="card">
+            <h2>SMS Main Functions</h2>
 
-        document.getElementById("dashboard").style.display = "block";
+            <div class="module-box">1. Policies & Documentation</div>
+            <div class="module-box">2. Hazard Identification</div>
+            <div class="module-box">3. Safety Assurance</div>
+            <div class="module-box">4. Safety Promotion & Culture</div>
+        </div>
+
+        `;
 
     })
 
     .catch((error) => {
 
-        document.getElementById("message").innerHTML =
-        error.message;
+        document.getElementById("message").innerHTML = error.message;
 
     });
 
