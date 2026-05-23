@@ -4,6 +4,52 @@
 <meta charset="UTF-8">
 <title>SMS Report</title>
 
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+// 🔥 TU CONFIG REAL
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+// INIT
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// 🚀 FUNCIÓN ENVIAR REPORTE
+window.sendReport = function () {
+
+  const what = document.getElementById("what").value;
+  const date = document.getElementById("date").value;
+  const solution = document.getElementById("solution").value;
+
+  get(child(ref(db), "smsReports")).then((snapshot) => {
+
+    let count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+    let id = count + 1;
+
+    push(ref(db, "smsReports"), {
+      reportId: id,
+      whatHappened: what,
+      date: date,
+      solution: solution
+    });
+
+    alert("SMS Report sent successfully ✔ ID: " + id);
+
+  });
+
+};
+</script>
+
 <style>
 body{
   margin:0;
@@ -26,14 +72,12 @@ body{
 h1{
   text-align:center;
   color:#071f47;
-  margin-bottom:20px;
 }
 
 label{
   font-weight:bold;
   display:block;
   margin-top:10px;
-  color:#333;
 }
 
 input, textarea{
@@ -42,7 +86,6 @@ input, textarea{
   margin-top:5px;
   border:1px solid #ccc;
   border-radius:6px;
-  font-family:Arial;
 }
 
 button{
@@ -54,7 +97,6 @@ button{
   border:none;
   border-radius:6px;
   cursor:pointer;
-  font-size:14px;
 }
 
 button:hover{
@@ -65,8 +107,8 @@ button:hover{
   display:block;
   text-align:center;
   margin-top:15px;
-  color:white;
   background:red;
+  color:white;
   padding:10px;
   text-decoration:none;
   border-radius:6px;
@@ -83,29 +125,23 @@ button:hover{
 
   <!-- WHAT HAPPENED -->
   <label>What happened?</label>
-  <textarea placeholder="Describe the event..."></textarea>
+  <textarea id="what" placeholder="Describe the event..."></textarea>
 
   <!-- DATE -->
   <label>Date</label>
-  <input type="date">
+  <input type="date" id="date">
 
   <!-- HOW TO SOLVE -->
   <label>How can it be solved?</label>
-  <textarea placeholder="Suggested corrective action..."></textarea>
+  <textarea id="solution" placeholder="Suggested corrective action..."></textarea>
 
-  <!-- SUBMIT BUTTON -->
+  <!-- SUBMIT -->
   <button onclick="sendReport()">Send Report</button>
 
   <!-- BACK -->
   <a class="back" href="index.html">Back to Home</a>
 
 </div>
-
-<script>
-function sendReport(){
-  alert("SMS Report submitted successfully 👍 (Next step: connect to database)");
-}
-</script>
 
 </body>
 </html>
