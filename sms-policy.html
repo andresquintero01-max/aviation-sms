@@ -31,9 +31,8 @@ header{
   margin:auto;
 }
 
-h2{
-  color:#071f47;
-  margin-bottom:20px;
+h1{
+  margin:0;
 }
 
 button{
@@ -43,7 +42,7 @@ button{
   border:none;
   border-radius:6px;
   cursor:pointer;
-  margin:10px 5px;
+  margin:10px 0;
   display:block;
   width:260px;
 }
@@ -75,16 +74,17 @@ button:hover{
 
   <div class="card">
 
-    <!-- BOTONES -->
-
+    <!-- BOTÓN MANUAL -->
     <button onclick="openManual()">
       Manual
     </button>
 
+    <!-- BOTÓN POLICY -->
     <button onclick="openPolicy()">
       SMS Policy Documents
     </button>
 
+    <!-- BOTÓN OBJECTIVES -->
     <button onclick="openObjectives()">
       SMS Objectives Documents
     </button>
@@ -100,9 +100,9 @@ button:hover{
 
 <script>
 
-// 📘 MANUAL
+// 🚀 MANUAL (CORRECTO - ABRE PÁGINA)
 function openManual(){
-  alert("Next step: we will create Manual page");
+  window.location.href = "manual.html";
 }
 
 // 📄 POLICY
@@ -112,7 +112,7 @@ function openPolicy(){
 
 // 🎯 OBJECTIVES
 function openObjectives(){
-  alert("Next step: we will create Objectives page");
+  window.location.href = "sms-objectives.html";
 }
 
 </script>
