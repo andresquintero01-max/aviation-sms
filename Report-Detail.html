@@ -48,6 +48,7 @@ button{
   border:none;
   border-radius:6px;
   cursor:pointer;
+  margin-top:10px;
 }
 
 button:hover{
@@ -89,6 +90,9 @@ button:hover{
 
 <button onclick="calculateRisk()">Calculate Risk</button>
 
+<!-- 🔥 NUEVO BOTÓN GUARDAR RIESGO -->
+<button onclick="saveRisk()">Save Risk to Firebase</button>
+
 <div class="result" id="result"></div>
 
 </div>
@@ -97,7 +101,7 @@ button:hover{
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, get, child, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
@@ -116,6 +120,8 @@ const db = getDatabase(app);
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
+let currentFirebaseKey = null;
+
 // READ FIREBASE
 get(child(ref(db), "smsReports")).then((snapshot) => {
 
@@ -126,6 +132,8 @@ get(child(ref(db), "smsReports")).then((snapshot) => {
     for(let key in data){
 
       if(data[key].reportId == id){
+
+        currentFirebaseKey = key;
 
         document.getElementById("reportBox").innerHTML = `
           <p><b>ID:</b> ${data[key].reportId}</p>
@@ -158,6 +166,30 @@ window.calculateRisk = function(){
 
   document.getElementById("result").innerHTML =
     "Risk Score: " + r + " → " + level;
+};
+
+// 🔥 SAVE RISK TO FIREBASE
+window.saveRisk = function(){
+
+  let p = parseInt(document.getElementById("prob").value);
+  let s = parseInt(document.getElementById("sev").value);
+  let r = p * s;
+
+  if(!currentFirebaseKey){
+    alert("No report found");
+    return;
+  }
+
+  const updateRef = ref(db, "smsReports/" + currentFirebaseKey);
+
+  update(updateRef, {
+    probability: p,
+    severity: s,
+    risk: r
+  }).then(() => {
+    alert("Risk saved successfully in Firebase 🔥");
+  });
+
 };
 </script>
 
