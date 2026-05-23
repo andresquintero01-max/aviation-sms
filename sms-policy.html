@@ -78,8 +78,8 @@
       <li>No documents uploaded yet.</li>
     </ul>
 
-    <!-- BOTÓN CORREGIDO -->
-    <a class="back" href="index.html">
+    <!-- FIX FINAL -->
+    <a class="back" href="./index.html">
       Back to Home
     </a>
 
@@ -109,20 +109,27 @@ window.uploadFile = async function(){
   const file = document.getElementById("fileInput").files[0];
 
   if(!file){
-    alert("Select a file");
+    alert("Select a file first");
     return;
   }
 
   const fileRef = ref(storage, "sms-policy/" + file.name);
 
-  await uploadBytes(fileRef, file);
+  try{
 
-  const url = await getDownloadURL(fileRef);
+    await uploadBytes(fileRef, file);
 
-  document.getElementById("fileList").innerHTML =
-    `<li><a href="${url}" target="_blank">${file.name}</a></li>`;
+    const url = await getDownloadURL(fileRef);
 
-  alert("Uploaded successfully");
+    document.getElementById("fileList").innerHTML =
+      `<li><a href="${url}" target="_blank">${file.name}</a></li>`;
+
+    alert("Upload successful");
+
+  } catch(err){
+    console.log(err);
+    alert("Upload failed");
+  }
 
 };
 
