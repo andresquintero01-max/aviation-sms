@@ -1,1 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SMS Database</title>
 
+<style>
+body{
+  font-family: Arial;
+  background:#f4f6f8;
+  margin:0;
+  padding:20px;
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+}
+
+table{
+  width:100%;
+  border-collapse: collapse;
+  margin-top:20px;
+  background:white;
+}
+
+th, td{
+  border:1px solid #ccc;
+  padding:10px;
+  text-align:left;
+}
+
+th{
+  background:#071f47;
+  color:white;
+}
+
+.back{
+  display:block;
+  margin-top:20px;
+  text-align:center;
+  background:red;
+  color:white;
+  padding:10px;
+  text-decoration:none;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>SMS Reports Database</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>What Happened</th>
+      <th>Date</th>
+      <th>Solution</th>
+    </tr>
+  </thead>
+  <tbody id="data"></tbody>
+</table>
+
+<a class="back" href="index.html">Back to Home</a>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const tbody = document.getElementById("data");
+
+get(child(ref(db), "smsReports")).then((snapshot) => {
+
+  if(snapshot.exists()){
+    const data = snapshot.val();
+
+    Object.values(data).forEach(item => {
+
+      const row = `
+        <tr>
+          <td>${item.reportId}</td>
+          <td>${item.whatHappened}</td>
+          <td>${item.date}</td>
+          <td>${item.solution}</td>
+        </tr>
+      `;
+
+      tbody.innerHTML += row;
+
+    });
+
+  } else {
+    tbody.innerHTML = "<tr><td colspan='4'>No data found</td></tr>";
+  }
+
+});
+
+</script>
+
+</body>
+</html>
