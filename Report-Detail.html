@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Report Detail - SMS</title>
+<title>SMS Report Detail</title>
 
 <style>
 body{
@@ -31,10 +31,6 @@ h1{
   padding:15px;
   border:1px solid #ddd;
   border-radius:8px;
-}
-
-label{
-  font-weight:bold;
 }
 
 input{
@@ -75,15 +71,12 @@ button:hover{
 
 <h1>SMS Report Detail</h1>
 
-<!-- REPORTE SIMULADO -->
-<div class="box">
-  <p><b>ID:</b> 1</p>
-  <p><b>What happened:</b> Golpe a aeronave</p>
-  <p><b>Date:</b> 05/23/2026</p>
-  <p><b>Solution:</b> Comprar protectores</p>
+<!-- DATA FROM FIREBASE -->
+<div class="box" id="reportBox">
+  Loading report...
 </div>
 
-<!-- MATRIZ DE RIESGO -->
+<!-- RISK MATRIX -->
 <div class="box">
 
 <h3>Risk Assessment</h3>
@@ -102,8 +95,51 @@ button:hover{
 
 </div>
 
-<script>
-function calculateRisk(){
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// GET ID FROM URL
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+// READ FIREBASE
+get(child(ref(db), "smsReports")).then((snapshot) => {
+
+  if(snapshot.exists()){
+
+    const data = snapshot.val();
+
+    for(let key in data){
+
+      if(data[key].reportId == id){
+
+        document.getElementById("reportBox").innerHTML = `
+          <p><b>ID:</b> ${data[key].reportId}</p>
+          <p><b>What Happened:</b> ${data[key].whatHappened}</p>
+          <p><b>Date:</b> ${data[key].date}</p>
+          <p><b>Solution:</b> ${data[key].solution}</p>
+        `;
+      }
+    }
+  }
+});
+
+// RISK FUNCTION
+window.calculateRisk = function(){
 
   let p = parseInt(document.getElementById("prob").value);
   let s = parseInt(document.getElementById("sev").value);
@@ -122,7 +158,7 @@ function calculateRisk(){
 
   document.getElementById("result").innerHTML =
     "Risk Score: " + r + " → " + level;
-}
+};
 </script>
 
 </body>
