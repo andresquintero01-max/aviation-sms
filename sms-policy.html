@@ -70,17 +70,18 @@ button:hover{
 
     <h3>SMS Policy Documents</h3>
 
-    <!-- FILE SELECTOR -->
-    <input type="file" id="fileInput">
-
-    <!-- UPLOAD BUTTON -->
-    <button onclick="uploadToDriveSimple()">
+    <!-- UPLOAD BUTTON (solo informativo ahora) -->
+    <button onclick="openDrive()">
       Upload Document
     </button>
 
-    <!-- LIST -->
-    <ul id="fileList">
-      <li>No documents uploaded yet.</li>
+    <!-- DOCUMENT LIST -->
+    <ul>
+      <li>
+        <a href="https://drive.google.com/file/d/1HHWU5PUa02zMr3aa_0WuXwHd25M2LWyn/view?usp=sharing" target="_blank">
+          SMS-Policy-Manual.pdf
+        </a>
+      </li>
     </ul>
 
     <!-- BACK BUTTON -->
@@ -94,37 +95,15 @@ button:hover{
 
 <script>
 
-function uploadToDriveSimple() {
+function openDrive() {
 
-  const file = document.getElementById("fileInput").files[0];
-
-  if (!file) {
-    alert("Select a file first");
-    return;
-  }
-
-  // 🚀 OPEN GOOGLE DRIVE
   window.open(
     "https://drive.google.com/drive/u/0/my-drive",
     "_blank"
   );
 
-  alert(
-    "UPLOAD INSTRUCTIONS:\n\n" +
-    "1. Upload file in Google Drive\n" +
-    "2. Right click file\n" +
-    "3. Click 'Share'\n" +
-    "4. Copy link\n" +
-    "5. Paste it in SMS system"
-  );
+  alert("Upload files in Drive if needed. This system now uses Drive links.");
 
-  // 📌 TEMP DISPLAY
-  const list = document.getElementById("fileList");
-
-  const li = document.createElement("li");
-  li.innerHTML = file.name + " (add Drive link after upload)";
-
-  list.appendChild(li);
 }
 
 </script>
