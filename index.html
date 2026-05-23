@@ -74,6 +74,10 @@ button{
     cursor:pointer;
 }
 
+button:hover{
+    background:#16345f;
+}
+
 #message{
     margin-top:15px;
     font-weight:bold;
@@ -84,6 +88,19 @@ footer{
     padding:20px;
     background:#0b1f3a;
     color:white;
+}
+
+#dashboard{
+    display:none;
+}
+
+.sms-box{
+    background:#0b1f3a;
+    color:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+    font-size:20px;
 }
 
 </style>
@@ -101,6 +118,8 @@ footer{
 </header>
 
 <div class="container">
+
+<div id="login-section">
 
 <div class="card">
 
@@ -159,6 +178,34 @@ footer{
 
 </div>
 
+<div id="dashboard">
+
+<div class="card">
+
+<h2>SMS Main Functions</h2>
+
+<div class="sms-box">
+1. Policies & Documentation
+</div>
+
+<div class="sms-box">
+2. Hazard Identification
+</div>
+
+<div class="sms-box">
+3. Safety Assurance
+</div>
+
+<div class="sms-box">
+4. Safety Promotion & Culture
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 <footer>
 
 Aviation SMS Software © 2026
@@ -200,6 +247,10 @@ window.login = function(){
 
         document.getElementById("message").innerHTML =
         "Login successful";
+
+        document.getElementById("login-section").style.display = "none";
+
+        document.getElementById("dashboard").style.display = "block";
 
     })
 
