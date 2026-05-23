@@ -9,7 +9,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, push, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// 🔥 TU CONFIG REAL
+// 🔥 CONFIG FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
   authDomain: "aviation-sms.firebaseapp.com",
@@ -24,7 +24,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 🚀 FUNCIÓN ENVIAR REPORTE
+// 🚀 SEND REPORT
 window.sendReport = function () {
 
   const what = document.getElementById("what").value;
@@ -40,7 +40,12 @@ window.sendReport = function () {
       reportId: id,
       whatHappened: what,
       date: date,
-      solution: solution
+      solution: solution,
+
+      // 🔥 MEJORA SMS
+      status: "OPEN",
+      risk: "NOT ASSESSED",
+      timestamp: new Date().toISOString()
     });
 
     alert("SMS Report sent successfully ✔ ID: " + id);
@@ -123,22 +128,17 @@ button:hover{
 
   <h1>SMS Report Form</h1>
 
-  <!-- WHAT HAPPENED -->
   <label>What happened?</label>
   <textarea id="what" placeholder="Describe the event..."></textarea>
 
-  <!-- DATE -->
   <label>Date</label>
   <input type="date" id="date">
 
-  <!-- HOW TO SOLVE -->
   <label>How can it be solved?</label>
   <textarea id="solution" placeholder="Suggested corrective action..."></textarea>
 
-  <!-- SUBMIT -->
   <button onclick="sendReport()">Send Report</button>
 
-  <!-- BACK -->
   <a class="back" href="index.html">Back to Home</a>
 
 </div>
