@@ -24,19 +24,23 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 🚀 SEND REPORT
+// 🚀 SEND REPORT (ACTUALIZADO + FIX DETALLE)
 window.sendReport = function () {
 
   const what = document.getElementById("what").value;
   const date = document.getElementById("date").value;
   const solution = document.getElementById("solution").value;
 
+  // 🔥 ID consecutivo (lo mantienes igual)
   get(child(ref(db), "smsReports")).then((snapshot) => {
 
     let count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
     let id = count + 1;
 
-    push(ref(db, "smsReports"), {
+    // 🔥 CREAR KEY REAL DE FIREBASE (FIX IMPORTANTE)
+    const newRef = push(ref(db, "smsReports"));
+
+    newRef.set({
       reportId: id,
       whatHappened: what,
       date: date,
@@ -48,7 +52,8 @@ window.sendReport = function () {
       timestamp: new Date().toISOString()
     });
 
-    alert("SMS Report sent successfully ✔ ID: " + id);
+    // 🔥 AHORA SÍ: IR AL DETALLE CORRECTO
+    window.location.href = "Report-Detail.html?key=" + newRef.key;
 
   });
 
