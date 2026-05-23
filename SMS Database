@@ -17,22 +17,18 @@ h1{
   color:#071f47;
 }
 
-table{
-  width:100%;
-  border-collapse: collapse;
-  margin-top:20px;
+.container{
   background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.1);
+  margin-top:20px;
 }
 
-th, td{
-  border:1px solid #ccc;
+.record{
   padding:10px;
-  text-align:left;
-}
-
-th{
-  background:#071f47;
-  color:white;
+  border-bottom:1px solid #ddd;
+  font-family:Arial;
 }
 
 .back{
@@ -43,6 +39,7 @@ th{
   color:white;
   padding:10px;
   text-decoration:none;
+  border-radius:6px;
 }
 </style>
 
@@ -50,19 +47,9 @@ th{
 
 <body>
 
-<h1>SMS Reports Database</h1>
+<h1>SMS Aviation Database</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>What Happened</th>
-      <th>Date</th>
-      <th>Solution</th>
-    </tr>
-  </thead>
-  <tbody id="data"></tbody>
-</table>
+<div class="container" id="data"></div>
 
 <a class="back" href="index.html">Back to Home</a>
 
@@ -83,34 +70,35 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const tbody = document.getElementById("data");
+const container = document.getElementById("data");
 
 get(child(ref(db), "smsReports")).then((snapshot) => {
 
   if(snapshot.exists()){
+
     const data = snapshot.val();
 
     Object.values(data).forEach(item => {
 
-      const row = `
-        <tr>
-          <td>${item.reportId}</td>
-          <td>${item.whatHappened}</td>
-          <td>${item.date}</td>
-          <td>${item.solution}</td>
-        </tr>
+      const div = document.createElement("div");
+      div.className = "record";
+
+      div.innerHTML = `
+        <b>ID:</b> ${item.reportId} <br>
+        <b>What Happened:</b> ${item.whatHappened} <br>
+        <b>Date:</b> ${item.date} <br>
+        <b>Solution:</b> ${item.solution}
       `;
 
-      tbody.innerHTML += row;
+      container.appendChild(div);
 
     });
 
   } else {
-    tbody.innerHTML = "<tr><td colspan='4'>No data found</td></tr>";
+    container.innerHTML = "<p>No SMS reports found</p>";
   }
 
 });
-
 </script>
 
 </body>
