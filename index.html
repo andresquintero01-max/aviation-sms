@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SMS Policy</title>
+<title>Aviation SMS</title>
 
 <style>
 
@@ -23,7 +23,12 @@ header{
 
 header h1{
     margin:0;
-    font-size:42px;
+    font-size:46px;
+}
+
+header p{
+    margin-top:10px;
+    font-size:18px;
 }
 
 .container{
@@ -37,12 +42,55 @@ header h1{
     box-shadow:0px 2px 10px rgba(0,0,0,0.1);
 }
 
-.document-box{
-    margin-top:20px;
+.card h2{
+    color:#0b1f3a;
+}
+
+.module-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:20px;
+}
+
+.module-card{
     background:#0b1f3a;
     color:white;
-    padding:20px;
-    border-radius:12px;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.18);
+}
+
+.module-card h3{
+    margin-top:0;
+}
+
+.module-card p{
+    color:#dce6f5;
+}
+
+.button{
+    width:100%;
+    margin-top:15px;
+    background:white;
+    color:#0b1f3a;
+    border:none;
+    padding:12px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.sub-button{
+    width:100%;
+    background:#0b1f3a;
+    color:white;
+    border:none;
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
+    font-size:18px;
+    cursor:pointer;
+    text-align:left;
 }
 
 .back-button{
@@ -56,6 +104,13 @@ header h1{
     font-size:16px;
 }
 
+.policy-column{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    margin-top:30px;
+}
+
 footer{
     text-align:center;
     padding:20px;
@@ -64,27 +119,135 @@ footer{
     margin-top:40px;
 }
 
+@media(max-width:900px){
+
+.module-grid{
+    grid-template-columns:1fr;
+}
+
+}
+
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>1.1 SMS Policy</h1>
+<h1>Aviation Safety Management System</h1>
+<p>IOSA Based SMS Platform</p>
 </header>
 
-<div class="container">
+<!-- HOME PAGE -->
+
+<div class="container" id="homePage">
 
 <div class="card">
 
-<h2>SMS Policy Documents</h2>
+<h2>SMS Main Functions</h2>
 
-<div class="document-box">
-No documents uploaded yet.
+<div class="module-grid">
+
+<div class="module-card">
+
+<h3>1. Policies & Documentation</h3>
+
+<p>
+Manage SMS policies, manuals, procedures, and controlled documents.
+</p>
+
+<button class="button" onclick="openPolicies()">
+Open Details
+</button>
+
 </div>
 
-<button class="back-button" onclick="goBack()">
-Back to Policies
+<div class="module-card">
+
+<h3>2. Hazard Identification</h3>
+
+<p>
+Report hazards, unsafe conditions, events, and operational concerns.
+</p>
+
+<button class="button">
+Open Details
+</button>
+
+</div>
+
+<div class="module-card">
+
+<h3>3. Safety Assurance</h3>
+
+<p>
+Track audits, findings, corrective actions, investigations, and SPIs.
+</p>
+
+<button class="button">
+Open Details
+</button>
+
+</div>
+
+<div class="module-card">
+
+<h3>4. Safety Promotion & Culture</h3>
+
+<p>
+Support training, safety meetings, bulletins, and safety communication.
+</p>
+
+<button class="button">
+Open Details
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- POLICIES PAGE -->
+
+<div class="container" id="policiesPage" style="display:none;">
+
+<div class="card">
+
+<h2>Policies & Documentation</h2>
+
+<div class="policy-column">
+
+<button class="sub-button"
+onclick="window.location.href='sms-policy.html'">
+
+1.1 SMS Policy
+
+</button>
+
+<button class="sub-button">
+
+1.2 Non-Punitive Policy
+
+</button>
+
+<button class="sub-button">
+
+1.3 Safety Objectives
+
+</button>
+
+<button class="sub-button">
+
+1.4 SPI & KPI
+
+</button>
+
+</div>
+
+<button class="back-button" onclick="goHome()">
+Back to Home
 </button>
 
 </div>
@@ -97,8 +260,20 @@ Aviation SMS Software © 2026
 
 <script>
 
-function goBack(){
-    window.location.href = "index.html";
+function openPolicies(){
+
+document.getElementById("homePage").style.display = "none";
+
+document.getElementById("policiesPage").style.display = "block";
+
+}
+
+function goHome(){
+
+document.getElementById("policiesPage").style.display = "none";
+
+document.getElementById("homePage").style.display = "block";
+
 }
 
 </script>
