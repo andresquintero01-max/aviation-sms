@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SMS POLICY</title>
+<title>Manual de SMS</title>
 
 <style>
 body{
@@ -15,9 +15,35 @@ body{
   height:100vh;
 }
 
+.container{
+  text-align:center;
+}
+
+.title-row{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  justify-content:center;
+}
+
 h1{
-  font-size:60px;
+  font-size:50px;
   color:#071f47;
+  margin:0;
+}
+
+button{
+  background:#071f47;
+  color:white;
+  border:none;
+  padding:12px 18px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:16px;
+}
+
+button:hover{
+  background:#0b2a66;
 }
 </style>
 
@@ -25,7 +51,27 @@ h1{
 
 <body>
 
-<h1>SMS POLICY</h1>
+<div class="container">
+
+  <div class="title-row">
+
+    <!-- TITULO -->
+    <h1>Manual de SMS</h1>
+
+    <!-- BOTÓN -->
+    <button onclick="attachDocument()">
+      Adjuntar documento
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+function attachDocument(){
+  alert("Aquí conectaremos el documento de Google Drive en el siguiente paso 👍");
+}
+</script>
 
 </body>
 </html>
