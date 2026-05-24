@@ -98,6 +98,16 @@ button.active{
   cursor:pointer;
   font-size:12px;
 }
+
+/* 🔥 SEND BUTTON STYLE */
+.send-btn{
+  background:#071f47;
+  margin-left:5px;
+}
+
+.send-btn.active{
+  background:purple !important;
+}
 </style>
 
 </head>
@@ -111,6 +121,7 @@ button.active{
 <div class="box" id="reportBox">Loading report...</div>
 
 <div class="box">
+
 <h3>Risk Assessment</h3>
 
 <p>Probability:</p>
@@ -131,10 +142,12 @@ button.active{
 <p style="margin-top:15px;font-weight:bold;">
 Risk Assessment Save: <span id="savedRisk">N/A</span>
 </p>
+
 </div>
 
-<!-- CPA -->
+<!-- CPA MODULE -->
 <div class="cpa-box">
+
 <h3>CPA MODULE</h3>
 
 <select id="controlType">
@@ -157,6 +170,7 @@ Risk Assessment Save: <span id="savedRisk">N/A</span>
 <button onclick="sendCPA()">Send CPA</button>
 
 <div id="cpaContainer"></div>
+
 </div>
 
 </div>
@@ -168,7 +182,7 @@ import { getDatabase, ref, get, update, push, remove }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB2syFrbS8cxt1Sor1wXrgJcdSZAg1P",
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1P",
   authDomain: "aviation-sms.firebaseapp.com",
   databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
   projectId: "aviation-sms",
@@ -182,11 +196,7 @@ const db = getDatabase(app);
 
 const key = new URLSearchParams(window.location.search).get("key");
 
-let p = 0;
-let s = 0;
-let risk = 0;
-
-/* 🔥 CPA COUNTER */
+let p=0, s=0, risk=0;
 let cpaCounter = 0;
 
 /* LOAD REPORT */
@@ -205,64 +215,68 @@ loadCPA(d.CPA);
 }
 });
 
-/* LOAD CPA + COUNT */
+/* LOAD CPA */
 function loadCPA(data){
-
 const box=document.getElementById("cpaContainer");
 box.innerHTML="";
 
 if(!data){
-cpaCounter = 0;
+cpaCounter=0;
 return;
 }
 
-const entries = Object.entries(data);
-cpaCounter = entries.length;
+const entries=Object.entries(data);
+cpaCounter=entries.length;
 
-entries.forEach(([id,cpa], index)=>{
+entries.forEach(([id,cpa],index)=>{
 
 const div=document.createElement("div");
 div.className="cpa-item";
 
 div.innerHTML=`
-<b>CPA ${index + 1}</b><br>
+<b>CPA ${index+1}</b><br>
 Type: ${cpa.controlType}<br>
 Action: ${cpa.actionPlan}<br>
 Date: ${cpa.actionDate}<br>
 Email: ${cpa.emailTo}<br>
 
 <button class="delete-btn" onclick="deleteCPA('${id}')">🗑</button>
+<button class="send-btn" onclick="sendSingleCPA(this,'${cpa.emailTo}')">Send</button>
 `;
 
 box.appendChild(div);
 });
 }
 
-/* DELETE CPA */
-window.deleteCPA = function(id){
+/* DELETE */
+window.deleteCPA=function(id){
 remove(ref(db,"smsReports/"+key+"/CPA/"+id));
-alert("CPA deleted");
+alert("Deleted");
 };
 
-/* SAVE CPA (AUTO NUMBER) */
+/* SAVE */
 window.saveCPA=function(){
-
-cpaCounter++; // 🔥 incrementa automático
+cpaCounter++;
 
 push(ref(db,"smsReports/"+key+"/CPA"),{
-cpaNumber: cpaCounter,
+cpaNumber:cpaCounter,
 controlType:controlType.value,
 actionPlan:actionPlan.value,
 actionDate:actionDate.value,
 emailTo:emailTo.value
 });
-
-alert("CPA "+cpaCounter+" saved ✔");
 };
 
-/* SEND */
+/* SEND ALL */
 window.sendCPA=function(){
 window.location.href=`mailto:${emailTo.value}`;
+};
+
+/* SEND SINGLE (BUTTON CHANGE COLOR) */
+window.sendSingleCPA=function(btn,email){
+
+btn.classList.add("active");
+window.location.href=`mailto:${email}`;
 };
 
 /* RISK */
