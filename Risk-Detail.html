@@ -32,7 +32,6 @@ h1{
   border-radius:8px;
 }
 
-/* BUTTONS */
 button{
   padding:10px 12px;
   margin:4px;
@@ -110,21 +109,47 @@ button.active{
   background:purple !important;
 }
 
-/* ATTACHMENT */
-.attachment-box{
-  margin-top:25px;
-  padding:20px;
-  border:2px solid green;
-  border-radius:10px;
-  background:#f6fff6;
+/* ========================= */
+/* 🔥 RISK MATRIX (NUEVO) */
+/* ========================= */
+
+.matrix {
+  margin-top:20px;
+  display:grid;
+  grid-template-columns: repeat(5, 60px);
+  gap:5px;
+  justify-content:center;
 }
 
-.attachment-item{
-  background:white;
-  padding:10px;
-  margin-top:10px;
-  border-radius:8px;
-  border:1px solid #ccc;
+.cell {
+  width:60px;
+  height:60px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:bold;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
+  position:relative;
+}
+
+/* colores tipo ICAO */
+.low { background:#2ecc71; }
+.medium { background:#f1c40f; color:#000; }
+.high { background:#e74c3c; }
+
+/* tooltip */
+.tooltip {
+  position:absolute;
+  background:#071f47;
+  color:white;
+  padding:6px;
+  border-radius:6px;
+  font-size:12px;
+  display:none;
+  width:160px;
+  z-index:10;
 }
 </style>
 
@@ -162,6 +187,9 @@ button.active{
 Risk Assessment Save: <span id="savedRisk">N/A</span>
 </p>
 
+<!-- 🔥 MATRIZ ICAO (NUEVO) -->
+<div class="matrix" id="matrix"></div>
+
 </div>
 
 <!-- CPA -->
@@ -189,12 +217,6 @@ Risk Assessment Save: <span id="savedRisk">N/A</span>
 <div id="cpaContainer"></div>
 </div>
 
-<!-- ATTACHMENTS -->
-<div class="attachment-box">
-<h3>CPA ATTACHMENTS</h3>
-<div id="attachmentContainer"></div>
-</div>
-
 </div>
 
 <script type="module">
@@ -204,7 +226,7 @@ import { getDatabase, ref, get, update, push, remove }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJCD",
+  apiKey: "AIzaSyXXXX",
   authDomain: "aviation-sms.firebaseapp.com",
   databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
   projectId: "aviation-sms",
@@ -236,12 +258,11 @@ document.getElementById("reportBox").innerHTML=`
 `;
 
 document.getElementById("savedRisk").innerText = d.risk || "N/A";
-
 loadCPA(d.CPA);
 }
 });
 
-/* RISK BUTTONS */
+/* BUTTONS */
 function createButtons(id,type){
 const c=document.getElementById(id);
 
@@ -264,7 +285,7 @@ c.appendChild(b);
 createButtons("pBtns","p");
 createButtons("sBtns","s");
 
-/* RISK CALC */
+/* CALC */
 window.calculateRisk=function(){
 risk=p*s;
 
@@ -274,18 +295,71 @@ else if(risk<=12)level="MEDIUM 🟡";
 else level="HIGH 🔴";
 
 result.innerText="Risk: "+risk+" → "+level;
+renderMatrix();
 };
 
 /* SAVE RISK */
 window.saveRisk=function(){
-update(ref(db,"smsReports/"+key),{
-risk:risk
-});
-
+update(ref(db,"smsReports/"+key),{risk:risk});
 savedRisk.innerText=risk;
 };
 
-/* SAVE CPA */
+/* MATRIX GENERATOR */
+function renderMatrix(){
+
+const matrix=document.getElementById("matrix");
+matrix.innerHTML="";
+
+const defsP={
+1:"Very unlikely",
+2:"Unlikely",
+3:"Possible",
+4:"Likely",
+5:"Very likely"
+};
+
+const defsS={
+1:"Negligible",
+2:"Minor",
+3:"Moderate",
+4:"Major",
+5:"Catastrophic"
+};
+
+for(let s=5;s>=1;s--){
+for(let p=1;p<=5;p++){
+
+let value=p*s;
+let div=document.createElement("div");
+
+div.classList.add("cell");
+
+if(value<=5) div.classList.add("low");
+else if(value<=12) div.classList.add("medium");
+else div.classList.add("high");
+
+div.innerText=value;
+
+/* tooltip */
+div.onmouseover=(e)=>{
+let tip=document.createElement("div");
+tip.className="tooltip";
+tip.innerText =
+"Prob: "+defsP[p]+"\nSeverity: "+defsS[s];
+div.appendChild(tip);
+tip.style.display="block";
+};
+
+div.onmouseout=()=>{
+div.querySelector(".tooltip")?.remove();
+};
+
+matrix.appendChild(div);
+}
+}
+}
+
+/* CPA */
 window.saveCPA=function(){
 cpaCounter++;
 
@@ -298,63 +372,9 @@ emailTo:emailTo.value
 });
 };
 
-/* LOAD CPA + ATTACHMENTS */
-function loadCPA(data){
-
-const cpaBox=document.getElementById("cpaContainer");
-const attBox=document.getElementById("attachmentContainer");
-
-cpaBox.innerHTML="";
-attBox.innerHTML="";
-
-if(!data){cpaCounter=0;return;}
-
-const entries=Object.entries(data);
-cpaCounter=entries.length;
-
-entries.forEach(([id,cpa],i)=>{
-
-/* CPA */
-const div=document.createElement("div");
-div.className="cpa-item";
-
-div.innerHTML=`
-<b>CPA ${i+1}</b><br>
-Type: ${cpa.controlType}<br>
-Action: ${cpa.actionPlan}<br>
-Date: ${cpa.actionDate}<br>
-Email: ${cpa.emailTo}<br>
-
-<button class="delete-btn" onclick="deleteCPA('${id}')">🗑</button>
-<button class="send-btn" onclick="sendCPA(this,'${cpa.emailTo}')">Send</button>
-`;
-
-cpaBox.appendChild(div);
-
-/* ATTACHMENT */
-const att=document.createElement("div");
-att.className="attachment-item";
-
-att.innerHTML=`
-<b>CPA Attachment ${i+1}</b><br>
-Linked CPA ${i+1}<br>
-Owner: ${cpa.emailTo}
-`;
-
-attBox.appendChild(att);
-
-});
-}
-
 /* DELETE */
 window.deleteCPA=function(id){
 remove(ref(db,"smsReports/"+key+"/CPA/"+id));
-};
-
-/* SEND */
-window.sendCPA=function(btn,email){
-btn.classList.add("active");
-window.location.href=`mailto:${email}`;
 };
 
 /* BACK */
