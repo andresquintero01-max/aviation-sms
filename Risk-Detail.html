@@ -68,6 +68,38 @@ button.active{
 .back{
   background:red;
 }
+
+/* 🔥 CPA STYLES */
+.cpa-box{
+  margin-top:25px;
+  padding:20px;
+  border:2px solid #071f47;
+  border-radius:10px;
+  background:#fff;
+}
+
+.cpa-box h2{
+  font-weight:bold;
+  color:#071f47;
+}
+
+.cpa-row{
+  margin-bottom:12px;
+}
+
+.cpa-row label{
+  font-weight:bold;
+  display:block;
+  margin-bottom:5px;
+}
+
+.cpa-row input,
+.cpa-row select{
+  width:100%;
+  padding:8px;
+  border:1px solid #ccc;
+  border-radius:6px;
+}
 </style>
 
 </head>
@@ -78,10 +110,12 @@ button.active{
 
 <h1>SMS Report Detail</h1>
 
+<!-- REPORT -->
 <div class="box" id="reportBox">
 Loading report...
 </div>
 
+<!-- RISK -->
 <div class="box">
 
 <h3>Risk Assessment</h3>
@@ -101,19 +135,63 @@ Loading report...
 <button class="back" onclick="goBack()">Back</button>
 </div>
 
-<!-- 🔥 NUEVO: ABAJO DEL BOTÓN -->
-<p style="margin-top:15px; font-weight:bold;">
+<p style="margin-top:15px;font-weight:bold;">
 Risk Assessment Save: <span id="savedRisk">N/A</span>
 </p>
 
 </div>
+
+<!-- 🔥 CPA MODULE START -->
+<div class="cpa-box">
+
+<h2>CPA (Corrective Action Plan)</h2>
+
+<!-- TYPE CONTROL -->
+<div class="cpa-row">
+<label>Type of Control</label>
+<select id="controlType">
+  <option>Elimination</option>
+  <option>Substitution</option>
+  <option>Engineering</option>
+  <option>Administration</option>
+  <option>PPE</option>
+</select>
+</div>
+
+<!-- ACTION PLAN -->
+<div class="cpa-row">
+<label>Action Plan</label>
+<input type="text" id="actionPlan" placeholder="Describe action plan">
+</div>
+
+<!-- DATE -->
+<div class="cpa-row">
+<label>Implementation Date</label>
+<input type="date" id="actionDate">
+</div>
+
+<!-- EMAIL -->
+<div class="cpa-row">
+<label>Email</label>
+<select id="emailTo">
+  <option>andresquintero01@gmail.com</option>
+  <option>Geraldinmurilli85@gmail.com</option>
+</select>
+</div>
+
+<!-- BUTTONS -->
+<button onclick="saveCPA()">Save CPA</button>
+<button onclick="sendCPA()">Send CPA</button>
+
+</div>
+<!-- 🔥 CPA MODULE END -->
 
 </div>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, get, update, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1P",
@@ -150,7 +228,7 @@ get(ref(db, "smsReports/" + key)).then(snapshot => {
   }
 });
 
-/* BUTTONS */
+/* RISK BUTTONS */
 function createButtons(containerId, type){
   const container = document.getElementById(containerId);
 
@@ -159,7 +237,6 @@ function createButtons(containerId, type){
     btn.innerText = i;
 
     btn.onclick = () => {
-
       for(let b of container.children){
         b.classList.remove("active");
       }
@@ -179,7 +256,6 @@ createButtons("sBtns","s");
 
 /* CALCULATE */
 window.calculateRisk = function(){
-
   risk = p * s;
 
   let level = "";
@@ -192,9 +268,8 @@ window.calculateRisk = function(){
     "Risk Score: " + risk + " → " + level;
 };
 
-/* SAVE */
+/* SAVE RISK */
 window.saveRisk = function(){
-
   update(ref(db, "smsReports/" + key), {
     probability: p,
     severity: s,
@@ -202,7 +277,6 @@ window.saveRisk = function(){
   });
 
   document.getElementById("savedRisk").innerText = risk;
-
   alert("Risk saved ✔");
 };
 
@@ -211,8 +285,35 @@ window.goBack = function(){
   window.location.href = "SMS-Database.html";
 };
 
+/* 🔥 CPA SAVE */
+window.saveCPA = function(){
+
+  const controlType = document.getElementById("controlType").value;
+  const actionPlan = document.getElementById("actionPlan").value;
+  const actionDate = document.getElementById("actionDate").value;
+  const emailTo = document.getElementById("emailTo").value;
+
+  push(ref(db, "smsReports/" + key + "/CPA"), {
+    controlType,
+    actionPlan,
+    actionDate,
+    emailTo,
+    timestamp: new Date().toISOString()
+  });
+
+  alert("CPA Saved ✔");
+};
+
+/* 🔥 SEND CPA (SIMULATED) */
+window.sendCPA = function(){
+
+  const emailTo = document.getElementById("emailTo").value;
+
+  window.location.href =
+    `mailto:${emailTo}?subject=CPA Report&body=Corrective Action Plan from SMS System`;
+};
+
 </script>
 
 </body>
 </html>
- 
