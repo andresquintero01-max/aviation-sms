@@ -33,13 +33,6 @@ h1{
   border-radius:8px;
 }
 
-input{
-  width:100%;
-  padding:10px;
-  margin-top:5px;
-  margin-bottom:15px;
-}
-
 button{
   padding:10px 12px;
   margin:4px;
@@ -108,6 +101,11 @@ Loading report...
 <button class="back" onclick="goBack()">Back</button>
 </div>
 
+<!-- 🔥 NUEVO: ABAJO DEL BOTÓN -->
+<p style="margin-top:15px; font-weight:bold;">
+Risk Assessment Save: <span id="savedRisk">N/A</span>
+</p>
+
 </div>
 
 </div>
@@ -136,7 +134,7 @@ let p = 0;
 let s = 0;
 let risk = 0;
 
-// 🔥 LOAD REPORT
+/* LOAD REPORT */
 get(ref(db, "smsReports/" + key)).then(snapshot => {
   if(snapshot.exists()){
     const data = snapshot.val();
@@ -145,12 +143,14 @@ get(ref(db, "smsReports/" + key)).then(snapshot => {
       <p><b>ID:</b> ${data.reportId}</p>
       <p><b>What Happened:</b> ${data.whatHappened}</p>
       <p><b>Date:</b> ${data.date}</p>
-      <p><b>Risk Assessment Save:</b> ${data.risk}</p>
+      <p><b>Risk:</b> ${data.risk}</p>
     `;
+
+    document.getElementById("savedRisk").innerText = data.risk || "N/A";
   }
 });
 
-// 🔥 CREATE BUTTONS
+/* BUTTONS */
 function createButtons(containerId, type){
   const container = document.getElementById(containerId);
 
@@ -160,36 +160,24 @@ function createButtons(containerId, type){
 
     btn.onclick = () => {
 
-      if(type === "p"){
-        p = i;
-        updateUI("pBtns", i);
+      for(let b of container.children){
+        b.classList.remove("active");
       }
-      if(type === "s"){
-        s = i;
-        updateUI("sBtns", i);
-      }
+
+      btn.classList.add("active");
+
+      if(type === "p") p = i;
+      if(type === "s") s = i;
     };
 
     container.appendChild(btn);
   }
 }
 
-// 🔥 COLOR CHANGE
-function updateUI(containerId, selected){
-  let btns = document.getElementById(containerId).children;
-
-  for(let b of btns){
-    b.classList.remove("active");
-    if(b.innerText == selected){
-      b.classList.add("active");
-    }
-  }
-}
-
 createButtons("pBtns","p");
 createButtons("sBtns","s");
 
-// 🔥 CALCULATE
+/* CALCULATE */
 window.calculateRisk = function(){
 
   risk = p * s;
@@ -204,7 +192,7 @@ window.calculateRisk = function(){
     "Risk Score: " + risk + " → " + level;
 };
 
-// 🔥 SAVE
+/* SAVE */
 window.saveRisk = function(){
 
   update(ref(db, "smsReports/" + key), {
@@ -213,10 +201,12 @@ window.saveRisk = function(){
     risk: risk
   });
 
+  document.getElementById("savedRisk").innerText = risk;
+
   alert("Risk saved ✔");
 };
 
-// 🔥 BACK
+/* BACK */
 window.goBack = function(){
   window.location.href = "SMS-Database.html";
 };
