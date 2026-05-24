@@ -90,6 +90,17 @@ button.active{
   font-size:12px;
 }
 
+.send-btn{
+  background:#071f47;
+  color:white;
+  border:none;
+  border-radius:5px;
+  padding:4px 8px;
+  cursor:pointer;
+  font-size:12px;
+  margin-top:8px;
+}
+
 .send-btn.active{
   background:purple !important;
 }
@@ -395,6 +406,35 @@ emailTo:emailTo.value
 });
 };
 
+/* SEND CPA EMAIL */
+window.sendCPAEmail=function(email,type,action,date,cpaNumber){
+
+const subject = encodeURIComponent("CPA "+cpaNumber+" - Corrective Preventive Action");
+const body = encodeURIComponent(
+"CPA "+cpaNumber+"\n\n"+
+"Control Type: "+type+"\n"+
+"Action Plan: "+action+"\n"+
+"Action Date: "+date+"\n\n"+
+"Please review and follow up accordingly."
+);
+
+window.location.href="mailto:"+email+"?subject="+subject+"&body="+body;
+};
+
+/* DELETE CPA */
+window.deleteCPA=function(id){
+
+remove(ref(db,"smsReports/"+key+"/CPA/"+id)).then(()=>{
+get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
+if(s.exists()){
+loadCPA(s.val());
+}else{
+loadCPA(null);
+}
+});
+});
+};
+
 /* LOAD CPA */
 function loadCPA(data){
 
@@ -406,17 +446,21 @@ a.innerHTML="";
 
 if(!data){cpaCounter=0;return;}
 
+cpaCounter=Object.keys(data).length;
+
 Object.entries(data).forEach(([id,x],i)=>{
 
 let div=document.createElement("div");
 div.className="cpa-item";
 
 div.innerHTML=`
+<button class="delete-btn" onclick="deleteCPA('${id}')">🗑️</button>
 <b>CPA ${i+1}</b><br>
 Type: ${x.controlType}<br>
 Action: ${x.actionPlan}<br>
 Date: ${x.actionDate}<br>
-Email: ${x.emailTo}
+Email: ${x.emailTo}<br>
+<button class="send-btn" onclick="sendCPAEmail('${x.emailTo}','${x.controlType}','${x.actionPlan}','${x.actionDate}','${i+1}')">Enviar correo</button>
 `;
 
 c.appendChild(div);
