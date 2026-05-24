@@ -27,32 +27,39 @@ window.sendReport = function () {
   const date = document.getElementById("date").value;
   const solution = document.getElementById("solution").value;
 
-  // 🔥 NUEVO: VALIDACIÓN (EVITA NULL EN FIREBASE)
+  // VALIDACIÓN
   if (!what || !date || !solution) {
-    alert("Please complete all fields before sending the report");
+    alert("Please complete all fields");
     return;
   }
 
-  // 🔥 CREAR NUEVO REGISTRO
-  const newRef = push(ref(db, "smsReports"));
+  try {
 
-  // 🔥 GUARDAR EN FIREBASE
-  set(newRef, {
-    reportId: Date.now(),
-    whatHappened: what,
-    date: date,
-    solution: solution,
-    status: "OPEN",
-    risk: "NOT ASSESSED",
-    probability: 0,
-    severity: 0,
-    timestamp: new Date().toISOString()
-  });
+    // CREAR REFERENCIA ÚNICA
+    const newRef = push(ref(db, "smsReports"));
 
-  alert("SMS Report saved ✔ ID: " + Date.now());
+    // GUARDAR EN FIREBASE
+    set(newRef, {
+      reportId: Date.now(),
+      whatHappened: what,
+      date: date,
+      solution: solution,
+      status: "OPEN",
+      risk: "NOT ASSESSED",
+      probability: 0,
+      severity: 0,
+      timestamp: new Date().toISOString()
+    });
 
-  // 👉 IR A BASE DE DATOS (OPCIONAL PERO RECOMENDADO)
-  window.location.href = "SMS-Database.html";
+    alert("SMS Report saved ✔ ID: " + newRef.key);
+
+    // IR A DATABASE
+    window.location.href = "SMS-Database.html";
+
+  } catch (error) {
+    console.error("Firebase error:", error);
+    alert("Error saving report");
+  }
 };
 </script>
 
