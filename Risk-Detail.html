@@ -223,6 +223,33 @@ button.active{
 <div id="attachmentContainer"></div>
 </div>
 
+<div class="box">
+
+<h3>Valoracion del Riesgo Residual</h3>
+
+<p>Despues de la valoracion de riesgos y CPA se debe hacer una segunda valoracion con los controles aplicados.</p>
+
+<p>Probability:</p>
+<div id="rpBtns"></div>
+
+<p>Severity:</p>
+<div id="rsBtns"></div>
+
+<button onclick="calculateResidualRisk()">Calculate Risk</button>
+
+<div class="result" id="residualResult"></div>
+
+<p><b>Risk Save:</b> <span id="savedResidualRisk">N/A</span></p>
+
+<div class="matrix" id="residualMatrix"></div>
+
+<div class="bottom">
+<button onclick="saveResidualRisk()">Save Risk</button>
+<button onclick="goBack()" style="background:red;">Back</button>
+</div>
+
+</div>
+
 </div>
 
 <script type="module">
@@ -252,6 +279,7 @@ const storage = getStorage(app);
 const key = new URLSearchParams(window.location.search).get("key");
 
 let p=0,s=0,risk=0,cpaCounter=0;
+let rp=0,rs=0,residualRisk=0;
 
 get(ref(db,"smsReports/"+key)).then(s=>{
 if(s.exists()){
@@ -265,8 +293,10 @@ document.getElementById("reportBox").innerHTML=`
 `;
 
 savedRisk.innerText=d.risk||"N/A";
+savedResidualRisk.innerText=d.residualRisk||"N/A";
 loadCPA(d.CPA);
 renderMatrix();
+renderResidualMatrix();
 }
 });
 
@@ -292,6 +322,28 @@ c.appendChild(b);
 createButtons("pBtns","p");
 createButtons("sBtns","s");
 
+function createResidualButtons(id,type){
+const c=document.getElementById(id);
+
+for(let i=1;i<=5;i++){
+let b=document.createElement("button");
+b.innerText=i;
+
+b.onclick=()=>{
+for(let x of c.children)x.classList.remove("active");
+b.classList.add("active");
+
+if(type==="rp")rp=i;
+if(type==="rs")rs=i;
+};
+
+c.appendChild(b);
+}
+}
+
+createResidualButtons("rpBtns","rp");
+createResidualButtons("rsBtns","rs");
+
 window.calculateRisk=function(){
 risk=p*s;
 
@@ -306,9 +358,93 @@ update(ref(db,"smsReports/"+key),{risk});
 savedRisk.innerText=risk;
 };
 
+window.calculateResidualRisk=function(){
+residualRisk=rp*rs;
+
+let lvl = residualRisk<=5?"LOW 🟢":residualRisk<=12?"MEDIUM 🟡":"HIGH 🔴";
+
+residualResult.innerText="Risk: "+residualRisk+" → "+lvl;
+renderResidualMatrix();
+};
+
+window.saveResidualRisk=function(){
+update(ref(db,"smsReports/"+key),{residualRisk});
+savedResidualRisk.innerText=residualRisk;
+};
+
 function renderMatrix(){
 
 const m=document.getElementById("matrix");
+m.innerHTML="";
+
+const grid=document.createElement("div");
+grid.className="matrix-grid";
+
+grid.appendChild(document.createElement("div"));
+
+for(let p=1;p<=5;p++){
+let x=document.createElement("div");
+x.innerText="P"+p;
+x.style.fontWeight="bold";
+x.style.textAlign="center";
+grid.appendChild(x);
+}
+
+const dp={
+1:"Very unlikely",
+2:"Unlikely",
+3:"Possible",
+4:"Likely",
+5:"Very likely"
+};
+
+const ds={
+1:"Minor",
+2:"Low",
+3:"Medium",
+4:"High",
+5:"Catastrophic"
+};
+
+for(let s=5;s>=1;s--){
+
+let y=document.createElement("div");
+y.innerText="S"+s;
+y.style.fontWeight="bold";
+y.style.display="flex";
+y.style.alignItems="center";
+y.style.justifyContent="center";
+
+grid.appendChild(y);
+
+for(let p=1;p<=5;p++){
+
+let v=p*s;
+
+let cell=document.createElement("div");
+cell.className="cell "+(v<=5?"low":v<=12?"medium":"high");
+cell.innerText=v;
+
+cell.onmouseover=()=>{
+let t=document.createElement("div");
+t.className="tooltip";
+t.innerText=`P:${dp[p]} | S:${ds[s]}`;
+cell.appendChild(t);
+t.style.display="block";
+};
+
+cell.onmouseout=()=>cell.querySelector(".tooltip")?.remove();
+
+grid.appendChild(cell);
+}
+}
+
+m.appendChild(grid);
+}
+
+function renderResidualMatrix(){
+
+const m=document.getElementById("residualMatrix");
 m.innerHTML="";
 
 const grid=document.createElement("div");
