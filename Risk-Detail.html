@@ -50,32 +50,12 @@ button.active{
   background:purple !important;
 }
 
-/* RESULT */
-.result{
-  margin-top:20px;
-  padding:15px;
-  background:#e9f5ff;
-  border-radius:8px;
-  font-weight:bold;
-}
-
-.bottom{
-  display:flex;
-  justify-content:space-between;
-  margin-top:20px;
-}
-
-.back{
-  background:red;
-}
-
 /* CPA */
 .cpa-box{
   margin-top:25px;
   padding:20px;
   border:2px solid #071f47;
   border-radius:10px;
-  background:#fff;
 }
 
 .cpa-item{
@@ -100,20 +80,38 @@ button.active{
   font-size:12px;
 }
 
-.send-btn{
-  background:#071f47;
-  margin-left:10px;
-}
-
 .send-btn.active{
   background:purple !important;
 }
 
-/* ========================= */
-/* 🔥 RISK MATRIX (NUEVO) */
-/* ========================= */
+/* ATTACHMENTS */
+.attachment-box{
+  margin-top:25px;
+  padding:20px;
+  border:2px solid green;
+  border-radius:10px;
+  background:#f6fff6;
+}
 
-.matrix {
+.attachment-item{
+  background:white;
+  padding:10px;
+  margin-top:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+/* RESULT */
+.result{
+  margin-top:20px;
+  padding:15px;
+  background:#e9f5ff;
+  border-radius:8px;
+  font-weight:bold;
+}
+
+/* MATRIX */
+.matrix{
   margin-top:20px;
   display:grid;
   grid-template-columns: repeat(5, 60px);
@@ -121,7 +119,7 @@ button.active{
   justify-content:center;
 }
 
-.cell {
+.cell{
   width:60px;
   height:60px;
   display:flex;
@@ -131,16 +129,13 @@ button.active{
   color:white;
   border-radius:6px;
   cursor:pointer;
-  position:relative;
 }
 
-/* colores tipo ICAO */
-.low { background:#2ecc71; }
-.medium { background:#f1c40f; color:#000; }
-.high { background:#e74c3c; }
+.low{background:#2ecc71;}
+.medium{background:#f1c40f;color:black;}
+.high{background:#e74c3c;}
 
-/* tooltip */
-.tooltip {
+.tooltip{
   position:absolute;
   background:#071f47;
   color:white;
@@ -148,8 +143,6 @@ button.active{
   border-radius:6px;
   font-size:12px;
   display:none;
-  width:160px;
-  z-index:10;
 }
 </style>
 
@@ -178,17 +171,16 @@ button.active{
 
 <div class="result" id="result"></div>
 
-<div class="bottom">
-<button onclick="saveRisk()">Save Risk</button>
-<button class="back" onclick="goBack()">Back</button>
-</div>
-
-<p style="margin-top:15px;font-weight:bold;">
-Risk Assessment Save: <span id="savedRisk">N/A</span>
+<p style="font-weight:bold;">
+Risk Save: <span id="savedRisk">N/A</span>
 </p>
 
-<!-- 🔥 MATRIZ ICAO (NUEVO) -->
 <div class="matrix" id="matrix"></div>
+
+<div class="bottom">
+<button onclick="saveRisk()">Save Risk</button>
+<button onclick="goBack()" style="background:red;">Back</button>
+</div>
 
 </div>
 
@@ -197,24 +189,30 @@ Risk Assessment Save: <span id="savedRisk">N/A</span>
 <h3>CPA MODULE</h3>
 
 <select id="controlType">
-  <option>Elimination</option>
-  <option>Substitution</option>
-  <option>Engineering</option>
-  <option>Administration</option>
-  <option>PPE</option>
+<option>Elimination</option>
+<option>Substitution</option>
+<option>Engineering</option>
+<option>Administration</option>
+<option>PPE</option>
 </select>
 
 <input id="actionPlan" placeholder="Action Plan">
 <input type="date" id="actionDate">
 
 <select id="emailTo">
-  <option>andresquintero01@gmail.com</option>
-  <option>Geraldinmurilli85@gmail.com</option>
+<option>andresquintero01@gmail.com</option>
+<option>Geraldinmurilli85@gmail.com</option>
 </select>
 
 <button onclick="saveCPA()">Save CPA</button>
 
 <div id="cpaContainer"></div>
+</div>
+
+<!-- ATTACHMENTS -->
+<div class="attachment-box">
+<h3>CPA ATTACHMENTS</h3>
+<div id="attachmentContainer"></div>
 </div>
 
 </div>
@@ -226,29 +224,24 @@ import { getDatabase, ref, get, update, push, remove }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyXXXX",
-  authDomain: "aviation-sms.firebaseapp.com",
-  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
-  projectId: "aviation-sms",
-  storageBucket: "aviation-sms.firebasestorage.app",
-  messagingSenderId: "147000937860",
-  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+apiKey: "xxx",
+authDomain: "aviation-sms.firebaseapp.com",
+databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+projectId: "aviation-sms",
+storageBucket: "aviation-sms.firebasestorage.app",
+messagingSenderId: "147000937860",
+appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
+const db = getDatabase(initializeApp(firebaseConfig));
 const key = new URLSearchParams(window.location.search).get("key");
 
-let p = 0;
-let s = 0;
-let risk = 0;
-let cpaCounter = 0;
+let p=0,s=0,risk=0,cpaCounter=0;
 
-/* LOAD REPORT */
-get(ref(db,"smsReports/"+key)).then(snap=>{
-if(snap.exists()){
-const d=snap.val();
+/* LOAD */
+get(ref(db,"smsReports/"+key)).then(s=>{
+if(s.exists()){
+const d=s.val();
 
 document.getElementById("reportBox").innerHTML=`
 <b>ID:</b> ${d.reportId}<br>
@@ -257,8 +250,9 @@ document.getElementById("reportBox").innerHTML=`
 <b>Risk:</b> ${d.risk}
 `;
 
-document.getElementById("savedRisk").innerText = d.risk || "N/A";
+savedRisk.innerText=d.risk||"N/A";
 loadCPA(d.CPA);
+renderMatrix();
 }
 });
 
@@ -281,7 +275,6 @@ if(type==="s")s=i;
 c.appendChild(b);
 }
 }
-
 createButtons("pBtns","p");
 createButtons("sBtns","s");
 
@@ -289,72 +282,45 @@ createButtons("sBtns","s");
 window.calculateRisk=function(){
 risk=p*s;
 
-let level="";
-if(risk<=5)level="LOW 🟢";
-else if(risk<=12)level="MEDIUM 🟡";
-else level="HIGH 🔴";
+let lvl = risk<=5?"LOW 🟢":risk<=12?"MEDIUM 🟡":"HIGH 🔴";
 
-result.innerText="Risk: "+risk+" → "+level;
+result.innerText="Risk: "+risk+" → "+lvl;
 renderMatrix();
 };
 
 /* SAVE RISK */
 window.saveRisk=function(){
-update(ref(db,"smsReports/"+key),{risk:risk});
+update(ref(db,"smsReports/"+key),{risk});
 savedRisk.innerText=risk;
 };
 
-/* MATRIX GENERATOR */
+/* MATRIX */
 function renderMatrix(){
+const m=document.getElementById("matrix");
+m.innerHTML="";
 
-const matrix=document.getElementById("matrix");
-matrix.innerHTML="";
-
-const defsP={
-1:"Very unlikely",
-2:"Unlikely",
-3:"Possible",
-4:"Likely",
-5:"Very likely"
-};
-
-const defsS={
-1:"Negligible",
-2:"Minor",
-3:"Moderate",
-4:"Major",
-5:"Catastrophic"
-};
+const dp={1:"Very unlikely",2:"Unlikely",3:"Possible",4:"Likely",5:"Very likely"};
+const ds={1:"Minor",2:"Low",3:"Medium",4:"High",5:"Catastrophic"};
 
 for(let s=5;s>=1;s--){
 for(let p=1;p<=5;p++){
 
-let value=p*s;
-let div=document.createElement("div");
+let v=p*s;
+let d=document.createElement("div");
+d.className="cell "+(v<=5?"low":v<=12?"medium":"high");
+d.innerText=v;
 
-div.classList.add("cell");
-
-if(value<=5) div.classList.add("low");
-else if(value<=12) div.classList.add("medium");
-else div.classList.add("high");
-
-div.innerText=value;
-
-/* tooltip */
-div.onmouseover=(e)=>{
-let tip=document.createElement("div");
-tip.className="tooltip";
-tip.innerText =
-"Prob: "+defsP[p]+"\nSeverity: "+defsS[s];
-div.appendChild(tip);
-tip.style.display="block";
+d.onmouseover=(e)=>{
+let t=document.createElement("div");
+t.className="tooltip";
+t.innerText=`P:${dp[p]} | S:${ds[s]}`;
+d.appendChild(t);
+t.style.display="block";
 };
 
-div.onmouseout=()=>{
-div.querySelector(".tooltip")?.remove();
-};
+d.onmouseout=()=>d.querySelector(".tooltip")?.remove();
 
-matrix.appendChild(div);
+m.appendChild(d);
 }
 }
 }
@@ -362,7 +328,6 @@ matrix.appendChild(div);
 /* CPA */
 window.saveCPA=function(){
 cpaCounter++;
-
 push(ref(db,"smsReports/"+key+"/CPA"),{
 cpaNumber:cpaCounter,
 controlType:controlType.value,
@@ -372,15 +337,39 @@ emailTo:emailTo.value
 });
 };
 
-/* DELETE */
-window.deleteCPA=function(id){
-remove(ref(db,"smsReports/"+key+"/CPA/"+id));
-};
+/* LOAD CPA */
+function loadCPA(data){
+const c=document.getElementById("cpaContainer");
+const a=document.getElementById("attachmentContainer");
+c.innerHTML="";a.innerHTML="";
+
+if(!data){cpaCounter=0;return;}
+
+Object.entries(data).forEach(([id,x],i)=>{
+
+let div=document.createElement("div");
+div.className="cpa-item";
+
+div.innerHTML=`
+<b>CPA ${i+1}</b><br>
+Type:${x.controlType}<br>
+Action:${x.actionPlan}<br>
+Date:${x.actionDate}<br>
+Email:${x.emailTo}
+<button class="delete-btn" onclick="remove(ref(db,'smsReports/'+key+'/CPA/${id}'))">🗑</button>
+`;
+
+c.appendChild(div);
+
+let att=document.createElement("div");
+att.className="attachment-item";
+att.innerHTML=`CPA Attachment ${i+1}`;
+a.appendChild(att);
+});
+}
 
 /* BACK */
-window.goBack=function(){
-window.location.href="SMS-Database.html";
-};
+window.goBack=()=>location.href="SMS-Database.html";
 
 </script>
 
