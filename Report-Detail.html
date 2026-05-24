@@ -72,12 +72,10 @@ button:hover{
 
 <h1>SMS Report Detail</h1>
 
-<!-- DATA FROM FIREBASE -->
 <div class="box" id="reportBox">
   Loading report...
 </div>
 
-<!-- RISK MATRIX -->
 <div class="box">
 
 <h3>Risk Assessment</h3>
@@ -90,7 +88,6 @@ button:hover{
 
 <button onclick="calculateRisk()">Calculate Risk</button>
 
-<!-- 🔥 NUEVO BOTÓN GUARDAR RIESGO -->
 <button onclick="saveRisk()">Save Risk to Firebase</button>
 
 <div class="result" id="result"></div>
@@ -100,6 +97,7 @@ button:hover{
 </div>
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, get, child, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
@@ -116,81 +114,79 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// GET ID FROM URL
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+// 🔥 KEY DEL REPORTE
+const key = new URLSearchParams(window.location.search).get("key");
 
-let currentFirebaseKey = null;
+let riskValue = 0;
 
-// READ FIREBASE
-get(child(ref(db), "smsReports")).then((snapshot) => {
+// 🚀 CARGAR REPORTE DESDE FIREBASE
+get(ref(db, "smsReports/" + key)).then((snapshot) => {
 
   if(snapshot.exists()){
 
     const data = snapshot.val();
 
-    for(let key in data){
+    document.getElementById("reportBox").innerHTML = `
+      <p><b>ID:</b> ${data.reportId}</p>
+      <p><b>What Happened:</b> ${data.whatHappened}</p>
+      <p><b>Date:</b> ${data.date}</p>
+      <p><b>Solution:</b> ${data.solution}</p>
+      <p><b>Status:</b> ${data.status}</p>
+      <p><b>Risk:</b> ${data.risk}</p>
+    `;
 
-      if(data[key].reportId == id){
-
-        currentFirebaseKey = key;
-
-        document.getElementById("reportBox").innerHTML = `
-          <p><b>ID:</b> ${data[key].reportId}</p>
-          <p><b>What Happened:</b> ${data[key].whatHappened}</p>
-          <p><b>Date:</b> ${data[key].date}</p>
-          <p><b>Solution:</b> ${data[key].solution}</p>
-        `;
-      }
+    // 🔥 si ya existe data de riesgo, lo carga
+    if(data.probability){
+      document.getElementById("prob").value = data.probability;
     }
+
+    if(data.severity){
+      document.getElementById("sev").value = data.severity;
+    }
+
+    riskValue = data.risk || 0;
   }
 });
 
-// RISK FUNCTION
+// 🚀 CALCULAR RISK
 window.calculateRisk = function(){
 
   let p = parseInt(document.getElementById("prob").value);
   let s = parseInt(document.getElementById("sev").value);
 
-  let r = p * s;
+  riskValue = p * s;
 
   let level = "";
 
-  if(r <= 5){
+  if(riskValue <= 5){
     level = "LOW RISK 🟢";
-  } else if(r <= 12){
+  } else if(riskValue <= 12){
     level = "MEDIUM RISK 🟡";
   } else {
     level = "HIGH RISK 🔴";
   }
 
   document.getElementById("result").innerHTML =
-    "Risk Score: " + r + " → " + level;
+    "Risk Score: " + riskValue + " → " + level;
 };
 
-// 🔥 SAVE RISK TO FIREBASE
+// 🚀 GUARDAR RISK EN FIREBASE (REAL)
 window.saveRisk = function(){
 
   let p = parseInt(document.getElementById("prob").value);
   let s = parseInt(document.getElementById("sev").value);
-  let r = p * s;
 
-  if(!currentFirebaseKey){
-    alert("No report found");
-    return;
-  }
+  riskValue = p * s;
 
-  const updateRef = ref(db, "smsReports/" + currentFirebaseKey);
-
-  update(updateRef, {
+  update(ref(db, "smsReports/" + key), {
     probability: p,
     severity: s,
-    risk: r
-  }).then(() => {
-    alert("Risk saved successfully in Firebase 🔥");
+    risk: riskValue
   });
 
+  alert("Risk saved successfully ✔");
 };
+
 </script>
 
 </body>
