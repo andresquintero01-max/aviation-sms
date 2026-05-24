@@ -6,7 +6,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
@@ -21,43 +21,32 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 🚀 SAVE REPORT (FIX FINAL ESTABLE)
 window.sendReport = function () {
 
   const what = document.getElementById("what").value;
   const date = document.getElementById("date").value;
   const solution = document.getElementById("solution").value;
 
-  // 🔥 VALIDACIÓN SIMPLE (EVITA VACÍOS)
-  if(!what || !solution){
-    alert("Please fill required fields");
-    return;
-  }
+  // 🔥 CREAR NUEVO REGISTRO
+  const newRef = push(ref(db, "smsReports"));
 
-  try {
+  // 🔥 GUARDAR EN FIREBASE (CORRECTO)
+  set(newRef, {
+    reportId: Date.now(),
+    whatHappened: what,
+    date: date,
+    solution: solution,
+    status: "OPEN",
+    risk: "NOT ASSESSED",
+    probability: 0,
+    severity: 0,
+    timestamp: new Date().toISOString()
+  });
 
-    // 🔥 CREA NUEVO REGISTRO
-    const newRef = push(ref(db, "smsReports"));
+  alert("SMS Report saved ✔");
 
-    // 🔥 GUARDA EN FIREBASE
-    newRef.set({
-      reportId: Date.now(),
-      whatHappened: what,
-      date: date,
-      solution: solution,
-      status: "OPEN",
-      risk: "NOT ASSESSED",
-      probability: 0,
-      severity: 0,
-      timestamp: new Date().toISOString()
-    });
-
-    // 🔥 REDIRECCIÓN A DETALLE
-    window.location.href = "Report-Detail.html?key=" + newRef.key;
-
-  } catch (error) {
-    alert("Error saving report: " + error.message);
-  }
+  // opcional: ir a base de datos
+  window.location.href = "SMS-Database.html";
 };
 </script>
 
@@ -95,6 +84,8 @@ input, textarea{
   width:100%;
   padding:10px;
   margin-top:5px;
+  border:1px solid #ccc;
+  border-radius:6px;
 }
 
 button{
@@ -105,6 +96,7 @@ button{
   color:white;
   border:none;
   border-radius:6px;
+  cursor:pointer;
 }
 
 button:hover{
@@ -119,28 +111,30 @@ button:hover{
   color:white;
   padding:10px;
   text-decoration:none;
+  border-radius:6px;
 }
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>SMS Report Form</h1>
+  <h1>SMS Report Form</h1>
 
-<label>What happened?</label>
-<textarea id="what"></textarea>
+  <label>What happened?</label>
+  <textarea id="what"></textarea>
 
-<label>Date</label>
-<input type="date" id="date">
+  <label>Date</label>
+  <input type="date" id="date">
 
-<label>Solution</label>
-<textarea id="solution"></textarea>
+  <label>Solution</label>
+  <textarea id="solution"></textarea>
 
-<button onclick="sendReport()">Send Report</button>
+  <button onclick="sendReport()">Send Report</button>
 
-<a class="back" href="index.html">Back to Home</a>
+  <a class="back" href="index.html">Back to Home</a>
 
 </div>
 
