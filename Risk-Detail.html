@@ -50,24 +50,6 @@ button.active{
   background:purple !important;
 }
 
-.result{
-  margin-top:20px;
-  padding:15px;
-  background:#e9f5ff;
-  border-radius:8px;
-  font-weight:bold;
-}
-
-.bottom{
-  display:flex;
-  justify-content:space-between;
-  margin-top:20px;
-}
-
-.back{
-  background:red;
-}
-
 /* CPA */
 .cpa-box{
   margin-top:25px;
@@ -98,6 +80,16 @@ button.active{
   cursor:pointer;
   font-size:12px;
 }
+
+/* SEND BUTTON */
+.send-btn{
+  background:#071f47;
+  margin-left:10px;
+}
+
+.send-btn.active{
+  background:purple !important;
+}
 </style>
 
 </head>
@@ -109,31 +101,6 @@ button.active{
 <h1>SMS Report Detail</h1>
 
 <div class="box" id="reportBox">Loading report...</div>
-
-<div class="box">
-
-<h3>Risk Assessment</h3>
-
-<p>Probability:</p>
-<div id="pBtns"></div>
-
-<p>Severity:</p>
-<div id="sBtns"></div>
-
-<button onclick="calculateRisk()">Calculate Risk</button>
-
-<div class="result" id="result"></div>
-
-<div class="bottom">
-<button onclick="saveRisk()">Save Risk</button>
-<button class="back" onclick="goBack()">Back</button>
-</div>
-
-<p style="margin-top:15px;font-weight:bold;">
-Risk Assessment Save: <span id="savedRisk">N/A</span>
-</p>
-
-</div>
 
 <!-- CPA MODULE -->
 <div class="cpa-box">
@@ -167,7 +134,7 @@ Risk Assessment Save: <span id="savedRisk">N/A</span>
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, get, update, push, remove }
+import { getDatabase, ref, get, push, remove }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
@@ -185,7 +152,6 @@ const db = getDatabase(app);
 
 const key = new URLSearchParams(window.location.search).get("key");
 
-let p=0, s=0, risk=0;
 let cpaCounter = 0;
 
 /* LOAD REPORT */
@@ -230,13 +196,14 @@ Date: ${cpa.actionDate}<br>
 Email: ${cpa.emailTo}<br>
 
 <button class="delete-btn" onclick="deleteCPA('${id}')">🗑</button>
+<button class="send-btn" onclick="sendCPA(this,'${cpa.emailTo}')">Send</button>
 `;
 
 box.appendChild(div);
 });
 }
 
-/* DELETE CPA */
+/* DELETE */
 window.deleteCPA=function(id){
 remove(ref(db,"smsReports/"+key+"/CPA/"+id));
 alert("Deleted");
@@ -258,21 +225,11 @@ emailTo:emailTo.value
 alert("CPA "+cpaCounter+" saved ✔");
 };
 
-/* RISK */
-window.calculateRisk=function(){
-risk=p*s;
-result.innerText="Risk: "+risk;
-};
+/* SEND INDIVIDUAL CPA */
+window.sendCPA=function(btn,email){
 
-window.saveRisk=function(){
-update(ref(db,"smsReports/"+key),{
-risk:risk
-});
-savedRisk.innerText=risk;
-};
-
-window.goBack=function(){
-window.location.href="SMS-Database.html";
+btn.classList.add("active"); // 🔥 turns purple
+window.location.href=`mailto:${email}`;
 };
 
 </script>
