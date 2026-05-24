@@ -68,30 +68,6 @@ button.active{
 .back{
   background:red;
 }
-
-/* 🔥 CPA STYLES */
-.cpa-box{
-  margin-top:20px;
-  padding:15px;
-  border:2px solid #071f47;
-  border-radius:10px;
-  background:#fff;
-}
-
-.cpa-item{
-  margin-bottom:15px;
-  padding:10px;
-  border:1px solid #ddd;
-  border-radius:8px;
-}
-
-.cpa-item select,
-.cpa-item input{
-  width:100%;
-  padding:8px;
-  margin-top:5px;
-  margin-bottom:10px;
-}
 </style>
 
 </head>
@@ -125,23 +101,12 @@ Loading report...
 <button class="back" onclick="goBack()">Back</button>
 </div>
 
-<p style="margin-top:15px;font-weight:bold;">
+<!-- 🔥 NUEVO: ABAJO DEL BOTÓN -->
+<p style="margin-top:15px; font-weight:bold;">
 Risk Assessment Save: <span id="savedRisk">N/A</span>
 </p>
 
 </div>
-
-<!-- 🔥 CPA MODULE START -->
-<div class="box">
-
-<h3>CPA - Corrective Action Plans</h3>
-
-<div id="cpaContainer"></div>
-
-<button onclick="addCPA()">+ Add CPA</button>
-
-</div>
-<!-- 🔥 CPA MODULE END -->
 
 </div>
 
@@ -194,9 +159,11 @@ function createButtons(containerId, type){
     btn.innerText = i;
 
     btn.onclick = () => {
+
       for(let b of container.children){
         b.classList.remove("active");
       }
+
       btn.classList.add("active");
 
       if(type === "p") p = i;
@@ -244,46 +211,8 @@ window.goBack = function(){
   window.location.href = "SMS-Database.html";
 };
 
-/* 🔥 CPA LOGIC START */
-let cpaCount = 0;
-
-window.addCPA = function(){
-
-  cpaCount++;
-
-  const container = document.getElementById("cpaContainer");
-
-  const div = document.createElement("div");
-  div.className = "cpa-item";
-
-  div.innerHTML = `
-    <b>CPA #${cpaCount}</b>
-
-    <label>Type of Control</label>
-    <select>
-      <option>Elimination</option>
-      <option>Substitution</option>
-      <option>Engineering</option>
-      <option>Administration</option>
-      <option>PPE</option>
-    </select>
-
-    <label>Action Plan</label>
-    <input type="text" placeholder="Describe action...">
-
-    <label>Target Date</label>
-    <input type="date">
-
-    <label>Email</label>
-    <select>
-      <option>andresquintero01@gmail.com</option>
-      <option>Geraldinmurilli85@gmail.com</option>
-    </select>
-  `;
-
-  container.appendChild(div);
-};
 </script>
 
 </body>
 </html>
+ 
