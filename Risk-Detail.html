@@ -224,6 +224,8 @@ button.active{
 <option>Geraldinmurilli85@gmail.com</option>
 </select>
 
+<input type="file" id="cpaPdf" accept="application/pdf">
+
 <button onclick="saveCPA()">Save CPA</button>
 
 <div id="cpaContainer"></div>
@@ -243,6 +245,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getDatabase, ref, get, update, push, remove }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
 const firebaseConfig = {
 apiKey: "xxx",
 authDomain: "aviation-sms.firebaseapp.com",
@@ -255,6 +260,7 @@ appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const storage = getStorage(app);
 
 const key = new URLSearchParams(window.location.search).get("key");
 
@@ -395,19 +401,43 @@ m.appendChild(grid);
 }
 
 /* CPA */
-window.saveCPA=function(){
+window.saveCPA=async function(){
 cpaCounter++;
+
+let pdfUrl="";
+let pdfName="";
+
+const file=document.getElementById("cpaPdf").files[0];
+
+if(file){
+const pdfPath="smsReports/"+key+"/CPA/CPA-"+cpaCounter+"-"+file.name;
+const pdfStorageRef=storageRef(storage,pdfPath);
+
+await uploadBytes(pdfStorageRef,file);
+pdfUrl=await getDownloadURL(pdfStorageRef);
+pdfName=file.name;
+}
+
 push(ref(db,"smsReports/"+key+"/CPA"),{
 cpaNumber:cpaCounter,
 controlType:controlType.value,
 actionPlan:actionPlan.value,
 actionDate:actionDate.value,
-emailTo:emailTo.value
+emailTo:emailTo.value,
+pdfUrl:pdfUrl,
+pdfName:pdfName
+}).then(()=>{
+document.getElementById("cpaPdf").value="";
+get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
+if(s.exists()){
+loadCPA(s.val());
+}
+});
 });
 };
 
 /* SEND CPA EMAIL */
-window.sendCPAEmail=function(email,type,action,date,cpaNumber){
+window.sendCPAEmail=function(email,type,action,date,cpaNumber,pdfUrl){
 
 const subject = encodeURIComponent("CPA "+cpaNumber+" - Corrective Preventive Action");
 const body = encodeURIComponent(
@@ -415,6 +445,7 @@ const body = encodeURIComponent(
 "Control Type: "+type+"\n"+
 "Action Plan: "+action+"\n"+
 "Action Date: "+date+"\n\n"+
+(pdfUrl ? "PDF Attachment Link: "+pdfUrl+"\n\n" : "")+
 "Please review and follow up accordingly."
 );
 
@@ -460,14 +491,18 @@ Type: ${x.controlType}<br>
 Action: ${x.actionPlan}<br>
 Date: ${x.actionDate}<br>
 Email: ${x.emailTo}<br>
-<button class="send-btn" onclick="sendCPAEmail('${x.emailTo}','${x.controlType}','${x.actionPlan}','${x.actionDate}','${i+1}')">Enviar correo</button>
+<button class="send-btn" onclick="sendCPAEmail('${x.emailTo}','${x.controlType}','${x.actionPlan}','${x.actionDate}','${i+1}','${x.pdfUrl||""}')">Enviar correo</button>
+${x.pdfUrl ? `<button class="send-btn" onclick="window.open('${x.pdfUrl}','_blank')">Open PDF</button>` : ""}
 `;
 
 c.appendChild(div);
 
 let att=document.createElement("div");
 att.className="attachment-item";
-att.innerHTML=`CPA Attachment ${i+1}`;
+att.innerHTML=`
+CPA Attachment ${i+1}<br>
+${x.pdfUrl ? `<button onclick="window.open('${x.pdfUrl}','_blank')">Open PDF</button>` : "No PDF uploaded"}
+`;
 a.appendChild(att);
 });
 }
