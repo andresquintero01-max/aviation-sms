@@ -428,6 +428,29 @@ loadCPA(s.val());
 
 };
 
+window.addDriveLink=async function(id,cpaNumber){
+
+const driveLink = prompt("Paste Google Drive document link for CPA Attachment "+cpaNumber);
+
+if(!driveLink){
+alert("No Drive link added.");
+return;
+}
+
+await update(ref(db,"smsReports/"+key+"/CPA/"+id),{
+pdfUrl:driveLink,
+pdfName:"Google Drive Document",
+pdfPath:""
+});
+
+get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
+if(s.exists()){
+loadCPA(s.val());
+}
+});
+
+};
+
 window.sendCPAEmail=function(email,type,action,date,cpaNumber,pdfUrl){
 
 const subject = encodeURIComponent("CPA "+cpaNumber+" - Corrective Preventive Action");
@@ -437,7 +460,7 @@ const body = encodeURIComponent(
 "Control Type: "+type+"\n"+
 "Action Plan: "+action+"\n"+
 "Action Date: "+date+"\n\n"+
-(pdfUrl ? "PDF Link: "+pdfUrl+"\n\n" : "")+
+(pdfUrl ? "Document Link: "+pdfUrl+"\n\n" : "")+
 "Please review and follow up accordingly."
 );
 
@@ -488,7 +511,7 @@ Action: ${x.actionPlan}<br>
 Date: ${x.actionDate}<br>
 Email: ${x.emailTo}<br>
 <button class="send-btn" onclick="sendCPAEmail('${x.emailTo}','${x.controlType}','${x.actionPlan}','${x.actionDate}','${i+1}','${x.pdfUrl||""}')">Enviar correo</button>
-${x.pdfUrl ? `<button class="send-btn" onclick="window.open('${x.pdfUrl}','_blank')">Open PDF</button>` : ""}
+${x.pdfUrl ? `<button class="send-btn" onclick="window.open('${x.pdfUrl}','_blank')">Open Document</button>` : ""}
 `;
 
 c.appendChild(div);
@@ -497,10 +520,9 @@ let att=document.createElement("div");
 att.className="attachment-item";
 
 att.innerHTML=`
-<b>CPA Attachment ${i+1}</b>
-<input type="file" id="pdf-${id}" accept="application/pdf">
-<button onclick="uploadCPAPdf('${id}','${i+1}')">Upload PDF</button>
-${x.pdfUrl ? `<button onclick="window.open('${x.pdfUrl}','_blank')">Open PDF</button>` : "No PDF uploaded"}
+<b>CPA Attachment ${i+1}</b><br>
+<button onclick="addDriveLink('${id}','${i+1}')">Add Drive Link</button>
+${x.pdfUrl ? `<button onclick="window.open('${x.pdfUrl}','_blank')">Open Document</button>` : "No document link added"}
 `;
 
 a.appendChild(att);
