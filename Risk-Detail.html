@@ -33,10 +33,6 @@ h1{
   border-radius:8px;
 }
 
-.row{
-  margin:10px 0;
-}
-
 button{
   padding:10px 12px;
   margin:4px;
@@ -47,12 +43,8 @@ button{
   cursor:pointer;
 }
 
-button:hover{
-  background:#0b2a66;
-}
-
-.smallBtn{
-  width:40px;
+button.active{
+  background:green !important;
 }
 
 .result{
@@ -63,13 +55,13 @@ button:hover{
   font-weight:bold;
 }
 
-.bottomBtns{
+.bottom{
   display:flex;
   justify-content:space-between;
   margin-top:20px;
 }
 
-.backBtn{
+.back{
   background:red;
 }
 </style>
@@ -89,31 +81,19 @@ Loading report...
 
 <h3>Risk Assessment</h3>
 
-<div class="row">
-<b>Probability:</b>
-<button onclick="setP(1)">↑1</button>
-<button onclick="setP(2)">↑2</button>
-<button onclick="setP(3)">↑3</button>
-<button onclick="setP(4)">↑4</button>
-<button onclick="setP(5)">↑5</button>
-</div>
+<p>Probability:</p>
+<div id="pBtns"></div>
 
-<div class="row">
-<b>Severity:</b>
-<button onclick="setS(1)">↑1</button>
-<button onclick="setS(2)">↑2</button>
-<button onclick="setS(3)">↑3</button>
-<button onclick="setS(4)">↑4</button>
-<button onclick="setS(5)">↑5</button>
-</div>
+<p>Severity:</p>
+<div id="sBtns"></div>
 
 <button onclick="calculateRisk()">Calculate Risk</button>
 
 <div class="result" id="result"></div>
 
-<div class="bottomBtns">
+<div class="bottom">
 <button onclick="saveRisk()">Save Risk</button>
-<button class="backBtn" onclick="goBack()">Back</button>
+<button class="back" onclick="goBack()">Back</button>
 </div>
 
 </div>
@@ -138,14 +118,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 🔥 ID DEL REPORTE
+// 🔥 AHORA USAMOS KEY REAL
 const key = new URLSearchParams(window.location.search).get("key");
 
 let p = 0;
 let s = 0;
 let risk = 0;
 
-// 🔥 CARGAR REPORTE
+// --------------------
+// LOAD REPORT (FIX REAL)
+// --------------------
 get(ref(db, "smsReports/" + key)).then(snapshot => {
 
   if(snapshot.exists()){
@@ -157,20 +139,56 @@ get(ref(db, "smsReports/" + key)).then(snapshot => {
       <p><b>Date:</b> ${data.date}</p>
     `;
   } else {
-    document.getElementById("reportBox").innerHTML = "Report not found";
+    document.getElementById("reportBox").innerHTML =
+      "Report not found (check link key)";
   }
 });
 
-// 🔥 BOTONES
-window.setP = function(val){
-  p = val;
-};
+// --------------------
+// BUTTONS CREATION
+// --------------------
+function createButtons(containerId, type){
+  const container = document.getElementById(containerId);
 
-window.setS = function(val){
-  s = val;
-};
+  for(let i=1;i<=5;i++){
+    let btn = document.createElement("button");
+    btn.innerText = i;
 
-// 🔥 CALCULAR
+    btn.onclick = () => {
+
+      if(type === "p") {
+        p = i;
+        updateUI("pBtns", i);
+      }
+
+      if(type === "s") {
+        s = i;
+        updateUI("sBtns", i);
+      }
+    };
+
+    container.appendChild(btn);
+  }
+}
+
+function updateUI(containerId, selected){
+  let btns = document.getElementById(containerId).children;
+
+  for(let b of btns){
+    b.classList.remove("active");
+    if(b.innerText == selected){
+      b.classList.add("active");
+    }
+  }
+}
+
+// init buttons
+createButtons("pBtns", "p");
+createButtons("sBtns", "s");
+
+// --------------------
+// CALC RISK
+// --------------------
 window.calculateRisk = function(){
   risk = p * s;
 
@@ -184,7 +202,9 @@ window.calculateRisk = function(){
     "Risk Score: " + risk + " → " + level;
 };
 
-// 🔥 GUARDAR EN MISMO ID
+// --------------------
+// SAVE (same ID)
+// --------------------
 window.saveRisk = function(){
 
   update(ref(db, "smsReports/" + key), {
@@ -196,7 +216,9 @@ window.saveRisk = function(){
   alert("Risk saved ✔");
 };
 
-// 🔥 BACK
+// --------------------
+// BACK
+// --------------------
 window.goBack = function(){
   window.location.href = "SMS-Database.html";
 };
