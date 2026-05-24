@@ -98,16 +98,6 @@ button.active{
   cursor:pointer;
   font-size:12px;
 }
-
-/* 🔥 SEND BUTTON STYLE */
-.send-btn{
-  background:#071f47;
-  margin-left:5px;
-}
-
-.send-btn.active{
-  background:purple !important;
-}
 </style>
 
 </head>
@@ -167,7 +157,6 @@ Risk Assessment Save: <span id="savedRisk">N/A</span>
 </select>
 
 <button onclick="saveCPA()">Save CPA</button>
-<button onclick="sendCPA()">Send CPA</button>
 
 <div id="cpaContainer"></div>
 
@@ -241,21 +230,21 @@ Date: ${cpa.actionDate}<br>
 Email: ${cpa.emailTo}<br>
 
 <button class="delete-btn" onclick="deleteCPA('${id}')">🗑</button>
-<button class="send-btn" onclick="sendSingleCPA(this,'${cpa.emailTo}')">Send</button>
 `;
 
 box.appendChild(div);
 });
 }
 
-/* DELETE */
+/* DELETE CPA */
 window.deleteCPA=function(id){
 remove(ref(db,"smsReports/"+key+"/CPA/"+id));
 alert("Deleted");
 };
 
-/* SAVE */
+/* SAVE CPA */
 window.saveCPA=function(){
+
 cpaCounter++;
 
 push(ref(db,"smsReports/"+key+"/CPA"),{
@@ -265,18 +254,8 @@ actionPlan:actionPlan.value,
 actionDate:actionDate.value,
 emailTo:emailTo.value
 });
-};
 
-/* SEND ALL */
-window.sendCPA=function(){
-window.location.href=`mailto:${emailTo.value}`;
-};
-
-/* SEND SINGLE (BUTTON CHANGE COLOR) */
-window.sendSingleCPA=function(btn,email){
-
-btn.classList.add("active");
-window.location.href=`mailto:${email}`;
+alert("CPA "+cpaCounter+" saved ✔");
 };
 
 /* RISK */
