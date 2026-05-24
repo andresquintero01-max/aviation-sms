@@ -81,7 +81,6 @@ button.active{
   font-size:12px;
 }
 
-/* SEND BUTTON */
 .send-btn{
   background:#071f47;
   margin-left:10px;
@@ -89,6 +88,23 @@ button.active{
 
 .send-btn.active{
   background:purple !important;
+}
+
+/* 🔥 CPA ATTACHMENT */
+.attachment-box{
+  margin-top:30px;
+  padding:20px;
+  border:2px solid green;
+  border-radius:10px;
+  background:#f6fff6;
+}
+
+.attachment-item{
+  padding:10px;
+  margin-top:10px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  background:white;
 }
 </style>
 
@@ -129,6 +145,12 @@ button.active{
 
 </div>
 
+<!-- 🔥 CPA ATTACHMENT NEW BOX -->
+<div class="attachment-box">
+<h3>CPA ATTACHMENT</h3>
+<div id="attachmentContainer"></div>
+</div>
+
 </div>
 
 <script type="module">
@@ -154,7 +176,7 @@ const key = new URLSearchParams(window.location.search).get("key");
 
 let cpaCounter = 0;
 
-/* LOAD REPORT */
+/* LOAD REPORT + CPA */
 get(ref(db,"smsReports/"+key)).then(snap=>{
 if(snap.exists()){
 const d=snap.val();
@@ -170,10 +192,14 @@ loadCPA(d.CPA);
 }
 });
 
-/* LOAD CPA */
+/* LOAD CPA + ATTACHMENTS */
 function loadCPA(data){
+
 const box=document.getElementById("cpaContainer");
+const attach=document.getElementById("attachmentContainer");
+
 box.innerHTML="";
+attach.innerHTML="";
 
 if(!data){
 cpaCounter=0;
@@ -185,6 +211,7 @@ cpaCounter=entries.length;
 
 entries.forEach(([id,cpa],index)=>{
 
+/* CPA CARD */
 const div=document.createElement("div");
 div.className="cpa-item";
 
@@ -200,6 +227,19 @@ Email: ${cpa.emailTo}<br>
 `;
 
 box.appendChild(div);
+
+/* 🔥 ATTACHMENT CARD */
+const att=document.createElement("div");
+att.className="attachment-item";
+
+att.innerHTML=`
+<b>CPA Attachment ${index+1}</b><br>
+Linked to CPA ${index+1}<br>
+Owner: ${cpa.emailTo}
+`;
+
+attach.appendChild(att);
+
 });
 }
 
@@ -225,10 +265,9 @@ emailTo:emailTo.value
 alert("CPA "+cpaCounter+" saved ✔");
 };
 
-/* SEND INDIVIDUAL CPA */
+/* SEND */
 window.sendCPA=function(btn,email){
-
-btn.classList.add("active"); // 🔥 turns purple
+btn.classList.add("active");
 window.location.href=`mailto:${email}`;
 };
 
