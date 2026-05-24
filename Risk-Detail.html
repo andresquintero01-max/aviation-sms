@@ -32,7 +32,6 @@ h1{
   border-radius:8px;
 }
 
-/* BUTTONS */
 button{
   padding:10px 12px;
   margin:4px;
@@ -51,7 +50,6 @@ button.active{
   background:purple !important;
 }
 
-/* RESULT */
 .result{
   margin-top:20px;
   padding:15px;
@@ -60,7 +58,6 @@ button.active{
   font-weight:bold;
 }
 
-/* CPA */
 .cpa-box{
   margin-top:25px;
   padding:20px;
@@ -105,7 +102,6 @@ button.active{
   background:purple !important;
 }
 
-/* ATTACHMENTS */
 .attachment-box{
   margin-top:25px;
   padding:20px;
@@ -121,10 +117,6 @@ button.active{
   border-radius:8px;
   border:1px solid #ccc;
 }
-
-/* ========================= */
-/* RISK MATRIX FULL */
-/* ========================= */
 
 .matrix {
   margin-top:20px;
@@ -167,7 +159,6 @@ button.active{
   z-index:10;
 }
 </style>
-
 </head>
 
 <body>
@@ -178,7 +169,6 @@ button.active{
 
 <div class="box" id="reportBox">Loading report...</div>
 
-<!-- RISK -->
 <div class="box">
 
 <h3>Risk Assessment</h3>
@@ -204,9 +194,7 @@ button.active{
 
 </div>
 
-<!-- CPA -->
 <div class="cpa-box">
-
 <h3>CPA MODULE</h3>
 
 <select id="controlType">
@@ -218,7 +206,6 @@ button.active{
 </select>
 
 <input id="actionPlan" placeholder="Action Plan">
-
 <input type="date" id="actionDate">
 
 <select id="emailTo">
@@ -229,35 +216,26 @@ button.active{
 <button onclick="saveCPA()">Save CPA</button>
 
 <div id="cpaContainer"></div>
-
 </div>
 
-<!-- ATTACHMENTS -->
 <div class="attachment-box">
-
 <h3>CPA ATTACHMENTS</h3>
-
-<input type="file" id="cpaPdf" accept="application/pdf">
-
 <div id="attachmentContainer"></div>
-
 </div>
 
 </div>
 
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
 import { getDatabase, ref, get, update, push, remove }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL }
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
-
 apiKey: "xxx",
 authDomain: "aviation-sms.firebaseapp.com",
 databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
@@ -265,124 +243,85 @@ projectId: "aviation-sms",
 storageBucket: "aviation-sms.firebasestorage.app",
 messagingSenderId: "147000937860",
 appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
-
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getDatabase(app);
-
 const storage = getStorage(app);
 
 const key = new URLSearchParams(window.location.search).get("key");
 
 let p=0,s=0,risk=0,cpaCounter=0;
 
-/* LOAD REPORT */
 get(ref(db,"smsReports/"+key)).then(s=>{
-
 if(s.exists()){
-
 const d=s.val();
 
 document.getElementById("reportBox").innerHTML=`
-
 <b>ID:</b> ${d.reportId}<br>
 <b>What Happened:</b> ${d.whatHappened}<br>
 <b>Date:</b> ${d.date}<br>
 <b>Risk:</b> ${d.risk}
-
 `;
 
 savedRisk.innerText=d.risk||"N/A";
-
 loadCPA(d.CPA);
-
 renderMatrix();
-
 }
-
 });
 
-/* BUTTONS */
 function createButtons(id,type){
-
 const c=document.getElementById(id);
 
 for(let i=1;i<=5;i++){
-
 let b=document.createElement("button");
-
 b.innerText=i;
 
 b.onclick=()=>{
-
 for(let x of c.children)x.classList.remove("active");
-
 b.classList.add("active");
 
 if(type==="p")p=i;
 if(type==="s")s=i;
-
 };
 
 c.appendChild(b);
-
 }
-
 }
 
 createButtons("pBtns","p");
 createButtons("sBtns","s");
 
-/* CALC */
 window.calculateRisk=function(){
-
 risk=p*s;
 
 let lvl = risk<=5?"LOW 🟢":risk<=12?"MEDIUM 🟡":"HIGH 🔴";
 
 result.innerText="Risk: "+risk+" → "+lvl;
-
 renderMatrix();
-
 };
 
-/* SAVE */
 window.saveRisk=function(){
-
 update(ref(db,"smsReports/"+key),{risk});
-
 savedRisk.innerText=risk;
-
 };
-
-/* MATRIX */
 
 function renderMatrix(){
 
 const m=document.getElementById("matrix");
-
 m.innerHTML="";
 
 const grid=document.createElement("div");
-
 grid.className="matrix-grid";
 
 grid.appendChild(document.createElement("div"));
 
 for(let p=1;p<=5;p++){
-
 let x=document.createElement("div");
-
 x.innerText="P"+p;
-
 x.style.fontWeight="bold";
-
 x.style.textAlign="center";
-
 grid.appendChild(x);
-
 }
 
 const dp={
@@ -404,15 +343,10 @@ const ds={
 for(let s=5;s>=1;s--){
 
 let y=document.createElement("div");
-
 y.innerText="S"+s;
-
 y.style.fontWeight="bold";
-
 y.style.display="flex";
-
 y.style.alignItems="center";
-
 y.style.justifyContent="center";
 
 grid.appendChild(y);
@@ -422,224 +356,156 @@ for(let p=1;p<=5;p++){
 let v=p*s;
 
 let cell=document.createElement("div");
-
 cell.className="cell "+(v<=5?"low":v<=12?"medium":"high");
-
 cell.innerText=v;
 
 cell.onmouseover=()=>{
-
 let t=document.createElement("div");
-
 t.className="tooltip";
-
 t.innerText=`P:${dp[p]} | S:${ds[s]}`;
-
 cell.appendChild(t);
-
 t.style.display="block";
-
 };
 
 cell.onmouseout=()=>cell.querySelector(".tooltip")?.remove();
 
 grid.appendChild(cell);
-
 }
-
 }
 
 m.appendChild(grid);
-
 }
 
-/* SAVE CPA */
-
-window.saveCPA=async function(){
-
+window.saveCPA=function(){
 cpaCounter++;
 
-let pdfUrl="";
-let pdfName="";
-
-const file=document.getElementById("cpaPdf").files[0];
-
-if(file){
-
-const pdfPath="smsReports/"+key+"/CPA/CPA-"+cpaCounter+"-"+file.name;
-
-const pdfStorageRef=storageRef(storage,pdfPath);
-
-await uploadBytes(pdfStorageRef,file);
-
-pdfUrl=await getDownloadURL(pdfStorageRef);
-
-pdfName=file.name;
-
-}
-
 push(ref(db,"smsReports/"+key+"/CPA"),{
-
 cpaNumber:cpaCounter,
 controlType:controlType.value,
 actionPlan:actionPlan.value,
 actionDate:actionDate.value,
 emailTo:emailTo.value,
-pdfUrl:pdfUrl,
-pdfName:pdfName
-
+pdfUrl:"",
+pdfName:"",
+pdfPath:""
 }).then(()=>{
-
-document.getElementById("cpaPdf").value="";
-
 get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
-
 if(s.exists()){
-
 loadCPA(s.val());
+}
+});
+});
+};
 
+window.uploadCPAPdf=async function(id,cpaNumber){
+
+const fileInput=document.getElementById("pdf-"+id);
+const file=fileInput.files[0];
+
+if(!file){
+alert("Please select a PDF file first.");
+return;
 }
 
+const pdfPath="smsReports/"+key+"/CPA/"+id+"/"+file.name;
+const pdfStorageRef=storageRef(storage,pdfPath);
+
+await uploadBytes(pdfStorageRef,file);
+
+const pdfUrl=await getDownloadURL(pdfStorageRef);
+
+await update(ref(db,"smsReports/"+key+"/CPA/"+id),{
+pdfUrl:pdfUrl,
+pdfName:file.name,
+pdfPath:pdfPath
 });
 
+get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
+if(s.exists()){
+loadCPA(s.val());
+}
 });
 
 };
 
-/* SEND EMAIL */
-
 window.sendCPAEmail=function(email,type,action,date,cpaNumber,pdfUrl){
 
-const subject = encodeURIComponent(
-"CPA "+cpaNumber+" - Corrective Preventive Action"
-);
+const subject = encodeURIComponent("CPA "+cpaNumber+" - Corrective Preventive Action");
 
 const body = encodeURIComponent(
-
 "CPA "+cpaNumber+"\n\n"+
 "Control Type: "+type+"\n"+
 "Action Plan: "+action+"\n"+
 "Action Date: "+date+"\n\n"+
 (pdfUrl ? "PDF Link: "+pdfUrl+"\n\n" : "")+
 "Please review and follow up accordingly."
-
 );
 
-window.location.href=
-"mailto:"+email+"?subject="+subject+"&body="+body;
-
+window.location.href="mailto:"+email+"?subject="+subject+"&body="+body;
 };
 
-/* DELETE CPA */
+window.deleteCPA=async function(id,pdfPath){
 
-window.deleteCPA=function(id){
-
-remove(ref(db,"smsReports/"+key+"/CPA/"+id)).then(()=>{
-
-get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
-
-if(s.exists()){
-
-loadCPA(s.val());
-
-}else{
-
-loadCPA(null);
-
+if(pdfPath){
+try{
+await deleteObject(storageRef(storage,pdfPath));
+}catch(e){}
 }
 
+remove(ref(db,"smsReports/"+key+"/CPA/"+id)).then(()=>{
+get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
+if(s.exists()){
+loadCPA(s.val());
+}else{
+loadCPA(null);
+}
 });
-
 });
-
 };
-
-/* LOAD CPA */
 
 function loadCPA(data){
 
 const c=document.getElementById("cpaContainer");
-
 const a=document.getElementById("attachmentContainer");
 
 c.innerHTML="";
-
 a.innerHTML="";
 
-if(!data){
-
-cpaCounter=0;
-
-return;
-
-}
+if(!data){cpaCounter=0;return;}
 
 cpaCounter=Object.keys(data).length;
 
 Object.entries(data).forEach(([id,x],i)=>{
 
 let div=document.createElement("div");
-
 div.className="cpa-item";
 
 div.innerHTML=`
-
-<button class="delete-btn"
-onclick="deleteCPA('${id}')">
-🗑️
-</button>
-
+<button class="delete-btn" onclick="deleteCPA('${id}','${x.pdfPath||""}')">🗑️</button>
 <b>CPA ${i+1}</b><br>
-
 Type: ${x.controlType}<br>
-
 Action: ${x.actionPlan}<br>
-
 Date: ${x.actionDate}<br>
-
 Email: ${x.emailTo}<br>
-
-<button class="send-btn"
-onclick="sendCPAEmail('${x.emailTo}','${x.controlType}','${x.actionPlan}','${x.actionDate}','${i+1}','${x.pdfUrl||""}')">
-Enviar correo
-</button>
-
-${x.pdfUrl ? `
-<button class="send-btn"
-onclick="window.open('${x.pdfUrl}','_blank')">
-Open PDF
-</button>
-` : ""}
-
+<button class="send-btn" onclick="sendCPAEmail('${x.emailTo}','${x.controlType}','${x.actionPlan}','${x.actionDate}','${i+1}','${x.pdfUrl||""}')">Enviar correo</button>
+${x.pdfUrl ? `<button class="send-btn" onclick="window.open('${x.pdfUrl}','_blank')">Open PDF</button>` : ""}
 `;
 
 c.appendChild(div);
 
 let att=document.createElement("div");
-
 att.className="attachment-item";
 
 att.innerHTML=`
-
-CPA Attachment ${i+1}<br>
-
-${x.pdfUrl ? `
-
-<button onclick="window.open('${x.pdfUrl}','_blank')">
-Open PDF
-</button>
-
-` : "No PDF uploaded"}
-
+<b>CPA Attachment ${i+1}</b>
+<input type="file" id="pdf-${id}" accept="application/pdf">
+<button onclick="uploadCPAPdf('${id}','${i+1}')">Upload PDF</button>
+${x.pdfUrl ? `<button onclick="window.open('${x.pdfUrl}','_blank')">Open PDF</button>` : "No PDF uploaded"}
 `;
 
 a.appendChild(att);
-
 });
-
 }
-
-/* BACK */
 
 window.goBack=()=>location.href="SMS-Database.html";
 
