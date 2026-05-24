@@ -78,14 +78,14 @@ get(child(ref(db), "smsReports")).then((snapshot) => {
 
     const data = snapshot.val();
 
-    Object.values(data).forEach(item => {
+    Object.entries(data).forEach(([key, item]) => {
 
       const div = document.createElement("div");
       div.className = "record";
 
       div.innerHTML = `
         <b>ID:</b> 
-        <a href="Risk-Detail.html?id=${item.reportId}">
+        <a href="Risk-Detail.html?key=${key}">
           ${item.reportId}
         </a>
         <br>
