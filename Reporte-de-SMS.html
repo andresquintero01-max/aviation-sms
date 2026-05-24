@@ -6,7 +6,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, push, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
@@ -21,29 +21,43 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 🚀 SAVE REPORT
+// 🚀 SAVE REPORT (FIX FINAL ESTABLE)
 window.sendReport = function () {
 
   const what = document.getElementById("what").value;
   const date = document.getElementById("date").value;
   const solution = document.getElementById("solution").value;
 
-  const newRef = push(ref(db, "smsReports"));
+  // 🔥 VALIDACIÓN SIMPLE (EVITA VACÍOS)
+  if(!what || !solution){
+    alert("Please fill required fields");
+    return;
+  }
 
-  newRef.set({
-    reportId: Date.now(),
-    whatHappened: what,
-    date: date,
-    solution: solution,
-    status: "OPEN",
-    risk: "NOT ASSESSED",
-    probability: 0,
-    severity: 0,
-    timestamp: new Date().toISOString()
-  });
+  try {
 
-  // 🔥 IR A DETALLE CON KEY REAL
-  window.location.href = "Report-Detail.html?key=" + newRef.key;
+    // 🔥 CREA NUEVO REGISTRO
+    const newRef = push(ref(db, "smsReports"));
+
+    // 🔥 GUARDA EN FIREBASE
+    newRef.set({
+      reportId: Date.now(),
+      whatHappened: what,
+      date: date,
+      solution: solution,
+      status: "OPEN",
+      risk: "NOT ASSESSED",
+      probability: 0,
+      severity: 0,
+      timestamp: new Date().toISOString()
+    });
+
+    // 🔥 REDIRECCIÓN A DETALLE
+    window.location.href = "Report-Detail.html?key=" + newRef.key;
+
+  } catch (error) {
+    alert("Error saving report: " + error.message);
+  }
 };
 </script>
 
