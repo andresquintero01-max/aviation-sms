@@ -225,9 +225,9 @@ button.active{
 
 <div class="box">
 
-<h3>Valoracion del Riesgo Residual</h3>
+<h3>Residual Risk Assessment</h3>
 
-<p>Despues de la valoracion de riesgos y CPA se debe hacer una segunda valoracion con los controles aplicados.</p>
+<p>After the initial risk assessment and CPA implementation, a second risk assessment must be performed considering the controls applied.</p>
 
 <p>Probability:</p>
 <div id="rpBtns"></div>
@@ -294,44 +294,31 @@ document.getElementById("reportBox").innerHTML=`
 
 savedRisk.innerText=d.risk||"N/A";
 savedResidualRisk.innerText=d.residualRisk||"N/A";
+
 loadCPA(d.CPA);
+
 renderMatrix();
 renderResidualMatrix();
 }
 });
 
 function createButtons(id,type){
+
 const c=document.getElementById(id);
 
 for(let i=1;i<=5;i++){
+
 let b=document.createElement("button");
 b.innerText=i;
 
 b.onclick=()=>{
+
 for(let x of c.children)x.classList.remove("active");
+
 b.classList.add("active");
 
 if(type==="p")p=i;
 if(type==="s")s=i;
-};
-
-c.appendChild(b);
-}
-}
-
-createButtons("pBtns","p");
-createButtons("sBtns","s");
-
-function createResidualButtons(id,type){
-const c=document.getElementById(id);
-
-for(let i=1;i<=5;i++){
-let b=document.createElement("button");
-b.innerText=i;
-
-b.onclick=()=>{
-for(let x of c.children)x.classList.remove("active");
-b.classList.add("active");
 
 if(type==="rp")rp=i;
 if(type==="rs")rs=i;
@@ -341,52 +328,77 @@ c.appendChild(b);
 }
 }
 
-createResidualButtons("rpBtns","rp");
-createResidualButtons("rsBtns","rs");
+createButtons("pBtns","p");
+createButtons("sBtns","s");
+
+createButtons("rpBtns","rp");
+createButtons("rsBtns","rs");
 
 window.calculateRisk=function(){
+
 risk=p*s;
 
-let lvl = risk<=5?"LOW 🟢":risk<=12?"MEDIUM 🟡":"HIGH 🔴";
+let lvl =
+risk<=5?"LOW 🟢":
+risk<=12?"MEDIUM 🟡":
+"HIGH 🔴";
 
 result.innerText="Risk: "+risk+" → "+lvl;
+
 renderMatrix();
 };
 
 window.saveRisk=function(){
+
 update(ref(db,"smsReports/"+key),{risk});
+
 savedRisk.innerText=risk;
 };
 
 window.calculateResidualRisk=function(){
+
 residualRisk=rp*rs;
 
-let lvl = residualRisk<=5?"LOW 🟢":residualRisk<=12?"MEDIUM 🟡":"HIGH 🔴";
+let lvl =
+residualRisk<=5?"LOW 🟢":
+residualRisk<=12?"MEDIUM 🟡":
+"HIGH 🔴";
 
 residualResult.innerText="Risk: "+residualRisk+" → "+lvl;
+
 renderResidualMatrix();
 };
 
 window.saveResidualRisk=function(){
-update(ref(db,"smsReports/"+key),{residualRisk});
+
+update(ref(db,"smsReports/"+key),{
+residualRisk
+});
+
 savedResidualRisk.innerText=residualRisk;
 };
 
 function renderMatrix(){
 
 const m=document.getElementById("matrix");
+
 m.innerHTML="";
 
 const grid=document.createElement("div");
+
 grid.className="matrix-grid";
 
 grid.appendChild(document.createElement("div"));
 
 for(let p=1;p<=5;p++){
+
 let x=document.createElement("div");
+
 x.innerText="P"+p;
+
 x.style.fontWeight="bold";
 x.style.textAlign="center";
+
 grid.appendChild(x);
 }
 
@@ -409,7 +421,9 @@ const ds={
 for(let s=5;s>=1;s--){
 
 let y=document.createElement("div");
+
 y.innerText="S"+s;
+
 y.style.fontWeight="bold";
 y.style.display="flex";
 y.style.alignItems="center";
@@ -422,14 +436,25 @@ for(let p=1;p<=5;p++){
 let v=p*s;
 
 let cell=document.createElement("div");
-cell.className="cell "+(v<=5?"low":v<=12?"medium":"high");
+
+cell.className="cell "+(
+v<=5?"low":
+v<=12?"medium":
+"high"
+);
+
 cell.innerText=v;
 
 cell.onmouseover=()=>{
+
 let t=document.createElement("div");
+
 t.className="tooltip";
+
 t.innerText=`P:${dp[p]} | S:${ds[s]}`;
+
 cell.appendChild(t);
+
 t.style.display="block";
 };
 
@@ -445,18 +470,24 @@ m.appendChild(grid);
 function renderResidualMatrix(){
 
 const m=document.getElementById("residualMatrix");
+
 m.innerHTML="";
 
 const grid=document.createElement("div");
+
 grid.className="matrix-grid";
 
 grid.appendChild(document.createElement("div"));
 
 for(let p=1;p<=5;p++){
+
 let x=document.createElement("div");
+
 x.innerText="P"+p;
+
 x.style.fontWeight="bold";
 x.style.textAlign="center";
+
 grid.appendChild(x);
 }
 
@@ -479,7 +510,9 @@ const ds={
 for(let s=5;s>=1;s--){
 
 let y=document.createElement("div");
+
 y.innerText="S"+s;
+
 y.style.fontWeight="bold";
 y.style.display="flex";
 y.style.alignItems="center";
@@ -492,14 +525,25 @@ for(let p=1;p<=5;p++){
 let v=p*s;
 
 let cell=document.createElement("div");
-cell.className="cell "+(v<=5?"low":v<=12?"medium":"high");
+
+cell.className="cell "+(
+v<=5?"low":
+v<=12?"medium":
+"high"
+);
+
 cell.innerText=v;
 
 cell.onmouseover=()=>{
+
 let t=document.createElement("div");
+
 t.className="tooltip";
+
 t.innerText=`P:${dp[p]} | S:${ds[s]}`;
+
 cell.appendChild(t);
+
 t.style.display="block";
 };
 
@@ -510,159 +554,6 @@ grid.appendChild(cell);
 }
 
 m.appendChild(grid);
-}
-
-window.saveCPA=function(){
-cpaCounter++;
-
-push(ref(db,"smsReports/"+key+"/CPA"),{
-cpaNumber:cpaCounter,
-controlType:controlType.value,
-actionPlan:actionPlan.value,
-actionDate:actionDate.value,
-emailTo:emailTo.value,
-pdfUrl:"",
-pdfName:"",
-pdfPath:""
-}).then(()=>{
-get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
-if(s.exists()){
-loadCPA(s.val());
-}
-});
-});
-};
-
-window.uploadCPAPdf=async function(id,cpaNumber){
-
-const fileInput=document.getElementById("pdf-"+id);
-const file=fileInput.files[0];
-
-if(!file){
-alert("Please select a PDF file first.");
-return;
-}
-
-const pdfPath="smsReports/"+key+"/CPA/"+id+"/"+file.name;
-const pdfStorageRef=storageRef(storage,pdfPath);
-
-await uploadBytes(pdfStorageRef,file);
-
-const pdfUrl=await getDownloadURL(pdfStorageRef);
-
-await update(ref(db,"smsReports/"+key+"/CPA/"+id),{
-pdfUrl:pdfUrl,
-pdfName:file.name,
-pdfPath:pdfPath
-});
-
-get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
-if(s.exists()){
-loadCPA(s.val());
-}
-});
-
-};
-
-window.addDriveLink=async function(id,cpaNumber){
-
-const driveLink = prompt("Paste Google Drive document link for CPA Attachment "+cpaNumber);
-
-if(!driveLink){
-alert("No Drive link added.");
-return;
-}
-
-await update(ref(db,"smsReports/"+key+"/CPA/"+id),{
-pdfUrl:driveLink,
-pdfName:"Google Drive Document",
-pdfPath:""
-});
-
-get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
-if(s.exists()){
-loadCPA(s.val());
-}
-});
-
-};
-
-window.sendCPAEmail=function(email,type,action,date,cpaNumber,pdfUrl){
-
-const subject = encodeURIComponent("CPA "+cpaNumber+" - Corrective Preventive Action");
-
-const body = encodeURIComponent(
-"CPA "+cpaNumber+"\n\n"+
-"Control Type: "+type+"\n"+
-"Action Plan: "+action+"\n"+
-"Action Date: "+date+"\n\n"+
-(pdfUrl ? "Document Link: "+pdfUrl+"\n\n" : "")+
-"Please review and follow up accordingly."
-);
-
-window.location.href="mailto:"+email+"?subject="+subject+"&body="+body;
-};
-
-window.deleteCPA=async function(id,pdfPath){
-
-if(pdfPath){
-try{
-await deleteObject(storageRef(storage,pdfPath));
-}catch(e){}
-}
-
-remove(ref(db,"smsReports/"+key+"/CPA/"+id)).then(()=>{
-get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
-if(s.exists()){
-loadCPA(s.val());
-}else{
-loadCPA(null);
-}
-});
-});
-};
-
-function loadCPA(data){
-
-const c=document.getElementById("cpaContainer");
-const a=document.getElementById("attachmentContainer");
-
-c.innerHTML="";
-a.innerHTML="";
-
-if(!data){cpaCounter=0;return;}
-
-cpaCounter=Object.keys(data).length;
-
-Object.entries(data).forEach(([id,x],i)=>{
-
-let div=document.createElement("div");
-div.className="cpa-item";
-
-div.innerHTML=`
-<button class="delete-btn" onclick="deleteCPA('${id}','${x.pdfPath||""}')">🗑️</button>
-<b>CPA ${i+1}</b><br>
-Type: ${x.controlType}<br>
-Action: ${x.actionPlan}<br>
-Date: ${x.actionDate}<br>
-Email: ${x.emailTo}<br>
-<button class="send-btn" onclick="sendCPAEmail('${x.emailTo}','${x.controlType}','${x.actionPlan}','${x.actionDate}','${i+1}','${x.pdfUrl||""}')">Enviar correo</button>
-${x.pdfUrl ? `<button class="send-btn" onclick="window.open('${x.pdfUrl}','_blank')">Open Document</button>` : ""}
-`;
-
-c.appendChild(div);
-
-let att=document.createElement("div");
-att.className="attachment-item";
-
-att.innerHTML=`
-<b>CPA Attachment ${i+1}</b><br>
-<button onclick="addDriveLink('${id}','${i+1}')">Add Drive Link</button>
-${x.pdfUrl ? `<button onclick="window.open('${x.pdfUrl}','_blank')">Open Document</button>` : "No document link added"}
-`;
-
-a.appendChild(att);
-});
 }
 
 window.goBack=()=>location.href="SMS-Database.html";
