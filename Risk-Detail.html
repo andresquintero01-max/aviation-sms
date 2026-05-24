@@ -51,16 +51,7 @@ button.active{
   background:purple !important;
 }
 
-/* RESULT */
-.result{
-  margin-top:20px;
-  padding:15px;
-  background:#e9f5ff;
-  border-radius:8px;
-  font-weight:bold;
-}
-
-/* CPA */
+/* CPA (UNCHANGED) */
 .cpa-box{
   margin-top:25px;
   padding:20px;
@@ -94,7 +85,7 @@ button.active{
   background:purple !important;
 }
 
-/* ATTACHMENTS */
+/* ATTACHMENTS (UNCHANGED) */
 .attachment-box{
   margin-top:25px;
   padding:20px;
@@ -111,11 +102,8 @@ button.active{
   border:1px solid #ccc;
 }
 
-/* ========================= */
-/* RISK MATRIX FULL */
-/* ========================= */
-
-.matrix {
+/* MATRIX */
+.matrix{
   margin-top:20px;
   display:flex;
   justify-content:center;
@@ -123,7 +111,7 @@ button.active{
 
 .matrix-grid{
   display:grid;
-  grid-template-columns: 40px repeat(5, 60px);
+  grid-template-columns: 60px repeat(5, 60px);
   gap:5px;
 }
 
@@ -148,12 +136,12 @@ button.active{
   position:absolute;
   background:#071f47;
   color:white;
-  padding:6px;
+  padding:8px;
   border-radius:6px;
-  font-size:12px;
-  width:160px;
-  display:none;
+  font-size:11px;
+  width:240px;
   z-index:10;
+  white-space:pre-line;
 }
 </style>
 
@@ -193,7 +181,7 @@ button.active{
 
 </div>
 
-<!-- CPA -->
+<!-- CPA (UNCHANGED) -->
 <div class="cpa-box">
 <h3>CPA MODULE</h3>
 
@@ -218,7 +206,7 @@ button.active{
 <div id="cpaContainer"></div>
 </div>
 
-<!-- ATTACHMENTS -->
+<!-- ATTACHMENTS (UNCHANGED) -->
 <div class="attachment-box">
 <h3>CPA ATTACHMENTS</h3>
 <div id="attachmentContainer"></div>
@@ -239,7 +227,7 @@ databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
 projectId: "aviation-sms",
 storageBucket: "aviation-sms.firebasestorage.app",
 messagingSenderId: "147000937860",
-appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+appId: "1:xxxxxxxx:web:90049a1f5269ef107ca1d1"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -300,15 +288,15 @@ result.innerText="Risk: "+risk+" → "+lvl;
 renderMatrix();
 };
 
-/* SAVE */
+/* SAVE RISK */
 window.saveRisk=function(){
 update(ref(db,"smsReports/"+key),{risk});
 savedRisk.innerText=risk;
 };
 
-/* ========================= */
-/* MATRIX X = P / Y = S */
-/* ========================= */
+/* =========================
+ ICAO RISK MATRIX (UPDATED)
+========================= */
 
 function renderMatrix(){
 
@@ -318,10 +306,8 @@ m.innerHTML="";
 const grid=document.createElement("div");
 grid.className="matrix-grid";
 
-/* empty corner */
-grid.appendChild(document.createElement("div"));
-
 /* X axis */
+grid.appendChild(document.createElement("div"));
 for(let p=1;p<=5;p++){
 let x=document.createElement("div");
 x.innerText="P"+p;
@@ -330,27 +316,28 @@ x.style.textAlign="center";
 grid.appendChild(x);
 }
 
-const dp={
-1:"Very unlikely",
-2:"Unlikely",
-3:"Possible",
-4:"Likely",
-5:"Very likely"
+/* ICAO DEFINITIONS */
+const probDef={
+1:"1 - Extremely Improbable\nCasi inconceivable that it will occur.",
+2:"2 - Improbable\nVery unlikely but possible.",
+3:"3 - Remote\nUnlikely but could occur.",
+4:"4 - Occasional\nMay occur sometimes.",
+5:"5 - Frequent\nLikely to occur repeatedly."
 };
 
-const ds={
-1:"Minor",
-2:"Low",
-3:"Medium",
-4:"High",
-5:"Catastrophic"
+const sevDef={
+1:"E - Negligible\nNo significant effect on safety.",
+2:"D - Minor\nSmall reduction in safety margin.",
+3:"C - Major\nNoticeable reduction in safety.",
+4:"B - Hazardous\nSerious reduction, possible injury.",
+5:"A - Catastrophic\nMultiple fatalities or aircraft loss."
 };
 
-/* rows */
+/* rows Y */
 for(let s=5;s>=1;s--){
 
 let y=document.createElement("div");
-y.innerText="S"+s;
+y.innerText="S"+String.fromCharCode(64+s); // A-E
 y.style.fontWeight="bold";
 y.style.display="flex";
 y.style.alignItems="center";
@@ -360,21 +347,24 @@ grid.appendChild(y);
 
 for(let p=1;p<=5;p++){
 
-let v=p*s;
+let value=p*s;
 
 let cell=document.createElement("div");
-cell.className="cell "+(v<=5?"low":v<=12?"medium":"high");
-cell.innerText=v;
+cell.className="cell "+(value<=5?"low":value<=12?"medium":"high");
+cell.innerText=value;
 
 cell.onmouseover=()=>{
-let t=document.createElement("div");
-t.className="tooltip";
-t.innerText=`P:${dp[p]} | S:${ds[s]}`;
-cell.appendChild(t);
-t.style.display="block";
+let tip=document.createElement("div");
+tip.className="tooltip";
+tip.innerText=
+"PROBABILITY:\n"+probDef[p]+"\n\nSEVERITY:\n"+sevDef[s];
+
+cell.appendChild(tip);
 };
 
-cell.onmouseout=()=>cell.querySelector(".tooltip")?.remove();
+cell.onmouseout=()=>{
+cell.querySelector(".tooltip")?.remove();
+};
 
 grid.appendChild(cell);
 }
