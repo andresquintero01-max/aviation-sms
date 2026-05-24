@@ -4,12 +4,10 @@
 <meta charset="UTF-8">
 <title>SMS Report</title>
 
-<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, push, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// 🔥 CONFIG FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
   authDomain: "aviation-sms.firebaseapp.com",
@@ -20,43 +18,32 @@ const firebaseConfig = {
   appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
 };
 
-// INIT
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 🚀 SEND REPORT (ACTUALIZADO + FIX DETALLE)
+// 🚀 SAVE REPORT
 window.sendReport = function () {
 
   const what = document.getElementById("what").value;
   const date = document.getElementById("date").value;
   const solution = document.getElementById("solution").value;
 
-  // 🔥 ID consecutivo (lo mantienes igual)
-  get(child(ref(db), "smsReports")).then((snapshot) => {
+  const newRef = push(ref(db, "smsReports"));
 
-    let count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-    let id = count + 1;
-
-    // 🔥 CREAR KEY REAL DE FIREBASE (FIX IMPORTANTE)
-    const newRef = push(ref(db, "smsReports"));
-
-    newRef.set({
-      reportId: id,
-      whatHappened: what,
-      date: date,
-      solution: solution,
-
-      // 🔥 MEJORA SMS
-      status: "OPEN",
-      risk: "NOT ASSESSED",
-      timestamp: new Date().toISOString()
-    });
-
-    // 🔥 AHORA SÍ: IR AL DETALLE CORRECTO
-    window.location.href = "Report-Detail.html?key=" + newRef.key;
-
+  newRef.set({
+    reportId: Date.now(),
+    whatHappened: what,
+    date: date,
+    solution: solution,
+    status: "OPEN",
+    risk: "NOT ASSESSED",
+    probability: 0,
+    severity: 0,
+    timestamp: new Date().toISOString()
   });
 
+  // 🔥 IR A DETALLE CON KEY REAL
+  window.location.href = "Report-Detail.html?key=" + newRef.key;
 };
 </script>
 
@@ -94,8 +81,6 @@ input, textarea{
   width:100%;
   padding:10px;
   margin-top:5px;
-  border:1px solid #ccc;
-  border-radius:6px;
 }
 
 button{
@@ -106,7 +91,6 @@ button{
   color:white;
   border:none;
   border-radius:6px;
-  cursor:pointer;
 }
 
 button:hover{
@@ -121,30 +105,28 @@ button:hover{
   color:white;
   padding:10px;
   text-decoration:none;
-  border-radius:6px;
 }
 </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-  <h1>SMS Report Form</h1>
+<h1>SMS Report Form</h1>
 
-  <label>What happened?</label>
-  <textarea id="what" placeholder="Describe the event..."></textarea>
+<label>What happened?</label>
+<textarea id="what"></textarea>
 
-  <label>Date</label>
-  <input type="date" id="date">
+<label>Date</label>
+<input type="date" id="date">
 
-  <label>How can it be solved?</label>
-  <textarea id="solution" placeholder="Suggested corrective action..."></textarea>
+<label>Solution</label>
+<textarea id="solution"></textarea>
 
-  <button onclick="sendReport()">Send Report</button>
+<button onclick="sendReport()">Send Report</button>
 
-  <a class="back" href="index.html">Back to Home</a>
+<a class="back" href="index.html">Back to Home</a>
 
 </div>
 
