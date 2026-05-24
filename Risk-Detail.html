@@ -86,7 +86,6 @@ button.active{
   position:relative;
 }
 
-/* 🗑️ DELETE BUTTON */
 .delete-btn{
   position:absolute;
   right:10px;
@@ -109,12 +108,9 @@ button.active{
 
 <h1>SMS Report Detail</h1>
 
-<div class="box" id="reportBox">
-Loading report...
-</div>
+<div class="box" id="reportBox">Loading report...</div>
 
 <div class="box">
-
 <h3>Risk Assessment</h3>
 
 <p>Probability:</p>
@@ -135,7 +131,6 @@ Loading report...
 <p style="margin-top:15px;font-weight:bold;">
 Risk Assessment Save: <span id="savedRisk">N/A</span>
 </p>
-
 </div>
 
 <!-- CPA -->
@@ -169,7 +164,7 @@ Risk Assessment Save: <span id="savedRisk">N/A</span>
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, get, update, push, remove } 
+import { getDatabase, ref, get, update, push, remove }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
@@ -187,7 +182,12 @@ const db = getDatabase(app);
 
 const key = new URLSearchParams(window.location.search).get("key");
 
-let p=0, s=0, risk=0;
+let p = 0;
+let s = 0;
+let risk = 0;
+
+/* 🔥 CPA COUNTER */
+let cpaCounter = 0;
 
 /* LOAD REPORT */
 get(ref(db,"smsReports/"+key)).then(snap=>{
@@ -205,23 +205,31 @@ loadCPA(d.CPA);
 }
 });
 
-/* LOAD CPA */
+/* LOAD CPA + COUNT */
 function loadCPA(data){
+
 const box=document.getElementById("cpaContainer");
 box.innerHTML="";
 
-if(!data) return;
+if(!data){
+cpaCounter = 0;
+return;
+}
 
-Object.entries(data).forEach(([id,cpa])=>{
+const entries = Object.entries(data);
+cpaCounter = entries.length;
+
+entries.forEach(([id,cpa], index)=>{
 
 const div=document.createElement("div");
 div.className="cpa-item";
 
 div.innerHTML=`
-<b>Type:</b> ${cpa.controlType}<br>
-<b>Action:</b> ${cpa.actionPlan}<br>
-<b>Date:</b> ${cpa.actionDate}<br>
-<b>Email:</b> ${cpa.emailTo}<br>
+<b>CPA ${index + 1}</b><br>
+Type: ${cpa.controlType}<br>
+Action: ${cpa.actionPlan}<br>
+Date: ${cpa.actionDate}<br>
+Email: ${cpa.emailTo}<br>
 
 <button class="delete-btn" onclick="deleteCPA('${id}')">🗑</button>
 `;
@@ -232,20 +240,24 @@ box.appendChild(div);
 
 /* DELETE CPA */
 window.deleteCPA = function(id){
-
 remove(ref(db,"smsReports/"+key+"/CPA/"+id));
-
 alert("CPA deleted");
 };
 
-/* SAVE CPA */
+/* SAVE CPA (AUTO NUMBER) */
 window.saveCPA=function(){
+
+cpaCounter++; // 🔥 incrementa automático
+
 push(ref(db,"smsReports/"+key+"/CPA"),{
+cpaNumber: cpaCounter,
 controlType:controlType.value,
 actionPlan:actionPlan.value,
 actionDate:actionDate.value,
 emailTo:emailTo.value
 });
+
+alert("CPA "+cpaCounter+" saved ✔");
 };
 
 /* SEND */
