@@ -25,41 +25,25 @@ window.sendReport = function () {
 
   const what = document.getElementById("what").value;
   const date = document.getElementById("date").value;
-  const solution = document.getElementById("solution").value;
 
-  // VALIDACIÓN
-  if (!what || !date || !solution) {
-    alert("Please complete all fields");
+  if (!what || !date) {
+    alert("Fill all fields");
     return;
   }
 
-  try {
+  const newRef = push(ref(db, "smsReports"));
 
-    // CREAR REFERENCIA ÚNICA
-    const newRef = push(ref(db, "smsReports"));
+  set(newRef, {
+    reportId: Date.now(),
+    whatHappened: what,
+    date: date,
+    status: "OPEN",
+    risk: "NOT ASSESSED",
+    timestamp: new Date().toISOString()
+  }).then(() => {
+    window.location.href = "Hazard-Identification.html";
+  });
 
-    // GUARDAR EN FIREBASE
-    set(newRef, {
-      reportId: Date.now(),
-      whatHappened: what,
-      date: date,
-      solution: solution,
-      status: "OPEN",
-      risk: "NOT ASSESSED",
-      probability: 0,
-      severity: 0,
-      timestamp: new Date().toISOString()
-    });
-
-    alert("SMS Report saved ✔ ID: " + newRef.key);
-
-    // IR A DATABASE
-    window.location.href = "SMS-Database.html";
-
-  } catch (error) {
-    console.error("Firebase error:", error);
-    alert("Error saving report");
-  }
 };
 </script>
 
@@ -142,12 +126,9 @@ button:hover{
   <label>Date</label>
   <input type="date" id="date">
 
-  <label>Solution</label>
-  <textarea id="solution"></textarea>
-
   <button onclick="sendReport()">Send Report</button>
 
-  <a class="back" href="index.html">Back to Home</a>
+  <a class="back" href="Hazard-Identification.html">Back to Home</a>
 
 </div>
 
