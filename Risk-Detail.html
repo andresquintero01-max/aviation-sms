@@ -41,18 +41,22 @@ input{
 }
 
 button{
-  width:100%;
-  padding:12px;
+  padding:10px 12px;
+  margin:4px;
+  border:none;
   background:#071f47;
   color:white;
-  border:none;
   border-radius:6px;
   cursor:pointer;
-  margin-top:10px;
 }
 
 button:hover{
   background:#0b2a66;
+}
+
+/* 🔥 MORADO SELECCIONADO */
+button.active{
+  background:purple !important;
 }
 
 .result{
@@ -61,6 +65,16 @@ button:hover{
   background:#e9f5ff;
   border-radius:8px;
   font-weight:bold;
+}
+
+.bottom{
+  display:flex;
+  justify-content:space-between;
+  margin-top:20px;
+}
+
+.back{
+  background:red;
 }
 </style>
 
@@ -80,16 +94,20 @@ Loading report...
 
 <h3>Risk Assessment</h3>
 
-<label>Probability (1-5)</label>
-<input type="number" id="prob" min="1" max="5">
+<p>Probability:</p>
+<div id="pBtns"></div>
 
-<label>Severity (1-5)</label>
-<input type="number" id="sev" min="1" max="5">
+<p>Severity:</p>
+<div id="sBtns"></div>
 
 <button onclick="calculateRisk()">Calculate Risk</button>
-<button onclick="saveRisk()">Save Risk to Firebase</button>
 
 <div class="result" id="result"></div>
+
+<div class="bottom">
+<button onclick="saveRisk()">Save Risk</button>
+<button class="back" onclick="goBack()">Back</button>
+</div>
 
 </div>
 
@@ -113,18 +131,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 🔥 KEY REAL (IMPORTANTE)
 const key = new URLSearchParams(window.location.search).get("key");
 
-let riskValue = 0;
-let probValue = 0;
-let sevValue = 0;
+let p = 0;
+let s = 0;
+let risk = 0;
 
-// 🚀 CARGAR DESDE FIREBASE (CORRECTO)
-get(ref(db, "smsReports/" + key)).then((snapshot) => {
+// 🔥 LOAD REPORT
+get(ref(db, "smsReports/" + key)).then(snapshot => {
 
   if(snapshot.exists()){
-
     const data = snapshot.val();
 
     document.getElementById("reportBox").innerHTML = `
@@ -134,51 +150,79 @@ get(ref(db, "smsReports/" + key)).then((snapshot) => {
       <p><b>Status:</b> ${data.status}</p>
       <p><b>Risk:</b> ${data.risk}</p>
     `;
-
-    if(data.probability){
-      document.getElementById("prob").value = data.probability;
-      probValue = data.probability;
-    }
-
-    if(data.severity){
-      document.getElementById("sev").value = data.severity;
-      sevValue = data.severity;
-    }
-
-  } else {
-    document.getElementById("reportBox").innerHTML =
-      "Report not found in Firebase";
   }
 });
 
-// 🚀 CALCULAR RISK
+// 🔥 CREATE BUTTONS
+function createButtons(containerId, type){
+  const container = document.getElementById(containerId);
+
+  for(let i=1;i<=5;i++){
+    let btn = document.createElement("button");
+    btn.innerText = i;
+
+    btn.onclick = () => {
+
+      if(type === "p") {
+        p = i;
+        updateUI("pBtns", i);
+      }
+
+      if(type === "s") {
+        s = i;
+        updateUI("sBtns", i);
+      }
+    };
+
+    container.appendChild(btn);
+  }
+}
+
+// 🔥 COLOR CHANGE (MORADO ACTIVE)
+function updateUI(containerId, selected){
+  let btns = document.getElementById(containerId).children;
+
+  for(let b of btns){
+    b.classList.remove("active");
+    if(b.innerText == selected){
+      b.classList.add("active");
+    }
+  }
+}
+
+createButtons("pBtns","p");
+createButtons("sBtns","s");
+
+// 🔥 CALCULATE
 window.calculateRisk = function(){
 
-  probValue = parseInt(document.getElementById("prob").value);
-  sevValue = parseInt(document.getElementById("sev").value);
-
-  riskValue = probValue * sevValue;
+  risk = p * s;
 
   let level = "";
 
-  if(riskValue <= 5) level = "LOW 🟢";
-  else if(riskValue <= 12) level = "MEDIUM 🟡";
+  if(risk <= 5) level = "LOW 🟢";
+  else if(risk <= 12) level = "MEDIUM 🟡";
   else level = "HIGH 🔴";
 
   document.getElementById("result").innerHTML =
-    "Risk Score: " + riskValue + " → " + level;
+    "Risk Score: " + risk + " → " + level;
 };
 
-// 🚀 GUARDAR EN MISMO REGISTRO
+// 🔥 SAVE
 window.saveRisk = function(){
 
   update(ref(db, "smsReports/" + key), {
-    probability: probValue,
-    severity: sevValue,
-    risk: riskValue
+    probability: p,
+    severity: s,
+    risk: risk
   });
 
-  alert("Risk saved in SAME report ✔");
+  alert("Risk saved ✔");
+};
+
+// 🔥 BACK
+window.goBack = function(){
+  window.location.href = "SMS-Database.html";
 };
 
 </script>
