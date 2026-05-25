@@ -5,11 +5,7 @@
 <title>FRAT Details</title>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
   font-family:Arial, sans-serif;
@@ -79,20 +75,9 @@ h1{
   margin-bottom:25px;
 }
 
-.low{
-  background:#2f9144;
-  color:white;
-}
-
-.moderate{
-  background:#ffd966;
-  color:#222;
-}
-
-.high{
-  background:#ff1a0a;
-  color:white;
-}
+.low{background:#2f9144;color:white;}
+.moderate{background:#ffd966;color:#222;}
+.high{background:#ff1a0a;color:white;}
 
 h2{
   color:#071f47;
@@ -146,17 +131,10 @@ tr:nth-child(even){
   margin:6px;
 }
 
-.back-btn{
-  background:#c40000;
-}
-
-.frat-btn{
-  background:#004080;
-}
-
-.home-btn{
-  background:#0b2a66;
-}
+.report-btn{background:#2f9144;}
+.back-btn{background:#c40000;}
+.frat-btn{background:#004080;}
+.home-btn{background:#0b2a66;}
 </style>
 </head>
 
@@ -175,6 +153,10 @@ tr:nth-child(even){
   </div>
 
   <div class="buttons">
+    <button id="viewFullReportBtn" class="btn report-btn" style="display:none;">
+      View FRAT Report
+    </button>
+
     <button class="btn back-btn" onclick="window.location.href='FRAT-Database.html'">
       Back to FRAT Database
     </button>
@@ -211,6 +193,7 @@ const database = getDatabase(app);
 const params = new URLSearchParams(window.location.search);
 const reportId = params.get("id");
 const content = document.getElementById("content");
+const viewFullReportBtn = document.getElementById("viewFullReportBtn");
 
 function riskClass(level){
   if(!level) return "";
@@ -221,12 +204,13 @@ function riskClass(level){
 }
 
 if(!reportId){
-  content.innerHTML = `
-    <div class="no-data">
-      No FRAT Report ID was found in the URL.
-    </div>
-  `;
+  content.innerHTML = `<div class="no-data">No FRAT Report ID was found in the URL.</div>`;
 }else{
+  viewFullReportBtn.style.display = "inline-block";
+  viewFullReportBtn.onclick = function(){
+    window.location.href = "FRAT-Full-Report.html?id=" + reportId;
+  };
+
   const reportRef = ref(database, "fratReports/" + reportId);
 
   get(reportRef).then((snapshot) => {
@@ -246,11 +230,7 @@ if(!reportId){
           `;
         });
       }else{
-        factorsHTML = `
-          <tr>
-            <td colspan="3">No selected factors found.</td>
-          </tr>
-        `;
+        factorsHTML = `<tr><td colspan="3">No selected factors found.</td></tr>`;
       }
 
       content.innerHTML = `
@@ -297,25 +277,16 @@ if(!reportId){
               <th>Score</th>
             </tr>
           </thead>
-
           <tbody>
             ${factorsHTML}
           </tbody>
         </table>
       `;
     }else{
-      content.innerHTML = `
-        <div class="no-data">
-          FRAT Report not found in Firebase.
-        </div>
-      `;
+      content.innerHTML = `<div class="no-data">FRAT Report not found in Firebase.</div>`;
     }
   }).catch((error) => {
-    content.innerHTML = `
-      <div class="no-data">
-        Error loading FRAT Report: ${error.message}
-      </div>
-    `;
+    content.innerHTML = `<div class="no-data">Error loading FRAT Report: ${error.message}</div>`;
   });
 }
 
