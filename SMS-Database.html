@@ -90,13 +90,37 @@ h1{
   background:#27ae60;
 }
 
+.edit-btn{
+  background:#071f47;
+  color:white;
+  border:none;
+  border-radius:8px;
+  padding:8px 12px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.edit-btn:hover{
+  background:#0b2a66;
+}
+
+.save-btn{
+  background:green;
+  color:white;
+  border:none;
+  border-radius:8px;
+  padding:8px 12px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
 .delete-btn{
-  background:#ff0000;
+  background:red;
   color:white;
   border:none;
   border-radius:50%;
-  width:34px;
-  height:34px;
+  width:36px;
+  height:36px;
   cursor:pointer;
   font-size:16px;
   font-weight:bold;
@@ -116,6 +140,33 @@ h1{
 .label{
   font-weight:bold;
   color:#071f47;
+}
+
+.edit-area{
+  margin-top:15px;
+  display:none;
+  background:#f7f9fc;
+  padding:15px;
+  border-radius:10px;
+  border:1px solid #ddd;
+}
+
+.edit-area input,
+.edit-area textarea{
+  width:100%;
+  padding:10px;
+  margin-top:6px;
+  margin-bottom:12px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-family:Arial;
+  font-size:14px;
+  box-sizing:border-box;
+}
+
+.edit-area textarea{
+  min-height:80px;
+  resize:vertical;
 }
 
 .back{
@@ -147,7 +198,6 @@ h1{
 }
 
 </style>
-
 </head>
 
 <body>
@@ -156,9 +206,7 @@ h1{
 
 <div class="container" id="data"></div>
 
-<a class="back" href="Hazard-Identification.html">
-Back
-</a>
+<a class="back" href="Hazard-Identification.html">Back</a>
 
 <script type="module">
 
@@ -170,57 +218,80 @@ getDatabase,
 ref,
 get,
 child,
-remove
+remove,
+update
 }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
-
-apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
-
-authDomain: "aviation-sms.firebaseapp.com",
-
-databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
-
-projectId: "aviation-sms",
-
-storageBucket: "aviation-sms.firebasestorage.app",
-
-messagingSenderId: "147000937860",
-
-appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
-
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getDatabase(app);
-
 const container = document.getElementById("data");
 
 window.deleteReport = function(key){
 
-const confirmation = confirm("Are you sure you want to delete this SMS report?");
+  const confirmation = confirm("Are you sure you want to delete this SMS report?");
 
-if(confirmation){
+  if(confirmation){
 
-remove(ref(db,"smsReports/"+key)).then(()=>{
+    remove(ref(db,"smsReports/"+key)).then(()=>{
 
-document.getElementById("record-"+key).remove();
+      document.getElementById("record-"+key).remove();
 
-if(container.children.length === 0){
+      if(container.children.length === 0){
+        container.innerHTML = `
+        <div class="empty">
+        No SMS reports found
+        </div>
+        `;
+      }
 
-container.innerHTML = `
-<div class="empty">
-No SMS reports found
-</div>
-`;
+    });
 
-}
+  }
 
-});
+};
 
-}
+window.showEdit = function(key){
+
+  const editBox = document.getElementById("edit-"+key);
+
+  if(editBox.style.display === "block"){
+    editBox.style.display = "none";
+  }else{
+    editBox.style.display = "block";
+  }
+
+};
+
+window.saveEdit = function(key){
+
+  const newReportId = document.getElementById("edit-reportId-"+key).value;
+  const newWhatHappened = document.getElementById("edit-whatHappened-"+key).value;
+  const newDate = document.getElementById("edit-date-"+key).value;
+  const newSolution = document.getElementById("edit-solution-"+key).value;
+
+  update(ref(db,"smsReports/"+key),{
+    reportId:newReportId,
+    whatHappened:newWhatHappened,
+    date:newDate,
+    solution:newSolution
+  }).then(()=>{
+
+    alert("Report updated successfully.");
+
+    location.reload();
+
+  });
 
 };
 
@@ -235,68 +306,83 @@ const reports = Object.entries(data).reverse();
 reports.forEach(([key,item])=>{
 
 const div = document.createElement("div");
-
 div.className = "record";
-
 div.id = "record-"+key;
 
 const riskAssessmentStatus = item.riskClosed === true
-
 ? '<div class="status close">RISK ASSESSMENT CLOSED</div>'
-
 : '<div class="status open">RISK ASSESSMENT OPEN</div>';
 
 const residualRiskAssessmentStatus = item.residualRiskClosed === true
-
 ? '<div class="status close">RESIDUAL RISK CLOSED</div>'
-
 : '<div class="status open">RESIDUAL RISK OPEN</div>';
 
 div.innerHTML = `
 
 <div class="top-row">
 
-<div class="report-id">
+  <div class="report-id">
+    ID:
+    <a href="Risk-Detail.html?key=${key}">
+      ${item.reportId || "N/A"}
+    </a>
+  </div>
 
-ID:
-<a href="Risk-Detail.html?key=${key}">
-${item.reportId}
-</a>
+  <div class="actions-row">
 
-</div>
+    <div class="status-box">
+      ${riskAssessmentStatus}
+      ${residualRiskAssessmentStatus}
+    </div>
 
-<div class="actions-row">
+    <button class="edit-btn" onclick="showEdit('${key}')">
+      Edit
+    </button>
 
-<div class="status-box">
+    <button class="delete-btn" onclick="deleteReport('${key}')">
+      🗑️
+    </button>
 
-${riskAssessmentStatus}
-
-${residualRiskAssessmentStatus}
-
-</div>
-
-<button class="delete-btn" onclick="deleteReport('${key}')">🗑️</button>
-
-</div>
+  </div>
 
 </div>
 
 <div class="info">
 
-<div>
-<span class="label">What Happened:</span>
-${item.whatHappened || "N/A"}
+  <div>
+    <span class="label">What Happened:</span>
+    ${item.whatHappened || "N/A"}
+  </div>
+
+  <div>
+    <span class="label">Date:</span>
+    ${item.date || "N/A"}
+  </div>
+
+  <div>
+    <span class="label">Solution:</span>
+    ${item.solution || "N/A"}
+  </div>
+
 </div>
 
-<div>
-<span class="label">Date:</span>
-${item.date || "N/A"}
-</div>
+<div class="edit-area" id="edit-${key}">
 
-<div>
-<span class="label">Solution:</span>
-${item.solution || "N/A"}
-</div>
+  <label><b>Report ID / Name:</b></label>
+  <input id="edit-reportId-${key}" value="${item.reportId || ""}">
+
+  <label><b>What Happened:</b></label>
+  <textarea id="edit-whatHappened-${key}">${item.whatHappened || ""}</textarea>
+
+  <label><b>Date:</b></label>
+  <input type="date" id="edit-date-${key}" value="${item.date || ""}">
+
+  <label><b>Solution:</b></label>
+  <textarea id="edit-solution-${key}">${item.solution || ""}</textarea>
+
+  <button class="save-btn" onclick="saveEdit('${key}')">
+    Save Changes
+  </button>
 
 </div>
 
