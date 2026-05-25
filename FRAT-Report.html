@@ -156,6 +156,19 @@ input[type="radio"]{
   font-weight:normal;
 }
 
+.risk-comment{
+  max-width:420px;
+  padding:15px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:bold;
+  line-height:1.5;
+  background:#d8f3dc;
+  color:#14532d;
+  border:1px solid #2f9144;
+  text-align:left;
+}
+
 .risk-assessment{
   margin-top:15px;
   padding:0 5px;
@@ -436,11 +449,19 @@ function buildForm(){
 
   formArea.innerHTML += `
     <div class="total-line">
+
       <div class="total-label">Total Risk Value</div>
+
       <div id="riskResult" class="risk-result low">
         LOW RISK
         <span class="risk-number">0</span>
       </div>
+
+      <div id="riskComment" class="risk-comment">
+        OK TO OPERATE:<br>
+        Risk is acceptable and flight operations may continue under standard operational controls.
+      </div>
+
     </div>
 
     <div class="risk-assessment">
@@ -560,6 +581,7 @@ function calculateRisk(){
       total += Number(radio.dataset.score);
 
       const rows = document.querySelectorAll("#detailsBody tr");
+
       rows.forEach(row => {
         if(row.innerText.includes(radio.dataset.category)){
           row.querySelectorAll("td").forEach(td => td.classList.add("selected"));
@@ -570,14 +592,54 @@ function calculateRisk(){
 
   const level = getRiskLevel(total);
   const box = document.getElementById("riskResult");
+  const comment = document.getElementById("riskComment");
 
   box.className = "risk-result";
 
-  if(level === "LOW RISK") box.classList.add("low");
-  if(level === "MODERATE RISK") box.classList.add("moderate");
-  if(level === "HIGH RISK") box.classList.add("high");
+  if(level === "LOW RISK"){
+    box.classList.add("low");
 
-  box.innerHTML = `${level}<span class="risk-number">${total}</span>`;
+    comment.innerHTML = `
+      OK TO OPERATE:<br>
+      Risk is acceptable and flight operations may continue under standard operational controls.
+    `;
+
+    comment.style.background = "#d8f3dc";
+    comment.style.color = "#14532d";
+    comment.style.border = "1px solid #2f9144";
+  }
+
+  if(level === "MODERATE RISK"){
+    box.classList.add("moderate");
+
+    comment.innerHTML = `
+      CAUTION:<br>
+      Moderate risk identified. Notify the Operations area before continuing the flight.
+    `;
+
+    comment.style.background = "#fff3cd";
+    comment.style.color = "#664d03";
+    comment.style.border = "1px solid #ffd966";
+  }
+
+  if(level === "HIGH RISK"){
+    box.classList.add("high");
+
+    comment.innerHTML = `
+      NO-GO:<br>
+      High risk identified. Flight operations are NOT authorized until the risk is reduced or mitigated.
+    `;
+
+    comment.style.background = "#f8d7da";
+    comment.style.color = "#842029";
+    comment.style.border = "1px solid #ff1a0a";
+  }
+
+  box.innerHTML = `
+    ${level}
+    <span class="risk-number">${total}</span>
+  `;
+
   document.getElementById("grandTotal").innerText = total;
 
   return { total, level };
@@ -627,6 +689,7 @@ function saveFRAT(){
     experienceLevel: document.getElementById("experience").value,
     totalRiskValue: risk.total,
     riskLevel: risk.level,
+    riskComment: document.getElementById("riskComment").innerText,
     selectedFactors: selectedFactors,
     createdAt: new Date().toLocaleString()
   };
