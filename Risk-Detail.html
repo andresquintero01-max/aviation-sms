@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -188,7 +189,7 @@ button.active{
 <div class="matrix" id="matrix"></div>
 
 <div class="bottom">
-<button onclick="saveRisk()">Save Risk</button>
+<button id="saveRiskBtn" onclick="saveRisk()">Save Risk</button>
 <button onclick="goBack()" style="background:red;">Back</button>
 </div>
 
@@ -244,7 +245,7 @@ button.active{
 <div class="matrix" id="residualMatrix"></div>
 
 <div class="bottom">
-<button onclick="saveResidualRisk()">Save Risk</button>
+<button id="saveResidualRiskBtn" onclick="saveResidualRisk()">Save Risk</button>
 <button onclick="goBack()" style="background:red;">Back</button>
 </div>
 
@@ -354,8 +355,12 @@ renderMatrix();
 };
 
 window.saveRisk=function(){
+
 update(ref(db,"smsReports/"+key),{risk});
+
 savedRisk.innerText=risk;
+
+document.getElementById("saveRiskBtn").style.background="green";
 };
 
 window.calculateResidualRisk=function(){
@@ -368,8 +373,12 @@ renderResidualMatrix();
 };
 
 window.saveResidualRisk=function(){
+
 update(ref(db,"smsReports/"+key),{residualRisk});
+
 savedResidualRisk.innerText=residualRisk;
+
+document.getElementById("saveResidualRiskBtn").style.background="green";
 };
 
 function renderMatrix(){
