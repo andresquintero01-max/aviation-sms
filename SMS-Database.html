@@ -330,7 +330,10 @@ editBox.style.display = "block";
 
 /* SAVE EDIT */
 
-window.saveEdit = async function(key){
+window.saveEdit = function(key){
+
+const newReportId =
+document.getElementById("edit-reportId-"+key).value;
 
 const newWhatHappened =
 document.getElementById("edit-whatHappened-"+key).value;
@@ -341,71 +344,9 @@ document.getElementById("edit-date-"+key).value;
 const newSolution =
 document.getElementById("edit-solution-"+key).value;
 
-let finalReportId = "";
-
-/* AUTO ID FOR 2026 */
-
-if(newDate && newDate.startsWith("2026")){
-
-const snapshot = await get(child(ref(db), "smsReports"));
-
-let maxNumber = 0;
-
-if(snapshot.exists()){
-
-const reports = snapshot.val();
-
-Object.entries(reports).forEach(([reportKey,report])=>{
-
-if(report.reportId){
-
-const match =
-report.reportId.match(/^26-(\d+)$/);
-
-if(match){
-
-const currentNumber =
-parseInt(match[1]);
-
-if(currentNumber > maxNumber){
-maxNumber = currentNumber;
-}
-
-}
-
-}
-
-});
-
-}
-
-const currentReport =
-document.getElementById("edit-reportId-"+key).value;
-
-if(currentReport &&
-currentReport.match(/^26-(\d+)$/)){
-
-finalReportId = currentReport;
-
-}else{
-
-const nextNumber = maxNumber + 1;
-
-finalReportId =
-`26-${String(nextNumber).padStart(2,"0")}`;
-
-}
-
-}else{
-
-finalReportId =
-document.getElementById("edit-reportId-"+key).value;
-
-}
-
 update(ref(db,"smsReports/"+key),{
 
-reportId:finalReportId,
+reportId:newReportId,
 whatHappened:newWhatHappened,
 date:newDate,
 solution:newSolution
@@ -419,6 +360,59 @@ location.reload();
 });
 
 };
+
+/* AUTO CONSECUTIVE 2026 */
+
+async function assign2026Consecutives(data){
+
+let usedNumbers = [];
+
+Object.entries(data).forEach(([key,item])=>{
+
+if(item.reportId){
+
+const match =
+item.reportId.match(/^26-(\d+)$/);
+
+if(match){
+usedNumbers.push(parseInt(match[1]));
+}
+
+}
+
+});
+
+let nextNumber =
+usedNumbers.length > 0 ? Math.max(...usedNumbers) + 1 : 1;
+
+for(const [key,item] of Object.entries(data)){
+
+const is2026 =
+item.date && item.date.startsWith("2026");
+
+const hasValid2026Id =
+item.reportId && item.reportId.match(/^26-(\d+)$/);
+
+if(is2026 && !hasValid2026Id){
+
+const newId =
+`26-${String(nextNumber).padStart(2,"0")}`;
+
+await update(ref(db,"smsReports/"+key),{
+reportId:newId
+});
+
+item.reportId = newId;
+
+nextNumber++;
+
+}
+
+}
+
+return data;
+
+}
 
 /* RISK CLASS */
 
@@ -466,11 +460,15 @@ return "NOT ACCEPTABLE 🔴";
 
 /* LOAD REPORTS */
 
-get(child(ref(db), "smsReports")).then((snapshot)=>{
+get(child(ref(db), "smsReports")).then(async (snapshot)=>{
 
 if(snapshot.exists()){
 
-const data = snapshot.val();
+let data = snapshot.val();
+
+data = await assign2026Consecutives(data);
+
+/* NEWEST FIRST */
 
 const reports =
 Object.entries(data).reverse();
@@ -482,6 +480,8 @@ const div = document.createElement("div");
 div.className = "record";
 
 div.id = "record-"+key;
+
+/* STATUS */
 
 const riskAssessmentStatus =
 item.riskClosed === true
@@ -497,6 +497,8 @@ item.residualRiskClosed === true
 
 : '<div class="status open">RESIDUAL RISK OPEN</div>';
 
+/* RISK CLASS */
+
 const riskClass =
 item.riskClosed === true
 ? getRiskClass(item.risk)
@@ -507,6 +509,8 @@ item.residualRiskClosed === true
 ? getRiskClass(item.residualRisk)
 : "risk-empty";
 
+/* RISK TEXT */
+
 const riskText =
 item.riskClosed === true
 ? getRiskText(item.risk)
@@ -516,6 +520,8 @@ const residualText =
 item.residualRiskClosed === true
 ? getRiskText(item.residualRisk)
 : "NOT ASSESSED";
+
+/* RISK VALUE */
 
 const riskValue =
 item.riskClosed === true
@@ -544,6 +550,8 @@ ${item.reportId || "N/A"}
 
 <div class="status-box">
 
+<!-- RISK -->
+
 <div class="status-group">
 
 ${riskAssessmentStatus}
@@ -560,6 +568,8 @@ ${riskText}
 </div>
 
 </div>
+
+<!-- RESIDUAL -->
 
 <div class="status-group">
 
