@@ -112,6 +112,13 @@ h1{
   color:white;
 }
 
+/* NOT ASSESSED */
+
+.risk-empty{
+  background:#dfe6ee;
+  color:#071f47;
+}
+
 .risk-value{
   margin-top:8px;
   padding:10px 14px;
@@ -281,7 +288,7 @@ const db = getDatabase(app);
 
 const container = document.getElementById("data");
 
-/* DELETE REPORT */
+/* DELETE */
 
 window.deleteReport = function(key){
 
@@ -358,11 +365,13 @@ location.reload();
 
 };
 
-/* RISK COLOR */
+/* RISK CLASS */
 
 function getRiskClass(value){
 
-if(!value) return "risk-green";
+if(value === undefined || value === null || value === ""){
+return "risk-empty";
+}
 
 if(value <= 5){
 return "risk-green";
@@ -380,7 +389,9 @@ return "risk-red";
 
 function getRiskText(value){
 
-if(!value) return "ACCEPTABLE 🟢";
+if(value === undefined || value === null || value === ""){
+return "NOT ASSESSED";
+}
 
 if(value <= 5){
 return "ACCEPTABLE 🟢";
@@ -431,7 +442,7 @@ item.residualRiskClosed === true
 
 : '<div class="status open">RESIDUAL RISK OPEN</div>';
 
-/* RISK COLORS */
+/* RISK CLASS */
 
 const riskClass =
 getRiskClass(item.risk);
@@ -446,6 +457,18 @@ getRiskText(item.risk);
 
 const residualText =
 getRiskText(item.residualRisk);
+
+/* RISK VALUE */
+
+const riskValue =
+(item.risk === undefined || item.risk === null || item.risk === "")
+? "N/A"
+: item.risk;
+
+const residualValue =
+(item.residualRisk === undefined || item.residualRisk === null || item.residualRisk === "")
+? "N/A"
+: item.residualRisk;
 
 div.innerHTML = `
 
@@ -473,7 +496,7 @@ ${riskAssessmentStatus}
 <div class="risk-value ${riskClass}">
 
 Risk:
-${item.risk || "N/A"}
+${riskValue}
 
 <br><br>
 
@@ -492,7 +515,7 @@ ${residualRiskAssessmentStatus}
 <div class="risk-value ${residualClass}">
 
 Residual:
-${item.residualRisk || "N/A"}
+${residualValue}
 
 <br><br>
 
