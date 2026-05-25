@@ -1,1 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FRAT Details</title>
 
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial, sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  padding:30px;
+}
+
+.container{
+  max-width:1000px;
+  margin:auto;
+  background:white;
+  padding:40px;
+  border-radius:25px;
+  box-shadow:0 18px 45px rgba(0,0,0,0.3);
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  font-size:44px;
+  margin-bottom:10px;
+}
+
+.description{
+  text-align:center;
+  color:#666;
+  font-size:18px;
+  margin-bottom:35px;
+}
+
+.info-box{
+  background:#f4f6f8;
+  border-radius:18px;
+  padding:25px;
+  margin-bottom:25px;
+  border:1px solid #ddd;
+}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px solid #ddd;
+  padding:12px 0;
+  font-size:16px;
+}
+
+.info-row:last-child{
+  border-bottom:none;
+}
+
+.label{
+  font-weight:bold;
+  color:#071f47;
+}
+
+.value{
+  color:#333;
+}
+
+.risk-box{
+  text-align:center;
+  padding:22px;
+  border-radius:16px;
+  font-size:24px;
+  font-weight:bold;
+  margin-bottom:25px;
+}
+
+.low{
+  background:#2f9144;
+  color:white;
+}
+
+.moderate{
+  background:#ffd966;
+  color:#222;
+}
+
+.high{
+  background:#ff1a0a;
+  color:white;
+}
+
+h2{
+  color:#071f47;
+  margin-bottom:15px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+}
+
+th{
+  background:#071f47;
+  color:white;
+  padding:14px;
+  font-size:16px;
+}
+
+td{
+  border:1px solid #ddd;
+  padding:12px;
+  text-align:center;
+  font-size:15px;
+}
+
+tr:nth-child(even){
+  background:#f4f6f8;
+}
+
+.no-data{
+  text-align:center;
+  color:#777;
+  font-size:18px;
+  margin-top:25px;
+}
+
+.buttons{
+  text-align:center;
+  margin-top:30px;
+}
+
+.btn{
+  border:none;
+  color:white;
+  padding:14px 28px;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:6px;
+}
+
+.back-btn{
+  background:#c40000;
+}
+
+.frat-btn{
+  background:#004080;
+}
+
+.home-btn{
+  background:#0b2a66;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>FRAT Report Details</h1>
+
+  <div class="description">
+    Full Flight Risk Assessment Tool report information
+  </div>
+
+  <div id="content">
+    Loading FRAT Report...
+  </div>
+
+  <div class="buttons">
+    <button class="btn back-btn" onclick="window.location.href='FRAT-Database.html'">
+      Back to FRAT Database
+    </button>
+
+    <button class="btn frat-btn" onclick="window.location.href='FRAT.html'">
+      Back to FRAT
+    </button>
+
+    <button class="btn home-btn" onclick="window.location.href='index.html'">
+      Home
+    </button>
+  </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+const params = new URLSearchParams(window.location.search);
+const reportId = params.get("id");
+const content = document.getElementById("content");
+
+function riskClass(level){
+  if(!level) return "";
+  if(level.includes("LOW")) return "low";
+  if(level.includes("MODERATE")) return "moderate";
+  if(level.includes("HIGH")) return "high";
+  return "";
+}
+
+if(!reportId){
+  content.innerHTML = `
+    <div class="no-data">
+      No FRAT Report ID was found in the URL.
+    </div>
+  `;
+}else{
+  const reportRef = ref(database, "fratReports/" + reportId);
+
+  get(reportRef).then((snapshot) => {
+    if(snapshot.exists()){
+      const data = snapshot.val();
+
+      let factorsHTML = "";
+
+      if(data.selectedFactors && data.selectedFactors.length > 0){
+        data.selectedFactors.forEach(factor => {
+          factorsHTML += `
+            <tr>
+              <td>${factor.type || ""}</td>
+              <td>${factor.category || ""}</td>
+              <td>${factor.score || 0}</td>
+            </tr>
+          `;
+        });
+      }else{
+        factorsHTML = `
+          <tr>
+            <td colspan="3">No selected factors found.</td>
+          </tr>
+        `;
+      }
+
+      content.innerHTML = `
+        <div class="info-box">
+
+          <div class="info-row">
+            <div class="label">FRAT Report ID</div>
+            <div class="value">${reportId}</div>
+          </div>
+
+          <div class="info-row">
+            <div class="label">Created At</div>
+            <div class="value">${data.createdAt || ""}</div>
+          </div>
+
+          <div class="info-row">
+            <div class="label">Pilot Type</div>
+            <div class="value">${data.pilotType || ""}</div>
+          </div>
+
+          <div class="info-row">
+            <div class="label">Experience Level</div>
+            <div class="value">${data.experienceLevel || ""}</div>
+          </div>
+
+          <div class="info-row">
+            <div class="label">Total Risk Value</div>
+            <div class="value">${data.totalRiskValue || 0}</div>
+          </div>
+
+        </div>
+
+        <div class="risk-box ${riskClass(data.riskLevel)}">
+          ${data.riskLevel || "Risk Level Not Available"}
+        </div>
+
+        <h2>Selected Risk Factors</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Category</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${factorsHTML}
+          </tbody>
+        </table>
+      `;
+    }else{
+      content.innerHTML = `
+        <div class="no-data">
+          FRAT Report not found in Firebase.
+        </div>
+      `;
+    }
+  }).catch((error) => {
+    content.innerHTML = `
+      <div class="no-data">
+        Error loading FRAT Report: ${error.message}
+      </div>
+    `;
+  });
+}
+
+</script>
+
+</body>
+</html>
