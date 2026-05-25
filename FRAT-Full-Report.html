@@ -1,1 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FRAT Full Report</title>
 
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:Arial, sans-serif;
+  background:white;
+  color:#111;
+  padding:25px;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+}
+
+h1{
+  text-align:center;
+  color:#004080;
+  font-size:38px;
+  margin-bottom:8px;
+}
+
+.description{
+  text-align:center;
+  color:#555;
+  margin-bottom:25px;
+}
+
+.info-box{
+  border:1px solid #ddd;
+  background:#f4f6f8;
+  border-radius:16px;
+  padding:22px;
+  margin-bottom:25px;
+}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px solid #ddd;
+  padding:10px 0;
+}
+
+.info-row:last-child{
+  border-bottom:none;
+}
+
+.label{
+  font-weight:bold;
+  color:#004080;
+}
+
+.section-title{
+  background:#004080;
+  color:white;
+  padding:8px;
+  font-weight:bold;
+  margin-top:18px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:10px;
+}
+
+th{
+  background:#071f47;
+  color:white;
+  padding:10px;
+}
+
+td{
+  border:1px solid #ddd;
+  padding:10px;
+  text-align:center;
+}
+
+tr:nth-child(even){
+  background:#f4f6f8;
+}
+
+.true-row{
+  background:#d9f2ff!important;
+  font-weight:bold;
+}
+
+.risk-box{
+  text-align:center;
+  padding:22px;
+  border-radius:16px;
+  font-size:24px;
+  font-weight:bold;
+  margin:25px 0;
+}
+
+.low{background:#2f9144;color:white;}
+.moderate{background:#ffd966;color:#222;}
+.high{background:#ff1a0a;color:white;}
+
+.buttons{
+  text-align:center;
+  margin-top:30px;
+}
+
+.btn{
+  border:none;
+  color:white;
+  padding:14px 28px;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:6px;
+}
+
+.print-btn{background:#2f9144;}
+.back-btn{background:#c40000;}
+.database-btn{background:#004080;}
+.home-btn{background:#0b2a66;}
+
+@media print{
+  .buttons{display:none;}
+  body{padding:10px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Flight Risk Assessment Tool (FRAT)</h1>
+
+  <div class="description">
+    Complete FRAT Report
+  </div>
+
+  <div id="content">
+    Loading full FRAT Report...
+  </div>
+
+  <div class="buttons">
+    <button class="btn print-btn" onclick="window.print()">Print / Save PDF</button>
+
+    <button class="btn back-btn" onclick="goBackDetails()">
+      Back to FRAT Details
+    </button>
+
+    <button class="btn database-btn" onclick="window.location.href='FRAT-Database.html'">
+      Back to FRAT Database
+    </button>
+
+    <button class="btn home-btn" onclick="window.location.href='index.html'">
+      Home
+    </button>
+  </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+const fratItems = [
+  {
+    type:"Pilot",
+    items:[
+      ["Less than 50 Hours in Aircraft or Avionics Type",5],
+      ["Less than 15 hours in the last 90 days",5],
+      ["Flight will occur after work",3],
+      ["Less than 8 hours sleep prior to flight",5],
+      ["Dual Instruction Received in last 90 days",0],
+      ["WINGS Phase Completion in last 6 months",-3],
+      ["Instrument Rating current and proficient",-3]
+    ]
+  },
+  {
+    type:"Flight Conditions",
+    items:[
+      ["Twilight or Night",5],
+      ["Surface wind greater than 15 Knots",4],
+      ["Cross wind greater than 7 Knots",4],
+      ["Mountainous Terrain",3]
+    ]
+  },
+  {
+    type:"Airport",
+    items:[
+      ["Non-towered Airport or tower closed at ETD or ETA",3],
+      ["Runway length less than 3,000 Feet",4],
+      ["Wet or soft field Runway",3],
+      ["Obstacles on Approach and/or departure",4]
+    ]
+  },
+  {
+    type:"VFR Flight Plan",
+    items:[
+      ["Ceiling less than 3,000 feet AGL",5],
+      ["Visibility less than 5 SM",5],
+      ["No Weather Reporting at destination",4],
+      ["Flight Plan filed and activated",-3],
+      ["ATC Flight Following used",-3]
+    ]
+  },
+  {
+    type:"IFR Flight Plan",
+    items:[
+      ["Ceiling less than 1000 feet AGL",5],
+      ["Visibility less than 3 SM",5],
+      ["No Weather Reporting at destination",4]
+    ]
+  },
+  {
+    type:"Approaches - Instrument Pilots - Best Available Approach",
+    items:[
+      ["Precision Approach",-3],
+      ["Non precision Approach",3],
+      ["No Instrument Approach",6],
+      ["Circling Approach",5]
+    ]
+  }
+];
+
+const params = new URLSearchParams(window.location.search);
+const reportId = params.get("id");
+const content = document.getElementById("content");
+
+window.goBackDetails = function(){
+  window.location.href = "FRAT-Details.html?id=" + reportId;
+};
+
+function riskClass(level){
+  if(!level) return "";
+  if(level.includes("LOW")) return "low";
+  if(level.includes("MODERATE")) return "moderate";
+  if(level.includes("HIGH")) return "high";
+  return "";
+}
+
+function isSelected(data, type, category){
+  if(!data.selectedFactors) return false;
+
+  return data.selectedFactors.some(factor =>
+    factor.type === type && factor.category === category
+  );
+}
+
+if(!reportId){
+  content.innerHTML = `<div>No FRAT Report ID was found in the URL.</div>`;
+}else{
+  const reportRef = ref(database, "fratReports/" + reportId);
+
+  get(reportRef).then((snapshot) => {
+    if(snapshot.exists()){
+      const data = snapshot.val();
+
+      let allSectionsHTML = "";
+
+      fratItems.forEach(section => {
+        let rows = "";
+
+        section.items.forEach(item => {
+          const selected = isSelected(data, section.type, item[0]);
+
+          rows += `
+            <tr class="${selected ? 'true-row' : ''}">
+              <td>${item[0]}</td>
+              <td>${item[1]}</td>
+              <td>${selected ? "True" : "False"}</td>
+            </tr>
+          `;
+        });
+
+        allSectionsHTML += `
+          <div class="section-title">${section.type}</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Risk Factor</th>
+                <th>Score</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        `;
+      });
+
+      content.innerHTML = `
+        <div class="info-box">
+          <div class="info-row">
+            <div class="label">FRAT Report ID</div>
+            <div>${reportId}</div>
+          </div>
+
+          <div class="info-row">
+            <div class="label">Created At</div>
+            <div>${data.createdAt || ""}</div>
+          </div>
+
+          <div class="info-row">
+            <div class="label">Pilot Type</div>
+            <div>${data.pilotType || ""}</div>
+          </div>
+
+          <div class="info-row">
+            <div class="label">Experience Level</div>
+            <div>${data.experienceLevel || ""}</div>
+          </div>
+
+          <div class="info-row">
+            <div class="label">Total Risk Value</div>
+            <div>${data.totalRiskValue || 0}</div>
+          </div>
+        </div>
+
+        <div class="risk-box ${riskClass(data.riskLevel)}">
+          ${data.riskLevel || "Risk Level Not Available"}
+        </div>
+
+        ${allSectionsHTML}
+      `;
+    }else{
+      content.innerHTML = `<div>FRAT Report not found in Firebase.</div>`;
+    }
+  }).catch((error) => {
+    content.innerHTML = `<div>Error loading FRAT Report: ${error.message}</div>`;
+  });
+}
+
+</script>
+
+</body>
+</html>
