@@ -65,6 +65,17 @@ tr:nth-child(even){
   background:#f4f6f8;
 }
 
+.report-link{
+  color:#071f47;
+  font-weight:bold;
+  text-decoration:none;
+}
+
+.report-link:hover{
+  color:#1450b8;
+  text-decoration:underline;
+}
+
 .no-data{
   text-align:center;
   color:#777;
@@ -170,7 +181,11 @@ onValue(reportsRef, (snapshot) => {
       const row = document.createElement("tr");
 
       row.innerHTML = `
-        <td>${reportId}</td>
+        <td>
+          <a class="report-link" href="FRAT-Details.html?id=${reportId}">
+            ${reportId}
+          </a>
+        </td>
       `;
 
       tableBody.appendChild(row);
