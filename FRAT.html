@@ -1,1 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Flight Risk Assessment Tool (FRAT)</title>
 
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial, sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:30px;
+}
+
+/* MAIN CONTAINER */
+.container{
+  width:100%;
+  max-width:650px;
+  background:#f4f4f4;
+  padding:50px;
+  border-radius:28px;
+  box-shadow:0 18px 45px rgba(0,0,0,0.3);
+  text-align:center;
+}
+
+/* MAIN TITLE */
+h1{
+  font-size:58px;
+  color:#071f47;
+  margin-bottom:18px;
+  font-weight:bold;
+}
+
+/* DESCRIPTION */
+.description{
+  font-size:18px;
+  color:#666;
+  margin-bottom:45px;
+}
+
+/* SECTION */
+.section{
+  margin-bottom:35px;
+}
+
+/* SUBTITLE */
+.subtitle{
+  font-size:24px;
+  color:#222;
+  font-weight:bold;
+  margin-bottom:18px;
+}
+
+/* BUTTON LINKS */
+a.btn{
+  text-decoration:none;
+}
+
+/* MAIN BUTTONS */
+.main-btn{
+  width:100%;
+  max-width:420px;
+  background:linear-gradient(135deg,#071f47,#0b2a66);
+  color:white;
+  border:none;
+  padding:22px;
+  border-radius:18px;
+  cursor:pointer;
+  font-size:20px;
+  font-weight:bold;
+  transition:0.3s;
+  box-shadow:0 10px 22px rgba(0,0,0,0.25);
+}
+
+.main-btn:hover{
+  transform:translateY(-5px) scale(1.02);
+  background:linear-gradient(135deg,#0b2a66,#1c63db);
+  box-shadow:0 15px 28px rgba(0,0,0,0.3);
+}
+
+/* SMALL TEXT */
+.small-text{
+  display:block;
+  font-size:14px;
+  margin-top:6px;
+  font-weight:normal;
+  opacity:0.9;
+}
+
+/* BUTTON CONTAINER */
+.bottom-buttons{
+  margin-top:30px;
+  display:flex;
+  justify-content:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+
+/* BACK BUTTON */
+.back-btn{
+  background:linear-gradient(135deg,#c40000,#ff2b2b);
+  color:white;
+  text-decoration:none;
+  padding:15px 28px;
+  border-radius:16px;
+  font-size:17px;
+  font-weight:bold;
+  transition:0.3s;
+  box-shadow:0 8px 18px rgba(0,0,0,0.2);
+}
+
+.back-btn:hover{
+  transform:translateY(-3px) scale(1.03);
+  background:linear-gradient(135deg,#ff2b2b,#ff5b5b);
+}
+
+/* HOME BUTTON */
+.home-btn{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+  color:white;
+  text-decoration:none;
+  padding:15px 28px;
+  border-radius:16px;
+  font-size:17px;
+  font-weight:bold;
+  transition:0.3s;
+  box-shadow:0 8px 18px rgba(0,0,0,0.2);
+}
+
+.home-btn:hover{
+  transform:translateY(-3px) scale(1.03);
+  background:linear-gradient(135deg,#1450b8,#2f7dff);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- MAIN TITLE -->
+  <h1>Flight Risk Assessment Tool (FRAT)</h1>
+
+  <!-- DESCRIPTION -->
+  <div class="description">
+    Flight operational risk assessment and management system
+  </div>
+
+  <!-- FRAT REPORT -->
+  <div class="section">
+
+    <div class="subtitle">
+      FRAT Report
+    </div>
+
+    <a class="btn" href="FRAT-Report.html">
+      <button class="main-btn">
+        Open FRAT Report
+        <span class="small-text">
+          Create and manage FRAT assessments
+        </span>
+      </button>
+    </a>
+
+  </div>
+
+  <!-- FRAT DATABASE -->
+  <div class="section">
+
+    <div class="subtitle">
+      FRAT Database
+    </div>
+
+    <a class="btn" href="FRAT-Database.html">
+      <button class="main-btn">
+        Open FRAT Database
+        <span class="small-text">
+          Review and track FRAT reports
+        </span>
+      </button>
+    </a>
+
+  </div>
+
+  <!-- BOTTOM BUTTONS -->
+  <div class="bottom-buttons">
+
+    <!-- BACK BUTTON -->
+    <a class="back-btn" href="Risk-Management-Tools.html">
+      Back to Risk Management Tools
+    </a>
+
+    <!-- HOME BUTTON -->
+    <a class="home-btn" href="index.html">
+      Home
+    </a>
+
+  </div>
+
+</div>
+
+</body>
+</html>
