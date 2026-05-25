@@ -112,7 +112,7 @@ h1{
   color:white;
 }
 
-/* NOT ASSESSED */
+/* EMPTY */
 
 .risk-empty{
   background:#dfe6ee;
@@ -373,6 +373,10 @@ if(value === undefined || value === null || value === ""){
 return "risk-empty";
 }
 
+if(value === "NOT ASSESSED"){
+return "risk-empty";
+}
+
 if(value <= 5){
 return "risk-green";
 }
@@ -445,30 +449,38 @@ item.residualRiskClosed === true
 /* RISK CLASS */
 
 const riskClass =
-getRiskClass(item.risk);
+item.riskClosed === true
+? getRiskClass(item.risk)
+: "risk-empty";
 
 const residualClass =
-getRiskClass(item.residualRisk);
+item.residualRiskClosed === true
+? getRiskClass(item.residualRisk)
+: "risk-empty";
 
 /* RISK TEXT */
 
 const riskText =
-getRiskText(item.risk);
+item.riskClosed === true
+? getRiskText(item.risk)
+: "NOT ASSESSED";
 
 const residualText =
-getRiskText(item.residualRisk);
+item.residualRiskClosed === true
+? getRiskText(item.residualRisk)
+: "NOT ASSESSED";
 
 /* RISK VALUE */
 
 const riskValue =
-(item.risk === undefined || item.risk === null || item.risk === "")
-? "N/A"
-: item.risk;
+item.riskClosed === true
+? item.risk
+: "N/A";
 
 const residualValue =
-(item.residualRisk === undefined || item.residualRisk === null || item.residualRisk === "")
-? "N/A"
-: item.residualRisk;
+item.residualRiskClosed === true
+? item.residualRisk
+: "N/A";
 
 div.innerHTML = `
 
