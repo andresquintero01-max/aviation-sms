@@ -149,19 +149,19 @@ input[type="radio"]{
   text-align:left;
 }
 
-.risk-comment.low-comment{
+.low-comment{
   background:#d8f3dc;
   color:#14532d;
   border:1px solid #2f9144;
 }
 
-.risk-comment.moderate-comment{
+.moderate-comment{
   background:#fff3cd;
   color:#664d03;
   border:1px solid #ffd966;
 }
 
-.risk-comment.high-comment{
+.high-comment{
   background:#f8d7da;
   color:#842029;
   border:1px solid #ff1a0a;
@@ -331,6 +331,7 @@ input[type="radio"]{
 </div>
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
@@ -347,12 +348,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-window.database = database;
-window.dbRef = ref;
-window.dbGet = get;
-</script>
-
-<script>
 const fratItems = [
   {
     type:"Pilot",
@@ -433,10 +428,12 @@ function isSelected(type, category){
 }
 
 function getRiskComment(level){
-  if(!level) return {
-    text:"Risk level not available.",
-    className:"low-comment"
-  };
+  if(!level){
+    return {
+      text:"Risk level not available.",
+      className:"low-comment"
+    };
+  }
 
   if(level.includes("LOW")){
     return {
@@ -447,14 +444,14 @@ function getRiskComment(level){
 
   if(level.includes("MODERATE")){
     return {
-      text:"Caution: Moderate risk identified. Operations area must be notified before continuing.",
+      text:"Caution: Moderate risk identified. Notify the Operations area before continuing.",
       className:"moderate-comment"
     };
   }
 
   if(level.includes("HIGH")){
     return {
-      text:"NO-GO: High risk identified. The flight should not operate until risk is reduced or mitigated.",
+      text:"NO-GO: High risk identified. The flight must not operate until the risk is reduced or mitigated.",
       className:"high-comment"
     };
   }
@@ -605,7 +602,7 @@ function applyRiskColor(){
   else box.classList.add("low");
 }
 
-function toggleDetails(){
+window.toggleDetails = function(){
   const details = document.getElementById("detailsArea");
   const btn = document.querySelector(".hide-btn");
 
@@ -616,18 +613,18 @@ function toggleDetails(){
     details.style.display = "none";
     btn.innerText = "Show Details";
   }
-}
+};
 
-function goBackDetails(){
+window.goBackDetails = function(){
   window.location.href = "FRAT-Details.html?id=" + reportId;
-}
+};
 
 if(!reportId){
   formArea.innerHTML = "<h2>No FRAT Report ID was found in the URL.</h2>";
 }else{
-  const reportRef = window.dbRef(window.database, "fratReports/" + reportId);
+  const reportRef = ref(database, "fratReports/" + reportId);
 
-  window.dbGet(reportRef).then(snapshot => {
+  get(reportRef).then(snapshot => {
     if(snapshot.exists()){
       savedData = snapshot.val();
 
@@ -643,6 +640,7 @@ if(!reportId){
     formArea.innerHTML = "<h2>Error loading FRAT Report: " + error.message + "</h2>";
   });
 }
+
 </script>
 
 </body>
