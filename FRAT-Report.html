@@ -9,7 +9,7 @@
 
 body{
   font-family:Arial, sans-serif;
-  background:#ffffff;
+  background:white;
   color:#111;
 }
 
@@ -17,7 +17,6 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  background:#fff;
   padding:10px 22px 5px 22px;
 }
 
@@ -76,12 +75,10 @@ select{
 .main{
   display:flex;
   padding:0 22px 20px 22px;
-  gap:0;
 }
 
 .left{
   width:67%;
-  padding-right:0;
 }
 
 .right{
@@ -271,8 +268,8 @@ input[type="radio"]{
     <div class="control-box">
       Select Experience Level
       <select id="experience" onchange="calculateRisk()">
-        <option value="<100">&lt;100</option>
-        <option value=">100">&gt;100</option>
+        <option value="LESS_100">&lt;100 In Type</option>
+        <option value="MORE_100">&gt;100 In Type</option>
       </select>
     </div>
 
@@ -326,6 +323,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+
 window.database = database;
 window.dbRef = ref;
 window.dbPush = push;
@@ -337,64 +335,68 @@ const fratItems = [
   {
     type:"Pilot",
     items:[
-      ["Less than 50 Hours in Aircraft or Avionics Type",0],
-      ["Less than 15 hours in the last 90 days",0],
-      ["Flight will occur after work",0],
-      ["Less than 8 hours sleep prior to flight",0],
+      ["Less than 50 Hours in Aircraft or Avionics Type",5],
+      ["Less than 15 hours in the last 90 days",5],
+      ["Flight will occur after work",3],
+      ["Less than 8 hours sleep prior to flight",5],
       ["Dual Instruction Received in last 90 days",0],
       ["WINGS Phase Completion in last 6 months",-3],
-      ["Instrument Rating current and proficient",0]
+      ["Instrument Rating current and proficient",-3]
     ]
   },
   {
     type:"Flight Conditions",
     items:[
       ["Twilight or Night",5],
-      ["Surface wind greater than 15 Knots",0],
+      ["Surface wind greater than 15 Knots",4],
       ["Cross wind greater than 7 Knots",4],
-      ["Mountainous Terrain",0]
+      ["Mountainous Terrain",3]
     ]
   },
   {
     type:"Airport",
     items:[
-      ["Non-towered Airport or tower closed at ETD or ETA",0],
-      ["Runway length less than 3,000 Feet",0],
+      ["Non-towered Airport or tower closed at ETD or ETA",3],
+      ["Runway length less than 3,000 Feet",4],
       ["Wet or soft field Runway",3],
-      ["Obstacles on Approach and/or departure",0]
+      ["Obstacles on Approach and/or departure",4]
     ]
   },
   {
     type:"VFR Flight Plan",
     items:[
-      ["Ceiling less than 3,000 feet AGL",0],
-      ["Visibility less than 5 SM",0],
-      ["No Weather Reporting at destination",0],
-      ["Flight Plan filed and activated",0],
-      ["ATC Flight Following used",0]
+      ["Ceiling less than 3,000 feet AGL",5],
+      ["Visibility less than 5 SM",5],
+      ["No Weather Reporting at destination",4],
+      ["Flight Plan filed and activated",-3],
+      ["ATC Flight Following used",-3]
     ]
   },
   {
     type:"IFR Flight Plan",
     items:[
-      ["Ceiling less than 1000 feet AGL",0],
-      ["Visibility less than 3 SM",0],
-      ["No Weather Reporting at destination",0]
+      ["Ceiling less than 1000 feet AGL",5],
+      ["Visibility less than 3 SM",5],
+      ["No Weather Reporting at destination",4]
     ]
   },
   {
     type:"Approaches - Instrument Pilots - Best Available Approach",
     items:[
-      ["Precision Approach",0],
-      ["Non precision Approach",0],
-      ["No Instrument Approach",0],
-      ["Circling Approach",0]
+      ["Precision Approach",-3],
+      ["Non precision Approach",3],
+      ["No Instrument Approach",6],
+      ["Circling Approach",5]
     ]
   }
 ];
 
 const formArea = document.getElementById("formArea");
 const detailsBody = document.getElementById("detailsBody");
+
+function safeId(text){
+  return text.replaceAll(" ","_").replaceAll("-","_").replaceAll("/","_").replaceAll("&","_");
+}
 
 function buildForm(){
   formArea.innerHTML = "";
@@ -409,7 +411,7 @@ function buildForm(){
     itemsDiv.className = "items";
 
     section.items.forEach((item, index) => {
-      const id = section.type.replaceAll(" ","_").replaceAll("-","_") + "_" + index;
+      const id = safeId(section.type) + "_" + index;
 
       const div = document.createElement("div");
       div.className = "item";
@@ -417,8 +419,12 @@ function buildForm(){
       div.innerHTML = `
         <div>${item[0]}</div>
         <div class="radio-group">
-          <label><input type="radio" name="${id}" value="true" data-score="${item[1]}" data-type="${section.type}" data-category="${item[0]}" onchange="calculateRisk()">True</label>
-          <label><input type="radio" name="${id}" value="false" data-score="0" data-type="${section.type}" data-category="${item[0]}" onchange="calculateRisk()" checked>False</label>
+          <label>
+            <input type="radio" name="${id}" value="true" data-score="${item[1]}" data-type="${section.type}" data-category="${item[0]}" onchange="calculateRisk()">True
+          </label>
+          <label>
+            <input type="radio" name="${id}" value="false" data-score="0" data-type="${section.type}" data-category="${item[0]}" onchange="calculateRisk()" checked>False
+          </label>
         </div>
       `;
 
@@ -492,7 +498,6 @@ function buildDetails(){
   fratItems.forEach(section => {
     section.items.forEach((item, index) => {
       const tr = document.createElement("tr");
-      tr.id = "detail_" + section.type.replaceAll(" ","_").replaceAll("-","_") + "_" + index;
 
       tr.innerHTML = `
         ${index === 0 ? `<td class="category-cell" rowspan="${section.items.length}">${section.type}</td>` : ""}
@@ -516,42 +521,46 @@ function getRiskLevel(total){
   const pilotType = document.getElementById("pilotType").value;
   const experience = document.getElementById("experience").value;
 
-  if(pilotType === "VFR" && experience === "<100"){
+  if(pilotType === "VFR" && experience === "LESS_100"){
     if(total <= 15) return "LOW RISK";
     if(total <= 20) return "MODERATE RISK";
     return "HIGH RISK";
   }
 
-  if(pilotType === "VFR" && experience === ">100"){
+  if(pilotType === "VFR" && experience === "MORE_100"){
     if(total <= 20) return "LOW RISK";
     if(total <= 25) return "MODERATE RISK";
     return "HIGH RISK";
   }
 
-  if(pilotType === "IFR" && experience === "<100"){
+  if(pilotType === "IFR" && experience === "LESS_100"){
     if(total <= 25) return "LOW RISK";
     if(total <= 30) return "MODERATE RISK";
     return "HIGH RISK";
   }
 
-  if(pilotType === "IFR" && experience === ">100"){
+  if(pilotType === "IFR" && experience === "MORE_100"){
     if(total <= 30) return "LOW RISK";
     if(total <= 35) return "MODERATE RISK";
     return "HIGH RISK";
   }
+
+  return "LOW RISK";
 }
 
 function calculateRisk(){
   let total = 0;
 
-  document.querySelectorAll(".selected").forEach(e => e.classList.remove("selected"));
+  document.querySelectorAll(".selected").forEach(e => {
+    e.classList.remove("selected");
+  });
 
   document.querySelectorAll("input[type='radio']:checked").forEach(radio => {
     if(radio.value === "true"){
       total += Number(radio.dataset.score);
 
-      const detailRows = Array.from(document.querySelectorAll("#detailsBody tr"));
-      detailRows.forEach(row => {
+      const rows = document.querySelectorAll("#detailsBody tr");
+      rows.forEach(row => {
         if(row.innerText.includes(radio.dataset.category)){
           row.querySelectorAll("td").forEach(td => td.classList.add("selected"));
         }
@@ -569,7 +578,6 @@ function calculateRisk(){
   if(level === "HIGH RISK") box.classList.add("high");
 
   box.innerHTML = `${level}<span class="risk-number">${total}</span>`;
-
   document.getElementById("grandTotal").innerText = total;
 
   return { total, level };
@@ -581,7 +589,7 @@ function resetForm(){
   });
 
   document.getElementById("pilotType").value = "VFR";
-  document.getElementById("experience").value = "<100";
+  document.getElementById("experience").value = "LESS_100";
 
   calculateRisk();
 }
