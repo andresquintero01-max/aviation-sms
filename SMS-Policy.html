@@ -5,64 +5,98 @@
 <title>SMS Policy</title>
 
 <style>
-body{
+
+*{
   margin:0;
-  font-family:Arial;
-  background:#f4f6f8;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#071f47,#0b2a66,#123b7a);
+  min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  height:100vh;
+  padding:30px;
 }
 
+/* MAIN CONTAINER */
 .container{
+  width:100%;
+  max-width:650px;
+  background:white;
+  padding:40px;
+  border-radius:25px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.25);
   text-align:center;
 }
 
-/* MAIN TITLE */
+/* TITLE */
 h1{
-  font-size:60px;
+  font-size:55px;
   color:#071f47;
+  margin-bottom:35px;
+  letter-spacing:1px;
+}
+
+/* SECTION */
+.section{
   margin-bottom:25px;
 }
 
-/* SECTIONS */
-.section{
-  font-size:20px;
+/* SECTION TITLES */
+.section-title{
+  font-size:22px;
   color:#333;
-  margin-top:15px;
-  margin-bottom:8px;
+  margin-bottom:12px;
+  font-weight:bold;
 }
 
-/* BUTTONS */
-button{
-  background:#071f47;
+/* MODERN BUTTONS */
+.main-btn{
+  display:inline-block;
+  width:100%;
+  max-width:420px;
+  background:linear-gradient(135deg,#071f47,#0b2a66);
   color:white;
-  border:none;
-  padding:10px 15px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:14px;
-  margin-bottom:10px;
+  text-decoration:none;
+  padding:18px;
+  border-radius:16px;
+  font-size:18px;
+  font-weight:bold;
+  transition:0.3s;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
 }
 
-button:hover{
-  background:#0b2a66;
+.main-btn:hover{
+  transform:translateY(-4px) scale(1.02);
+  background:linear-gradient(135deg,#0b2a66,#1450b8);
+  box-shadow:0 12px 25px rgba(0,0,0,0.3);
 }
 
 /* BACK BUTTON */
 .back-btn{
-  margin-top:15px;
   display:inline-block;
-  background:red;
+  margin-top:20px;
+  background:linear-gradient(135deg,#c40000,#ff2b2b);
   color:white;
-  padding:10px 15px;
   text-decoration:none;
-  border-radius:8px;
-  font-size:14px;
+  padding:15px 35px;
+  border-radius:14px;
+  font-size:18px;
+  font-weight:bold;
+  transition:0.3s;
+  box-shadow:0 8px 18px rgba(0,0,0,0.2);
 }
-</style>
 
+.back-btn:hover{
+  transform:translateY(-3px);
+  background:linear-gradient(135deg,#ff2b2b,#ff4d4d);
+}
+
+</style>
 </head>
 
 <body>
@@ -73,35 +107,50 @@ button:hover{
   <h1>SMS Policy</h1>
 
   <!-- MANUAL -->
-  <div class="section">Manual</div>
+  <div class="section">
+    <div class="section-title">Manual</div>
 
-  <a href="https://docs.google.com/document/d/1Tg5qRdjBNnFmmkCuflhb_7JzFbwKHhdt/view" target="_blank">
-    <button>Manual</button>
-  </a>
+    <a class="main-btn"
+       href="https://docs.google.com/document/d/1Tg5qRdjBNnFmmkCuflhb_7JzFbwKHhdt/view"
+       target="_blank">
+       Open Manual
+    </a>
+  </div>
 
   <!-- SMS POLICY DOCUMENT -->
-  <div class="section">SMS Policy Document</div>
+  <div class="section">
+    <div class="section-title">SMS Policy Document</div>
 
-  <a href="https://docs.google.com/document/d/1VOfcOccqYe7618w5NkMiSR_eCVnqoXZn/view" target="_blank">
-    <button>SMS Policy Document</button>
-  </a>
+    <a class="main-btn"
+       href="https://docs.google.com/document/d/1VOfcOccqYe7618w5NkMiSR_eCVnqoXZn/view"
+       target="_blank">
+       Open SMS Policy Document
+    </a>
+  </div>
 
   <!-- OBJECTIVES -->
-  <div class="section">Objectives</div>
+  <div class="section">
+    <div class="section-title">Objectives</div>
 
-  <a href="https://docs.google.com/document/d/1PvXAmlvLIqr4c8pwLpoZA81AhPfBaieM/view" target="_blank">
-    <button>Objectives Document</button>
-  </a>
+    <a class="main-btn"
+       href="https://docs.google.com/document/d/1PvXAmlvLIqr4c8pwLpoZA81AhPfBaieM/view"
+       target="_blank">
+       Open Objectives Document
+    </a>
+  </div>
 
   <!-- EMERGENCY PLANS -->
-  <div class="section">Emergency Plans</div>
+  <div class="section">
+    <div class="section-title">Emergency Plans</div>
 
-  <a href="https://docs.google.com/document/d/1HqGqV4J5Z3yF0y02-qDaSIzxaX3axkBa/view" target="_blank">
-    <button>Emergency Plans Document</button>
-  </a>
+    <a class="main-btn"
+       href="https://docs.google.com/document/d/1HqGqV4J5Z3yF0y02-qDaSIzxaX3axkBa/view"
+       target="_blank">
+       Open Emergency Plans
+    </a>
+  </div>
 
   <!-- BACK BUTTON -->
-  <br>
   <a class="back-btn" href="index.html">
     Back
   </a>
