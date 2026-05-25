@@ -51,6 +51,10 @@ button.active{
   background:purple !important;
 }
 
+button.closed{
+  background:green !important;
+}
+
 .result{
   margin-top:20px;
   padding:15px;
@@ -97,10 +101,6 @@ button.active{
   cursor:pointer;
   font-size:12px;
   margin-top:8px;
-}
-
-.send-btn.active{
-  background:purple !important;
 }
 
 .attachment-box{
@@ -295,6 +295,19 @@ document.getElementById("reportBox").innerHTML=`
 
 savedRisk.innerText=d.risk||"N/A";
 savedResidualRisk.innerText=d.residualRisk||"N/A";
+
+if(d.riskClosed===true){
+  const btn=document.getElementById("saveRiskBtn");
+  btn.innerText="Close";
+  btn.classList.add("closed");
+}
+
+if(d.residualRiskClosed===true){
+  const btn=document.getElementById("saveResidualRiskBtn");
+  btn.innerText="Close";
+  btn.classList.add("closed");
+}
+
 loadCPA(d.CPA);
 renderMatrix();
 renderResidualMatrix();
@@ -356,11 +369,16 @@ renderMatrix();
 
 window.saveRisk=function(){
 
-update(ref(db,"smsReports/"+key),{risk});
+update(ref(db,"smsReports/"+key),{
+risk:risk,
+riskClosed:true
+});
 
 savedRisk.innerText=risk;
 
-document.getElementById("saveRiskBtn").style.background="green";
+const btn=document.getElementById("saveRiskBtn");
+btn.innerText="Close";
+btn.classList.add("closed");
 };
 
 window.calculateResidualRisk=function(){
@@ -374,11 +392,16 @@ renderResidualMatrix();
 
 window.saveResidualRisk=function(){
 
-update(ref(db,"smsReports/"+key),{residualRisk});
+update(ref(db,"smsReports/"+key),{
+residualRisk:residualRisk,
+residualRiskClosed:true
+});
 
 savedResidualRisk.innerText=residualRisk;
 
-document.getElementById("saveResidualRiskBtn").style.background="green";
+const btn=document.getElementById("saveResidualRiskBtn");
+btn.innerText="Close";
+btn.classList.add("closed");
 };
 
 function renderMatrix(){
