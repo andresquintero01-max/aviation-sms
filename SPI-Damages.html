@@ -92,7 +92,7 @@ th{
 
 td{
   border:1px solid #d0d7de;
-  padding:7px 6px;
+  padding:7px 5px;
   text-align:center;
   font-size:14px;
 }
@@ -102,7 +102,7 @@ tr:nth-child(even){
 }
 
 input{
-  width:75px;
+  width:72px;
   padding:7px;
   text-align:center;
   border:1px solid #aaa;
@@ -239,7 +239,7 @@ function defaultData(){
 
     data[year] = months.map(month=>({
       month:month,
-      laborhours:0,
+      workhours:0,
       events:0
     }));
 
@@ -250,13 +250,13 @@ function defaultData(){
 
 let spiData = defaultData();
 
-function calculateRate(events, laborhours){
+function calculateRate(events, workhours){
 
-  if(!laborhours || laborhours <= 0){
+  if(!workhours || workhours <= 0){
     return 0;
   }
 
-  return (events / laborhours) * 10000;
+  return (events / workhours) * 10000;
 }
 
 function renderAll(){
@@ -280,9 +280,9 @@ function renderAll(){
         <thead>
           <tr>
             <th style="width:18%;">Month</th>
-            <th style="width:18%;">Labor Hours</th>
-            <th style="width:16%;">Events</th>
-            <th style="width:20%;">Event Rate</th>
+            <th style="width:18%;">Work Hours or Flight Hours</th>
+            <th style="width:15%;">Events</th>
+            <th style="width:18%;">Event Rate</th>
           </tr>
         </thead>
 
@@ -311,18 +311,18 @@ function renderTable(year){
 
   tbody.innerHTML = "";
 
-  let totalLaborHours = 0;
+  let totalWorkHours = 0;
   let totalEvents = 0;
 
   let rates = [];
 
   spiData[year].forEach((row,index)=>{
 
-    const rate = calculateRate(row.events,row.laborhours);
+    const rate = calculateRate(row.events,row.workhours);
 
     rates.push(rate);
 
-    totalLaborHours += Number(row.laborhours || 0);
+    totalWorkHours += Number(row.workhours || 0);
 
     totalEvents += Number(row.events || 0);
 
@@ -334,8 +334,8 @@ function renderTable(year){
 
         <td>
           <input type="number"
-          value="${row.laborhours}"
-          onchange="updateValue(${year},${index},'laborhours',this.value)">
+          value="${row.workhours}"
+          onchange="updateValue(${year},${index},'workhours',this.value)">
         </td>
 
         <td>
@@ -368,7 +368,7 @@ function renderTable(year){
 
     <tr class="summary">
       <td>Total</td>
-      <td>${totalLaborHours.toFixed(2)}</td>
+      <td>${totalWorkHours.toFixed(2)}</td>
       <td>${totalEvents}</td>
       <td></td>
     </tr>
@@ -402,7 +402,7 @@ function renderYearChart(year){
   }
 
   const rates = spiData[year].map(row=>
-    calculateRate(row.events,row.laborhours)
+    calculateRate(row.events,row.workhours)
   );
 
   const average =
@@ -476,7 +476,7 @@ function renderHistoricalChart(){
       );
 
       rates.push(
-        calculateRate(row.events,row.laborhours)
+        calculateRate(row.events,row.workhours)
       );
 
     });
@@ -534,7 +534,7 @@ window.addYear = function(){
   spiData[newYear] = months.map(month=>({
 
     month:month,
-    laborhours:0,
+    workhours:0,
     events:0
 
   }));
