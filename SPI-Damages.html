@@ -49,6 +49,10 @@ button:hover{
   background:red;
 }
 
+.home-btn{
+  background:#0b2a66;
+}
+
 .add-btn{
   background:#6f42c1;
 }
@@ -76,7 +80,7 @@ table{
 
 th,td{
   border:1px solid #333;
-  padding:8px;
+  padding:7px;
   text-align:center;
 }
 
@@ -85,11 +89,12 @@ th{
 }
 
 input{
-  width:90%;
-  padding:6px;
+  width:70px;
+  padding:4px;
   text-align:center;
   border:1px solid #aaa;
   border-radius:6px;
+  font-size:13px;
 }
 
 .rate{
@@ -130,8 +135,13 @@ canvas{
 <div class="top-buttons">
 
   <button class="back-btn"
-  onclick="window.location.href='Safety-Assurance.html'">
-    Back to Safety Assurance
+  onclick="window.location.href='Safety-Performance-Indicators.html'">
+    Back to Safety Performance Indicators
+  </button>
+
+  <button class="home-btn"
+  onclick="window.location.href='index.html'">
+    Home
   </button>
 
   <button class="print-btn"
@@ -247,7 +257,7 @@ function renderAll(){
         <thead>
           <tr>
             <th>Month</th>
-            <th>Manhours</th>
+            <th>Man hours</th>
             <th>Events</th>
             <th>Event rate* year</th>
           </tr>
