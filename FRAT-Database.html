@@ -126,7 +126,7 @@ tr:nth-child(even){
   transform:scale(1.05);
 }
 
-/* NEW REPORT NUMBER INPUT */
+/* REPORT NUMBER */
 
 .report-number{
   width:180px;
@@ -136,6 +136,8 @@ tr:nth-child(even){
   text-align:center;
   font-weight:bold;
 }
+
+/* SAVE BUTTON */
 
 .save-btn{
   background:#2f9144;
@@ -150,6 +152,32 @@ tr:nth-child(even){
 
 .save-btn:hover{
   background:#1f6e31;
+}
+
+/* DELETE BUTTON */
+
+.delete-btn{
+  background:red;
+  color:white;
+  border:none;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:18px;
+  font-weight:bold;
+  transition:0.3s;
+}
+
+.delete-btn:hover{
+  background:#b30000;
+  transform:scale(1.08);
+}
+
+.action-buttons{
+  display:flex;
+  justify-content:center;
+  gap:10px;
 }
 
 </style>
@@ -169,7 +197,6 @@ tr:nth-child(even){
     <thead>
       <tr>
         <th>FRAT Report Number</th>
-        <th>Edit Report</th>
       </tr>
     </thead>
 
@@ -201,7 +228,8 @@ import {
   getDatabase,
   ref,
   onValue,
-  update
+  update,
+  remove
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
@@ -258,15 +286,20 @@ onValue(reportsRef, (snapshot) => {
             Save
           </button>
 
-        </td>
-
-        <td>
           <button
             class="edit-btn"
             onclick="editReport('${firebaseId}')"
           >
             Edit
           </button>
+
+          <button
+            class="delete-btn"
+            onclick="deleteReport('${firebaseId}')"
+          >
+            🗑
+          </button>
+
         </td>
       `;
 
@@ -321,6 +354,32 @@ window.editReport = function(firebaseId){
 
   window.location.href =
     "FRAT.html?id=" + firebaseId + "&edit=true";
+
+};
+
+/* DELETE REPORT */
+
+window.deleteReport = function(firebaseId){
+
+  const confirmDelete = confirm(
+    "Are you sure you want to permanently delete this FRAT report?"
+  );
+
+  if(!confirmDelete) return;
+
+  remove(
+    ref(database, "fratReports/" + firebaseId)
+  )
+  .then(() => {
+
+    alert("FRAT Report deleted successfully.");
+
+  })
+  .catch((error) => {
+
+    alert("Error deleting report: " + error.message);
+
+  });
 
 };
 
