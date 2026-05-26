@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>FRAT Report</title>
+<title>FRAT Full Report</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -45,16 +45,6 @@ select{
   margin-top:3px;
 }
 
-.reset-btn{
-  width:125px;
-  height:92px;
-  border:none;
-  background:#e6e6e6;
-  color:#004080;
-  font-weight:bold;
-  cursor:pointer;
-}
-
 .hide-btn{
   width:210px;
   height:92px;
@@ -72,19 +62,41 @@ select{
   font-size:12px;
 }
 
+.flight-info{
+  padding:0 22px 15px 22px;
+}
+
+.flight-box{
+  background:#f4f6f8;
+  border:1px solid #ccc;
+  border-radius:10px;
+  padding:15px;
+}
+
+.flight-title{
+  font-size:18px;
+  font-weight:bold;
+  color:#004080;
+  margin-bottom:12px;
+}
+
+.flight-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+
+.flight-table td{
+  padding:8px;
+}
+
 .main{
   display:flex;
   padding:0 22px 20px 22px;
 }
 
-.left{
-  width:67%;
-}
-
-.right{
-  width:33%;
-  border-left:1px solid #ccc;
-}
+.left{width:67%;}
+.right{width:33%;border-left:1px solid #ccc;}
 
 .section-title{
   background:#004080;
@@ -160,13 +172,27 @@ input[type="radio"]{
   max-width:420px;
   padding:15px;
   border-radius:10px;
-  font-size:15px;
+  font-size:16px;
   font-weight:bold;
-  line-height:1.5;
+  text-align:left;
+}
+
+.low-comment{
   background:#d8f3dc;
   color:#14532d;
   border:1px solid #2f9144;
-  text-align:left;
+}
+
+.moderate-comment{
+  background:#fff3cd;
+  color:#664d03;
+  border:1px solid #ffd966;
+}
+
+.high-comment{
+  background:#f8d7da;
+  color:#842029;
+  border:1px solid #ff1a0a;
 }
 
 .risk-assessment{
@@ -236,7 +262,7 @@ input[type="radio"]{
 
 .bottom-buttons{
   text-align:center;
-  margin:20px;
+  margin:25px;
 }
 
 .btn{
@@ -250,9 +276,14 @@ input[type="radio"]{
   margin:6px;
 }
 
-.save-btn{background:#004080;}
+.print-btn{background:#2f9144;}
 .back-btn{background:#c40000;}
+.database-btn{background:#004080;}
 .home-btn{background:#0b2a66;}
+
+@media print{
+  .bottom-buttons{display:none;}
+}
 
 @media(max-width:900px){
   .main{flex-direction:column;}
@@ -272,7 +303,7 @@ input[type="radio"]{
   <div class="controls">
     <div class="control-box">
       Select Pilot Type
-      <select id="pilotType" onchange="calculateRisk()">
+      <select id="pilotType" disabled>
         <option value="VFR">VFR</option>
         <option value="IFR">IFR</option>
       </select>
@@ -280,49 +311,86 @@ input[type="radio"]{
 
     <div class="control-box">
       Select Experience Level
-      <select id="experience" onchange="calculateRisk()">
+      <select id="experience" disabled>
         <option value="LESS_100">&lt;100 In Type</option>
         <option value="MORE_100">&gt;100 In Type</option>
       </select>
     </div>
 
-    <button class="reset-btn" onclick="resetForm()">Form Reset</button>
     <button class="hide-btn" onclick="toggleDetails()">Hide Details</button>
   </div>
 </div>
 
 <div class="instructions">
-  Instructions: Check the True radio button opposite each statement that applies to your flight.
+  Instructions: This is the saved FRAT report loaded from Firebase.
+</div>
+
+<div class="flight-info">
+  <div class="flight-box">
+    <div class="flight-title">Flight Information</div>
+
+    <table class="flight-table">
+      <tr>
+        <td><strong>Pilot Name:</strong></td>
+        <td id="pilotName">N/A</td>
+        <td><strong>License Number:</strong></td>
+        <td id="licenseNumber">N/A</td>
+      </tr>
+
+      <tr>
+        <td><strong>Aircraft Registration:</strong></td>
+        <td id="aircraftRegistration">N/A</td>
+        <td><strong>Flight Number:</strong></td>
+        <td id="flightNumber">N/A</td>
+      </tr>
+
+      <tr>
+        <td><strong>Destination:</strong></td>
+        <td id="destination">N/A</td>
+        <td><strong>Date:</strong></td>
+        <td id="flightDate">N/A</td>
+      </tr>
+    </table>
+  </div>
 </div>
 
 <div class="main">
+  <div class="left" id="formArea"></div>
 
-<div class="left" id="formArea"></div>
-
-<div class="right" id="detailsArea">
-  <table class="details-table" id="detailsTable">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Category</th>
-        <th>Score</th>
-      </tr>
-    </thead>
-    <tbody id="detailsBody"></tbody>
-  </table>
-</div>
-
+  <div class="right" id="detailsArea">
+    <table class="details-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Category</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody id="detailsBody"></tbody>
+    </table>
+  </div>
 </div>
 
 <div class="bottom-buttons">
-  <button class="btn save-btn" onclick="saveFRAT()">Save FRAT Report</button>
-  <button class="btn back-btn" onclick="window.location.href='FRAT.html'">Back to FRAT</button>
-  <button class="btn home-btn" onclick="window.location.href='index.html'">Home</button>
+  <button class="btn print-btn" onclick="window.print()">Print / Save PDF</button>
+
+  <button class="btn back-btn" onclick="goBackDetails()">
+    Back to FRAT Details
+  </button>
+
+  <button class="btn database-btn" onclick="window.location.href='FRAT-Database.html'">
+    Back to FRAT Database
+  </button>
+
+  <button class="btn home-btn" onclick="window.location.href='index.html'">
+    Home
+  </button>
 </div>
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
@@ -337,13 +405,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-window.database = database;
-window.dbRef = ref;
-window.dbPush = push;
-window.dbSet = set;
-</script>
-
-<script>
 const fratItems = [
   {
     type:"Pilot",
@@ -404,11 +465,58 @@ const fratItems = [
   }
 ];
 
+const params = new URLSearchParams(window.location.search);
+const reportId = params.get("id");
 const formArea = document.getElementById("formArea");
 const detailsBody = document.getElementById("detailsBody");
 
+let savedData = null;
+
 function safeId(text){
   return text.replaceAll(" ","_").replaceAll("-","_").replaceAll("/","_").replaceAll("&","_");
+}
+
+function isSelected(type, category){
+  if(!savedData || !savedData.selectedFactors) return false;
+
+  return savedData.selectedFactors.some(factor =>
+    factor.type === type && factor.category === category
+  );
+}
+
+function getRiskComment(level){
+  if(!level){
+    return {
+      text:"Risk level not available.",
+      className:"low-comment"
+    };
+  }
+
+  if(level.includes("LOW")){
+    return {
+      text:"PK: Risk is acceptable. The flight may operate normally under standard operational controls.",
+      className:"low-comment"
+    };
+  }
+
+  if(level.includes("MODERATE")){
+    return {
+      text:"Caution: Moderate risk identified. Notify the Operations area before continuing.",
+      className:"moderate-comment"
+    };
+  }
+
+  if(level.includes("HIGH")){
+    return {
+      text:"NO-GO: High risk identified. The flight must not operate until the risk is reduced or mitigated.",
+      className:"high-comment"
+    };
+  }
+
+  return {
+    text:"Risk level not available.",
+    className:"low-comment"
+  };
 }
 
 function buildForm(){
@@ -425,6 +533,7 @@ function buildForm(){
 
     section.items.forEach((item, index) => {
       const id = safeId(section.type) + "_" + index;
+      const selected = isSelected(section.type, item[0]);
 
       const div = document.createElement("div");
       div.className = "item";
@@ -433,10 +542,10 @@ function buildForm(){
         <div>${item[0]}</div>
         <div class="radio-group">
           <label>
-            <input type="radio" name="${id}" value="true" data-score="${item[1]}" data-type="${section.type}" data-category="${item[0]}" onchange="calculateRisk()">True
+            <input type="radio" name="${id}" disabled ${selected ? "checked" : ""}>True
           </label>
           <label>
-            <input type="radio" name="${id}" value="false" data-score="0" data-type="${section.type}" data-category="${item[0]}" onchange="calculateRisk()" checked>False
+            <input type="radio" name="${id}" disabled ${!selected ? "checked" : ""}>False
           </label>
         </div>
       `;
@@ -447,21 +556,20 @@ function buildForm(){
     formArea.appendChild(itemsDiv);
   });
 
+  const riskComment = getRiskComment(savedData.riskLevel || "");
+
   formArea.innerHTML += `
     <div class="total-line">
-
       <div class="total-label">Total Risk Value</div>
 
-      <div id="riskResult" class="risk-result low">
-        LOW RISK
-        <span class="risk-number">0</span>
+      <div id="riskResult" class="risk-result">
+        ${savedData.riskLevel || "LOW RISK"}
+        <span class="risk-number">${savedData.totalRiskValue || 0}</span>
       </div>
 
-      <div id="riskComment" class="risk-comment">
-        OK TO OPERATE:<br>
-        Risk is acceptable and flight operations may continue under standard operational controls.
+      <div class="risk-comment ${riskComment.className}">
+        ${riskComment.text}
       </div>
-
     </div>
 
     <div class="risk-assessment">
@@ -509,8 +617,7 @@ function buildForm(){
     </div>
   `;
 
-  buildDetails();
-  calculateRisk();
+  applyRiskColor();
 }
 
 function buildDetails(){
@@ -518,12 +625,14 @@ function buildDetails(){
 
   fratItems.forEach(section => {
     section.items.forEach((item, index) => {
+      const selected = isSelected(section.type, item[0]);
+
       const tr = document.createElement("tr");
 
       tr.innerHTML = `
         ${index === 0 ? `<td class="category-cell" rowspan="${section.items.length}">${section.type}</td>` : ""}
-        <td class="factor-cell ${index % 2 === 0 ? 'alt' : ''}">${item[0]}</td>
-        <td class="score-cell">${item[1]}</td>
+        <td class="factor-cell ${index % 2 === 0 ? 'alt' : ''} ${selected ? 'selected' : ''}">${item[0]}</td>
+        <td class="score-cell ${selected ? 'selected' : ''}">${item[1]}</td>
       `;
 
       detailsBody.appendChild(tr);
@@ -533,130 +642,24 @@ function buildDetails(){
   const totalRow = document.createElement("tr");
   totalRow.innerHTML = `
     <td colspan="2">Grand Total</td>
-    <td class="score-cell" id="grandTotal">0</td>
+    <td class="score-cell">${savedData.totalRiskValue || 0}</td>
   `;
   detailsBody.appendChild(totalRow);
 }
 
-function getRiskLevel(total){
-  const pilotType = document.getElementById("pilotType").value;
-  const experience = document.getElementById("experience").value;
-
-  if(pilotType === "VFR" && experience === "LESS_100"){
-    if(total <= 15) return "LOW RISK";
-    if(total <= 20) return "MODERATE RISK";
-    return "HIGH RISK";
-  }
-
-  if(pilotType === "VFR" && experience === "MORE_100"){
-    if(total <= 20) return "LOW RISK";
-    if(total <= 25) return "MODERATE RISK";
-    return "HIGH RISK";
-  }
-
-  if(pilotType === "IFR" && experience === "LESS_100"){
-    if(total <= 25) return "LOW RISK";
-    if(total <= 30) return "MODERATE RISK";
-    return "HIGH RISK";
-  }
-
-  if(pilotType === "IFR" && experience === "MORE_100"){
-    if(total <= 30) return "LOW RISK";
-    if(total <= 35) return "MODERATE RISK";
-    return "HIGH RISK";
-  }
-
-  return "LOW RISK";
-}
-
-function calculateRisk(){
-  let total = 0;
-
-  document.querySelectorAll(".selected").forEach(e => {
-    e.classList.remove("selected");
-  });
-
-  document.querySelectorAll("input[type='radio']:checked").forEach(radio => {
-    if(radio.value === "true"){
-      total += Number(radio.dataset.score);
-
-      const rows = document.querySelectorAll("#detailsBody tr");
-
-      rows.forEach(row => {
-        if(row.innerText.includes(radio.dataset.category)){
-          row.querySelectorAll("td").forEach(td => td.classList.add("selected"));
-        }
-      });
-    }
-  });
-
-  const level = getRiskLevel(total);
+function applyRiskColor(){
   const box = document.getElementById("riskResult");
-  const comment = document.getElementById("riskComment");
+  const level = savedData.riskLevel || "";
 
-  box.className = "risk-result";
+  box.classList.remove("low","moderate","high");
 
-  if(level === "LOW RISK"){
-    box.classList.add("low");
-
-    comment.innerHTML = `
-      OK TO OPERATE:<br>
-      Risk is acceptable and flight operations may continue under standard operational controls.
-    `;
-
-    comment.style.background = "#d8f3dc";
-    comment.style.color = "#14532d";
-    comment.style.border = "1px solid #2f9144";
-  }
-
-  if(level === "MODERATE RISK"){
-    box.classList.add("moderate");
-
-    comment.innerHTML = `
-      CAUTION:<br>
-      Moderate risk identified. Notify the Operations area before continuing the flight.
-    `;
-
-    comment.style.background = "#fff3cd";
-    comment.style.color = "#664d03";
-    comment.style.border = "1px solid #ffd966";
-  }
-
-  if(level === "HIGH RISK"){
-    box.classList.add("high");
-
-    comment.innerHTML = `
-      NO-GO:<br>
-      High risk identified. Flight operations are NOT authorized until the risk is reduced or mitigated.
-    `;
-
-    comment.style.background = "#f8d7da";
-    comment.style.color = "#842029";
-    comment.style.border = "1px solid #ff1a0a";
-  }
-
-  box.innerHTML = `
-    ${level}
-    <span class="risk-number">${total}</span>
-  `;
-
-  document.getElementById("grandTotal").innerText = total;
-
-  return { total, level };
+  if(level.includes("LOW")) box.classList.add("low");
+  else if(level.includes("MODERATE")) box.classList.add("moderate");
+  else if(level.includes("HIGH")) box.classList.add("high");
+  else box.classList.add("low");
 }
 
-function resetForm(){
-  document.querySelectorAll("input[type='radio'][value='false']").forEach(radio => {
-    radio.checked = true;
-  });
-
-  document.getElementById("pilotType").value = "VFR";
-  document.getElementById("experience").value = "LESS_100";
-
-  calculateRisk();
-}
-
-function toggleDetails(){
+window.toggleDetails = function(){
   const details = document.getElementById("detailsArea");
   const btn = document.querySelector(".hide-btn");
 
@@ -667,45 +670,41 @@ function toggleDetails(){
     details.style.display = "none";
     btn.innerText = "Show Details";
   }
-}
+};
 
-function saveFRAT(){
-  const risk = calculateRisk();
+window.goBackDetails = function(){
+  window.location.href = "FRAT-Details.html?id=" + reportId;
+};
 
-  const selectedFactors = [];
+if(!reportId){
+  formArea.innerHTML = "<h2>No FRAT Report ID was found in the URL.</h2>";
+}else{
+  const reportRef = ref(database, "fratReports/" + reportId);
 
-  document.querySelectorAll("input[type='radio']:checked").forEach(radio => {
-    if(radio.value === "true"){
-      selectedFactors.push({
-        type: radio.dataset.type,
-        category: radio.dataset.category,
-        score: Number(radio.dataset.score)
-      });
+  get(reportRef).then(snapshot => {
+    if(snapshot.exists()){
+      savedData = snapshot.val();
+
+      document.getElementById("pilotName").innerText = savedData.pilotName || "N/A";
+      document.getElementById("licenseNumber").innerText = savedData.licenseNumber || "N/A";
+      document.getElementById("aircraftRegistration").innerText = savedData.aircraftRegistration || "N/A";
+      document.getElementById("flightNumber").innerText = savedData.flightNumber || "N/A";
+      document.getElementById("destination").innerText = savedData.destination || "N/A";
+      document.getElementById("flightDate").innerText = savedData.flightDate || savedData.date || "N/A";
+
+      document.getElementById("pilotType").value = savedData.pilotType || "VFR";
+      document.getElementById("experience").value = savedData.experienceLevel || "LESS_100";
+
+      buildForm();
+      buildDetails();
+    }else{
+      formArea.innerHTML = "<h2>FRAT Report not found in Firebase.</h2>";
     }
-  });
-
-  const data = {
-    pilotType: document.getElementById("pilotType").value,
-    experienceLevel: document.getElementById("experience").value,
-    totalRiskValue: risk.total,
-    riskLevel: risk.level,
-    riskComment: document.getElementById("riskComment").innerText,
-    selectedFactors: selectedFactors,
-    createdAt: new Date().toLocaleString()
-  };
-
-  const newRef = window.dbPush(window.dbRef(window.database, "fratReports"));
-
-  window.dbSet(newRef, data)
-  .then(() => {
-    alert("FRAT Report saved successfully.");
-  })
-  .catch(error => {
-    alert("Error saving FRAT Report: " + error.message);
+  }).catch(error => {
+    formArea.innerHTML = "<h2>Error loading FRAT Report: " + error.message + "</h2>";
   });
 }
 
-buildForm();
 </script>
 
 </body>
