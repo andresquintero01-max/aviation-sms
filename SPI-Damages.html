@@ -7,7 +7,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-
 body{
   font-family:Arial, sans-serif;
   background:#f4f6f8;
@@ -43,26 +42,10 @@ button:hover{
   opacity:0.85;
 }
 
-.print-btn{
-  background:#198754;
-}
-
-.add-btn{
-  background:#6f42c1;
-}
-
-.back-btn{
-  background:#dc3545;
-}
-
-.home-btn{
-  background:#555;
-}
-
-.year-save-btn{
-  background:#198754;
-  padding:10px 18px;
-}
+.print-btn{background:#198754;}
+.add-btn{background:#6f42c1;}
+.back-btn{background:#dc3545;}
+.home-btn{background:#555;}
 
 .year-section{
   background:white;
@@ -90,10 +73,14 @@ button:hover{
   gap:10px;
 }
 
+.year-save-btn{
+  background:#198754;
+  padding:10px 18px;
+}
+
 .delete-year-btn{
   background:#dc3545;
   padding:10px 14px;
-  border-radius:10px;
   font-size:18px;
 }
 
@@ -131,7 +118,6 @@ input{
   border-radius:8px;
   font-size:14px;
   font-weight:bold;
-  background:white;
 }
 
 .rate{
@@ -146,6 +132,21 @@ input{
   color:#071f47;
 }
 
+.acceptable-row{
+  background:#d4edda !important;
+  font-weight:bold;
+}
+
+.tolerable-row{
+  background:#fff3cd !important;
+  font-weight:bold;
+}
+
+.notacceptable-row{
+  background:#f8d7da !important;
+  font-weight:bold;
+}
+
 canvas{
   background:white;
   margin-top:20px;
@@ -158,6 +159,9 @@ canvas{
   box-shadow:0 8px 22px rgba(0,0,0,0.12);
 }
 
+@media print{
+  button{display:none;}
+}
 </style>
 </head>
 
@@ -167,13 +171,9 @@ canvas{
 
 <div class="top-buttons">
 
-  <button class="print-btn" onclick="window.print()">
-    Print
-  </button>
+  <button class="print-btn" onclick="window.print()">Print</button>
 
-  <button class="add-btn" onclick="addYear()">
-    + Add Year
-  </button>
+  <button class="add-btn" onclick="addYear()">+ Add Year</button>
 
   <button class="back-btn"
   onclick="window.location.href='Safety-Performance-Indicators.html'">
@@ -190,13 +190,8 @@ canvas{
 <div id="yearsContainer"></div>
 
 <div class="historical">
-
-  <h2 style="text-align:center;color:#071f47;">
-    Historical Trend
-  </h2>
-
+  <h2 style="text-align:center;color:#071f47;">Historical Trend</h2>
   <canvas id="historicalChart"></canvas>
-
 </div>
 
 <script type="module">
@@ -240,13 +235,11 @@ function defaultData(){
   let data = {};
 
   years.forEach(year=>{
-
     data[year] = months.map(month=>({
       month:month,
       workhours:0,
       events:0
     }));
-
   });
 
   return data;
@@ -261,6 +254,63 @@ function calculateRate(events, workhours){
   }
 
   return (events / workhours) * 10000;
+}
+
+function getYearRates(year){
+
+  if(!spiData[year]){
+    return [];
+  }
+
+  return spiData[year].map(row=>
+    calculateRate(row.events,row.workhours)
+  );
+}
+
+function getAverage(rates){
+
+  if(!rates.length){
+    return 0;
+  }
+
+  return rates.reduce((a,b)=>a+b,0) / rates.length;
+}
+
+function getStandardDeviation(rates){
+
+  if(!rates.length){
+    return 0;
+  }
+
+  const average = getAverage(rates);
+
+  return Math.sqrt(
+    rates
+    .map(x=>Math.pow(x-average,2))
+    .reduce((a,b)=>a+b,0) / rates.length
+  );
+}
+
+function getThresholds(year){
+
+  const previousYear = year - 1;
+
+  if(!spiData[previousYear]){
+    return null;
+  }
+
+  const previousRates = getYearRates(previousYear);
+
+  const average = getAverage(previousRates);
+
+  const sd = getStandardDeviation(previousRates);
+
+  return {
+    acceptable: average,
+    tolerable: average + sd,
+    notAcceptable: average + (sd * 2),
+    baseYear: previousYear
+  };
 }
 
 function renderAll(){
@@ -283,13 +333,11 @@ function renderAll(){
 
         <div class="right-buttons">
 
-          <button class="year-save-btn"
-          onclick="saveData()">
+          <button class="year-save-btn" onclick="saveData()">
             Save
           </button>
 
-          <button class="delete-year-btn"
-          onclick="deleteYear(${year})">
+          <button class="delete-year-btn" onclick="deleteYear(${year})">
             🗑
           </button>
 
@@ -301,10 +349,10 @@ function renderAll(){
 
         <thead>
           <tr>
-            <th>Month</th>
-            <th>Work Hours or Flight Hours</th>
-            <th>Events</th>
-            <th>Event Rate</th>
+            <th style="width:18%;">Month</th>
+            <th style="width:18%;">Work Hours or Flight Hours</th>
+            <th style="width:15%;">Events</th>
+            <th style="width:18%;">Event Rate</th>
           </tr>
         </thead>
 
@@ -333,13 +381,19 @@ function renderTable(year){
 
   tbody.innerHTML = "";
 
-  let rates = [];
+  let totalWorkHours = 0;
+  let totalEvents = 0;
+
+  const rates = [];
 
   spiData[year].forEach((row,index)=>{
 
     const rate = calculateRate(row.events,row.workhours);
 
     rates.push(rate);
+
+    totalWorkHours += Number(row.workhours || 0);
+    totalEvents += Number(row.events || 0);
 
     tbody.innerHTML += `
 
@@ -359,37 +413,63 @@ function renderTable(year){
           onchange="updateValue(${year},${index},'events',this.value)">
         </td>
 
-        <td class="rate">
-          ${rate.toFixed(2)}
-        </td>
+        <td class="rate">${rate.toFixed(2)}</td>
 
       </tr>
 
     `;
   });
 
+  const average = getAverage(rates);
+  const sd = getStandardDeviation(rates);
+
+  tbody.innerHTML += `
+
+    <tr class="summary">
+      <td>Total</td>
+      <td>${totalWorkHours.toFixed(2)}</td>
+      <td>${totalEvents}</td>
+      <td></td>
+    </tr>
+
+    <tr class="summary">
+      <td colspan="3">Average</td>
+      <td>${average.toFixed(2)}</td>
+    </tr>
+
+    <tr class="summary">
+      <td colspan="3">Standard Deviation</td>
+      <td>${sd.toFixed(2)}</td>
+    </tr>
+
+  `;
+
   if(year >= 2025){
 
-    tbody.innerHTML += `
+    const thresholds = getThresholds(year);
 
-      <tr style="background:#d4edda;font-weight:bold;">
-        <td colspan="3">Acceptable</td>
-        <td>1.00</td>
-      </tr>
+    if(thresholds){
 
-      <tr style="background:#fff3cd;font-weight:bold;">
-        <td colspan="3">Tolerable</td>
-        <td>2.00</td>
-      </tr>
+      tbody.innerHTML += `
 
-      <tr style="background:#f8d7da;font-weight:bold;">
-        <td colspan="3">Not Acceptable</td>
-        <td>3.00</td>
-      </tr>
+        <tr class="acceptable-row">
+          <td colspan="3">Acceptable Limit - Based on ${thresholds.baseYear}</td>
+          <td>${thresholds.acceptable.toFixed(2)}</td>
+        </tr>
 
-    `;
+        <tr class="tolerable-row">
+          <td colspan="3">Tolerable Limit - Based on ${thresholds.baseYear}</td>
+          <td>${thresholds.tolerable.toFixed(2)}</td>
+        </tr>
+
+        <tr class="notacceptable-row">
+          <td colspan="3">Not Acceptable Limit - Based on ${thresholds.baseYear}</td>
+          <td>${thresholds.notAcceptable.toFixed(2)}</td>
+        </tr>
+
+      `;
+    }
   }
-
 }
 
 window.updateValue = function(year,index,field,value){
@@ -407,9 +487,7 @@ function renderYearChart(year){
     charts[year].destroy();
   }
 
-  const rates = spiData[year].map(row=>
-    calculateRate(row.events,row.workhours)
-  );
+  const rates = getYearRates(year);
 
   let datasets = [
 
@@ -425,31 +503,38 @@ function renderYearChart(year){
 
   if(year >= 2025){
 
-    datasets.push(
-      {
-        label:"Acceptable",
-        data:months.map(()=>1),
-        borderDash:[5,5],
-        pointRadius:0,
-        borderWidth:2
-      },
+    const thresholds = getThresholds(year);
 
-      {
-        label:"Tolerable",
-        data:months.map(()=>2),
-        borderDash:[5,5],
-        pointRadius:0,
-        borderWidth:2
-      },
+    if(thresholds){
 
-      {
-        label:"Not Acceptable",
-        data:months.map(()=>3),
-        borderDash:[5,5],
-        pointRadius:0,
-        borderWidth:2
-      }
-    );
+      datasets.push(
+
+        {
+          label:"Acceptable Limit",
+          data:months.map(()=>thresholds.acceptable),
+          borderDash:[5,5],
+          pointRadius:0,
+          borderWidth:2
+        },
+
+        {
+          label:"Tolerable Limit",
+          data:months.map(()=>thresholds.tolerable),
+          borderDash:[5,5],
+          pointRadius:0,
+          borderWidth:2
+        },
+
+        {
+          label:"Not Acceptable Limit",
+          data:months.map(()=>thresholds.notAcceptable),
+          borderDash:[5,5],
+          pointRadius:0,
+          borderWidth:2
+        }
+
+      );
+    }
   }
 
   charts[year] = new Chart(ctx,{
@@ -483,8 +568,7 @@ function renderYearChart(year){
 
 function renderHistoricalChart(){
 
-  const ctx =
-  document.getElementById("historicalChart");
+  const ctx = document.getElementById("historicalChart");
 
   if(historicalChart){
     historicalChart.destroy();
@@ -497,13 +581,9 @@ function renderHistoricalChart(){
 
     spiData[year].forEach(row=>{
 
-      labels.push(
-        row.month + "-" + String(year).slice(2)
-      );
+      labels.push(row.month + "-" + String(year).slice(2));
 
-      rates.push(
-        calculateRate(row.events,row.workhours)
-      );
+      rates.push(calculateRate(row.events,row.workhours));
 
     });
 
@@ -517,7 +597,6 @@ function renderHistoricalChart(){
       labels:labels,
 
       datasets:[
-
         {
           label:"Historical Event Rate",
           data:rates,
@@ -525,8 +604,24 @@ function renderHistoricalChart(){
           tension:0.25,
           pointRadius:4
         }
-
       ]
+    },
+
+    options:{
+      responsive:true,
+
+      plugins:{
+        title:{
+          display:true,
+          text:"Historical Aircraft Damages Event Rate"
+        }
+      },
+
+      scales:{
+        y:{
+          beginAtZero:true
+        }
+      }
     }
 
   });
@@ -541,11 +636,9 @@ window.addYear = function(){
   years.push(newYear);
 
   spiData[newYear] = months.map(month=>({
-
     month:month,
     workhours:0,
     events:0
-
   }));
 
   renderAll();
@@ -553,7 +646,7 @@ window.addYear = function(){
 
 window.deleteYear = async function(year){
 
-  if(!confirm("Delete year " + year + "?")){
+  if(!confirm("Are you sure you want to delete year " + year + "?")){
     return;
   }
 
@@ -582,8 +675,7 @@ window.saveData = async function(){
 
 async function loadData(){
 
-  const snapshot =
-  await get(ref(db,"SPI-Damages"));
+  const snapshot = await get(ref(db,"SPI-Damages"));
 
   if(snapshot.exists()){
 
