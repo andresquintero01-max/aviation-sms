@@ -180,13 +180,13 @@ onValue(reportsRef, (snapshot) => {
 
       const row = document.createElement("tr");
 
-      row.innerHTML = 
+      row.innerHTML = `
         <td>
           <a class="report-link" href="FRAT-Details.html?id=${reportId}">
-            ${reportId}
+            ID: ${reportId}
           </a>
         </td>
-      ;
+      `;
 
       tableBody.appendChild(row);
     });
