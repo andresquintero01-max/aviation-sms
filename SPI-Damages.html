@@ -43,8 +43,16 @@ button:hover{
   opacity:0.85;
 }
 
+.save-btn{
+  background:#071f47;
+}
+
 .print-btn{
   background:#198754;
+}
+
+.add-btn{
+  background:#6f42c1;
 }
 
 .back-btn{
@@ -55,10 +63,6 @@ button:hover{
   background:#555;
 }
 
-.add-btn{
-  background:#6f42c1;
-}
-
 .year-section{
   background:white;
   padding:28px;
@@ -67,12 +71,27 @@ button:hover{
   box-shadow:0 8px 22px rgba(0,0,0,0.12);
 }
 
+.year-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
 .year-title{
+  flex:1;
   text-align:center;
   font-size:32px;
   color:#071f47;
-  margin-bottom:20px;
   font-weight:bold;
+}
+
+.delete-year-btn{
+  background:#dc3545;
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:18px;
+  margin-left:15px;
 }
 
 table{
@@ -157,28 +176,26 @@ canvas{
 
 <div class="top-buttons">
 
+  <button class="save-btn" onclick="saveData()">
+    Save
+  </button>
+
+  <button class="print-btn" onclick="window.print()">
+    Print
+  </button>
+
+  <button class="add-btn" onclick="addYear()">
+    + Add Year
+  </button>
+
   <button class="back-btn"
   onclick="window.location.href='Safety-Performance-Indicators.html'">
-    Back
+    Volver a Safety Performance Indicator
   </button>
 
   <button class="home-btn"
   onclick="window.location.href='index.html'">
     Home
-  </button>
-
-  <button class="print-btn"
-  onclick="window.print()">
-    Print
-  </button>
-
-  <button onclick="saveData()">
-    Save
-  </button>
-
-  <button class="add-btn"
-  onclick="addYear()">
-    + Add Year
   </button>
 
 </div>
@@ -273,7 +290,17 @@ function renderAll(){
 
     section.innerHTML = `
 
-      <div class="year-title">${year}</div>
+      <div class="year-header">
+
+        <div style="width:45px;"></div>
+
+        <div class="year-title">${year}</div>
+
+        <button class="delete-year-btn" onclick="deleteYear(${year})">
+          🗑
+        </button>
+
+      </div>
 
       <table>
 
@@ -540,6 +567,30 @@ window.addYear = function(){
   }));
 
   renderAll();
+}
+
+window.deleteYear = async function(year){
+
+  if(!confirm("Are you sure you want to delete year " + year + "?")){
+    return;
+  }
+
+  years = years.filter(y => y !== year);
+
+  delete spiData[year];
+
+  await set(
+    ref(db,"SPI-Damages"),
+    {
+      years:years,
+      data:spiData,
+      updatedAt:new Date().toISOString()
+    }
+  );
+
+  renderAll();
+
+  alert("Year deleted successfully.");
 }
 
 window.saveData = async function(){
