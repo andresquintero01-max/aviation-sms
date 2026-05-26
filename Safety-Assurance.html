@@ -2,97 +2,136 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Safety Assurance</title>
 
 <style>
 
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:30px;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
+
+body{
+    font-family:Arial, sans-serif;
+    min-height:100vh;
+    background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+}
+
+/* MAIN CARD */
 
 .main-container{
-  width:100%;
-  max-width:650px;
-  background:white;
-  border-radius:28px;
-  padding:45px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.3);
-  text-align:center;
+    width:100%;
+    max-width:700px;
+    background:white;
+    border-radius:30px;
+    padding:50px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.35);
+    text-align:center;
+    animation:fadeIn 1s ease;
 }
+
+/* TITLE */
 
 h1{
-  font-size:42px;
-  color:#071f47;
-  margin-bottom:15px;
+    font-size:50px;
+    color:#071f47;
+    margin-bottom:15px;
 }
+
+/* SUBTITLE */
 
 .subtitle{
-  font-size:18px;
-  color:#555;
-  margin-bottom:40px;
+    font-size:18px;
+    color:#666;
+    margin-bottom:45px;
 }
+
+/* MENU */
 
 .menu{
-  display:flex;
-  flex-direction:column;
-  gap:20px;
+    display:flex;
+    flex-direction:column;
+    gap:25px;
 }
 
+/* BUTTONS */
+
 .btn{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#071f47,#0b2a66);
-  color:white;
-  text-decoration:none;
-  padding:22px;
-  border-radius:18px;
-  font-size:22px;
-  font-weight:bold;
-  transition:0.3s;
-  box-shadow:0 10px 22px rgba(0,0,0,0.2);
+    text-decoration:none;
+    background:linear-gradient(135deg,#071f47,#0b2a66);
+    color:white;
+    padding:28px;
+    border-radius:22px;
+    transition:0.35s;
+    box-shadow:0 12px 28px rgba(0,0,0,0.25);
+    display:block;
 }
 
 .btn:hover{
-  transform:translateY(-5px) scale(1.02);
-  background:linear-gradient(135deg,#0b2a66,#1c63db);
-  box-shadow:0 15px 28px rgba(0,0,0,0.3);
+    transform:translateY(-6px) scale(1.02);
+    background:linear-gradient(135deg,#0b2a66,#1d63db);
+    box-shadow:0 18px 35px rgba(0,0,0,0.35);
 }
 
-.btn span{
-  font-size:15px;
-  font-weight:normal;
-  display:block;
-  margin-top:5px;
-  opacity:0.9;
+/* BUTTON TITLE */
+
+.btn-title{
+    font-size:28px;
+    font-weight:bold;
+    margin-bottom:8px;
 }
+
+/* BUTTON DESCRIPTION */
+
+.btn-description{
+    font-size:15px;
+    opacity:0.9;
+}
+
+/* BACK BUTTON */
 
 .back-btn{
-  margin-top:35px;
-  background:red;
-  color:white;
-  border:none;
-  padding:14px 28px;
-  border-radius:12px;
-  font-size:16px;
-  cursor:pointer;
+    margin-top:40px;
+    background:red;
+    color:white;
+    border:none;
+    padding:15px 35px;
+    border-radius:14px;
+    font-size:17px;
+    cursor:pointer;
+    transition:0.3s;
 }
 
 .back-btn:hover{
-  background:darkred;
+    background:darkred;
+    transform:scale(1.05);
 }
 
+/* FOOTER */
+
 .footer{
-  margin-top:30px;
-  color:#777;
-  font-size:14px;
+    margin-top:35px;
+    color:#777;
+    font-size:14px;
+}
+
+/* ANIMATION */
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 
 </style>
@@ -103,33 +142,78 @@ h1{
 
 <div class="main-container">
 
-  <h1>Safety Assurance</h1>
+    <!-- TITLE -->
 
-  <div class="subtitle">
-    Audits, inspections and safety performance monitoring
-  </div>
+    <h1>Safety Assurance</h1>
 
-  <div class="menu">
+    <!-- SUBTITLE -->
 
-    <!-- SAFETY PERFORMANCE MONITORING -->
-    <a class="btn" href="safety-performance-monitoring.html">
-      <div>
-        Safety Performance Monitoring
-        <span>Monitor KPIs, inspections and safety trends</span>
-      </div>
-    </a>
+    <div class="subtitle">
+        Audits, inspections and safety performance monitoring
+    </div>
 
-  </div>
+    <!-- MENU -->
 
-  <!-- BACK BUTTON -->
-  <button class="back-btn"
-  onclick="window.location.href='index.html'">
-    Back
-  </button>
+    <div class="menu">
 
-  <div class="footer">
-    Aviation Safety Management Platform
-  </div>
+        <!-- SAFETY PERFORMANCE MONITORING -->
+
+        <a class="btn" href="safety-performance-monitoring.html">
+
+            <div class="btn-title">
+                Safety Performance Monitoring
+            </div>
+
+            <div class="btn-description">
+                Monitor KPIs, inspections, trends and operational safety performance
+            </div>
+
+        </a>
+
+        <!-- AUDITS -->
+
+        <a class="btn" href="#">
+
+            <div class="btn-title">
+                Audits & Inspections
+            </div>
+
+            <div class="btn-description">
+                Internal audits, compliance inspections and quality evaluations
+            </div>
+
+        </a>
+
+        <!-- SAFETY REPORTS -->
+
+        <a class="btn" href="#">
+
+            <div class="btn-title">
+                Safety Reports
+            </div>
+
+            <div class="btn-description">
+                Review operational findings, investigations and corrective actions
+            </div>
+
+        </a>
+
+    </div>
+
+    <!-- BACK BUTTON -->
+
+    <button class="back-btn"
+    onclick="window.location.href='index.html'">
+
+        Back
+
+    </button>
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+        Aviation Safety Management Platform
+    </div>
 
 </div>
 
