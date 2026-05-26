@@ -369,6 +369,42 @@ const fratItems = [
       ["Cross wind greater than 7 Knots",4],
       ["Mountainous Terrain",3]
     ]
+  },
+  {
+    type:"Airport",
+    items:[
+      ["Non-towered Airport or tower closed at ETD or ETA",3],
+      ["Runway length less than 3,000 Feet",4],
+      ["Wet or soft field Runway",3],
+      ["Obstacles on Approach and/or departure",4]
+    ]
+  },
+  {
+    type:"VFR Flight Plan",
+    items:[
+      ["Ceiling less than 3,000 feet AGL",5],
+      ["Visibility less than 5 SM",5],
+      ["No Weather Reporting at destination",4],
+      ["Flight Plan filed and activated",-3],
+      ["ATC Flight Following used",-3]
+    ]
+  },
+  {
+    type:"IFR Flight Plan",
+    items:[
+      ["Ceiling less than 1000 feet AGL",5],
+      ["Visibility less than 3 SM",5],
+      ["No Weather Reporting at destination",4]
+    ]
+  },
+  {
+    type:"Approaches - Instrument Pilots - Best Available Approach",
+    items:[
+      ["Precision Approach",-3],
+      ["Non precision Approach",3],
+      ["No Instrument Approach",6],
+      ["Circling Approach",5]
+    ]
   }
 ];
 
@@ -477,6 +513,50 @@ function buildForm(){
       <div class="risk-comment ${riskComment.className}">
         ${riskComment.text}
       </div>
+    </div>
+
+    <div class="risk-assessment">
+      <h2>Risk Assessment</h2>
+
+      <table class="risk-table">
+        <tr>
+          <th>Pilot</th>
+          <th>Experience</th>
+          <th>Low Risk</th>
+          <th>Moderate Risk</th>
+          <th>High Risk</th>
+        </tr>
+
+        <tr>
+          <td class="gray" rowspan="2">IFR</td>
+          <td class="gray">&lt;100 In Type</td>
+          <td class="green">20 to 25</td>
+          <td class="yellow">25 to 30</td>
+          <td class="red">&gt;30</td>
+        </tr>
+
+        <tr>
+          <td class="gray">&gt;100 In Type</td>
+          <td class="green">25 to 30</td>
+          <td class="yellow">30 to 35</td>
+          <td class="red">&gt;35</td>
+        </tr>
+
+        <tr>
+          <td class="gray" rowspan="2">VFR</td>
+          <td class="gray">&lt;100 In Type</td>
+          <td class="green">5 to 15</td>
+          <td class="yellow">15 to 20</td>
+          <td class="red">&gt;20</td>
+        </tr>
+
+        <tr>
+          <td class="gray">&gt;100 In Type</td>
+          <td class="green">15 to 20</td>
+          <td class="yellow">20 to 25</td>
+          <td class="red">&gt;25</td>
+        </tr>
+      </table>
     </div>
   `;
 
