@@ -72,6 +72,45 @@ select{
   font-size:12px;
 }
 
+.flight-info{
+  padding:0 22px 15px 22px;
+}
+
+.flight-info-box{
+  border:1px solid #004080;
+  padding:15px;
+}
+
+.flight-info-title{
+  background:#004080;
+  color:white;
+  font-weight:bold;
+  padding:6px;
+  margin-bottom:12px;
+  font-size:16px;
+}
+
+.flight-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:12px;
+}
+
+.flight-field label{
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  color:#004080;
+  margin-bottom:5px;
+}
+
+.flight-field input{
+  width:100%;
+  padding:8px;
+  border:1px solid #ccc;
+  border-radius:5px;
+}
+
 .main{
   display:flex;
   padding:0 22px 20px 22px;
@@ -260,6 +299,7 @@ input[type="radio"]{
   .items{grid-template-columns:1fr;}
   .header{flex-direction:column;gap:10px;}
   .controls{flex-wrap:wrap;}
+  .flight-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -293,6 +333,40 @@ input[type="radio"]{
 
 <div class="instructions">
   Instructions: Check the True radio button opposite each statement that applies to your flight.
+</div>
+
+<div class="flight-info">
+  <div class="flight-info-box">
+
+    <div class="flight-info-title">
+      Flight Information
+    </div>
+
+    <div class="flight-grid">
+
+      <div class="flight-field">
+        <label>Name</label>
+        <input type="text" id="pilotName" placeholder="Enter name">
+      </div>
+
+      <div class="flight-field">
+        <label>License</label>
+        <input type="text" id="licenseNumber" placeholder="Enter license number">
+      </div>
+
+      <div class="flight-field">
+        <label>From</label>
+        <input type="text" id="flightFrom" placeholder="Departure">
+      </div>
+
+      <div class="flight-field">
+        <label>To</label>
+        <input type="text" id="flightTo" placeholder="Destination">
+      </div>
+
+    </div>
+
+  </div>
 </div>
 
 <div class="main">
@@ -653,6 +727,11 @@ function resetForm(){
   document.getElementById("pilotType").value = "VFR";
   document.getElementById("experience").value = "LESS_100";
 
+  document.getElementById("pilotName").value = "";
+  document.getElementById("licenseNumber").value = "";
+  document.getElementById("flightFrom").value = "";
+  document.getElementById("flightTo").value = "";
+
   calculateRisk();
 }
 
@@ -685,6 +764,10 @@ function saveFRAT(){
   });
 
   const data = {
+    pilotName: document.getElementById("pilotName").value.trim(),
+    licenseNumber: document.getElementById("licenseNumber").value.trim(),
+    flightFrom: document.getElementById("flightFrom").value.trim(),
+    flightTo: document.getElementById("flightTo").value.trim(),
     pilotType: document.getElementById("pilotType").value,
     experienceLevel: document.getElementById("experience").value,
     totalRiskValue: risk.total,
