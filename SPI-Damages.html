@@ -10,7 +10,7 @@
 
 body{
   font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#eef4ff,#f7f9fc);
+  background:#f4f6f8;
   margin:0;
   padding:25px;
 }
@@ -40,7 +40,7 @@ button{
 }
 
 button:hover{
-  background:#0b2a66;
+  opacity:0.85;
 }
 
 .print-btn{
@@ -52,7 +52,7 @@ button:hover{
 }
 
 .home-btn{
-  background:#0d6efd;
+  background:#555;
 }
 
 .add-btn{
@@ -63,8 +63,8 @@ button:hover{
   background:white;
   padding:28px;
   margin-bottom:35px;
-  border-radius:22px;
-  box-shadow:0 10px 30px rgba(7,31,71,0.18);
+  border-radius:18px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.12);
 }
 
 .year-title{
@@ -77,62 +77,56 @@ button:hover{
 
 table{
   width:100%;
-  border-collapse:separate;
-  border-spacing:0;
+  border-collapse:collapse;
   margin-bottom:25px;
+  border-radius:12px;
   overflow:hidden;
-  border-radius:14px;
-  box-shadow:0 4px 14px rgba(0,0,0,0.08);
 }
 
 th{
   background:#071f47;
   color:white;
-  padding:13px 10px;
+  padding:12px;
   font-size:15px;
 }
 
 td{
-  border-bottom:1px solid #d6deea;
-  padding:9px 8px;
+  border:1px solid #d0d7de;
+  padding:8px;
   text-align:center;
   font-size:14px;
 }
 
 tr:nth-child(even){
-  background:#f8fbff;
-}
-
-tr:hover{
-  background:#eef5ff;
+  background:#fafafa;
 }
 
 input{
-  width:95px;
-  padding:8px 10px;
+  width:90px;
+  padding:7px;
   text-align:center;
-  border:1px solid #b7c6d9;
-  border-radius:10px;
+  border:1px solid #aaa;
+  border-radius:8px;
   font-size:14px;
   font-weight:bold;
-  background:#ffffff;
+  background:white;
 }
 
 input:focus{
   outline:none;
-  border-color:#0d6efd;
-  box-shadow:0 0 0 3px rgba(13,110,253,0.15);
+  border-color:#071f47;
+  box-shadow:0 0 4px rgba(7,31,71,0.35);
 }
 
 .rate{
-  background:#eaf3ff;
+  background:#f1f3f5;
   color:#071f47;
   font-weight:bold;
 }
 
 .summary{
   font-weight:bold;
-  background:#dfeeff !important;
+  background:#e9ecef !important;
   color:#071f47;
 }
 
@@ -144,8 +138,8 @@ canvas{
 .historical{
   background:white;
   padding:28px;
-  border-radius:22px;
-  box-shadow:0 10px 30px rgba(7,31,71,0.18);
+  border-radius:18px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.12);
 }
 
 @media print{
@@ -285,10 +279,10 @@ function renderAll(){
 
         <thead>
           <tr>
-            <th style="width:16%;">Month</th>
+            <th style="width:18%;">Month</th>
             <th style="width:24%;">Man hours</th>
             <th style="width:20%;">Events</th>
-            <th style="width:40%;">Event rate* year</th>
+            <th style="width:38%;">Event rate* year</th>
           </tr>
         </thead>
 
