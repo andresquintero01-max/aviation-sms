@@ -19,7 +19,7 @@ body{
 }
 
 .container{
-  max-width:1000px;
+  max-width:900px;
   margin:auto;
   background:white;
   padding:40px;
@@ -106,80 +106,6 @@ tr:nth-child(even){
 .home-btn{
   background:#071f47;
 }
-
-/* EDIT BUTTON */
-
-.edit-btn{
-  background:#1450b8;
-  color:white;
-  border:none;
-  padding:8px 18px;
-  border-radius:8px;
-  font-size:14px;
-  font-weight:bold;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-.edit-btn:hover{
-  background:#0b2a66;
-  transform:scale(1.05);
-}
-
-/* REPORT NUMBER */
-
-.report-number{
-  width:180px;
-  padding:8px;
-  border:1px solid #ccc;
-  border-radius:6px;
-  text-align:center;
-  font-weight:bold;
-}
-
-/* SAVE BUTTON */
-
-.save-btn{
-  background:#2f9144;
-  color:white;
-  border:none;
-  padding:8px 14px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:bold;
-  margin-left:8px;
-}
-
-.save-btn:hover{
-  background:#1f6e31;
-}
-
-/* DELETE BUTTON */
-
-.delete-btn{
-  background:red;
-  color:white;
-  border:none;
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  cursor:pointer;
-  font-size:18px;
-  font-weight:bold;
-  transition:0.3s;
-}
-
-.delete-btn:hover{
-  background:#b30000;
-  transform:scale(1.08);
-}
-
-.action-buttons{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-}
-
 </style>
 </head>
 
@@ -196,7 +122,7 @@ tr:nth-child(even){
   <table>
     <thead>
       <tr>
-        <th>FRAT Report Number</th>
+        <th>FRAT Report ID</th>
       </tr>
     </thead>
 
@@ -223,14 +149,7 @@ tr:nth-child(even){
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-
-import {
-  getDatabase,
-  ref,
-  onValue,
-  update,
-  remove
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
@@ -251,137 +170,31 @@ const noData = document.getElementById("noData");
 const reportsRef = ref(database, "fratReports");
 
 onValue(reportsRef, (snapshot) => {
-
   tableBody.innerHTML = "";
 
   if(snapshot.exists()){
-
     noData.style.display = "none";
 
     snapshot.forEach((childSnapshot) => {
-
-      const firebaseId = childSnapshot.key;
-      const data = childSnapshot.val();
-
-      const reportNumber =
-        data.reportNumber ||
-        "FRAT-" + firebaseId.substring(0,8);
+      const reportId = childSnapshot.key;
 
       const row = document.createElement("tr");
 
       row.innerHTML = `
         <td>
-
-          <input
-            type="text"
-            class="report-number"
-            id="report-${firebaseId}"
-            value="${reportNumber}"
-          >
-
-          <button
-            class="save-btn"
-            onclick="saveReportNumber('${firebaseId}')"
-          >
-            Save
-          </button>
-
-          <button
-            class="edit-btn"
-            onclick="editReport('${firebaseId}')"
-          >
-            Edit
-          </button>
-
-          <button
-            class="delete-btn"
-            onclick="deleteReport('${firebaseId}')"
-          >
-            🗑
-          </button>
-
+          <a class="report-link" href="FRAT-Details.html?id=${reportId}">
+            ID: ${reportId}
+          </a>
         </td>
       `;
 
       tableBody.appendChild(row);
-
     });
 
   } else {
-
     noData.style.display = "block";
-
   }
-
 });
-
-/* SAVE REPORT NUMBER */
-
-window.saveReportNumber = function(firebaseId){
-
-  const value = document
-    .getElementById("report-" + firebaseId)
-    .value
-    .trim();
-
-  if(value === ""){
-    alert("Report Number cannot be empty.");
-    return;
-  }
-
-  update(
-    ref(database, "fratReports/" + firebaseId),
-    {
-      reportNumber:value
-    }
-  )
-  .then(() => {
-
-    alert("FRAT Report Number updated successfully.");
-
-  })
-  .catch((error) => {
-
-    alert("Error updating report: " + error.message);
-
-  });
-
-};
-
-/* EDIT REPORT */
-
-window.editReport = function(firebaseId){
-
-  window.location.href =
-    "FRAT.html?id=" + firebaseId + "&edit=true";
-
-};
-
-/* DELETE REPORT */
-
-window.deleteReport = function(firebaseId){
-
-  const confirmDelete = confirm(
-    "Are you sure you want to permanently delete this FRAT report?"
-  );
-
-  if(!confirmDelete) return;
-
-  remove(
-    ref(database, "fratReports/" + firebaseId)
-  )
-  .then(() => {
-
-    alert("FRAT Report deleted successfully.");
-
-  })
-  .catch((error) => {
-
-    alert("Error deleting report: " + error.message);
-
-  });
-
-};
 
 </script>
 
