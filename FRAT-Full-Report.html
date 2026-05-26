@@ -294,8 +294,354 @@ input[type="radio"]{
 </div>
 
 <div class="instructions">
-  Instructions: This is the saved FRAT report loaded from Firebase. This page is read-only.
+  Instructions: This is the saved FRAT report loaded from Firebase.
 </div>
 
 <div class="main">
-  <div class="left" id="formArea
+  <div class="left" id="formArea"></div>
+
+  <div class="right" id="detailsArea">
+    <table class="details-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Category</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody id="detailsBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="bottom-buttons">
+  <button class="btn print-btn" onclick="window.print()">Print / Save PDF</button>
+
+  <button class="btn back-btn" onclick="goBackDetails()">
+    Back to FRAT Details
+  </button>
+
+  <button class="btn database-btn" onclick="window.location.href='FRAT-Database.html'">
+    Back to FRAT Database
+  </button>
+
+  <button class="btn home-btn" onclick="window.location.href='index.html'">
+    Home
+  </button>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+const fratItems = [
+  {
+    type:"Pilot",
+    items:[
+      ["Less than 50 Hours in Aircraft or Avionics Type",5],
+      ["Less than 15 hours in the last 90 days",5],
+      ["Flight will occur after work",3],
+      ["Less than 8 hours sleep prior to flight",5],
+      ["Dual Instruction Received in last 90 days",0],
+      ["WINGS Phase Completion in last 6 months",-3],
+      ["Instrument Rating current and proficient",-3]
+    ]
+  },
+  {
+    type:"Flight Conditions",
+    items:[
+      ["Twilight or Night",5],
+      ["Surface wind greater than 15 Knots",4],
+      ["Cross wind greater than 7 Knots",4],
+      ["Mountainous Terrain",3]
+    ]
+  },
+  {
+    type:"Airport",
+    items:[
+      ["Non-towered Airport or tower closed at ETD or ETA",3],
+      ["Runway length less than 3,000 Feet",4],
+      ["Wet or soft field Runway",3],
+      ["Obstacles on Approach and/or departure",4]
+    ]
+  },
+  {
+    type:"VFR Flight Plan",
+    items:[
+      ["Ceiling less than 3,000 feet AGL",5],
+      ["Visibility less than 5 SM",5],
+      ["No Weather Reporting at destination",4],
+      ["Flight Plan filed and activated",-3],
+      ["ATC Flight Following used",-3]
+    ]
+  },
+  {
+    type:"IFR Flight Plan",
+    items:[
+      ["Ceiling less than 1000 feet AGL",5],
+      ["Visibility less than 3 SM",5],
+      ["No Weather Reporting at destination",4]
+    ]
+  },
+  {
+    type:"Approaches - Instrument Pilots - Best Available Approach",
+    items:[
+      ["Precision Approach",-3],
+      ["Non precision Approach",3],
+      ["No Instrument Approach",6],
+      ["Circling Approach",5]
+    ]
+  }
+];
+
+const params = new URLSearchParams(window.location.search);
+const reportId = params.get("id");
+const formArea = document.getElementById("formArea");
+const detailsBody = document.getElementById("detailsBody");
+
+let savedData = null;
+
+function safeId(text){
+  return text.replaceAll(" ","_").replaceAll("-","_").replaceAll("/","_").replaceAll("&","_");
+}
+
+function isSelected(type, category){
+  if(!savedData || !savedData.selectedFactors) return false;
+
+  return savedData.selectedFactors.some(factor =>
+    factor.type === type && factor.category === category
+  );
+}
+
+function getRiskComment(level){
+  if(!level){
+    return {
+      text:"Risk level not available.",
+      className:"low-comment"
+    };
+  }
+
+  if(level.includes("LOW")){
+    return {
+      text:"PK: Risk is acceptable. The flight may operate normally under standard operational controls.",
+      className:"low-comment"
+    };
+  }
+
+  if(level.includes("MODERATE")){
+    return {
+      text:"Caution: Moderate risk identified. Notify the Operations area before continuing.",
+      className:"moderate-comment"
+    };
+  }
+
+  if(level.includes("HIGH")){
+    return {
+      text:"NO-GO: High risk identified. The flight must not operate until the risk is reduced or mitigated.",
+      className:"high-comment"
+    };
+  }
+
+  return {
+    text:"Risk level not available.",
+    className:"low-comment"
+  };
+}
+
+function buildForm(){
+  formArea.innerHTML = "";
+
+  fratItems.forEach(section => {
+    const title = document.createElement("div");
+    title.className = "section-title";
+    title.innerText = section.type;
+    formArea.appendChild(title);
+
+    const itemsDiv = document.createElement("div");
+    itemsDiv.className = "items";
+
+    section.items.forEach((item, index) => {
+      const id = safeId(section.type) + "_" + index;
+      const selected = isSelected(section.type, item[0]);
+
+      const div = document.createElement("div");
+      div.className = "item";
+
+      div.innerHTML = `
+        <div>${item[0]}</div>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="${id}" disabled ${selected ? "checked" : ""}>True
+          </label>
+          <label>
+            <input type="radio" name="${id}" disabled ${!selected ? "checked" : ""}>False
+          </label>
+        </div>
+      `;
+
+      itemsDiv.appendChild(div);
+    });
+
+    formArea.appendChild(itemsDiv);
+  });
+
+  const riskComment = getRiskComment(savedData.riskLevel || "");
+
+  formArea.innerHTML += `
+    <div class="total-line">
+      <div class="total-label">Total Risk Value</div>
+
+      <div id="riskResult" class="risk-result">
+        ${savedData.riskLevel || "LOW RISK"}
+        <span class="risk-number">${savedData.totalRiskValue || 0}</span>
+      </div>
+
+      <div class="risk-comment ${riskComment.className}">
+        ${riskComment.text}
+      </div>
+    </div>
+
+    <div class="risk-assessment">
+      <h2>Risk Assessment</h2>
+
+      <table class="risk-table">
+        <tr>
+          <th>Pilot</th>
+          <th>Experience</th>
+          <th>Low Risk</th>
+          <th>Moderate Risk</th>
+          <th>High Risk</th>
+        </tr>
+
+        <tr>
+          <td class="gray" rowspan="2">IFR</td>
+          <td class="gray">&lt;100 In Type</td>
+          <td class="green">20 to 25</td>
+          <td class="yellow">25 to 30</td>
+          <td class="red">&gt;30</td>
+        </tr>
+
+        <tr>
+          <td class="gray">&gt;100 In Type</td>
+          <td class="green">25 to 30</td>
+          <td class="yellow">30 to 35</td>
+          <td class="red">&gt;35</td>
+        </tr>
+
+        <tr>
+          <td class="gray" rowspan="2">VFR</td>
+          <td class="gray">&lt;100 In Type</td>
+          <td class="green">5 to 15</td>
+          <td class="yellow">15 to 20</td>
+          <td class="red">&gt;20</td>
+        </tr>
+
+        <tr>
+          <td class="gray">&gt;100 In Type</td>
+          <td class="green">15 to 20</td>
+          <td class="yellow">20 to 25</td>
+          <td class="red">&gt;25</td>
+        </tr>
+      </table>
+    </div>
+  `;
+
+  applyRiskColor();
+}
+
+function buildDetails(){
+  detailsBody.innerHTML = "";
+
+  fratItems.forEach(section => {
+    section.items.forEach((item, index) => {
+      const selected = isSelected(section.type, item[0]);
+
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        ${index === 0 ? `<td class="category-cell" rowspan="${section.items.length}">${section.type}</td>` : ""}
+        <td class="factor-cell ${index % 2 === 0 ? 'alt' : ''} ${selected ? 'selected' : ''}">${item[0]}</td>
+        <td class="score-cell ${selected ? 'selected' : ''}">${item[1]}</td>
+      `;
+
+      detailsBody.appendChild(tr);
+    });
+  });
+
+  const totalRow = document.createElement("tr");
+  totalRow.innerHTML = `
+    <td colspan="2">Grand Total</td>
+    <td class="score-cell">${savedData.totalRiskValue || 0}</td>
+  `;
+  detailsBody.appendChild(totalRow);
+}
+
+function applyRiskColor(){
+  const box = document.getElementById("riskResult");
+  const level = savedData.riskLevel || "";
+
+  box.classList.remove("low","moderate","high");
+
+  if(level.includes("LOW")) box.classList.add("low");
+  else if(level.includes("MODERATE")) box.classList.add("moderate");
+  else if(level.includes("HIGH")) box.classList.add("high");
+  else box.classList.add("low");
+}
+
+window.toggleDetails = function(){
+  const details = document.getElementById("detailsArea");
+  const btn = document.querySelector(".hide-btn");
+
+  if(details.style.display === "none"){
+    details.style.display = "block";
+    btn.innerText = "Hide Details";
+  }else{
+    details.style.display = "none";
+    btn.innerText = "Show Details";
+  }
+};
+
+window.goBackDetails = function(){
+  window.location.href = "FRAT-Details.html?id=" + reportId;
+};
+
+if(!reportId){
+  formArea.innerHTML = "<h2>No FRAT Report ID was found in the URL.</h2>";
+}else{
+  const reportRef = ref(database, "fratReports/" + reportId);
+
+  get(reportRef).then(snapshot => {
+    if(snapshot.exists()){
+      savedData = snapshot.val();
+
+      document.getElementById("pilotType").value = savedData.pilotType || "VFR";
+      document.getElementById("experience").value = savedData.experienceLevel || "LESS_100";
+
+      buildForm();
+      buildDetails();
+    }else{
+      formArea.innerHTML = "<h2>FRAT Report not found in Firebase.</h2>";
+    }
+  }).catch(error => {
+    formArea.innerHTML = "<h2>Error loading FRAT Report: " + error.message + "</h2>";
+  });
+}
+
+</script>
+
+</body>
+</html>
