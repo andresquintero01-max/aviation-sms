@@ -62,6 +62,34 @@ select{
   font-size:12px;
 }
 
+.flight-info{
+  padding:0 22px 15px 22px;
+}
+
+.flight-box{
+  background:#f4f6f8;
+  border:1px solid #ccc;
+  border-radius:10px;
+  padding:15px;
+}
+
+.flight-title{
+  font-size:18px;
+  font-weight:bold;
+  color:#004080;
+  margin-bottom:12px;
+}
+
+.flight-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+
+.flight-table td{
+  padding:8px;
+}
+
 .main{
   display:flex;
   padding:0 22px 20px 22px;
@@ -295,6 +323,35 @@ input[type="radio"]{
 
 <div class="instructions">
   Instructions: This is the saved FRAT report loaded from Firebase.
+</div>
+
+<div class="flight-info">
+  <div class="flight-box">
+    <div class="flight-title">Flight Information</div>
+
+    <table class="flight-table">
+      <tr>
+        <td><strong>Pilot Name:</strong></td>
+        <td id="pilotName">N/A</td>
+        <td><strong>License Number:</strong></td>
+        <td id="licenseNumber">N/A</td>
+      </tr>
+
+      <tr>
+        <td><strong>Aircraft Registration:</strong></td>
+        <td id="aircraftRegistration">N/A</td>
+        <td><strong>Flight Number:</strong></td>
+        <td id="flightNumber">N/A</td>
+      </tr>
+
+      <tr>
+        <td><strong>Destination:</strong></td>
+        <td id="destination">N/A</td>
+        <td><strong>Date:</strong></td>
+        <td id="flightDate">N/A</td>
+      </tr>
+    </table>
+  </div>
 </div>
 
 <div class="main">
@@ -627,6 +684,13 @@ if(!reportId){
   get(reportRef).then(snapshot => {
     if(snapshot.exists()){
       savedData = snapshot.val();
+
+      document.getElementById("pilotName").innerText = savedData.pilotName || "N/A";
+      document.getElementById("licenseNumber").innerText = savedData.licenseNumber || "N/A";
+      document.getElementById("aircraftRegistration").innerText = savedData.aircraftRegistration || "N/A";
+      document.getElementById("flightNumber").innerText = savedData.flightNumber || "N/A";
+      document.getElementById("destination").innerText = savedData.destination || "N/A";
+      document.getElementById("flightDate").innerText = savedData.flightDate || savedData.date || "N/A";
 
       document.getElementById("pilotType").value = savedData.pilotType || "VFR";
       document.getElementById("experience").value = savedData.experienceLevel || "LESS_100";
