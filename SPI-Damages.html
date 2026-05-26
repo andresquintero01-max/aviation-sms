@@ -9,8 +9,8 @@
 <style>
 
 body{
-  font-family:Arial;
-  background:#f4f6f8;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#eef4ff,#f7f9fc);
   margin:0;
   padding:25px;
 }
@@ -19,6 +19,7 @@ h1{
   text-align:center;
   color:#071f47;
   margin-bottom:25px;
+  font-size:38px;
 }
 
 .top-buttons{
@@ -35,6 +36,7 @@ button{
   cursor:pointer;
   margin:5px;
   font-size:15px;
+  font-weight:bold;
 }
 
 button:hover{
@@ -46,11 +48,11 @@ button:hover{
 }
 
 .back-btn{
-  background:red;
+  background:#dc3545;
 }
 
 .home-btn{
-  background:#0b2a66;
+  background:#0d6efd;
 }
 
 .add-btn{
@@ -59,52 +61,79 @@ button:hover{
 
 .year-section{
   background:white;
-  padding:25px;
+  padding:28px;
   margin-bottom:35px;
-  border-radius:18px;
-  box-shadow:0 8px 22px rgba(0,0,0,0.15);
+  border-radius:22px;
+  box-shadow:0 10px 30px rgba(7,31,71,0.18);
 }
 
 .year-title{
   text-align:center;
-  font-size:30px;
+  font-size:32px;
   color:#071f47;
   margin-bottom:20px;
+  font-weight:bold;
 }
 
 table{
   width:100%;
-  border-collapse:collapse;
+  border-collapse:separate;
+  border-spacing:0;
   margin-bottom:25px;
-}
-
-th,td{
-  border:1px solid #333;
-  padding:7px;
-  text-align:center;
+  overflow:hidden;
+  border-radius:14px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.08);
 }
 
 th{
-  background:#d9e6f2;
+  background:#071f47;
+  color:white;
+  padding:13px 10px;
+  font-size:15px;
+}
+
+td{
+  border-bottom:1px solid #d6deea;
+  padding:9px 8px;
+  text-align:center;
+  font-size:14px;
+}
+
+tr:nth-child(even){
+  background:#f8fbff;
+}
+
+tr:hover{
+  background:#eef5ff;
 }
 
 input{
-  width:70px;
-  padding:4px;
+  width:95px;
+  padding:8px 10px;
   text-align:center;
-  border:1px solid #aaa;
-  border-radius:6px;
-  font-size:13px;
+  border:1px solid #b7c6d9;
+  border-radius:10px;
+  font-size:14px;
+  font-weight:bold;
+  background:#ffffff;
+}
+
+input:focus{
+  outline:none;
+  border-color:#0d6efd;
+  box-shadow:0 0 0 3px rgba(13,110,253,0.15);
 }
 
 .rate{
-  background:#eef5ff;
+  background:#eaf3ff;
+  color:#071f47;
   font-weight:bold;
 }
 
 .summary{
   font-weight:bold;
-  background:#f2f2f2;
+  background:#dfeeff !important;
+  color:#071f47;
 }
 
 canvas{
@@ -114,9 +143,9 @@ canvas{
 
 .historical{
   background:white;
-  padding:25px;
-  border-radius:18px;
-  box-shadow:0 8px 22px rgba(0,0,0,0.15);
+  padding:28px;
+  border-radius:22px;
+  box-shadow:0 10px 30px rgba(7,31,71,0.18);
 }
 
 @media print{
@@ -256,10 +285,10 @@ function renderAll(){
 
         <thead>
           <tr>
-            <th>Month</th>
-            <th>Man hours</th>
-            <th>Events</th>
-            <th>Event rate* year</th>
+            <th style="width:16%;">Month</th>
+            <th style="width:24%;">Man hours</th>
+            <th style="width:20%;">Events</th>
+            <th style="width:40%;">Event rate* year</th>
           </tr>
         </thead>
 
@@ -307,7 +336,7 @@ function renderTable(year){
 
       <tr>
 
-        <td>${row.month}</td>
+        <td><strong>${row.month}</strong></td>
 
         <td>
           <input type="number"
@@ -398,7 +427,7 @@ function renderYearChart(year){
           label:String(year),
           data:rates,
           borderWidth:3,
-          tension:0.2,
+          tension:0.25,
           pointRadius:5
         },
 
@@ -473,7 +502,7 @@ function renderHistoricalChart(){
           label:"Historical Event Rate",
           data:rates,
           borderWidth:3,
-          tension:0.2,
+          tension:0.25,
           pointRadius:4
         }
 
