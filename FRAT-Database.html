@@ -19,7 +19,7 @@ body{
 }
 
 .container{
-  max-width:900px;
+  max-width:1000px;
   margin:auto;
   background:white;
   padding:40px;
@@ -106,6 +106,26 @@ tr:nth-child(even){
 .home-btn{
   background:#071f47;
 }
+
+/* NEW EDIT BUTTON */
+
+.edit-btn{
+  background:#1450b8;
+  color:white;
+  border:none;
+  padding:8px 18px;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.edit-btn:hover{
+  background:#0b2a66;
+  transform:scale(1.05);
+}
+
 </style>
 </head>
 
@@ -123,6 +143,7 @@ tr:nth-child(even){
     <thead>
       <tr>
         <th>FRAT Report ID</th>
+        <th>Edit Report</th>
       </tr>
     </thead>
 
@@ -170,12 +191,15 @@ const noData = document.getElementById("noData");
 const reportsRef = ref(database, "fratReports");
 
 onValue(reportsRef, (snapshot) => {
+
   tableBody.innerHTML = "";
 
   if(snapshot.exists()){
+
     noData.style.display = "none";
 
     snapshot.forEach((childSnapshot) => {
+
       const reportId = childSnapshot.key;
 
       const row = document.createElement("tr");
@@ -186,15 +210,34 @@ onValue(reportsRef, (snapshot) => {
             ID: ${reportId}
           </a>
         </td>
+
+        <td>
+          <button class="edit-btn"
+            onclick="editReport('${reportId}')">
+            Edit
+          </button>
+        </td>
       `;
 
       tableBody.appendChild(row);
+
     });
 
   } else {
+
     noData.style.display = "block";
+
   }
+
 });
+
+/* EDIT FUNCTION */
+
+window.editReport = function(reportId){
+
+  window.location.href = "FRAT.html?id=" + reportId + "&edit=true";
+
+};
 
 </script>
 
