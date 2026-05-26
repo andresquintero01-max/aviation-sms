@@ -43,10 +43,6 @@ button:hover{
   opacity:0.85;
 }
 
-.save-btn{
-  background:#071f47;
-}
-
 .print-btn{
   background:#198754;
 }
@@ -61,6 +57,11 @@ button:hover{
 
 .home-btn{
   background:#555;
+}
+
+.year-save-btn{
+  background:#198754;
+  padding:10px 18px;
 }
 
 .year-section{
@@ -79,11 +80,14 @@ button:hover{
 }
 
 .year-title{
-  flex:1;
-  text-align:center;
   font-size:32px;
   color:#071f47;
   font-weight:bold;
+}
+
+.right-buttons{
+  display:flex;
+  gap:10px;
 }
 
 .delete-year-btn{
@@ -91,7 +95,6 @@ button:hover{
   padding:10px 14px;
   border-radius:10px;
   font-size:18px;
-  margin-left:15px;
 }
 
 table{
@@ -131,12 +134,6 @@ input{
   background:white;
 }
 
-input:focus{
-  outline:none;
-  border-color:#071f47;
-  box-shadow:0 0 4px rgba(7,31,71,0.35);
-}
-
 .rate{
   background:#f1f3f5;
   color:#071f47;
@@ -161,12 +158,6 @@ canvas{
   box-shadow:0 8px 22px rgba(0,0,0,0.12);
 }
 
-@media print{
-  button{
-    display:none;
-  }
-}
-
 </style>
 </head>
 
@@ -175,10 +166,6 @@ canvas{
 <h1>Aircraft Damages - Safety Performance Indicator</h1>
 
 <div class="top-buttons">
-
-  <button class="save-btn" onclick="saveData()">
-    Save
-  </button>
 
   <button class="print-btn" onclick="window.print()">
     Print
@@ -292,13 +279,21 @@ function renderAll(){
 
       <div class="year-header">
 
-        <div style="width:45px;"></div>
-
         <div class="year-title">${year}</div>
 
-        <button class="delete-year-btn" onclick="deleteYear(${year})">
-          🗑
-        </button>
+        <div class="right-buttons">
+
+          <button class="year-save-btn"
+          onclick="saveData()">
+            Save
+          </button>
+
+          <button class="delete-year-btn"
+          onclick="deleteYear(${year})">
+            🗑
+          </button>
+
+        </div>
 
       </div>
 
@@ -306,10 +301,10 @@ function renderAll(){
 
         <thead>
           <tr>
-            <th style="width:18%;">Month</th>
-            <th style="width:18%;">Work Hours or Flight Hours</th>
-            <th style="width:15%;">Events</th>
-            <th style="width:18%;">Event Rate</th>
+            <th>Month</th>
+            <th>Work Hours or Flight Hours</th>
+            <th>Events</th>
+            <th>Event Rate</th>
           </tr>
         </thead>
 
@@ -338,9 +333,6 @@ function renderTable(year){
 
   tbody.innerHTML = "";
 
-  let totalWorkHours = 0;
-  let totalEvents = 0;
-
   let rates = [];
 
   spiData[year].forEach((row,index)=>{
@@ -348,10 +340,6 @@ function renderTable(year){
     const rate = calculateRate(row.events,row.workhours);
 
     rates.push(rate);
-
-    totalWorkHours += Number(row.workhours || 0);
-
-    totalEvents += Number(row.events || 0);
 
     tbody.innerHTML += `
 
@@ -380,37 +368,28 @@ function renderTable(year){
     `;
   });
 
-  const average =
-  rates.reduce((a,b)=>a+b,0) / rates.length;
+  if(year >= 2025){
 
-  const sd = Math.sqrt(
+    tbody.innerHTML += `
 
-    rates
-    .map(x=>Math.pow(x-average,2))
-    .reduce((a,b)=>a+b,0) / rates.length
+      <tr style="background:#d4edda;font-weight:bold;">
+        <td colspan="3">Acceptable</td>
+        <td>1.00</td>
+      </tr>
 
-  );
+      <tr style="background:#fff3cd;font-weight:bold;">
+        <td colspan="3">Tolerable</td>
+        <td>2.00</td>
+      </tr>
 
-  tbody.innerHTML += `
+      <tr style="background:#f8d7da;font-weight:bold;">
+        <td colspan="3">Not Acceptable</td>
+        <td>3.00</td>
+      </tr>
 
-    <tr class="summary">
-      <td>Total</td>
-      <td>${totalWorkHours.toFixed(2)}</td>
-      <td>${totalEvents}</td>
-      <td></td>
-    </tr>
+    `;
+  }
 
-    <tr class="summary">
-      <td colspan="3">Average</td>
-      <td>${average.toFixed(2)}</td>
-    </tr>
-
-    <tr class="summary">
-      <td colspan="3">Standard Deviation</td>
-      <td>${sd.toFixed(2)}</td>
-    </tr>
-
-  `;
 }
 
 window.updateValue = function(year,index,field,value){
@@ -432,8 +411,46 @@ function renderYearChart(year){
     calculateRate(row.events,row.workhours)
   );
 
-  const average =
-  rates.reduce((a,b)=>a+b,0) / rates.length;
+  let datasets = [
+
+    {
+      label:String(year),
+      data:rates,
+      borderWidth:3,
+      tension:0.25,
+      pointRadius:5
+    }
+
+  ];
+
+  if(year >= 2025){
+
+    datasets.push(
+      {
+        label:"Acceptable",
+        data:months.map(()=>1),
+        borderDash:[5,5],
+        pointRadius:0,
+        borderWidth:2
+      },
+
+      {
+        label:"Tolerable",
+        data:months.map(()=>2),
+        borderDash:[5,5],
+        pointRadius:0,
+        borderWidth:2
+      },
+
+      {
+        label:"Not Acceptable",
+        data:months.map(()=>3),
+        borderDash:[5,5],
+        pointRadius:0,
+        borderWidth:2
+      }
+    );
+  }
 
   charts[year] = new Chart(ctx,{
 
@@ -441,25 +458,7 @@ function renderYearChart(year){
 
     data:{
       labels:months,
-
-      datasets:[
-
-        {
-          label:String(year),
-          data:rates,
-          borderWidth:3,
-          tension:0.25,
-          pointRadius:5
-        },
-
-        {
-          label:"Yearly Average",
-          data:months.map(()=>average),
-          borderWidth:2,
-          pointRadius:0
-        }
-
-      ]
+      datasets:datasets
     },
 
     options:{
@@ -528,23 +527,6 @@ function renderHistoricalChart(){
         }
 
       ]
-    },
-
-    options:{
-      responsive:true,
-
-      plugins:{
-        title:{
-          display:true,
-          text:"Historical Aircraft Damages Event Rate"
-        }
-      },
-
-      scales:{
-        y:{
-          beginAtZero:true
-        }
-      }
     }
 
   });
@@ -571,7 +553,7 @@ window.addYear = function(){
 
 window.deleteYear = async function(year){
 
-  if(!confirm("Are you sure you want to delete year " + year + "?")){
+  if(!confirm("Delete year " + year + "?")){
     return;
   }
 
@@ -579,18 +561,9 @@ window.deleteYear = async function(year){
 
   delete spiData[year];
 
-  await set(
-    ref(db,"SPI-Damages"),
-    {
-      years:years,
-      data:spiData,
-      updatedAt:new Date().toISOString()
-    }
-  );
+  await saveData();
 
   renderAll();
-
-  alert("Year deleted successfully.");
 }
 
 window.saveData = async function(){
