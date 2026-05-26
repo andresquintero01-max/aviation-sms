@@ -1,1 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Aircraft Damages SPI</title>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+  font-family:Arial;
+  background:#f4f6f8;
+  margin:0;
+  padding:25px;
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  margin-bottom:25px;
+}
+
+.top-buttons{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+button{
+  background:#071f47;
+  color:white;
+  border:none;
+  padding:12px 22px;
+  border-radius:10px;
+  cursor:pointer;
+  margin:5px;
+  font-size:15px;
+}
+
+button:hover{
+  background:#0b2a66;
+}
+
+.print-btn{
+  background:#198754;
+}
+
+.back-btn{
+  background:red;
+}
+
+.add-btn{
+  background:#6f42c1;
+}
+
+.year-section{
+  background:white;
+  padding:25px;
+  margin-bottom:35px;
+  border-radius:18px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.15);
+}
+
+.year-title{
+  text-align:center;
+  font-size:30px;
+  color:#071f47;
+  margin-bottom:20px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:25px;
+}
+
+th,td{
+  border:1px solid #333;
+  padding:8px;
+  text-align:center;
+}
+
+th{
+  background:#d9e6f2;
+}
+
+input{
+  width:90%;
+  padding:6px;
+  text-align:center;
+  border:1px solid #aaa;
+  border-radius:6px;
+}
+
+.rate{
+  background:#eef5ff;
+  font-weight:bold;
+}
+
+.summary{
+  font-weight:bold;
+  background:#f2f2f2;
+}
+
+canvas{
+  background:white;
+  margin-top:20px;
+}
+
+.historical{
+  background:white;
+  padding:25px;
+  border-radius:18px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.15);
+}
+
+@media print{
+  button{
+    display:none;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Aircraft Damages - Safety Performance Indicator</h1>
+
+<div class="top-buttons">
+
+  <button class="back-btn"
+  onclick="window.location.href='Safety-Assurance.html'">
+    Back to Safety Assurance
+  </button>
+
+  <button class="print-btn"
+  onclick="window.print()">
+    Print
+  </button>
+
+  <button onclick="saveData()">
+    Save
+  </button>
+
+  <button class="add-btn"
+  onclick="addYear()">
+    + Add Year
+  </button>
+
+</div>
+
+<div id="yearsContainer"></div>
+
+<div class="historical">
+
+  <h2 style="text-align:center;color:#071f47;">
+    Historical Trend
+  </h2>
+
+  <canvas id="historicalChart"></canvas>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  get
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const months = [
+"JAN","FEB","MAR","APR","MAY","JUN",
+"JUL","AUG","SEP","OCT","NOV","DEC"
+];
+
+let years = [2024,2025,2026];
+
+let charts = {};
+let historicalChart;
+
+window.onload = loadData;
+
+function defaultData(){
+
+  let data = {};
+
+  years.forEach(year=>{
+
+    data[year] = months.map(month=>({
+      month:month,
+      manhours:0,
+      events:0
+    }));
+
+  });
+
+  return data;
+}
+
+let spiData = defaultData();
+
+function calculateRate(events, manhours){
+
+  if(!manhours || manhours <= 0){
+    return 0;
+  }
+
+  return (events / manhours) * 10000;
+}
+
+function renderAll(){
+
+  const container = document.getElementById("yearsContainer");
+
+  container.innerHTML = "";
+
+  years.forEach(year=>{
+
+    const section = document.createElement("div");
+
+    section.className = "year-section";
+
+    section.innerHTML = `
+
+      <div class="year-title">${year}</div>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Manhours</th>
+            <th>Events</th>
+            <th>Event rate* year</th>
+          </tr>
+        </thead>
+
+        <tbody id="table-${year}"></tbody>
+
+      </table>
+
+      <canvas id="chart-${year}"></canvas>
+
+    `;
+
+    container.appendChild(section);
+
+    renderTable(year);
+
+    renderYearChart(year);
+
+  });
+
+  renderHistoricalChart();
+}
+
+function renderTable(year){
+
+  const tbody = document.getElementById(`table-${year}`);
+
+  tbody.innerHTML = "";
+
+  let totalManhours = 0;
+  let totalEvents = 0;
+
+  let rates = [];
+
+  spiData[year].forEach((row,index)=>{
+
+    const rate = calculateRate(row.events,row.manhours);
+
+    rates.push(rate);
+
+    totalManhours += Number(row.manhours || 0);
+
+    totalEvents += Number(row.events || 0);
+
+    tbody.innerHTML += `
+
+      <tr>
+
+        <td>${row.month}</td>
+
+        <td>
+          <input type="number"
+          value="${row.manhours}"
+          onchange="updateValue(${year},${index},'manhours',this.value)">
+        </td>
+
+        <td>
+          <input type="number"
+          value="${row.events}"
+          onchange="updateValue(${year},${index},'events',this.value)">
+        </td>
+
+        <td class="rate">
+          ${rate.toFixed(2)}
+        </td>
+
+      </tr>
+
+    `;
+  });
+
+  const average =
+  rates.reduce((a,b)=>a+b,0) / rates.length;
+
+  const sd = Math.sqrt(
+
+    rates
+    .map(x=>Math.pow(x-average,2))
+    .reduce((a,b)=>a+b,0) / rates.length
+
+  );
+
+  tbody.innerHTML += `
+
+    <tr class="summary">
+      <td>Total</td>
+      <td>${totalManhours.toFixed(2)}</td>
+      <td>${totalEvents}</td>
+      <td></td>
+    </tr>
+
+    <tr class="summary">
+      <td colspan="3">Average</td>
+      <td>${average.toFixed(2)}</td>
+    </tr>
+
+    <tr class="summary">
+      <td colspan="3">Standard Deviation</td>
+      <td>${sd.toFixed(2)}</td>
+    </tr>
+
+  `;
+}
+
+window.updateValue = function(year,index,field,value){
+
+  spiData[year][index][field] = Number(value);
+
+  renderAll();
+}
+
+function renderYearChart(year){
+
+  const ctx = document.getElementById(`chart-${year}`);
+
+  if(charts[year]){
+    charts[year].destroy();
+  }
+
+  const rates = spiData[year].map(row=>
+    calculateRate(row.events,row.manhours)
+  );
+
+  const average =
+  rates.reduce((a,b)=>a+b,0) / rates.length;
+
+  charts[year] = new Chart(ctx,{
+
+    type:"line",
+
+    data:{
+      labels:months,
+
+      datasets:[
+
+        {
+          label:String(year),
+          data:rates,
+          borderWidth:3,
+          tension:0.2,
+          pointRadius:5
+        },
+
+        {
+          label:"Yearly Average",
+          data:months.map(()=>average),
+          borderWidth:2,
+          pointRadius:0
+        }
+
+      ]
+    },
+
+    options:{
+      responsive:true,
+
+      plugins:{
+        title:{
+          display:true,
+          text:"Event Rate* Year"
+        }
+      },
+
+      scales:{
+        y:{
+          beginAtZero:true
+        }
+      }
+    }
+
+  });
+}
+
+function renderHistoricalChart(){
+
+  const ctx =
+  document.getElementById("historicalChart");
+
+  if(historicalChart){
+    historicalChart.destroy();
+  }
+
+  let labels = [];
+  let rates = [];
+
+  years.forEach(year=>{
+
+    spiData[year].forEach(row=>{
+
+      labels.push(
+        row.month + "-" + String(year).slice(2)
+      );
+
+      rates.push(
+        calculateRate(row.events,row.manhours)
+      );
+
+    });
+
+  });
+
+  historicalChart = new Chart(ctx,{
+
+    type:"line",
+
+    data:{
+      labels:labels,
+
+      datasets:[
+
+        {
+          label:"Historical Event Rate",
+          data:rates,
+          borderWidth:3,
+          tension:0.2,
+          pointRadius:4
+        }
+
+      ]
+    },
+
+    options:{
+      responsive:true,
+
+      plugins:{
+        title:{
+          display:true,
+          text:"Historical Aircraft Damages Event Rate"
+        }
+      },
+
+      scales:{
+        y:{
+          beginAtZero:true
+        }
+      }
+    }
+
+  });
+}
+
+window.addYear = function(){
+
+  let lastYear = Math.max(...years);
+
+  let newYear = lastYear + 1;
+
+  years.push(newYear);
+
+  spiData[newYear] = months.map(month=>({
+
+    month:month,
+    manhours:0,
+    events:0
+
+  }));
+
+  renderAll();
+}
+
+window.saveData = async function(){
+
+  await set(
+    ref(db,"SPI-Damages"),
+    {
+      years:years,
+      data:spiData,
+      updatedAt:new Date().toISOString()
+    }
+  );
+
+  alert("SPI Damages saved successfully.");
+}
+
+async function loadData(){
+
+  const snapshot =
+  await get(ref(db,"SPI-Damages"));
+
+  if(snapshot.exists()){
+
+    const saved = snapshot.val();
+
+    years = saved.years || [2024,2025,2026];
+
+    spiData = saved.data || defaultData();
+  }
+
+  renderAll();
+}
+
+</script>
+
+</body>
+</html>
