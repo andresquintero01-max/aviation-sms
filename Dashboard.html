@@ -176,13 +176,7 @@ function renderDashboard(){
 
     /* INITIAL RISK */
 
-    const riskText = (
-      r.riskLevel ||
-      r.riskAssessment ||
-      r.initialRiskLevel ||
-      r.riskCategory ||
-      ""
-    ).toString().toLowerCase();
+    const riskText = JSON.stringify(r).toLowerCase();
 
     const riskValue = Number(
       r.riskValue ||
@@ -195,7 +189,8 @@ function renderDashboard(){
     );
 
     if(
-      riskText.includes("not") ||
+      riskText.includes("not acceptable") ||
+      riskText.includes("red") ||
       riskValue >= 15
     ){
 
@@ -204,6 +199,7 @@ function renderDashboard(){
     }
     else if(
       riskText.includes("tolerable") ||
+      riskText.includes("yellow") ||
       (riskValue >= 5 && riskValue <= 14)
     ){
 
@@ -212,6 +208,7 @@ function renderDashboard(){
     }
     else if(
       riskText.includes("acceptable") ||
+      riskText.includes("green") ||
       (riskValue >= 1 && riskValue <= 4)
     ){
 
@@ -226,41 +223,49 @@ function renderDashboard(){
 
     /* RESIDUAL RISK */
 
-    const residualText = (
-      r.residualRiskLevel ||
-      r.residualRisk ||
-      r.residualRiskAssessment ||
-      r.residualRiskCategory ||
-      ""
-    ).toString().toLowerCase();
+    const residualText = JSON.stringify(r).toLowerCase();
 
     const residualValue = Number(
       r.residualRiskValue ||
       r.residualRiskScore ||
       r.finalRiskValue ||
       r.finalRiskScore ||
+      r.residualValue ||
+      r.residualScore ||
       0
     );
 
     if(
-      residualText.includes("not") ||
-      residualValue >= 15
+      residualText.includes("residual") &&
+      (
+        residualText.includes("not acceptable") ||
+        residualText.includes("red") ||
+        residualValue >= 15
+      )
     ){
 
       residualNotAcceptable++;
 
     }
     else if(
-      residualText.includes("tolerable") ||
-      (residualValue >= 5 && residualValue <= 14)
+      residualText.includes("residual") &&
+      (
+        residualText.includes("tolerable") ||
+        residualText.includes("yellow") ||
+        (residualValue >= 5 && residualValue <= 14)
+      )
     ){
 
       residualTolerable++;
 
     }
     else if(
-      residualText.includes("acceptable") ||
-      (residualValue >= 1 && residualValue <= 4)
+      residualText.includes("residual") &&
+      (
+        residualText.includes("acceptable") ||
+        residualText.includes("green") ||
+        (residualValue >= 1 && residualValue <= 4)
+      )
     ){
 
       residualAcceptable++;
