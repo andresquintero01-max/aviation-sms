@@ -494,7 +494,9 @@ function renderYearChart(year){
     {
       label:String(year),
       data:rates,
-      borderWidth:3,
+      borderColor:"#2196f3",
+      backgroundColor:"#2196f3",
+      borderWidth:4,
       tension:0.25,
       pointRadius:5
     }
@@ -512,25 +514,28 @@ function renderYearChart(year){
         {
           label:"Acceptable Limit",
           data:months.map(()=>thresholds.acceptable),
-          borderDash:[5,5],
+          borderColor:"green",
+          backgroundColor:"green",
           pointRadius:0,
-          borderWidth:2
+          borderWidth:4
         },
 
         {
           label:"Tolerable Limit",
           data:months.map(()=>thresholds.tolerable),
-          borderDash:[5,5],
+          borderColor:"yellow",
+          backgroundColor:"yellow",
           pointRadius:0,
-          borderWidth:2
+          borderWidth:4
         },
 
         {
           label:"Not Acceptable Limit",
           data:months.map(()=>thresholds.notAcceptable),
-          borderDash:[5,5],
+          borderColor:"red",
+          backgroundColor:"red",
           pointRadius:0,
-          borderWidth:2
+          borderWidth:4
         }
 
       );
@@ -600,7 +605,9 @@ function renderHistoricalChart(){
         {
           label:"Historical Event Rate",
           data:rates,
-          borderWidth:3,
+          borderColor:"#2196f3",
+          backgroundColor:"#2196f3",
+          borderWidth:4,
           tension:0.25,
           pointRadius:4
         }
