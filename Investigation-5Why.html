@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Investigation - 5 Why</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  padding:30px;
+}
+
+.container{
+  max-width:950px;
+  margin:auto;
+  background:white;
+  border-radius:22px;
+  padding:35px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.35);
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  font-size:42px;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#666;
+  font-size:18px;
+  margin-bottom:30px;
+}
+
+.report-box{
+  background:#e9f5ff;
+  border-left:8px solid #071f47;
+  padding:18px;
+  border-radius:12px;
+  margin-bottom:25px;
+  font-size:18px;
+}
+
+.question-card{
+  background:#f8fbff;
+  border:1px solid #d7e6ff;
+  border-radius:16px;
+  padding:20px;
+  margin-top:18px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.question-title{
+  color:#071f47;
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+label{
+  font-weight:bold;
+  color:#333;
+  display:block;
+  margin:12px 0 6px;
+}
+
+input, textarea{
+  width:100%;
+  padding:13px;
+  border:1px solid #cfd8e3;
+  border-radius:10px;
+  font-size:16px;
+  box-sizing:border-box;
+}
+
+textarea{
+  min-height:95px;
+  resize:vertical;
+}
+
+.actions{
+  text-align:center;
+  margin-top:30px;
+}
+
+button{
+  padding:12px 20px;
+  margin:8px;
+  border:none;
+  border-radius:10px;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.save{background:#16803c;}
+.delete{background:#c62828;}
+.print{background:#0b2a66;}
+.back{background:#555;}
+
+button:hover{
+  opacity:0.88;
+  transform:scale(1.03);
+}
+
+@media print{
+  body{background:white;}
+  .container{box-shadow:none;}
+  button{display:none;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Investigation - 5 Why</h1>
+<div class="subtitle">Root Cause Analysis Module</div>
+
+<div class="report-box">
+<b>Report ID:</b> <span id="reportId">Loading...</span>
+</div>
+
+<div class="question-card">
+<div class="question-title">1. What happened?</div>
+<label>Answer</label>
+<textarea id="q1Answer" placeholder="Describe what happened"></textarea>
+</div>
+
+<div class="question-card">
+<div class="question-title">2. Why did it happen?</div>
+<label>Question</label>
+<input id="q2Question" placeholder="Enter question 2">
+<label>Answer</label>
+<textarea id="q2Answer" placeholder="Enter answer 2"></textarea>
+</div>
+
+<div class="question-card">
+<div class="question-title">3. Why?</div>
+<label>Question</label>
+<input id="q3Question" placeholder="Enter question 3">
+<label>Answer</label>
+<textarea id="q3Answer" placeholder="Enter answer 3"></textarea>
+</div>
+
+<div class="question-card">
+<div class="question-title">4. Why?</div>
+<label>Question</label>
+<input id="q4Question" placeholder="Enter question 4">
+<label>Answer</label>
+<textarea id="q4Answer" placeholder="Enter answer 4"></textarea>
+</div>
+
+<div class="question-card">
+<div class="question-title">5. Why?</div>
+<label>Question</label>
+<input id="q5Question" placeholder="Enter question 5">
+<label>Answer</label>
+<textarea id="q5Answer" placeholder="Enter answer 5"></textarea>
+</div>
+
+<div class="actions">
+<button class="save" onclick="saveInvestigation()">Save</button>
+<button class="delete" onclick="deleteInvestigation()">Delete</button>
+<button class="print" onclick="window.print()">Print</button>
+<button class="back" onclick="goBack()">Back to Risk Detail</button>
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import { getDatabase, ref, get, update, remove }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+apiKey: "xxx",
+authDomain: "aviation-sms.firebaseapp.com",
+databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+projectId: "aviation-sms",
+storageBucket: "aviation-sms.firebasestorage.app",
+messagingSenderId: "147000937860",
+appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const key = new URLSearchParams(window.location.search).get("key");
+
+if(!key){
+  alert("No report key found.");
+}
+
+get(ref(db,"smsReports/"+key)).then(snapshot=>{
+  if(snapshot.exists()){
+    const d = snapshot.val();
+
+    document.getElementById("reportId").innerText = d.reportId || "N/A";
+
+    if(d.investigation5Why){
+      const x = d.investigation5Why;
+
+      q1Answer.value = x.q1Answer || "";
+
+      q2Question.value = x.q2Question || "";
+      q2Answer.value = x.q2Answer || "";
+
+      q3Question.value = x.q3Question || "";
+      q3Answer.value = x.q3Answer || "";
+
+      q4Question.value = x.q4Question || "";
+      q4Answer.value = x.q4Answer || "";
+
+      q5Question.value = x.q5Question || "";
+      q5Answer.value = x.q5Answer || "";
+    }
+  }
+});
+
+window.saveInvestigation = function(){
+
+  update(ref(db,"smsReports/"+key+"/investigation5Why"),{
+    q1Question:"What happened?",
+    q1Answer:q1Answer.value,
+
+    q2Question:q2Question.value,
+    q2Answer:q2Answer.value,
+
+    q3Question:q3Question.value,
+    q3Answer:q3Answer.value,
+
+    q4Question:q4Question.value,
+    q4Answer:q4Answer.value,
+
+    q5Question:q5Question.value,
+    q5Answer:q5Answer.value,
+
+    status:"Saved",
+    savedAt:new Date().toISOString()
+  }).then(()=>{
+    alert("Investigation 5 Why saved successfully.");
+  });
+
+};
+
+window.deleteInvestigation = function(){
+
+  if(confirm("Do you want to delete this 5 Why investigation?")){
+    remove(ref(db,"smsReports/"+key+"/investigation5Why")).then(()=>{
+
+      q1Answer.value = "";
+
+      q2Question.value = "";
+      q2Answer.value = "";
+
+      q3Question.value = "";
+      q3Answer.value = "";
+
+      q4Question.value = "";
+      q4Answer.value = "";
+
+      q5Question.value = "";
+      q5Answer.value = "";
+
+      alert("Investigation 5 Why deleted.");
+    });
+  }
+
+};
+
+window.goBack = function(){
+  location.href = "SMS-Report-Detail.html?key=" + key;
+};
+
+</script>
+
+</body>
+</html>
