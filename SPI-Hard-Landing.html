@@ -1,1 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hard Landing SPI</title>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+  font-family:Arial, sans-serif;
+  background:#f4f6f8;
+  margin:0;
+  padding:25px;
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  margin-bottom:25px;
+  font-size:38px;
+}
+
+.spi-objective{
+  background:white;
+  padding:28px;
+  margin-bottom:35px;
+  border-radius:18px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.12);
+}
+
+.spi-objective h2{
+  text-align:center;
+  color:#071f47;
+  margin-bottom:20px;
+  font-size:32px;
+}
+
+.top-buttons{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+button{
+  background:#071f47;
+  color:white;
+  border:none;
+  padding:12px 22px;
+  border-radius:10px;
+  cursor:pointer;
+  margin:5px;
+  font-size:15px;
+  font-weight:bold;
+}
+
+button:hover{
+  opacity:0.85;
+}
+
+.print-btn{background:#198754;}
+.add-btn{background:#6f42c1;}
+.home-btn{background:#555;}
+.back-btn{background:#dc3545;}
+
+.year-section{
+  background:white;
+  padding:28px;
+  margin-bottom:35px;
+  border-radius:18px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.12);
+}
+
+.year-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.year-title{
+  font-size:32px;
+  color:#071f47;
+  font-weight:bold;
+}
+
+.right-buttons{
+  display:flex;
+  gap:10px;
+}
+
+.year-save-btn{
+  background:#198754;
+  padding:10px 18px;
+}
+
+.delete-year-btn{
+  background:#dc3545;
+  padding:10px 14px;
+  font-size:18px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:25px;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+th{
+  background:#071f47;
+  color:white;
+  padding:12px 8px;
+  font-size:15px;
+}
+
+td{
+  border:1px solid #d0d7de;
+  padding:7px 5px;
+  text-align:center;
+  font-size:14px;
+}
+
+tr:nth-child(even){
+  background:#fafafa;
+}
+
+.objective-label{
+  background:#f8f9fa;
+  color:#071f47;
+  font-weight:bold;
+  width:30%;
+}
+
+input{
+  width:72px;
+  padding:7px;
+  text-align:center;
+  border:1px solid #aaa;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:bold;
+}
+
+.rate{
+  background:#f1f3f5;
+  color:#071f47;
+  font-weight:bold;
+}
+
+.summary{
+  font-weight:bold;
+  background:#e9ecef !important;
+  color:#071f47;
+}
+
+.acceptable-row{
+  background:#d4edda !important;
+  font-weight:bold;
+}
+
+.tolerable-row{
+  background:#fff3cd !important;
+  font-weight:bold;
+}
+
+.notacceptable-row{
+  background:#f8d7da !important;
+  font-weight:bold;
+}
+
+canvas{
+  background:white;
+  margin-top:20px;
+}
+
+.historical{
+  background:white;
+  padding:28px;
+  border-radius:18px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.12);
+}
+
+.trend-box{
+  margin-top:18px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  color:#071f47;
+  background:#eef2f7;
+  padding:14px;
+  border-radius:12px;
+}
+
+@media print{
+  button{display:none;}
+}
+</style>
+</head>
+
+<body>
+
+<h1>Hard Landing - Safety Performance Indicator</h1>
+
+<div class="spi-objective">
+
+  <h2>SPI Objective</h2>
+
+  <table>
+
+    <tr>
+      <th>Indicator</th>
+      <th>Hard Landing</th>
+    </tr>
+
+    <tr>
+      <td class="objective-label">Specific Objective</td>
+      <td>
+        Reduce hard landing events through effective flight operation monitoring,
+        aircraft exceedance review, pilot reporting, and post-flight verification.
+      </td>
+    </tr>
+
+    <tr>
+      <td class="objective-label">Formula for its Calculation</td>
+      <td>
+        (Number of Hard Landing Events / Flight Hours per Month) * 10,000
+      </td>
+    </tr>
+
+    <tr>
+      <td class="objective-label">Data Sources</td>
+      <td>
+        Flight Operations Records, Pilot Reports, Aircraft Technical Logs, and Safety Reports
+      </td>
+    </tr>
+
+    <tr>
+      <td class="objective-label">Measurement Frequency</td>
+      <td>
+        Monthly
+      </td>
+    </tr>
+
+  </table>
+
+</div>
+
+<div class="top-buttons">
+
+  <button class="print-btn" onclick="window.print()">Print</button>
+
+  <button class="add-btn" onclick="addYear()">+ Add Year</button>
+
+  <button class="back-btn"
+  onclick="window.location.href='Safety-Performance-Indicators.html'">
+    Back to Safety Performance Indicator
+  </button>
+
+  <button class="home-btn"
+  onclick="window.location.href='index.html'">
+    Home
+  </button>
+
+</div>
+
+<div id="yearsContainer"></div>
+
+<div class="historical">
+  <h2 style="text-align:center;color:#071f47;">Historical Trend</h2>
+  <canvas id="historicalChart"></canvas>
+  <div class="trend-box" id="trendSummary">
+    Historical trend will be calculated automatically.
+  </div>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  get
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const months = [
+"JAN","FEB","MAR","APR","MAY","JUN",
+"JUL","AUG","SEP","OCT","NOV","DEC"
+];
+
+let years = [2024,2025,2026];
+
+let charts = {};
+let historicalChart;
+
+window.onload = loadData;
+
+function defaultData(){
+
+  let data = {};
+
+  years.forEach(year=>{
+    data[year] = months.map(month=>({
+      month:month,
+      flighthours:0,
+      events:0
+    }));
+  });
+
+  return data;
+}
+
+let spiData = defaultData();
+
+function calculateRate(events, flighthours){
+
+  if(!flighthours || flighthours <= 0){
+    return 0;
+  }
+
+  return (events / flighthours) * 10000;
+}
+
+function getYearRates(year){
+
+  if(!spiData[year]){
+    return [];
+  }
+
+  return spiData[year].map(row=>
+    calculateRate(row.events,row.flighthours)
+  );
+}
+
+function getAverage(rates){
+
+  if(!rates.length){
+    return 0;
+  }
+
+  return rates.reduce((a,b)=>a+b,0) / rates.length;
+}
+
+function getStandardDeviation(rates){
+
+  if(!rates.length){
+    return 0;
+  }
+
+  const average = getAverage(rates);
+
+  return Math.sqrt(
+    rates
+    .map(x=>Math.pow(x-average,2))
+    .reduce((a,b)=>a+b,0) / rates.length
+  );
+}
+
+function getThresholds(year){
+
+  const previousYear = year - 1;
+
+  if(!spiData[previousYear]){
+    return null;
+  }
+
+  const previousRates = getYearRates(previousYear);
+
+  const average = getAverage(previousRates);
+
+  const sd = getStandardDeviation(previousRates);
+
+  return {
+    acceptable: average,
+    tolerable: average + sd,
+    notAcceptable: average + (sd * 2),
+    baseYear: previousYear
+  };
+}
+
+function calculateTrendLine(values){
+
+  const n = values.length;
+
+  if(n === 0){
+    return { slope:0, trendValues:[] };
+  }
+
+  let sumX = 0;
+  let sumY = 0;
+  let sumXY = 0;
+  let sumXX = 0;
+
+  values.forEach((y,x)=>{
+    sumX += x;
+    sumY += y;
+    sumXY += x * y;
+    sumXX += x * x;
+  });
+
+  const slope =
+  (n * sumXY - sumX * sumY) /
+  (n * sumXX - sumX * sumX || 1);
+
+  const intercept =
+  (sumY - slope * sumX) / n;
+
+  const trendValues = values.map((_,x)=> intercept + slope * x);
+
+  return {
+    slope:slope,
+    trendValues:trendValues
+  };
+}
+
+function renderAll(){
+
+  const container = document.getElementById("yearsContainer");
+
+  container.innerHTML = "";
+
+  years.forEach(year=>{
+
+    const section = document.createElement("div");
+
+    section.className = "year-section";
+
+    section.innerHTML = `
+
+      <div class="year-header">
+
+        <div class="year-title">${year}</div>
+
+        <div class="right-buttons">
+
+          <button class="year-save-btn" onclick="saveData()">
+            Save
+          </button>
+
+          <button class="delete-year-btn" onclick="deleteYear(${year})">
+            🗑
+          </button>
+
+        </div>
+
+      </div>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th style="width:18%;">Month</th>
+            <th style="width:18%;">Flight Hours</th>
+            <th style="width:15%;">Hard Landing Events</th>
+            <th style="width:18%;">Event Rate</th>
+          </tr>
+        </thead>
+
+        <tbody id="table-${year}"></tbody>
+
+      </table>
+
+      <canvas id="chart-${year}"></canvas>
+
+    `;
+
+    container.appendChild(section);
+
+    renderTable(year);
+
+    renderYearChart(year);
+
+  });
+
+  renderHistoricalChart();
+}
+
+function renderTable(year){
+
+  const tbody = document.getElementById(`table-${year}`);
+
+  tbody.innerHTML = "";
+
+  let totalFlightHours = 0;
+  let totalEvents = 0;
+
+  const rates = [];
+
+  spiData[year].forEach((row,index)=>{
+
+    if(row.flighthours === undefined){
+      row.flighthours = row.workhours || 0;
+      delete row.workhours;
+    }
+
+    const rate = calculateRate(row.events,row.flighthours);
+
+    rates.push(rate);
+
+    totalFlightHours += Number(row.flighthours || 0);
+    totalEvents += Number(row.events || 0);
+
+    tbody.innerHTML += `
+
+      <tr>
+
+        <td><strong>${row.month}</strong></td>
+
+        <td>
+          <input type="number"
+          value="${row.flighthours}"
+          onchange="updateValue(${year},${index},'flighthours',this.value)">
+        </td>
+
+        <td>
+          <input type="number"
+          value="${row.events}"
+          onchange="updateValue(${year},${index},'events',this.value)">
+        </td>
+
+        <td class="rate">${rate.toFixed(2)}</td>
+
+      </tr>
+
+    `;
+  });
+
+  const average = getAverage(rates);
+  const sd = getStandardDeviation(rates);
+
+  tbody.innerHTML += `
+
+    <tr class="summary">
+      <td>Total</td>
+      <td>${totalFlightHours.toFixed(2)}</td>
+      <td>${totalEvents}</td>
+      <td></td>
+    </tr>
+
+    <tr class="summary">
+      <td colspan="3">Average</td>
+      <td>${average.toFixed(2)}</td>
+    </tr>
+
+    <tr class="summary">
+      <td colspan="3">Standard Deviation</td>
+      <td>${sd.toFixed(2)}</td>
+    </tr>
+
+  `;
+
+  if(year >= 2025){
+
+    const thresholds = getThresholds(year);
+
+    if(thresholds){
+
+      tbody.innerHTML += `
+
+        <tr class="acceptable-row">
+          <td colspan="3">Acceptable Limit - Based on ${thresholds.baseYear}</td>
+          <td>${thresholds.acceptable.toFixed(2)}</td>
+        </tr>
+
+        <tr class="tolerable-row">
+          <td colspan="3">Tolerable Limit - Based on ${thresholds.baseYear}</td>
+          <td>${thresholds.tolerable.toFixed(2)}</td>
+        </tr>
+
+        <tr class="notacceptable-row">
+          <td colspan="3">Not Acceptable Limit - Based on ${thresholds.baseYear}</td>
+          <td>${thresholds.notAcceptable.toFixed(2)}</td>
+        </tr>
+
+      `;
+    }
+  }
+}
+
+window.updateValue = function(year,index,field,value){
+
+  spiData[year][index][field] = Number(value);
+
+  renderAll();
+}
+
+function renderYearChart(year){
+
+  const ctx = document.getElementById(`chart-${year}`);
+
+  if(charts[year]){
+    charts[year].destroy();
+  }
+
+  const rates = getYearRates(year);
+
+  let datasets = [
+
+    {
+      label:String(year),
+      data:rates,
+      borderColor:"#2196f3",
+      backgroundColor:"#2196f3",
+      borderWidth:4,
+      tension:0.25,
+      pointRadius:5
+    }
+
+  ];
+
+  if(year >= 2025){
+
+    const thresholds = getThresholds(year);
+
+    if(thresholds){
+
+      datasets.push(
+
+        {
+          label:"Acceptable Limit",
+          data:months.map(()=>thresholds.acceptable),
+          borderColor:"green",
+          backgroundColor:"green",
+          pointRadius:0,
+          borderWidth:4
+        },
+
+        {
+          label:"Tolerable Limit",
+          data:months.map(()=>thresholds.tolerable),
+          borderColor:"yellow",
+          backgroundColor:"yellow",
+          pointRadius:0,
+          borderWidth:4
+        },
+
+        {
+          label:"Not Acceptable Limit",
+          data:months.map(()=>thresholds.notAcceptable),
+          borderColor:"red",
+          backgroundColor:"red",
+          pointRadius:0,
+          borderWidth:4
+        }
+
+      );
+    }
+  }
+
+  charts[year] = new Chart(ctx,{
+
+    type:"line",
+
+    data:{
+      labels:months,
+      datasets:datasets
+    },
+
+    options:{
+      responsive:true,
+
+      plugins:{
+        title:{
+          display:true,
+          text:"Hard Landing Event Rate"
+        }
+      },
+
+      scales:{
+        y:{
+          beginAtZero:true
+        }
+      }
+    }
+
+  });
+}
+
+function renderHistoricalChart(){
+
+  const ctx = document.getElementById("historicalChart");
+
+  if(historicalChart){
+    historicalChart.destroy();
+  }
+
+  let labels = [];
+  let rates = [];
+
+  years.forEach(year=>{
+
+    spiData[year].forEach(row=>{
+
+      if(row.flighthours === undefined){
+        row.flighthours = row.workhours || 0;
+        delete row.workhours;
+      }
+
+      labels.push(row.month + "-" + String(year).slice(2));
+
+      rates.push(calculateRate(row.events,row.flighthours));
+
+    });
+
+  });
+
+  const trend = calculateTrendLine(rates);
+
+  let trendText = "";
+
+  if(trend.slope > 0.05){
+    trendText = "Increasing trend: the hard landing rate is rising over time.";
+  }else if(trend.slope < -0.05){
+    trendText = "Decreasing trend: the hard landing rate is improving over time.";
+  }else{
+    trendText = "Stable trend: the hard landing rate remains relatively unchanged over time.";
+  }
+
+  document.getElementById("trendSummary").innerHTML =
+  "Historical Slope: " + trend.slope.toFixed(2) + " | " + trendText;
+
+  historicalChart = new Chart(ctx,{
+
+    type:"line",
+
+    data:{
+      labels:labels,
+
+      datasets:[
+        {
+          label:"Historical Hard Landing Rate",
+          data:rates,
+          borderColor:"#2196f3",
+          backgroundColor:"#2196f3",
+          borderWidth:4,
+          tension:0.25,
+          pointRadius:4
+        },
+        {
+          label:"Trend Line / Slope",
+          data:trend.trendValues,
+          borderColor:"#000000",
+          backgroundColor:"#000000",
+          borderWidth:4,
+          pointRadius:0,
+          tension:0
+        }
+      ]
+    },
+
+    options:{
+      responsive:true,
+
+      plugins:{
+        title:{
+          display:true,
+          text:"Historical Hard Landing Event Rate"
+        }
+      },
+
+      scales:{
+        y:{
+          beginAtZero:true
+        }
+      }
+    }
+
+  });
+}
+
+window.addYear = function(){
+
+  let lastYear = Math.max(...years);
+
+  let newYear = lastYear + 1;
+
+  years.push(newYear);
+
+  spiData[newYear] = months.map(month=>({
+    month:month,
+    flighthours:0,
+    events:0
+  }));
+
+  renderAll();
+}
+
+window.deleteYear = async function(year){
+
+  if(!confirm("Are you sure you want to delete year " + year + "?")){
+    return;
+  }
+
+  years = years.filter(y => y !== year);
+
+  delete spiData[year];
+
+  await saveData();
+
+  renderAll();
+}
+
+window.saveData = async function(){
+
+  await set(
+    ref(db,"SPI-Hard-Landing"),
+    {
+      years:years,
+      data:spiData,
+      updatedAt:new Date().toISOString()
+    }
+  );
+
+  alert("SPI Hard Landing saved successfully.");
+}
+
+async function loadData(){
+
+  const snapshot = await get(ref(db,"SPI-Hard-Landing"));
+
+  if(snapshot.exists()){
+
+    const saved = snapshot.val();
+
+    years = saved.years || [2024,2025,2026];
+
+    spiData = saved.data || defaultData();
+  }
+
+  renderAll();
+}
+
+</script>
+
+</body>
+</html>
