@@ -24,9 +24,11 @@ const db = getDatabase(app);
 let charts = {};
 
 function loadDashboard(){
+
   const reportsRef = ref(db, "smsReports");
 
   onValue(reportsRef, snapshot => {
+
     const data = snapshot.val() || {};
     const reports = Object.values(data);
 
@@ -34,6 +36,7 @@ function loadDashboard(){
 
     let open = 0;
     let closed = 0;
+
     let acceptable = 0;
     let tolerable = 0;
     let notAcceptable = 0;
@@ -43,118 +46,209 @@ function loadDashboard(){
 
     reports.forEach(r => {
 
-      const status = (r.status || r.reportStatus || "").toLowerCase();
+      /* OPEN VS CLOSED */
 
-      if(status.includes("closed") || status.includes("close")){
+      const residualStatus = (
+        r.residualRiskStatus ||
+        r.residualStatus ||
+        r.residualRiskClosed ||
+        ""
+      ).toString().toLowerCase();
+
+      const isClosed =
+        residualStatus.includes("closed") ||
+        residualStatus === "true" ||
+        residualStatus === "yes";
+
+      if(isClosed){
         closed++;
       }else{
         open++;
       }
 
+      /* RISK LEVEL */
+
       const risk = (
         r.riskLevel ||
         r.riskAssessment ||
         r.initialRiskLevel ||
-        r.residualRiskLevel ||
         ""
-      ).toLowerCase();
+      ).toString().toLowerCase();
 
       if(risk.includes("acceptable") && !risk.includes("not")){
         acceptable++;
-      }else if(risk.includes("tolerable")){
+      }
+      else if(risk.includes("tolerable")){
         tolerable++;
-      }else if(risk.includes("not")){
+      }
+      else if(risk.includes("not")){
         notAcceptable++;
       }
 
-      const dateValue = r.date || r.reportDate || r.eventDate || "";
+      /* REPORTS BY MONTH */
+
+      const dateValue =
+        r.date ||
+        r.reportDate ||
+        r.eventDate ||
+        "";
+
       if(dateValue){
+
         const month = dateValue.substring(0,7);
+
         months[month] = (months[month] || 0) + 1;
       }
 
-      const category = r.category || r.eventType || r.reportType || "Other";
+      /* CATEGORY */
+
+      const category =
+        r.category ||
+        r.eventType ||
+        r.reportType ||
+        "Other";
+
       categories[category] = (categories[category] || 0) + 1;
+
     });
 
     document.getElementById("openReports").innerText = open;
     document.getElementById("closedReports").innerText = closed;
     document.getElementById("notAcceptable").innerText = notAcceptable;
 
-    createBarChart("statusChart", ["Open", "Closed"], [open, closed], "Open vs Closed Reports");
-    createPieChart("riskChart", ["Acceptable", "Tolerable", "Not Acceptable"], [acceptable, tolerable, notAcceptable], "Risk Level");
-    createBarChart("monthChart", Object.keys(months), Object.values(months), "Reports by Month");
-    createBarChart("categoryChart", Object.keys(categories), Object.values(categories), "Reports by Category");
+    createBarChart(
+      "statusChart",
+      ["Open","Closed"],
+      [open,closed],
+      "Open vs Closed Reports"
+    );
+
+    createPieChart(
+      "riskChart",
+      ["Acceptable","Tolerable","Not Acceptable"],
+      [acceptable,tolerable,notAcceptable],
+      "Risk Level Distribution"
+    );
+
+    createBarChart(
+      "monthChart",
+      Object.keys(months),
+      Object.values(months),
+      "Reports by Month"
+    );
+
+    createBarChart(
+      "categoryChart",
+      Object.keys(categories),
+      Object.values(categories),
+      "Reports by Category"
+    );
+
   });
+
 }
 
 function destroyChart(id){
+
   if(charts[id]){
     charts[id].destroy();
   }
+
 }
 
 function createBarChart(id, labels, values, title){
+
   destroyChart(id);
 
   const ctx = document.getElementById(id);
 
   charts[id] = new Chart(ctx, {
+
     type: "bar",
+
     data: {
       labels: labels,
       datasets: [{
         label: title,
         data: values,
         backgroundColor: "#0b2a66",
-        borderRadius: 8
+        borderRadius: 10
       }]
     },
+
     options: {
+
       responsive: true,
+
       plugins: {
-        legend: { display:false },
-        title: {
+
+        legend:{
+          display:false
+        },
+
+        title:{
           display:true,
           text:title
         }
+
       },
+
       scales: {
+
         y: {
           beginAtZero:true,
-          ticks: {
+          ticks:{
             precision:0
           }
         }
+
       }
+
     }
+
   });
+
 }
 
 function createPieChart(id, labels, values, title){
+
   destroyChart(id);
 
   const ctx = document.getElementById(id);
 
   charts[id] = new Chart(ctx, {
+
     type: "pie",
+
     data: {
       labels: labels,
       datasets: [{
         data: values,
-        backgroundColor: ["#2ecc71", "#f1c40f", "#e74c3c"]
+        backgroundColor: [
+          "#2ecc71",
+          "#f1c40f",
+          "#e74c3c"
+        ]
       }]
     },
+
     options: {
-      responsive: true,
+
+      responsive:true,
+
       plugins: {
-        title: {
+
+        title:{
           display:true,
           text:title
         }
+
       }
+
     }
+
   });
+
 }
 
 window.goBack = function(){
@@ -162,11 +256,13 @@ window.goBack = function(){
 }
 
 window.onload = loadDashboard;
+
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+
 *{
   margin:0;
   padding:0;
@@ -174,14 +270,14 @@ window.onload = loadDashboard;
 }
 
 body{
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
   min-height:100vh;
   background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
   padding:30px;
 }
 
 .container{
-  max-width:1200px;
+  max-width:1250px;
   margin:auto;
   background:white;
   border-radius:28px;
@@ -192,7 +288,7 @@ body{
 h1{
   text-align:center;
   color:#071f47;
-  font-size:48px;
+  font-size:54px;
   margin-bottom:10px;
 }
 
@@ -206,38 +302,37 @@ h1{
 .cards{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px;
-  margin-bottom:35px;
+  gap:22px;
+  margin-bottom:40px;
 }
 
 .card{
   background:linear-gradient(135deg,#071f47,#0b2a66);
   color:white;
-  border-radius:20px;
-  padding:25px;
+  border-radius:22px;
+  padding:28px;
   text-align:center;
   box-shadow:0 10px 22px rgba(0,0,0,0.25);
 }
 
 .card h2{
-  font-size:38px;
-  margin-bottom:8px;
+  font-size:42px;
+  margin-bottom:10px;
 }
 
 .card p{
-  font-size:16px;
-  opacity:0.9;
+  font-size:18px;
 }
 
 .charts{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(450px,1fr));
   gap:30px;
 }
 
 .chart-box{
   background:#f4f6f8;
-  border-radius:20px;
+  border-radius:22px;
   padding:25px;
   box-shadow:0 8px 18px rgba(0,0,0,0.12);
 }
@@ -248,31 +343,35 @@ canvas{
 }
 
 .back-btn{
-  margin-top:35px;
+  margin-top:40px;
   width:100%;
-  padding:16px;
+  padding:18px;
   border:none;
-  border-radius:14px;
+  border-radius:16px;
   background:#c0392b;
   color:white;
-  font-size:18px;
+  font-size:20px;
   font-weight:bold;
   cursor:pointer;
+  transition:0.3s;
 }
 
 .back-btn:hover{
   background:#922b21;
 }
 
-@media(max-width:600px){
+@media(max-width:700px){
+
   h1{
-    font-size:36px;
+    font-size:38px;
   }
 
   .charts{
     grid-template-columns:1fr;
   }
+
 }
+
 </style>
 </head>
 
@@ -330,7 +429,9 @@ canvas{
 
   </div>
 
-  <button class="back-btn" onclick="goBack()">Back to Home</button>
+  <button class="back-btn" onclick="goBack()">
+    Back to Home
+  </button>
 
 </div>
 
