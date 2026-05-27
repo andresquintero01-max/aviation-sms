@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Aircraft Damages SPI</title>
+<title>Aircraft Damage by Maintenance SPI</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -200,7 +200,7 @@ canvas{
 
 <body>
 
-<h1>Aircraft Damages - Safety Performance Indicator</h1>
+<h1>Aircraft Damage by Maintenance - Safety Performance Indicator</h1>
 
 <div class="spi-objective">
 
@@ -210,21 +210,21 @@ canvas{
 
     <tr>
       <th>Indicator</th>
-      <th>Aircraft Damage</th>
+      <th>Aircraft Damage by Maintenance</th>
     </tr>
 
     <tr>
       <td class="objective-label">Specific Objective</td>
       <td>
-        Reduce aircraft damage events through enhanced maintenance controls,
-        operational awareness, inspection practices, and post-maintenance verification.
+        Reduce aircraft damage caused by maintenance activities through enhanced
+        maintenance controls, inspection practices, task execution, and post-maintenance verification.
       </td>
     </tr>
 
     <tr>
       <td class="objective-label">Formula for its Calculation</td>
       <td>
-        (Number of Damage Events / Flight Hours or Man-Hours per Month) * 10,000
+        (Number of Damage Events / Man-Hours per Month) * 10,000
       </td>
     </tr>
 
@@ -465,7 +465,7 @@ function renderAll(){
         <thead>
           <tr>
             <th style="width:18%;">Month</th>
-            <th style="width:18%;">Work Hours or Flight Hours</th>
+            <th style="width:18%;">Man-Hours</th>
             <th style="width:15%;">Events</th>
             <th style="width:18%;">Event Rate</th>
           </tr>
@@ -759,7 +759,7 @@ function renderHistoricalChart(){
       plugins:{
         title:{
           display:true,
-          text:"Historical Aircraft Damages Event Rate"
+          text:"Historical Aircraft Damage by Maintenance Event Rate"
         }
       },
 
@@ -816,7 +816,7 @@ window.saveData = async function(){
     }
   );
 
-  alert("SPI Damages saved successfully.");
+  alert("SPI Damage by Maintenance saved successfully.");
 }
 
 async function loadData(){
