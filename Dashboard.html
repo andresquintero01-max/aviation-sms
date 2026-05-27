@@ -41,9 +41,7 @@ function createBar(id, labels, values, title){
   destroyChart(id);
 
   charts[id] = new Chart(document.getElementById(id), {
-
     type:"bar",
-
     data:{
       labels:labels,
       datasets:[{
@@ -53,18 +51,12 @@ function createBar(id, labels, values, title){
         borderRadius:10
       }]
     },
-
     options:{
       responsive:true,
-
       plugins:{
         legend:{display:false},
-        title:{
-          display:true,
-          text:title
-        }
+        title:{display:true,text:title}
       },
-
       scales:{
         y:{
           beginAtZero:true,
@@ -72,7 +64,6 @@ function createBar(id, labels, values, title){
         }
       }
     }
-
   });
 
 }
@@ -82,9 +73,7 @@ function createPie(id, labels, values, title){
   destroyChart(id);
 
   charts[id] = new Chart(document.getElementById(id), {
-
     type:"doughnut",
-
     data:{
       labels:labels,
       datasets:[{
@@ -97,18 +86,12 @@ function createPie(id, labels, values, title){
         ]
       }]
     },
-
     options:{
       responsive:true,
-
       plugins:{
-        title:{
-          display:true,
-          text:title
-        }
+        title:{display:true,text:title}
       }
     }
-
   });
 
 }
@@ -124,43 +107,17 @@ function isReportClosed(r){
     ""
   ).toString().toLowerCase();
 
-  return (
-    status.includes("closed") ||
-    status === "true" ||
-    status === "yes"
-  );
-
-}
-
-function getRiskText(r){
-
-  return (
-    r.riskLevel ||
-    r.riskAssessment ||
-    r.initialRiskLevel ||
-    r.residualRiskLevel ||
-    r.riskCategory ||
-    ""
-  ).toString().toLowerCase();
+  return status.includes("closed") || status === "true" || status === "yes";
 
 }
 
 function getDate(r){
-
-  return (
-    r.date ||
-    r.reportDate ||
-    r.eventDate ||
-    r.createdAt ||
-    ""
-  );
-
+  return r.date || r.reportDate || r.eventDate || r.createdAt || "";
 }
 
 function renderDashboard(){
 
   let total = smsReports.length;
-
   let open = 0;
   let closed = 0;
 
@@ -168,6 +125,11 @@ function renderDashboard(){
   let tolerable = 0;
   let notAcceptable = 0;
   let notAssessed = 0;
+
+  let residualAcceptable = 0;
+  let residualTolerable = 0;
+  let residualNotAcceptable = 0;
+  let residualNotAssessed = 0;
 
   let months = {};
   let categories = {};
@@ -177,14 +139,16 @@ function renderDashboard(){
 
   smsReports.forEach(r => {
 
-    /* OPEN VS CLOSED */
-
     if(isReportClosed(r)) closed++;
     else open++;
 
-    /* RISK */
-
-    const risk = getRiskText(r);
+    const riskText = (
+      r.riskLevel ||
+      r.riskAssessment ||
+      r.initialRiskLevel ||
+      r.riskCategory ||
+      ""
+    ).toString().toLowerCase();
 
     const riskValue = Number(
       r.riskValue ||
@@ -196,59 +160,60 @@ function renderDashboard(){
       0
     );
 
-    if(risk.includes("not") || riskValue >= 15){
-
+    if(riskText.includes("not") || riskValue >= 15){
       notAcceptable++;
-
     }
-    else if(
-      risk.includes("tolerable") ||
-      (riskValue >= 5 && riskValue <= 14)
-    ){
-
+    else if(riskText.includes("tolerable") || (riskValue >= 5 && riskValue <= 14)){
       tolerable++;
-
     }
-    else if(
-      risk.includes("acceptable") ||
-      (riskValue >= 1 && riskValue <= 4)
-    ){
-
+    else if(riskText.includes("acceptable") || (riskValue >= 1 && riskValue <= 4)){
       acceptable++;
-
     }
     else{
-
       notAssessed++;
-
     }
 
-    /* MONTHS */
+    const residualText = (
+      r.residualRiskLevel ||
+      r.residualRisk ||
+      r.residualRiskAssessment ||
+      r.residualRiskCategory ||
+      ""
+    ).toString().toLowerCase();
+
+    const residualValue = Number(
+      r.residualRiskValue ||
+      r.residualRiskScore ||
+      r.residualRisk ||
+      r.finalRiskValue ||
+      r.finalRiskScore ||
+      0
+    );
+
+    if(residualText.includes("not") || residualValue >= 15){
+      residualNotAcceptable++;
+    }
+    else if(residualText.includes("tolerable") || (residualValue >= 5 && residualValue <= 14)){
+      residualTolerable++;
+    }
+    else if(residualText.includes("acceptable") || (residualValue >= 1 && residualValue <= 4)){
+      residualAcceptable++;
+    }
+    else{
+      residualNotAssessed++;
+    }
 
     const dateValue = getDate(r);
 
     if(dateValue){
-
       const month = dateValue.toString().substring(0,7);
-
       months[month] = (months[month] || 0) + 1;
-
     }
 
-    /* CATEGORY */
-
-    const category =
-      r.category ||
-      r.eventType ||
-      r.reportType ||
-      "Other";
-
-    categories[category] =
-      (categories[category] || 0) + 1;
+    const category = r.category || r.eventType || r.reportType || "Other";
+    categories[category] = (categories[category] || 0) + 1;
 
   });
-
-  /* FRAT */
 
   fratReports.forEach(f => {
 
@@ -260,29 +225,15 @@ function renderDashboard(){
       0
     );
 
-    if(value >= 16){
-      fratNoGo++;
-    }
-    else if(value >= 10){
-      fratHigh++;
-    }
+    if(value >= 16) fratNoGo++;
+    else if(value >= 10) fratHigh++;
 
   });
-
-  /* SAFETY SCORE */
 
   const safetyScore =
     total === 0
     ? 100
-    : Math.max(
-        0,
-        Math.round(
-          100 -
-          ((notAcceptable * 10) + (open * 2))
-        )
-      );
-
-  /* CARDS */
+    : Math.max(0, Math.round(100 - ((notAcceptable * 10) + (open * 2))));
 
   setText("totalReports", total);
   setText("openReports", open);
@@ -294,8 +245,6 @@ function renderDashboard(){
   setText("fratHigh", fratHigh);
   setText("fratNoGo", fratNoGo);
 
-  /* CHARTS */
-
   createBar(
     "statusChart",
     ["Open","Closed"],
@@ -305,19 +254,16 @@ function renderDashboard(){
 
   createPie(
     "riskChart",
-    [
-      "Acceptable",
-      "Tolerable",
-      "Not Acceptable",
-      "Not Assessed"
-    ],
-    [
-      acceptable,
-      tolerable,
-      notAcceptable,
-      notAssessed
-    ],
+    ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
+    [acceptable,tolerable,notAcceptable,notAssessed],
     "Risk Distribution"
+  );
+
+  createPie(
+    "residualRiskChart",
+    ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
+    [residualAcceptable,residualTolerable,residualNotAcceptable,residualNotAssessed],
+    "Residual Risk Distribution"
   );
 
   createBar(
@@ -337,11 +283,7 @@ function renderDashboard(){
   createBar(
     "fratChart",
     ["Total FRAT","High Risk","No Go"],
-    [
-      fratReports.length,
-      fratHigh,
-      fratNoGo
-    ],
+    [fratReports.length,fratHigh,fratNoGo],
     "FRAT Monitoring"
   );
 
@@ -352,13 +294,9 @@ function loadSMSReports(){
   const reportsRef = ref(db, "smsReports");
 
   onValue(reportsRef, snapshot => {
-
     const data = snapshot.val() || {};
-
     smsReports = Object.values(data);
-
     renderDashboard();
-
   });
 
 }
@@ -385,22 +323,15 @@ function loadFRATReports(){
 
       if(data){
 
-        const values = Object.values(data);
-
-        values.forEach(v => {
-
+        Object.values(data).forEach(v => {
           if(v && typeof v === "object"){
-
             all.push(v);
-
           }
-
         });
 
       }
 
       fratReports = all;
-
       renderDashboard();
 
     });
@@ -410,16 +341,12 @@ function loadFRATReports(){
 }
 
 window.goBack = function(){
-
   location.href = "index.html";
-
 }
 
 window.onload = function(){
-
   loadSMSReports();
   loadFRATReports();
-
 }
 
 </script>
@@ -636,6 +563,10 @@ canvas{
 
     <div class="chart-box">
       <canvas id="riskChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <canvas id="residualRiskChart"></canvas>
     </div>
 
     <div class="chart-box">
