@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SMS Dashboard</title>
+<title>SMS Executive Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -23,6 +25,83 @@ const db = getDatabase(app);
 
 let charts = {};
 
+function destroyChart(id){
+  if(charts[id]) charts[id].destroy();
+}
+
+function createBar(id, labels, values, title){
+  destroyChart(id);
+  charts[id] = new Chart(document.getElementById(id), {
+    type:"bar",
+    data:{
+      labels,
+      datasets:[{
+        label:title,
+        data:values,
+        backgroundColor:"#0b2a66",
+        borderRadius:10
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{display:false},
+        title:{display:true,text:title}
+      },
+      scales:{
+        y:{beginAtZero:true,ticks:{precision:0}}
+      }
+    }
+  });
+}
+
+function createPie(id, labels, values, title){
+  destroyChart(id);
+  charts[id] = new Chart(document.getElementById(id), {
+    type:"doughnut",
+    data:{
+      labels,
+      datasets:[{
+        data:values,
+        backgroundColor:["#2ecc71","#f1c40f","#e74c3c","#95a5a6"]
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        title:{display:true,text:title}
+      }
+    }
+  });
+}
+
+function setText(id,value){
+  document.getElementById(id).innerText = value;
+}
+
+function getRiskText(r){
+  return (
+    r.riskLevel ||
+    r.riskAssessment ||
+    r.initialRiskLevel ||
+    r.riskCategory ||
+    ""
+  ).toString().toLowerCase();
+}
+
+function getResidualStatus(r){
+  return (
+    r.residualRiskStatus ||
+    r.residualStatus ||
+    r.residualRiskClosed ||
+    ""
+  ).toString().toLowerCase();
+}
+
+function getDate(r){
+  return r.date || r.reportDate || r.eventDate || r.createdAt || "";
+}
+
 function loadDashboard(){
 
   const reportsRef = ref(db, "smsReports");
@@ -32,220 +111,128 @@ function loadDashboard(){
     const data = snapshot.val() || {};
     const reports = Object.values(data);
 
-    document.getElementById("totalReports").innerText = reports.length;
-
+    let total = reports.length;
     let open = 0;
     let closed = 0;
 
     let acceptable = 0;
     let tolerable = 0;
     let notAcceptable = 0;
+    let notAssessed = 0;
+
+    let fratTotal = 0;
+    let fratHigh = 0;
+    let fratNoGo = 0;
+
+    let fiveWhyTotal = 0;
+    let fiveWhyClosed = 0;
+
+    let cpaOpen = 0;
+    let cpaClosed = 0;
 
     let months = {};
     let categories = {};
+    let rootCauses = {};
 
     reports.forEach(r => {
 
-      /* OPEN VS CLOSED */
-
-      const residualStatus = (
-        r.residualRiskStatus ||
-        r.residualStatus ||
-        r.residualRiskClosed ||
-        ""
-      ).toString().toLowerCase();
+      const residualStatus = getResidualStatus(r);
 
       const isClosed =
         residualStatus.includes("closed") ||
         residualStatus === "true" ||
         residualStatus === "yes";
 
-      if(isClosed){
-        closed++;
-      }else{
-        open++;
-      }
+      if(isClosed) closed++;
+      else open++;
 
-      /* RISK LEVEL */
+      const risk = getRiskText(r);
 
-      const risk = (
-        r.riskLevel ||
-        r.riskAssessment ||
-        r.initialRiskLevel ||
-        ""
-      ).toString().toLowerCase();
+      if(risk.includes("not")) notAcceptable++;
+      else if(risk.includes("tolerable")) tolerable++;
+      else if(risk.includes("acceptable")) acceptable++;
+      else notAssessed++;
 
-      if(risk.includes("acceptable") && !risk.includes("not")){
-        acceptable++;
-      }
-      else if(risk.includes("tolerable")){
-        tolerable++;
-      }
-      else if(risk.includes("not")){
-        notAcceptable++;
-      }
-
-      /* REPORTS BY MONTH */
-
-      const dateValue =
-        r.date ||
-        r.reportDate ||
-        r.eventDate ||
-        "";
-
+      const dateValue = getDate(r);
       if(dateValue){
-
         const month = dateValue.substring(0,7);
-
         months[month] = (months[month] || 0) + 1;
       }
 
-      /* CATEGORY */
-
-      const category =
-        r.category ||
-        r.eventType ||
-        r.reportType ||
-        "Other";
-
+      const category = r.category || r.eventType || r.reportType || "Other";
       categories[category] = (categories[category] || 0) + 1;
+
+      const typeText = (
+        r.type ||
+        r.reportType ||
+        r.category ||
+        r.module ||
+        ""
+      ).toString().toLowerCase();
+
+      if(typeText.includes("frat")){
+        fratTotal++;
+
+        const fratRisk = (
+          r.fratRisk ||
+          r.fratLevel ||
+          r.result ||
+          r.finalDecision ||
+          ""
+        ).toString().toLowerCase();
+
+        if(fratRisk.includes("high")) fratHigh++;
+        if(fratRisk.includes("no go") || fratRisk.includes("nogo")) fratNoGo++;
+      }
+
+      const fiveWhy = r.fiveWhy || r.fiveWhys || r.investigation5Why || r.why1;
+
+      if(fiveWhy){
+        fiveWhyTotal++;
+
+        if(isClosed) fiveWhyClosed++;
+
+        const root = r.rootCauseCategory || r.rootCause || "Not Classified";
+        rootCauses[root] = (rootCauses[root] || 0) + 1;
+      }
+
+      const cpaList = r.cpa || r.cpas || r.correctiveActions || [];
+
+      if(Array.isArray(cpaList)){
+        cpaList.forEach(cpa => {
+          const status = (cpa.status || "").toLowerCase();
+          if(status.includes("closed")) cpaClosed++;
+          else cpaOpen++;
+        });
+      }
 
     });
 
-    document.getElementById("openReports").innerText = open;
-    document.getElementById("closedReports").innerText = closed;
-    document.getElementById("notAcceptable").innerText = notAcceptable;
+    const safetyScore = total === 0 ? 100 : Math.max(0, Math.round(100 - ((notAcceptable * 10) + (open * 3))));
 
-    createBarChart(
-      "statusChart",
-      ["Open","Closed"],
-      [open,closed],
-      "Open vs Closed Reports"
-    );
+    setText("totalReports", total);
+    setText("openReports", open);
+    setText("closedReports", closed);
+    setText("notAcceptable", notAcceptable);
+    setText("safetyScore", safetyScore + "%");
 
-    createPieChart(
-      "riskChart",
-      ["Acceptable","Tolerable","Not Acceptable"],
-      [acceptable,tolerable,notAcceptable],
-      "Risk Level Distribution"
-    );
+    setText("fratTotal", fratTotal);
+    setText("fratHigh", fratHigh);
+    setText("fratNoGo", fratNoGo);
 
-    createBarChart(
-      "monthChart",
-      Object.keys(months),
-      Object.values(months),
-      "Reports by Month"
-    );
+    setText("fiveWhyTotal", fiveWhyTotal);
+    setText("fiveWhyClosed", fiveWhyClosed);
 
-    createBarChart(
-      "categoryChart",
-      Object.keys(categories),
-      Object.values(categories),
-      "Reports by Category"
-    );
+    setText("cpaOpen", cpaOpen);
+    setText("cpaClosed", cpaClosed);
 
-  });
-
-}
-
-function destroyChart(id){
-
-  if(charts[id]){
-    charts[id].destroy();
-  }
-
-}
-
-function createBarChart(id, labels, values, title){
-
-  destroyChart(id);
-
-  const ctx = document.getElementById(id);
-
-  charts[id] = new Chart(ctx, {
-
-    type: "bar",
-
-    data: {
-      labels: labels,
-      datasets: [{
-        label: title,
-        data: values,
-        backgroundColor: "#0b2a66",
-        borderRadius: 10
-      }]
-    },
-
-    options: {
-
-      responsive: true,
-
-      plugins: {
-
-        legend:{
-          display:false
-        },
-
-        title:{
-          display:true,
-          text:title
-        }
-
-      },
-
-      scales: {
-
-        y: {
-          beginAtZero:true,
-          ticks:{
-            precision:0
-          }
-        }
-
-      }
-
-    }
-
-  });
-
-}
-
-function createPieChart(id, labels, values, title){
-
-  destroyChart(id);
-
-  const ctx = document.getElementById(id);
-
-  charts[id] = new Chart(ctx, {
-
-    type: "pie",
-
-    data: {
-      labels: labels,
-      datasets: [{
-        data: values,
-        backgroundColor: [
-          "#2ecc71",
-          "#f1c40f",
-          "#e74c3c"
-        ]
-      }]
-    },
-
-    options: {
-
-      responsive:true,
-
-      plugins: {
-
-        title:{
-          display:true,
-          text:title
-        }
-
-      }
-
-    }
+    createBar("statusChart", ["Open","Closed"], [open,closed], "Open vs Closed Reports");
+    createPie("riskChart", ["Acceptable","Tolerable","Not Acceptable","Not Assessed"], [acceptable,tolerable,notAcceptable,notAssessed], "Risk Distribution");
+    createBar("monthChart", Object.keys(months), Object.values(months), "Reports by Month");
+    createBar("categoryChart", Object.keys(categories), Object.values(categories), "Reports by Category");
+    createBar("rootCauseChart", Object.keys(rootCauses), Object.values(rootCauses), "5 Why Root Causes");
+    createBar("fratChart", ["Total FRAT","High Risk","No Go"], [fratTotal,fratHigh,fratNoGo], "FRAT Monitoring");
+    createBar("cpaChart", ["Open CPA","Closed CPA"], [cpaOpen,cpaClosed], "Corrective Actions Status");
 
   });
 
@@ -256,13 +243,9 @@ window.goBack = function(){
 }
 
 window.onload = loadDashboard;
-
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
-
 *{
   margin:0;
   padding:0;
@@ -270,64 +253,85 @@ window.onload = loadDashboard;
 }
 
 body{
-  font-family:Arial,sans-serif;
+  font-family:Arial, sans-serif;
   min-height:100vh;
   background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
   padding:30px;
 }
 
 .container{
-  max-width:1250px;
+  max-width:1350px;
   margin:auto;
   background:white;
-  border-radius:28px;
+  border-radius:30px;
   padding:35px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.35);
+  box-shadow:0 20px 50px rgba(0,0,0,0.35);
 }
 
 h1{
   text-align:center;
   color:#071f47;
   font-size:54px;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
 
 .subtitle{
   text-align:center;
   color:#555;
   font-size:18px;
-  margin-bottom:35px;
+  margin-bottom:30px;
+}
+
+.section-title{
+  color:#071f47;
+  font-size:26px;
+  margin:35px 0 18px;
+  border-left:8px solid #071f47;
+  padding-left:12px;
 }
 
 .cards{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:22px;
-  margin-bottom:40px;
+  gap:20px;
 }
 
 .card{
   background:linear-gradient(135deg,#071f47,#0b2a66);
   color:white;
   border-radius:22px;
-  padding:28px;
+  padding:25px;
   text-align:center;
   box-shadow:0 10px 22px rgba(0,0,0,0.25);
 }
 
+.card.red{
+  background:linear-gradient(135deg,#c0392b,#e74c3c);
+}
+
+.card.green{
+  background:linear-gradient(135deg,#138d75,#2ecc71);
+}
+
+.card.yellow{
+  background:linear-gradient(135deg,#b7950b,#f1c40f);
+  color:#071f47;
+}
+
 .card h2{
-  font-size:42px;
-  margin-bottom:10px;
+  font-size:40px;
+  margin-bottom:8px;
 }
 
 .card p{
-  font-size:18px;
+  font-size:16px;
 }
 
 .charts{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(450px,1fr));
-  gap:30px;
+  grid-template-columns:repeat(auto-fit,minmax(430px,1fr));
+  gap:28px;
+  margin-top:25px;
 }
 
 .chart-box{
@@ -343,7 +347,7 @@ canvas{
 }
 
 .back-btn{
-  margin-top:40px;
+  margin-top:35px;
   width:100%;
   padding:18px;
   border:none;
@@ -353,7 +357,6 @@ canvas{
   font-size:20px;
   font-weight:bold;
   cursor:pointer;
-  transition:0.3s;
 }
 
 .back-btn:hover{
@@ -361,7 +364,6 @@ canvas{
 }
 
 @media(max-width:700px){
-
   h1{
     font-size:38px;
   }
@@ -369,9 +371,7 @@ canvas{
   .charts{
     grid-template-columns:1fr;
   }
-
 }
-
 </style>
 </head>
 
@@ -379,11 +379,13 @@ canvas{
 
 <div class="container">
 
-  <h1>SMS Dashboard</h1>
+  <h1>SMS Executive Dashboard</h1>
 
   <div class="subtitle">
     Safety Management System Performance Overview
   </div>
+
+  <div class="section-title">Executive Summary</div>
 
   <div class="cards">
 
@@ -392,22 +394,76 @@ canvas{
       <p>Total SMS Reports</p>
     </div>
 
-    <div class="card">
+    <div class="card yellow">
       <h2 id="openReports">0</h2>
       <p>Open Reports</p>
     </div>
 
-    <div class="card">
+    <div class="card green">
       <h2 id="closedReports">0</h2>
       <p>Closed Reports</p>
     </div>
 
-    <div class="card">
+    <div class="card red">
       <h2 id="notAcceptable">0</h2>
       <p>Not Acceptable Risk</p>
     </div>
 
+    <div class="card">
+      <h2 id="safetyScore">100%</h2>
+      <p>Executive Safety Score</p>
+    </div>
+
   </div>
+
+  <div class="section-title">FRAT Monitoring</div>
+
+  <div class="cards">
+
+    <div class="card">
+      <h2 id="fratTotal">0</h2>
+      <p>Total FRAT</p>
+    </div>
+
+    <div class="card yellow">
+      <h2 id="fratHigh">0</h2>
+      <p>High Risk FRAT</p>
+    </div>
+
+    <div class="card red">
+      <h2 id="fratNoGo">0</h2>
+      <p>No Go FRAT</p>
+    </div>
+
+  </div>
+
+  <div class="section-title">Investigation & Corrective Actions</div>
+
+  <div class="cards">
+
+    <div class="card">
+      <h2 id="fiveWhyTotal">0</h2>
+      <p>5 Why Investigations</p>
+    </div>
+
+    <div class="card green">
+      <h2 id="fiveWhyClosed">0</h2>
+      <p>Closed 5 Why</p>
+    </div>
+
+    <div class="card yellow">
+      <h2 id="cpaOpen">0</h2>
+      <p>Open CPA</p>
+    </div>
+
+    <div class="card green">
+      <h2 id="cpaClosed">0</h2>
+      <p>Closed CPA</p>
+    </div>
+
+  </div>
+
+  <div class="section-title">Charts</div>
 
   <div class="charts">
 
@@ -427,11 +483,21 @@ canvas{
       <canvas id="categoryChart"></canvas>
     </div>
 
+    <div class="chart-box">
+      <canvas id="rootCauseChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <canvas id="fratChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <canvas id="cpaChart"></canvas>
+    </div>
+
   </div>
 
-  <button class="back-btn" onclick="goBack()">
-    Back to Home
-  </button>
+  <button class="back-btn" onclick="goBack()">Back to Home</button>
 
 </div>
 
