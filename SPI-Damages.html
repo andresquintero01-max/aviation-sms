@@ -44,8 +44,9 @@ button:hover{
 
 .print-btn{background:#198754;}
 .add-btn{background:#6f42c1;}
-.back-btn{background:#dc3545;}
+back-btn{background:#dc3545;}
 .home-btn{background:#555;}
+.back-btn{background:#dc3545;}
 
 .year-section{
   background:white;
@@ -159,6 +160,17 @@ canvas{
   box-shadow:0 8px 22px rgba(0,0,0,0.12);
 }
 
+.trend-box{
+  margin-top:18px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  color:#071f47;
+  background:#eef2f7;
+  padding:14px;
+  border-radius:12px;
+}
+
 @media print{
   button{display:none;}
 }
@@ -192,6 +204,9 @@ canvas{
 <div class="historical">
   <h2 style="text-align:center;color:#071f47;">Historical Trend</h2>
   <canvas id="historicalChart"></canvas>
+  <div class="trend-box" id="trendSummary">
+    Historical trend will be calculated automatically.
+  </div>
 </div>
 
 <script type="module">
@@ -310,6 +325,41 @@ function getThresholds(year){
     tolerable: average + sd,
     notAcceptable: average + (sd * 2),
     baseYear: previousYear
+  };
+}
+
+function calculateTrendLine(values){
+
+  const n = values.length;
+
+  if(n === 0){
+    return { slope:0, trendValues:[] };
+  }
+
+  let sumX = 0;
+  let sumY = 0;
+  let sumXY = 0;
+  let sumXX = 0;
+
+  values.forEach((y,x)=>{
+    sumX += x;
+    sumY += y;
+    sumXY += x * y;
+    sumXX += x * x;
+  });
+
+  const slope =
+  (n * sumXY - sumX * sumY) /
+  (n * sumXX - sumX * sumX || 1);
+
+  const intercept =
+  (sumY - slope * sumX) / n;
+
+  const trendValues = values.map((_,x)=> intercept + slope * x);
+
+  return {
+    slope:slope,
+    trendValues:trendValues
   };
 }
 
@@ -594,6 +644,21 @@ function renderHistoricalChart(){
 
   });
 
+  const trend = calculateTrendLine(rates);
+
+  let trendText = "";
+
+  if(trend.slope > 0.05){
+    trendText = "Increasing trend: the event rate is rising over time.";
+  }else if(trend.slope < -0.05){
+    trendText = "Decreasing trend: the event rate is improving over time.";
+  }else{
+    trendText = "Stable trend: the event rate remains relatively unchanged over time.";
+  }
+
+  document.getElementById("trendSummary").innerHTML =
+  "Historical Slope: " + trend.slope.toFixed(2) + " | " + trendText;
+
   historicalChart = new Chart(ctx,{
 
     type:"line",
@@ -610,6 +675,15 @@ function renderHistoricalChart(){
           borderWidth:4,
           tension:0.25,
           pointRadius:4
+        },
+        {
+          label:"Trend Line / Slope",
+          data:trend.trendValues,
+          borderColor:"#000000",
+          backgroundColor:"#000000",
+          borderWidth:4,
+          pointRadius:0,
+          tension:0
         }
       ]
     },
