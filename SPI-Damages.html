@@ -21,6 +21,21 @@ h1{
   font-size:38px;
 }
 
+.spi-objective{
+  background:white;
+  padding:28px;
+  margin-bottom:35px;
+  border-radius:18px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.12);
+}
+
+.spi-objective h2{
+  text-align:center;
+  color:#071f47;
+  margin-bottom:20px;
+  font-size:32px;
+}
+
 .top-buttons{
   text-align:center;
   margin-bottom:25px;
@@ -44,7 +59,6 @@ button:hover{
 
 .print-btn{background:#198754;}
 .add-btn{background:#6f42c1;}
-back-btn{background:#dc3545;}
 .home-btn{background:#555;}
 .back-btn{background:#dc3545;}
 
@@ -109,6 +123,13 @@ td{
 
 tr:nth-child(even){
   background:#fafafa;
+}
+
+.objective-label{
+  background:#f8f9fa;
+  color:#071f47;
+  font-weight:bold;
+  width:30%;
 }
 
 input{
@@ -180,6 +201,50 @@ canvas{
 <body>
 
 <h1>Aircraft Damages - Safety Performance Indicator</h1>
+
+<div class="spi-objective">
+
+  <h2>SPI Objective</h2>
+
+  <table>
+
+    <tr>
+      <th>Indicator</th>
+      <th>Aircraft Damage</th>
+    </tr>
+
+    <tr>
+      <td class="objective-label">Specific Objective</td>
+      <td>
+        Reduce aircraft damage events through enhanced maintenance controls,
+        operational awareness, inspection practices, and post-maintenance verification.
+      </td>
+    </tr>
+
+    <tr>
+      <td class="objective-label">Formula for its Calculation</td>
+      <td>
+        (Number of Damage Events / Flight Hours or Man-Hours per Month) * 10,000
+      </td>
+    </tr>
+
+    <tr>
+      <td class="objective-label">Data Sources</td>
+      <td>
+        Safety Reports, Quality Assurance, Maintenance Records, and Operational Reports
+      </td>
+    </tr>
+
+    <tr>
+      <td class="objective-label">Measurement Frequency</td>
+      <td>
+        Monthly
+      </td>
+    </tr>
+
+  </table>
+
+</div>
 
 <div class="top-buttons">
 
