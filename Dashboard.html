@@ -24,6 +24,12 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 let charts = {};
+let smsReports = [];
+let fratReports = [];
+
+function setText(id,value){
+  document.getElementById(id).innerText = value;
+}
 
 function destroyChart(id){
   if(charts[id]) charts[id].destroy();
@@ -34,7 +40,7 @@ function createBar(id, labels, values, title){
   charts[id] = new Chart(document.getElementById(id), {
     type:"bar",
     data:{
-      labels,
+      labels:labels,
       datasets:[{
         label:title,
         data:values,
@@ -60,7 +66,7 @@ function createPie(id, labels, values, title){
   charts[id] = new Chart(document.getElementById(id), {
     type:"doughnut",
     data:{
-      labels,
+      labels:labels,
       datasets:[{
         data:values,
         backgroundColor:["#2ecc71","#f1c40f","#e74c3c","#95a5a6"]
@@ -75,8 +81,17 @@ function createPie(id, labels, values, title){
   });
 }
 
-function setText(id,value){
-  document.getElementById(id).innerText = value;
+function isReportClosed(r){
+  const status = (
+    r.residualRiskStatus ||
+    r.residualStatus ||
+    r.residualRiskClosed ||
+    r.status ||
+    r.reportStatus ||
+    ""
+  ).toString().toLowerCase();
+
+  return status.includes("closed") || status === "true" || status === "yes";
 }
 
 function getRiskText(r){
@@ -84,16 +99,8 @@ function getRiskText(r){
     r.riskLevel ||
     r.riskAssessment ||
     r.initialRiskLevel ||
+    r.residualRiskLevel ||
     r.riskCategory ||
-    ""
-  ).toString().toLowerCase();
-}
-
-function getResidualStatus(r){
-  return (
-    r.residualRiskStatus ||
-    r.residualStatus ||
-    r.residualRiskClosed ||
     ""
   ).toString().toLowerCase();
 }
@@ -102,137 +109,179 @@ function getDate(r){
   return r.date || r.reportDate || r.eventDate || r.createdAt || "";
 }
 
-function loadDashboard(){
+function renderDashboard(){
 
+  let total = smsReports.length;
+  let open = 0;
+  let closed = 0;
+
+  let acceptable = 0;
+  let tolerable = 0;
+  let notAcceptable = 0;
+  let notAssessed = 0;
+
+  let fiveWhyTotal = 0;
+  let fiveWhyClosed = 0;
+
+  let cpaOpen = 0;
+  let cpaClosed = 0;
+
+  let months = {};
+  let categories = {};
+  let rootCauses = {};
+
+  smsReports.forEach(r => {
+
+    if(isReportClosed(r)) closed++;
+    else open++;
+
+    const risk = getRiskText(r);
+
+    if(risk.includes("not")) notAcceptable++;
+    else if(risk.includes("tolerable")) tolerable++;
+    else if(risk.includes("acceptable")) acceptable++;
+    else notAssessed++;
+
+    const dateValue = getDate(r);
+
+    if(dateValue){
+      const month = dateValue.toString().substring(0,7);
+      months[month] = (months[month] || 0) + 1;
+    }
+
+    const category = r.category || r.eventType || r.reportType || "Other";
+    categories[category] = (categories[category] || 0) + 1;
+
+    const fiveWhy = r.fiveWhy || r.fiveWhys || r.investigation5Why || r.why1;
+
+    if(fiveWhy){
+      fiveWhyTotal++;
+      if(isReportClosed(r)) fiveWhyClosed++;
+
+      const root = r.rootCauseCategory || r.rootCause || "Not Classified";
+      rootCauses[root] = (rootCauses[root] || 0) + 1;
+    }
+
+    const cpaList = r.cpa || r.cpas || r.correctiveActions || [];
+
+    if(Array.isArray(cpaList)){
+      cpaList.forEach(cpa => {
+        const status = (cpa.status || "").toLowerCase();
+        if(status.includes("closed")) cpaClosed++;
+        else cpaOpen++;
+      });
+    }
+
+  });
+
+  let fratTotal = fratReports.length;
+  let fratHigh = 0;
+  let fratNoGo = 0;
+  let fratMonths = {};
+
+  fratReports.forEach(f => {
+
+    const fratRisk = (
+      f.fratRisk ||
+      f.fratLevel ||
+      f.riskLevel ||
+      f.risk ||
+      f.result ||
+      f.finalDecision ||
+      f.decision ||
+      ""
+    ).toString().toLowerCase();
+
+    if(fratRisk.includes("high")) fratHigh++;
+    if(fratRisk.includes("no go") || fratRisk.includes("nogo")) fratNoGo++;
+
+    const dateValue = f.date || f.reportDate || f.createdAt || f.flightDate || "";
+
+    if(dateValue){
+      const month = dateValue.toString().substring(0,7);
+      fratMonths[month] = (fratMonths[month] || 0) + 1;
+    }
+
+  });
+
+  const safetyScore = total === 0 ? 100 : Math.max(0, Math.round(100 - ((notAcceptable * 10) + (open * 3))));
+
+  setText("totalReports", total);
+  setText("openReports", open);
+  setText("closedReports", closed);
+  setText("notAcceptable", notAcceptable);
+  setText("safetyScore", safetyScore + "%");
+
+  setText("fratTotal", fratTotal);
+  setText("fratHigh", fratHigh);
+  setText("fratNoGo", fratNoGo);
+
+  setText("fiveWhyTotal", fiveWhyTotal);
+  setText("fiveWhyClosed", fiveWhyClosed);
+  setText("cpaOpen", cpaOpen);
+  setText("cpaClosed", cpaClosed);
+
+  createBar("statusChart", ["Open","Closed"], [open,closed], "Open vs Closed Reports");
+  createPie("riskChart", ["Acceptable","Tolerable","Not Acceptable","Not Assessed"], [acceptable,tolerable,notAcceptable,notAssessed], "Risk Distribution");
+  createBar("monthChart", Object.keys(months), Object.values(months), "SMS Reports by Month");
+  createBar("categoryChart", Object.keys(categories), Object.values(categories), "Reports by Category");
+  createBar("rootCauseChart", Object.keys(rootCauses), Object.values(rootCauses), "5 Why Root Causes");
+  createBar("fratChart", ["Total FRAT","High Risk","No Go"], [fratTotal,fratHigh,fratNoGo], "FRAT Monitoring");
+  createBar("fratMonthChart", Object.keys(fratMonths), Object.values(fratMonths), "FRAT by Month");
+  createBar("cpaChart", ["Open CPA","Closed CPA"], [cpaOpen,cpaClosed], "Corrective Actions Status");
+}
+
+function loadSMSReports(){
   const reportsRef = ref(db, "smsReports");
 
   onValue(reportsRef, snapshot => {
-
     const data = snapshot.val() || {};
-    const reports = Object.values(data);
+    smsReports = Object.values(data);
+    renderDashboard();
+  });
+}
 
-    let total = reports.length;
-    let open = 0;
-    let closed = 0;
+function loadFRATReports(){
 
-    let acceptable = 0;
-    let tolerable = 0;
-    let notAcceptable = 0;
-    let notAssessed = 0;
+  const possiblePaths = [
+    "fratReports",
+    "FRATReports",
+    "frat",
+    "FRAT",
+    "fratData"
+  ];
 
-    let fratTotal = 0;
-    let fratHigh = 0;
-    let fratNoGo = 0;
+  let allFrats = [];
 
-    let fiveWhyTotal = 0;
-    let fiveWhyClosed = 0;
+  possiblePaths.forEach(path => {
 
-    let cpaOpen = 0;
-    let cpaClosed = 0;
+    const fratRef = ref(db, path);
 
-    let months = {};
-    let categories = {};
-    let rootCauses = {};
+    onValue(fratRef, snapshot => {
 
-    reports.forEach(r => {
+      const data = snapshot.val();
 
-      const residualStatus = getResidualStatus(r);
+      if(data){
+        const values = Object.values(data);
 
-      const isClosed =
-        residualStatus.includes("closed") ||
-        residualStatus === "true" ||
-        residualStatus === "yes";
-
-      if(isClosed) closed++;
-      else open++;
-
-      const risk = getRiskText(r);
-
-      if(risk.includes("not")) notAcceptable++;
-      else if(risk.includes("tolerable")) tolerable++;
-      else if(risk.includes("acceptable")) acceptable++;
-      else notAssessed++;
-
-      const dateValue = getDate(r);
-      if(dateValue){
-        const month = dateValue.substring(0,7);
-        months[month] = (months[month] || 0) + 1;
-      }
-
-      const category = r.category || r.eventType || r.reportType || "Other";
-      categories[category] = (categories[category] || 0) + 1;
-
-      const typeText = (
-        r.type ||
-        r.reportType ||
-        r.category ||
-        r.module ||
-        ""
-      ).toString().toLowerCase();
-
-      if(typeText.includes("frat")){
-        fratTotal++;
-
-        const fratRisk = (
-          r.fratRisk ||
-          r.fratLevel ||
-          r.result ||
-          r.finalDecision ||
-          ""
-        ).toString().toLowerCase();
-
-        if(fratRisk.includes("high")) fratHigh++;
-        if(fratRisk.includes("no go") || fratRisk.includes("nogo")) fratNoGo++;
-      }
-
-      const fiveWhy = r.fiveWhy || r.fiveWhys || r.investigation5Why || r.why1;
-
-      if(fiveWhy){
-        fiveWhyTotal++;
-
-        if(isClosed) fiveWhyClosed++;
-
-        const root = r.rootCauseCategory || r.rootCause || "Not Classified";
-        rootCauses[root] = (rootCauses[root] || 0) + 1;
-      }
-
-      const cpaList = r.cpa || r.cpas || r.correctiveActions || [];
-
-      if(Array.isArray(cpaList)){
-        cpaList.forEach(cpa => {
-          const status = (cpa.status || "").toLowerCase();
-          if(status.includes("closed")) cpaClosed++;
-          else cpaOpen++;
+        values.forEach(item => {
+          if(item && typeof item === "object"){
+            item.__sourcePath = path;
+            allFrats.push(item);
+          }
         });
       }
 
+      const unique = {};
+      allFrats.forEach(f => {
+        const key = f.id || f.key || f.reportNumber || f.createdAt || JSON.stringify(f);
+        unique[key] = f;
+      });
+
+      fratReports = Object.values(unique);
+      renderDashboard();
+
     });
-
-    const safetyScore = total === 0 ? 100 : Math.max(0, Math.round(100 - ((notAcceptable * 10) + (open * 3))));
-
-    setText("totalReports", total);
-    setText("openReports", open);
-    setText("closedReports", closed);
-    setText("notAcceptable", notAcceptable);
-    setText("safetyScore", safetyScore + "%");
-
-    setText("fratTotal", fratTotal);
-    setText("fratHigh", fratHigh);
-    setText("fratNoGo", fratNoGo);
-
-    setText("fiveWhyTotal", fiveWhyTotal);
-    setText("fiveWhyClosed", fiveWhyClosed);
-
-    setText("cpaOpen", cpaOpen);
-    setText("cpaClosed", cpaClosed);
-
-    createBar("statusChart", ["Open","Closed"], [open,closed], "Open vs Closed Reports");
-    createPie("riskChart", ["Acceptable","Tolerable","Not Acceptable","Not Assessed"], [acceptable,tolerable,notAcceptable,notAssessed], "Risk Distribution");
-    createBar("monthChart", Object.keys(months), Object.values(months), "Reports by Month");
-    createBar("categoryChart", Object.keys(categories), Object.values(categories), "Reports by Category");
-    createBar("rootCauseChart", Object.keys(rootCauses), Object.values(rootCauses), "5 Why Root Causes");
-    createBar("fratChart", ["Total FRAT","High Risk","No Go"], [fratTotal,fratHigh,fratNoGo], "FRAT Monitoring");
-    createBar("cpaChart", ["Open CPA","Closed CPA"], [cpaOpen,cpaClosed], "Corrective Actions Status");
 
   });
 
@@ -242,7 +291,10 @@ window.goBack = function(){
   location.href = "index.html";
 }
 
-window.onload = loadDashboard;
+window.onload = function(){
+  loadSMSReports();
+  loadFRATReports();
+}
 </script>
 
 <style>
@@ -260,7 +312,7 @@ body{
 }
 
 .container{
-  max-width:1350px;
+  max-width:1400px;
   margin:auto;
   background:white;
   border-radius:30px;
@@ -489,6 +541,10 @@ canvas{
 
     <div class="chart-box">
       <canvas id="fratChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <canvas id="fratMonthChart"></canvas>
     </div>
 
     <div class="chart-box">
