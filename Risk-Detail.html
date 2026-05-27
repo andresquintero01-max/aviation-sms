@@ -59,6 +59,14 @@ button.closed{
   background:green !important;
 }
 
+.print-file-btn{
+  background:#111827 !important;
+  width:100%;
+  margin-top:25px;
+  font-size:18px;
+  padding:15px;
+}
+
 .result{
   margin-top:20px;
   padding:15px;
@@ -275,6 +283,8 @@ button.closed{
 </div>
 
 </div>
+
+<button class="print-file-btn" onclick="printFullFile()">Print File</button>
 
 </div>
 
@@ -778,6 +788,170 @@ ${x.pdfUrl ? `<button onclick="window.open('${x.pdfUrl}','_blank')">Open Documen
 a.appendChild(att);
 });
 }
+
+window.printFullFile=async function(){
+
+const snap = await get(ref(db,"smsReports/"+key));
+
+if(!snap.exists()){
+alert("No report found.");
+return;
+}
+
+const d = snap.val();
+const cpas = d.CPA || {};
+const five = d.investigation5Why || {};
+
+let cpaHtml = "";
+
+if(Object.keys(cpas).length > 0){
+Object.entries(cpas).forEach(([id,x],i)=>{
+cpaHtml += `
+<div class="print-card">
+<h3>CPA ${i+1}</h3>
+<p><b>Control Type:</b> ${x.controlType || ""}</p>
+<p><b>Action Plan:</b> ${x.actionPlan || ""}</p>
+<p><b>Action Date:</b> ${x.actionDate || ""}</p>
+<p><b>Email:</b> ${x.emailTo || ""}</p>
+<p><b>Attachment:</b> ${x.pdfUrl || "No document link added"}</p>
+</div>
+`;
+});
+}else{
+cpaHtml = `<p>No CPA records saved.</p>`;
+}
+
+const printWindow = window.open("", "_blank");
+
+printWindow.document.write(`
+<!DOCTYPE html>
+<html>
+<head>
+<title>SMS Full File</title>
+
+<style>
+body{
+  font-family:Arial, sans-serif;
+  padding:30px;
+  color:#111827;
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  border-bottom:4px solid #071f47;
+  padding-bottom:12px;
+}
+
+h2{
+  color:#071f47;
+  background:#e9f5ff;
+  padding:10px;
+  border-left:8px solid #071f47;
+  margin-top:25px;
+}
+
+h3{
+  color:#0b2a66;
+}
+
+.print-card{
+  border:1px solid #ccc;
+  border-radius:10px;
+  padding:15px;
+  margin-top:12px;
+  background:#fafafa;
+}
+
+p{
+  font-size:15px;
+  line-height:1.5;
+}
+
+.answer{
+  white-space:pre-wrap;
+  background:white;
+  border:1px solid #ddd;
+  padding:12px;
+  border-radius:8px;
+  min-height:35px;
+}
+
+@media print{
+  body{
+    padding:15px;
+  }
+}
+</style>
+
+</head>
+<body>
+
+<h1>SMS Full File</h1>
+
+<h2>Report Detail</h2>
+<div class="print-card">
+<p><b>ID:</b> ${d.reportId || ""}</p>
+<p><b>Date:</b> ${d.date || ""}</p>
+<p><b>What Happened:</b></p>
+<div class="answer">${d.whatHappened || ""}</div>
+<p><b>Risk:</b> ${d.risk || "N/A"}</p>
+</div>
+
+<h2>Initial Risk Assessment</h2>
+<div class="print-card">
+<p><b>Initial Risk Value:</b> ${d.risk || "N/A"}</p>
+<p><b>Initial Risk Closed:</b> ${d.riskClosed === true ? "Yes" : "No"}</p>
+</div>
+
+<h2>Investigation - 5 Why</h2>
+
+<div class="print-card">
+<h3>1. What happened?</h3>
+<div class="answer">${five.q1Answer || ""}</div>
+</div>
+
+<div class="print-card">
+<h3>2. ${five.q2Question || ""}</h3>
+<div class="answer">${five.q2Answer || ""}</div>
+</div>
+
+<div class="print-card">
+<h3>3. ${five.q3Question || ""}</h3>
+<div class="answer">${five.q3Answer || ""}</div>
+</div>
+
+<div class="print-card">
+<h3>4. ${five.q4Question || ""}</h3>
+<div class="answer">${five.q4Answer || ""}</div>
+</div>
+
+<div class="print-card">
+<h3>5. ${five.q5Question || ""}</h3>
+<div class="answer">${five.q5Answer || ""}</div>
+</div>
+
+<h2>CPA Module</h2>
+${cpaHtml}
+
+<h2>Residual Risk Assessment</h2>
+<div class="print-card">
+<p><b>Residual Risk Value:</b> ${d.residualRisk || "N/A"}</p>
+<p><b>Residual Risk Closed:</b> ${d.residualRiskClosed === true ? "Yes" : "No"}</p>
+</div>
+
+</body>
+</html>
+`);
+
+printWindow.document.close();
+printWindow.focus();
+
+setTimeout(()=>{
+printWindow.print();
+},500);
+
+};
 
 window.goBack=()=>location.href="SMS-Database.html";
 
