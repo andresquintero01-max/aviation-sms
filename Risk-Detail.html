@@ -799,9 +799,14 @@ return;
 }
 
 const d = snap.val();
-const cpas = d.CPA || {};
 const five = d.investigation5Why || {};
+const fiveWhysSaved = five.status === "Saved";
 
+let printBody = "";
+
+if(fiveWhysSaved){
+
+const cpas = d.CPA || {};
 let cpaHtml = "";
 
 if(Object.keys(cpas).length > 0){
@@ -821,13 +826,85 @@ cpaHtml += `
 cpaHtml = `<p>No CPA records saved.</p>`;
 }
 
+printBody = `
+<h1>SMS Full File</h1>
+
+<h2>Report Detail</h2>
+<div class="print-card">
+<p><b>ID:</b> ${d.reportId || ""}</p>
+<p><b>Date:</b> ${d.date || ""}</p>
+<p><b>What Happened:</b></p>
+<div class="answer">${d.whatHappened || ""}</div>
+<p><b>Risk:</b> ${d.risk || "N/A"}</p>
+</div>
+
+<h2>Initial Risk Assessment</h2>
+<div class="print-card">
+<p><b>Initial Risk Value:</b> ${d.risk || "N/A"}</p>
+<p><b>Initial Risk Closed:</b> ${d.riskClosed === true ? "Yes" : "No"}</p>
+</div>
+
+<h2>Investigation - 5 Why</h2>
+
+<div class="print-card">
+<h3>1. What happened?</h3>
+<div class="answer">${five.q1Answer || ""}</div>
+</div>
+
+<div class="print-card">
+<h3>2. ${five.q2Question || ""}</h3>
+<div class="answer">${five.q2Answer || ""}</div>
+</div>
+
+<div class="print-card">
+<h3>3. ${five.q3Question || ""}</h3>
+<div class="answer">${five.q3Answer || ""}</div>
+</div>
+
+<div class="print-card">
+<h3>4. ${five.q4Question || ""}</h3>
+<div class="answer">${five.q4Answer || ""}</div>
+</div>
+
+<div class="print-card">
+<h3>5. ${five.q5Question || ""}</h3>
+<div class="answer">${five.q5Answer || ""}</div>
+</div>
+
+<h2>CPA Module</h2>
+${cpaHtml}
+
+<h2>Residual Risk Assessment</h2>
+<div class="print-card">
+<p><b>Residual Risk Value:</b> ${d.residualRisk || "N/A"}</p>
+<p><b>Residual Risk Closed:</b> ${d.residualRiskClosed === true ? "Yes" : "No"}</p>
+</div>
+`;
+
+}else{
+
+printBody = `
+<h1>SMS Report Detail</h1>
+
+<h2>Report Detail</h2>
+<div class="print-card">
+<p><b>ID:</b> ${d.reportId || ""}</p>
+<p><b>Date:</b> ${d.date || ""}</p>
+<p><b>What Happened:</b></p>
+<div class="answer">${d.whatHappened || ""}</div>
+<p><b>Risk:</b> ${d.risk || "N/A"}</p>
+</div>
+`;
+
+}
+
 const printWindow = window.open("", "_blank");
 
 printWindow.document.write(`
 <!DOCTYPE html>
 <html>
 <head>
-<title>SMS Full File</title>
+<title>${fiveWhysSaved ? "SMS Full File" : "SMS Report Detail"}</title>
 
 <style>
 body{
@@ -886,60 +963,7 @@ p{
 
 </head>
 <body>
-
-<h1>SMS Full File</h1>
-
-<h2>Report Detail</h2>
-<div class="print-card">
-<p><b>ID:</b> ${d.reportId || ""}</p>
-<p><b>Date:</b> ${d.date || ""}</p>
-<p><b>What Happened:</b></p>
-<div class="answer">${d.whatHappened || ""}</div>
-<p><b>Risk:</b> ${d.risk || "N/A"}</p>
-</div>
-
-<h2>Initial Risk Assessment</h2>
-<div class="print-card">
-<p><b>Initial Risk Value:</b> ${d.risk || "N/A"}</p>
-<p><b>Initial Risk Closed:</b> ${d.riskClosed === true ? "Yes" : "No"}</p>
-</div>
-
-<h2>Investigation - 5 Why</h2>
-
-<div class="print-card">
-<h3>1. What happened?</h3>
-<div class="answer">${five.q1Answer || ""}</div>
-</div>
-
-<div class="print-card">
-<h3>2. ${five.q2Question || ""}</h3>
-<div class="answer">${five.q2Answer || ""}</div>
-</div>
-
-<div class="print-card">
-<h3>3. ${five.q3Question || ""}</h3>
-<div class="answer">${five.q3Answer || ""}</div>
-</div>
-
-<div class="print-card">
-<h3>4. ${five.q4Question || ""}</h3>
-<div class="answer">${five.q4Answer || ""}</div>
-</div>
-
-<div class="print-card">
-<h3>5. ${five.q5Question || ""}</h3>
-<div class="answer">${five.q5Answer || ""}</div>
-</div>
-
-<h2>CPA Module</h2>
-${cpaHtml}
-
-<h2>Residual Risk Assessment</h2>
-<div class="print-card">
-<p><b>Residual Risk Value:</b> ${d.residualRisk || "N/A"}</p>
-<p><b>Residual Risk Closed:</b> ${d.residualRiskClosed === true ? "Yes" : "No"}</p>
-</div>
-
+${printBody}
 </body>
 </html>
 `);
