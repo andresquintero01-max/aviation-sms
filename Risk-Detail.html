@@ -211,8 +211,11 @@ button.closed{
 <h3>Investigation Modules</h3>
 
 <button id="investigationBtn" class="module-btn" onclick="toggleInvestigationModule('investigation','investigationBtn')">Investigation</button>
-<button id="fiveWhysBtn" class="module-btn" onclick="toggleInvestigationModule('fiveWhys','fiveWhysBtn')">5 Whys</button>
+
+<button id="fiveWhysBtn" class="module-btn" onclick="openFiveWhys()">5 Whys</button>
+
 <button id="shellBtn" class="module-btn" onclick="toggleInvestigationModule('shell','shellBtn')">SHELL</button>
+
 <button id="contributingFactorsBtn" class="module-btn" onclick="toggleInvestigationModule('contributingFactors','contributingFactorsBtn')">Contributing Factors</button>
 
 </div>
@@ -358,6 +361,17 @@ document.getElementById("contributingFactorsBtn").classList.add("completed");
 }
 
 }
+
+window.openFiveWhys=function(){
+
+update(ref(db,"smsReports/"+key+"/investigationModules"),{
+fiveWhys:true
+}).then(()=>{
+document.getElementById("fiveWhysBtn").classList.add("completed");
+location.href="Investigation-5Why.html?key="+key;
+});
+
+};
 
 window.toggleInvestigationModule=function(moduleName,buttonId){
 
