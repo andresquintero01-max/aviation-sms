@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Safety Promotion Training</title>
 
 <script type="module">
@@ -22,6 +23,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 function convertToEmbed(url){
+
   if(url.includes("youtube.com/watch?v=")){
     return url.replace("watch?v=","embed/");
   }
@@ -39,6 +41,7 @@ function convertToEmbed(url){
 }
 
 function showVideo(frameId, link){
+
   const frameBox = document.getElementById(frameId);
 
   if(!link){
@@ -57,6 +60,7 @@ function showVideo(frameId, link){
 }
 
 window.saveVideo = function(key, inputId, frameId){
+
   const link = document.getElementById(inputId).value.trim();
 
   if(link === ""){
@@ -70,39 +74,64 @@ window.saveVideo = function(key, inputId, frameId){
   });
 
   showVideo(frameId, link);
+
   alert("Video saved successfully.");
 }
 
 window.deleteVideo = function(key, inputId, frameId){
+
   remove(ref(db, "safetyPromotionTraining/" + key));
 
   document.getElementById(inputId).value = "";
+
   showVideo(frameId, "");
 
   alert("Video deleted successfully.");
 }
 
 function loadSavedVideos(){
+
   const trainingRef = ref(db, "safetyPromotionTraining");
 
   onValue(trainingRef, snapshot => {
+
     const data = snapshot.val() || {};
 
     if(data.humanFactors && data.humanFactors.videoLink){
-      document.getElementById("humanFactorsLink").value = data.humanFactors.videoLink;
-      showVideo("humanFactorsVideo", data.humanFactors.videoLink);
+
+      document.getElementById("humanFactorsLink").value =
+      data.humanFactors.videoLink;
+
+      showVideo(
+      "humanFactorsVideo",
+      data.humanFactors.videoLink
+      );
     }
 
     if(data.introductionSMS && data.introductionSMS.videoLink){
-      document.getElementById("smsIntroLink").value = data.introductionSMS.videoLink;
-      showVideo("smsIntroVideo", data.introductionSMS.videoLink);
+
+      document.getElementById("smsIntroLink").value =
+      data.introductionSMS.videoLink;
+
+      showVideo(
+      "smsIntroVideo",
+      data.introductionSMS.videoLink
+      );
     }
 
     if(data.safetyCulture && data.safetyCulture.videoLink){
-      document.getElementById("safetyCultureLink").value = data.safetyCulture.videoLink;
-      showVideo("safetyCultureVideo", data.safetyCulture.videoLink);
+
+      document.getElementById("safetyCultureLink").value =
+      data.safetyCulture.videoLink;
+
+      showVideo(
+      "safetyCultureVideo",
+      data.safetyCulture.videoLink
+      );
     }
+
   });
+
 }
 
 window.goBack = function(){
@@ -115,6 +144,7 @@ window.onload = function(){
 </script>
 
 <style>
+
 *{
   margin:0;
   padding:0;
@@ -124,133 +154,317 @@ window.onload = function(){
 body{
   font-family:Arial,sans-serif;
   min-height:100vh;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
-  padding:30px;
+  background:
+  linear-gradient(rgba(5,20,55,0.82), rgba(5,20,55,0.88)),
+  url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
+  padding:35px;
 }
 
+/* MAIN CONTAINER */
+
 .container{
-  max-width:1100px;
+  max-width:1200px;
   margin:auto;
-  background:white;
-  border-radius:30px;
-  padding:45px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.35);
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(8px);
+  border-radius:35px;
+  padding:55px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.35);
+  position:relative;
+  overflow:hidden;
+  animation:fadeIn 0.8s ease;
 }
+
+.container::before{
+  content:"";
+  position:absolute;
+  width:420px;
+  height:420px;
+  background:radial-gradient(circle,rgba(111,82,217,0.16),transparent 70%);
+  top:-180px;
+  right:-120px;
+}
+
+/* LOGO */
+
+.logo{
+  width:100px;
+  height:100px;
+  margin:auto;
+  border-radius:50%;
+  background:linear-gradient(135deg,#5b35d5,#8b5cf6);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:44px;
+  box-shadow:0 12px 25px rgba(0,0,0,0.25);
+  margin-bottom:22px;
+}
+
+/* TITLE */
 
 h1{
   text-align:center;
   color:#071f47;
-  font-size:54px;
-  margin-bottom:10px;
+  font-size:62px;
+  margin-bottom:12px;
+  font-weight:800;
 }
+
+/* SUBTITLE */
 
 .subtitle{
   text-align:center;
-  color:#555;
-  font-size:18px;
-  margin-bottom:35px;
+  color:#56657d;
+  font-size:21px;
+  margin-bottom:18px;
 }
 
-.training-box{
-  background:#f4f6f8;
-  border-radius:24px;
-  padding:25px;
-  margin-bottom:25px;
-  box-shadow:0 8px 18px rgba(0,0,0,0.12);
+/* LINE */
+
+.title-line{
+  width:220px;
+  height:4px;
+  margin:0 auto 45px;
+  border-radius:10px;
+  background:linear-gradient(90deg,transparent,#8b5cf6,transparent);
 }
+
+/* TRAINING BOX */
+
+.training-box{
+  background:white;
+  border-radius:30px;
+  padding:30px;
+  margin-bottom:28px;
+  box-shadow:0 12px 28px rgba(0,0,0,0.10);
+  position:relative;
+  overflow:hidden;
+  transition:0.35s;
+}
+
+.training-box:hover{
+  transform:translateY(-6px);
+  box-shadow:0 18px 35px rgba(0,0,0,0.18);
+}
+
+/* LEFT BORDER */
+
+.training-box::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:8px;
+  height:100%;
+}
+
+.training-box:nth-child(1)::before{
+  background:#1c63db;
+}
+
+.training-box:nth-child(2)::before{
+  background:#8b5cf6;
+}
+
+.training-box:nth-child(3)::before{
+  background:#22b573;
+}
+
+/* ROW */
 
 .training-row{
   display:grid;
-  grid-template-columns:1fr 2fr auto auto;
+  grid-template-columns:100px 1fr auto auto;
   gap:18px;
   align-items:center;
 }
 
+/* ICON */
+
+.training-icon{
+  width:85px;
+  height:85px;
+  border-radius:50%;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:38px;
+  box-shadow:0 10px 22px rgba(0,0,0,0.20);
+}
+
+.training-box:nth-child(1) .training-icon{
+  background:linear-gradient(135deg,#0b2a66,#1c63db);
+}
+
+.training-box:nth-child(2) .training-icon{
+  background:linear-gradient(135deg,#5b35d5,#8b5cf6);
+}
+
+.training-box:nth-child(3) .training-icon{
+  background:linear-gradient(135deg,#168f58,#22b573);
+}
+
+/* TITLE */
+
 .training-title{
   color:#071f47;
-  font-size:24px;
+  font-size:30px;
   font-weight:bold;
-  border-left:8px solid #071f47;
-  padding-left:12px;
+  margin-bottom:6px;
 }
+
+.training-description{
+  color:#56657d;
+  font-size:17px;
+  line-height:1.5;
+}
+
+/* INPUT */
 
 .video-input{
   width:100%;
-  padding:15px;
-  border:2px solid #cfd6e0;
-  border-radius:14px;
-  font-size:16px;
+  margin-top:18px;
+  padding:18px;
+  border:1px solid #d4dbe8;
+  border-radius:18px;
+  font-size:17px;
+  background:#f8fbff;
+  outline:none;
+  transition:0.3s;
+}
+
+.video-input:focus{
+  border-color:#1c63db;
+  box-shadow:0 0 0 4px rgba(28,99,219,0.15);
+  background:white;
+}
+
+/* BUTTONS */
+
+.save-btn,
+.delete-btn{
+  border:none;
+  padding:16px 24px;
+  border-radius:16px;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+  color:white;
 }
 
 .save-btn{
-  background:#071f47;
-  color:white;
-  border:none;
-  padding:15px 22px;
-  border-radius:14px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
+  background:linear-gradient(135deg,#071f47,#1450b8);
+  box-shadow:0 10px 22px rgba(0,0,0,0.18);
 }
 
 .save-btn:hover{
-  background:#0b2a66;
+  transform:translateY(-3px);
+  background:linear-gradient(135deg,#1450b8,#1d6eff);
 }
 
 .delete-btn{
-  background:#c0392b;
-  color:white;
-  border:none;
-  padding:15px 22px;
-  border-radius:14px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
+  background:linear-gradient(135deg,#c0392b,#ff5b5b);
 }
 
 .delete-btn:hover{
-  background:#922b21;
+  transform:translateY(-3px);
+  background:linear-gradient(135deg,#ff5b5b,#ff7b7b);
 }
 
+/* VIDEO */
+
 .video-frame{
-  margin-top:20px;
+  margin-top:25px;
   display:none;
 }
 
 .video-frame iframe{
   width:100%;
-  height:360px;
+  height:420px;
   border:none;
-  border-radius:18px;
-  box-shadow:0 8px 18px rgba(0,0,0,0.18);
+  border-radius:22px;
+  box-shadow:0 10px 22px rgba(0,0,0,0.20);
 }
 
+/* BACK BUTTON */
+
 .back-btn{
-  margin-top:25px;
+  margin-top:35px;
   width:100%;
-  padding:18px;
+  padding:20px;
   border:none;
-  border-radius:16px;
-  background:#c0392b;
+  border-radius:18px;
+  background:linear-gradient(135deg,#d40000,#ff2b2b);
   color:white;
-  font-size:20px;
+  font-size:22px;
   font-weight:bold;
   cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 10px 22px rgba(0,0,0,0.22);
 }
 
 .back-btn:hover{
-  background:#922b21;
+  transform:translateY(-4px);
+  background:linear-gradient(135deg,#ff2b2b,#ff4d4d);
 }
 
-@media(max-width:800px){
+/* FOOTER */
+
+.footer{
+  margin-top:35px;
+  text-align:center;
+  color:#51617b;
+  font-size:14px;
+  letter-spacing:3px;
+  font-weight:bold;
+}
+
+/* ANIMATION */
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
   h1{
-    font-size:38px;
+    font-size:46px;
+  }
+
+  .container{
+    padding:35px 22px;
   }
 
   .training-row{
     grid-template-columns:1fr;
+    text-align:center;
   }
+
+  .training-icon{
+    margin:auto;
+  }
+
+  .video-frame iframe{
+    height:260px;
+  }
+
 }
+
 </style>
 </head>
 
@@ -258,45 +472,138 @@ h1{
 
 <div class="container">
 
+  <div class="logo">🎓</div>
+
   <h1>Safety Promotion Training</h1>
 
   <div class="subtitle">
     Training videos for Safety Promotion and SMS awareness
   </div>
 
+  <div class="title-line"></div>
+
+  <!-- HUMAN FACTORS -->
+
   <div class="training-box">
+
     <div class="training-row">
-      <div class="training-title">Human Factors</div>
-      <input class="video-input" id="humanFactorsLink" type="text" placeholder="Paste video link here">
-      <button class="save-btn" onclick="saveVideo('humanFactors','humanFactorsLink','humanFactorsVideo')">Save</button>
-      <button class="delete-btn" onclick="deleteVideo('humanFactors','humanFactorsLink','humanFactorsVideo')">Delete</button>
+
+      <div class="training-icon">🧠</div>
+
+      <div>
+        <div class="training-title">Human Factors</div>
+
+        <div class="training-description">
+          Human performance, decision making and operational awareness training.
+        </div>
+      </div>
+
+      <button class="save-btn"
+      onclick="saveVideo('humanFactors','humanFactorsLink','humanFactorsVideo')">
+      Save
+      </button>
+
+      <button class="delete-btn"
+      onclick="deleteVideo('humanFactors','humanFactorsLink','humanFactorsVideo')">
+      Delete
+      </button>
+
     </div>
+
+    <input class="video-input"
+    id="humanFactorsLink"
+    type="text"
+    placeholder="Paste YouTube or Google Drive video link here">
+
     <div class="video-frame" id="humanFactorsVideo"></div>
+
   </div>
 
+  <!-- INTRODUCTION TO SMS -->
+
   <div class="training-box">
+
     <div class="training-row">
-      <div class="training-title">Introduction to SMS</div>
-      <input class="video-input" id="smsIntroLink" type="text" placeholder="Paste video link here">
-      <button class="save-btn" onclick="saveVideo('introductionSMS','smsIntroLink','smsIntroVideo')">Save</button>
-      <button class="delete-btn" onclick="deleteVideo('introductionSMS','smsIntroLink','smsIntroVideo')">Delete</button>
+
+      <div class="training-icon">📘</div>
+
+      <div>
+        <div class="training-title">Introduction to SMS</div>
+
+        <div class="training-description">
+          Introduction to Safety Management Systems and aviation SMS principles.
+        </div>
+      </div>
+
+      <button class="save-btn"
+      onclick="saveVideo('introductionSMS','smsIntroLink','smsIntroVideo')">
+      Save
+      </button>
+
+      <button class="delete-btn"
+      onclick="deleteVideo('introductionSMS','smsIntroLink','smsIntroVideo')">
+      Delete
+      </button>
+
     </div>
+
+    <input class="video-input"
+    id="smsIntroLink"
+    type="text"
+    placeholder="Paste YouTube or Google Drive video link here">
+
     <div class="video-frame" id="smsIntroVideo"></div>
+
   </div>
 
+  <!-- SAFETY CULTURE -->
+
   <div class="training-box">
+
     <div class="training-row">
-      <div class="training-title">Safety Culture</div>
-      <input class="video-input" id="safetyCultureLink" type="text" placeholder="Paste video link here">
-      <button class="save-btn" onclick="saveVideo('safetyCulture','safetyCultureLink','safetyCultureVideo')">Save</button>
-      <button class="delete-btn" onclick="deleteVideo('safetyCulture','safetyCultureLink','safetyCultureVideo')">Delete</button>
+
+      <div class="training-icon">👥</div>
+
+      <div>
+        <div class="training-title">Safety Culture</div>
+
+        <div class="training-description">
+          Safety communication, reporting culture and organizational awareness.
+        </div>
+      </div>
+
+      <button class="save-btn"
+      onclick="saveVideo('safetyCulture','safetyCultureLink','safetyCultureVideo')">
+      Save
+      </button>
+
+      <button class="delete-btn"
+      onclick="deleteVideo('safetyCulture','safetyCultureLink','safetyCultureVideo')">
+      Delete
+      </button>
+
     </div>
+
+    <input class="video-input"
+    id="safetyCultureLink"
+    type="text"
+    placeholder="Paste YouTube or Google Drive video link here">
+
     <div class="video-frame" id="safetyCultureVideo"></div>
+
   </div>
+
+  <!-- BACK BUTTON -->
 
   <button class="back-btn" onclick="goBack()">
-    Back to Safety Promotion
+    ← Back to Safety Promotion
   </button>
+
+  <!-- FOOTER -->
+
+  <div class="footer">
+    AVIATION SAFETY MANAGEMENT PLATFORM
+  </div>
 
 </div>
 
