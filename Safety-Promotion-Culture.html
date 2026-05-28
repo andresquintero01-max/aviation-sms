@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Safety Promotion Culture</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial, sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  padding:35px;
+}
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  background:white;
+  border-radius:30px;
+  padding:45px;
+  box-shadow:0 20px 55px rgba(0,0,0,0.35);
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  font-size:52px;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#555;
+  font-size:18px;
+  margin-bottom:40px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:25px;
+}
+
+.card{
+  background:#f4f6f8;
+  border-radius:24px;
+  padding:28px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.15);
+  border-left:8px solid #1450b8;
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 14px 28px rgba(0,0,0,0.25);
+}
+
+.card h2{
+  color:#071f47;
+  font-size:24px;
+  margin-bottom:15px;
+}
+
+.card p{
+  color:#444;
+  font-size:16px;
+  line-height:1.5;
+  margin-bottom:18px;
+}
+
+.card button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg,#071f47,#1450b8);
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.card button:hover{
+  background:linear-gradient(135deg,#1450b8,#071f47);
+}
+
+.back{
+  display:block;
+  margin:40px auto 0;
+  padding:14px 36px;
+  border:none;
+  border-radius:14px;
+  background:#d71920;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.back:hover{
+  background:#a50f15;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Safety Promotion Culture</h1>
+  <p class="subtitle">Safety communication, awareness, learning, and operational culture modules</p>
+
+  <div class="grid">
+
+    <div class="card">
+      <h2>Safety Bulletins and Alerts</h2>
+      <p>Publish operational safety alerts, immediate warnings, recent events, aircraft damage notifications, FOD alerts, LOTO alerts, and important SMS communications.</p>
+      <button onclick="location.href='Safety-Bulletins-Alerts.html'">Open Module</button>
+    </div>
+
+    <div class="card">
+      <h2>Lessons Learned</h2>
+      <p>Document lessons learned from SMS reports, investigations, root cause analysis, corrective actions, and operational events to prevent recurrence.</p>
+      <button onclick="location.href='Lessons-Learned.html'">Open Module</button>
+    </div>
+
+    <div class="card">
+      <h2>Safety Campaigns</h2>
+      <p>Create and manage safety campaigns such as FOD prevention, ramp safety, LOTO awareness, tool control, towing safety, and PPE compliance.</p>
+      <button onclick="location.href='Safety-Campaigns.html'">Open Module</button>
+    </div>
+
+    <div class="card">
+      <h2>Safety Videos</h2>
+      <p>Store internal training videos, safety communication videos, external aviation safety references, and awareness material for employees.</p>
+      <button onclick="location.href='Safety-Videos.html'">Open Module</button>
+    </div>
+
+    <div class="card">
+      <h2>Safety Meetings</h2>
+      <p>Register toolbox talks, safety meetings, attendance records, discussed topics, follow-up actions, and meeting minutes.</p>
+      <button onclick="location.href='Safety-Meetings.html'">Open Module</button>
+    </div>
+
+    <div class="card">
+      <h2>Safety Newsletter</h2>
+      <p>Create monthly safety newsletters with KPIs, SPIs, FRAT trends, risk distribution, aircraft damages, recurrent events, and safety highlights.</p>
+      <button onclick="location.href='Safety-Newsletter.html'">Open Module</button>
+    </div>
+
+    <div class="card">
+      <h2>Employee Recognition</h2>
+      <p>Recognize employees for proactive safety reporting, hazard identification, prevention actions, operational discipline, and positive safety behavior.</p>
+      <button onclick="location.href='Employee-Recognition.html'">Open Module</button>
+    </div>
+
+    <div class="card">
+      <h2>Trending Risks</h2>
+      <p>Review recurrent hazards, top operational risks, highest risk areas, risk distribution, residual risk trends, and repeated aircraft damage categories.</p>
+      <button onclick="location.href='Trending-Risks.html'">Open Module</button>
+    </div>
+
+  </div>
+
+  <button class="back" onclick="location.href='Safety-Promotion.html'">Back</button>
+
+</div>
+
+</body>
+</html>
