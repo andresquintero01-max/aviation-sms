@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hazard Identification</title>
 
 <style>
@@ -15,106 +16,287 @@
 body{
   font-family:Arial, sans-serif;
   min-height:100vh;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  background:
+  linear-gradient(rgba(5,20,55,0.82), rgba(5,20,55,0.88)),
+  url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:30px;
+  padding:35px;
 }
 
 /* MAIN CONTAINER */
+
 .container{
   width:100%;
-  max-width:650px;
-  background:white;
-  padding:50px;
-  border-radius:28px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.3);
+  max-width:1050px;
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(8px);
+  padding:55px;
+  border-radius:35px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.35);
   text-align:center;
+  position:relative;
+  overflow:hidden;
+  animation:fadeIn 0.8s ease;
 }
 
-/* MAIN TITLE */
+/* LIGHT EFFECT */
+
+.container::before{
+  content:"";
+  position:absolute;
+  width:420px;
+  height:420px;
+  background:radial-gradient(circle,rgba(28,99,219,0.15),transparent 70%);
+  top:-180px;
+  right:-120px;
+}
+
+/* LOGO */
+
+.logo{
+  width:100px;
+  height:100px;
+  margin:auto;
+  border-radius:50%;
+  background:linear-gradient(135deg,#0b2a66,#ff9800);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:44px;
+  box-shadow:0 12px 25px rgba(0,0,0,0.25);
+  margin-bottom:22px;
+}
+
+/* TITLE */
+
 h1{
-  font-size:52px;
+  font-size:64px;
   color:#071f47;
-  margin-bottom:15px;
+  margin-bottom:12px;
+  font-weight:800;
+  line-height:1.2;
 }
 
 /* DESCRIPTION */
+
 .description{
-  font-size:18px;
-  color:#666;
-  margin-bottom:40px;
+  font-size:21px;
+  color:#56657d;
+  margin-bottom:18px;
 }
 
-/* SECTION */
+/* LINE */
+
+.title-line{
+  width:210px;
+  height:4px;
+  margin:0 auto 45px;
+  border-radius:10px;
+  background:linear-gradient(90deg,transparent,#ff9800,transparent);
+}
+
+/* MENU */
+
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+}
+
+/* SECTION CARD */
+
 .section{
-  margin-bottom:28px;
+  background:white;
+  border-radius:30px;
+  padding:28px;
+  display:grid;
+  grid-template-columns:100px 1fr 330px;
+  align-items:center;
+  gap:25px;
+  text-align:left;
+  box-shadow:0 12px 28px rgba(0,0,0,0.10);
+  transition:0.35s;
+  position:relative;
+  overflow:hidden;
 }
 
-/* SUBTITLES */
-.subtitle{
-  font-size:24px;
-  color:#333;
-  font-weight:bold;
-  margin-bottom:14px;
+.section:hover{
+  transform:translateY(-6px);
+  box-shadow:0 18px 35px rgba(0,0,0,0.18);
 }
 
-/* BUTTON LINKS */
-a.btn{
-  text-decoration:none;
+/* LEFT BORDER */
+
+.section::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:8px;
+  height:100%;
 }
 
-/* MAIN BUTTONS */
-.main-btn{
-  width:100%;
-  max-width:420px;
-  background:linear-gradient(135deg,#071f47,#0b2a66);
+/* COLORS */
+
+.section:nth-child(1)::before{
+  background:#ff9800;
+}
+
+.section:nth-child(2)::before{
+  background:#1c63db;
+}
+
+.section:nth-child(3)::before{
+  background:#22b573;
+}
+
+/* ICON */
+
+.icon{
+  width:85px;
+  height:85px;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
   color:white;
-  border:none;
-  padding:20px;
+  font-size:38px;
+  box-shadow:0 10px 22px rgba(0,0,0,0.20);
+}
+
+.section:nth-child(1) .icon{
+  background:linear-gradient(135deg,#ff7b00,#ffb347);
+}
+
+.section:nth-child(2) .icon{
+  background:linear-gradient(135deg,#0b2a66,#1c63db);
+}
+
+.section:nth-child(3) .icon{
+  background:linear-gradient(135deg,#168f58,#22b573);
+}
+
+/* TEXT */
+
+.info h2{
+  font-size:34px;
+  color:#071f47;
+  margin-bottom:8px;
+}
+
+.info p{
+  color:#56657d;
+  font-size:18px;
+  line-height:1.5;
+}
+
+/* BUTTON */
+
+.main-btn{
+  text-decoration:none;
+  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  color:white;
+  padding:22px;
   border-radius:18px;
-  cursor:pointer;
-  font-size:20px;
+  font-size:19px;
   font-weight:bold;
+  text-align:center;
   transition:0.3s;
-  box-shadow:0 10px 22px rgba(0,0,0,0.2);
+  box-shadow:0 10px 22px rgba(0,0,0,0.20);
 }
 
 .main-btn:hover{
-  transform:translateY(-5px) scale(1.02);
+  transform:translateY(-4px);
   background:linear-gradient(135deg,#0b2a66,#1c63db);
-  box-shadow:0 15px 28px rgba(0,0,0,0.3);
-}
-
-/* SMALL TEXT */
-.small-text{
-  display:block;
-  font-size:14px;
-  margin-top:6px;
-  font-weight:normal;
-  opacity:0.9;
+  box-shadow:0 15px 28px rgba(0,0,0,0.28);
 }
 
 /* BACK BUTTON */
+
 .back-btn{
   display:inline-block;
-  margin-top:25px;
-  background:linear-gradient(135deg,#c40000,#ff2b2b);
+  margin-top:42px;
+  background:linear-gradient(135deg,#d40000,#ff2b2b);
   color:white;
   text-decoration:none;
-  padding:15px 35px;
+  padding:18px 45px;
   border-radius:16px;
-  font-size:18px;
+  font-size:22px;
   font-weight:bold;
   transition:0.3s;
-  box-shadow:0 8px 18px rgba(0,0,0,0.2);
+  box-shadow:0 10px 22px rgba(0,0,0,0.25);
 }
 
 .back-btn:hover{
-  transform:translateY(-3px) scale(1.03);
-  background:linear-gradient(135deg,#ff2b2b,#ff5b5b);
-  box-shadow:0 12px 22px rgba(0,0,0,0.3);
+  transform:translateY(-4px);
+  background:linear-gradient(135deg,#ff2b2b,#ff4d4d);
+}
+
+/* FOOTER */
+
+.footer{
+  margin-top:35px;
+  color:#51617b;
+  font-size:14px;
+  letter-spacing:3px;
+  font-weight:bold;
+}
+
+/* ANIMATION */
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+
+@media(max-width:850px){
+
+  .container{
+    padding:35px 22px;
+  }
+
+  h1{
+    font-size:46px;
+  }
+
+  .description{
+    font-size:18px;
+  }
+
+  .section{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+
+  .icon{
+    margin:auto;
+  }
+
+  .main-btn{
+    width:100%;
+  }
+
+  .info h2{
+    font-size:28px;
+  }
+
+  .info p{
+    font-size:16px;
+  }
+
 }
 
 </style>
@@ -125,7 +307,10 @@ a.btn{
 
 <div class="container">
 
-  <!-- MAIN TITLE -->
+  <!-- LOGO -->
+  <div class="logo">⚠</div>
+
+  <!-- TITLE -->
   <h1>Hazard Identification</h1>
 
   <!-- DESCRIPTION -->
@@ -133,58 +318,79 @@ a.btn{
     Hazard reporting and SMS database management system
   </div>
 
-  <!-- SMS REPORT -->
-  <div class="section">
+  <div class="title-line"></div>
 
-    <div class="subtitle">SMS Report</div>
+  <!-- MENU -->
+  <div class="menu">
 
-    <a class="btn" href="SMS-Report.html">
-      <button class="main-btn">
-        Open SMS Report
-        <span class="small-text">
-          Create and manage safety reports
-        </span>
-      </button>
-    </a>
+    <!-- SMS REPORT -->
+    <div class="section">
 
-  </div>
+      <div class="icon">📝</div>
 
-  <!-- SMS DATABASE -->
-  <div class="section">
+      <div class="info">
+        <h2>SMS Report</h2>
+        <p>
+          Create, submit and manage operational
+          safety reports and hazard events.
+        </p>
+      </div>
 
-    <div class="subtitle">SMS Database</div>
+      <a class="main-btn" href="SMS-Report.html">
+        Open SMS Report ›
+      </a>
 
-    <a class="btn" href="SMS-Database.html">
-      <button class="main-btn">
-        Open SMS Database
-        <span class="small-text">
-          Review and track hazard reports
-        </span>
-      </button>
-    </a>
+    </div>
 
-  </div>
+    <!-- SMS DATABASE -->
+    <div class="section">
 
-  <!-- RISK MANAGEMENT TOOLS -->
-  <div class="section">
+      <div class="icon">🗂</div>
 
-    <div class="subtitle">Risk Management Tools</div>
+      <div class="info">
+        <h2>SMS Database</h2>
+        <p>
+          Review, track and analyze hazard
+          reports, investigations and findings.
+        </p>
+      </div>
 
-    <a class="btn" href="Risk-Management-Tools.html">
-      <button class="main-btn">
-        Open Risk Management Tools
-        <span class="small-text">
-          Additional safety risk management resources
-        </span>
-      </button>
-    </a>
+      <a class="main-btn" href="SMS-Database.html">
+        Open SMS Database ›
+      </a>
+
+    </div>
+
+    <!-- RISK MANAGEMENT TOOLS -->
+    <div class="section">
+
+      <div class="icon">📊</div>
+
+      <div class="info">
+        <h2>Risk Management Tools</h2>
+        <p>
+          Access additional safety risk management
+          resources and assessment tools.
+        </p>
+      </div>
+
+      <a class="main-btn" href="Risk-Management-Tools.html">
+        Open Risk Management Tools ›
+      </a>
+
+    </div>
 
   </div>
 
   <!-- BACK BUTTON -->
   <a class="back-btn" href="index.html">
-    Back to SMS Aviation System
+    ← Back to SMS Aviation System
   </a>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    AVIATION SAFETY MANAGEMENT PLATFORM
+  </div>
 
 </div>
 
