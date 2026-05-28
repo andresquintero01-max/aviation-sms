@@ -37,9 +37,13 @@ function destroyChart(id){
 }
 
 function createBar(id, labels, values, title){
+
   destroyChart(id);
+
   charts[id] = new Chart(document.getElementById(id), {
+
     type:"bar",
+
     data:{
       labels,
       datasets:[{
@@ -49,12 +53,15 @@ function createBar(id, labels, values, title){
         borderRadius:10
       }]
     },
+
     options:{
       responsive:true,
+
       plugins:{
         legend:{display:false},
         title:{display:true,text:title}
       },
+
       scales:{
         y:{
           beginAtZero:true,
@@ -62,31 +69,53 @@ function createBar(id, labels, values, title){
         }
       }
     }
+
   });
+
 }
 
 function createPie(id, labels, values, title){
+
   destroyChart(id);
+
   charts[id] = new Chart(document.getElementById(id), {
+
     type:"doughnut",
+
     data:{
       labels,
       datasets:[{
         data:values,
-        backgroundColor:["#2ecc71","#f1c40f","#e74c3c","#95a5a6"]
+        backgroundColor:[
+          "#2ecc71",
+          "#f1c40f",
+          "#e74c3c",
+          "#95a5a6"
+        ]
       }]
     },
+
     options:{
       responsive:true,
+
       plugins:{
-        title:{display:true,text:title},
-        legend:{position:"top"}
+        title:{
+          display:true,
+          text:title
+        },
+
+        legend:{
+          position:"top"
+        }
       }
     }
+
   });
+
 }
 
 function isReportClosed(r){
+
   const status = (
     r.residualRiskStatus ||
     r.residualStatus ||
@@ -96,7 +125,12 @@ function isReportClosed(r){
     ""
   ).toString().toLowerCase();
 
-  return status.includes("closed") || status === "true" || status === "yes";
+  return (
+    status.includes("closed") ||
+    status === "true" ||
+    status === "yes"
+  );
+
 }
 
 function getDate(r){
@@ -104,28 +138,36 @@ function getDate(r){
 }
 
 function getResidualData(r){
+
   let text = "";
   let value = 0;
 
   Object.keys(r).forEach(key => {
+
     const lowerKey = key.toLowerCase();
 
     if(lowerKey.includes("residual")){
+
       const fieldValue = r[key];
+
       text += " " + String(fieldValue).toLowerCase();
 
       if(!isNaN(Number(fieldValue))){
         value = Number(fieldValue);
       }
+
     }
+
   });
 
   return { text, value };
+
 }
 
 function renderDashboard(){
 
   let total = smsReports.length;
+
   let open = 0;
   let closed = 0;
 
@@ -141,6 +183,7 @@ function renderDashboard(){
 
   let months = {};
   let categories = {};
+
   let fratHigh = 0;
   let fratNoGo = 0;
 
@@ -168,53 +211,133 @@ function renderDashboard(){
     );
 
     if(riskText.includes("not") || riskValue >= 15){
+
       notAcceptable++;
-    }else if(riskText.includes("tolerable") || (riskValue >= 5 && riskValue <= 14)){
+
+    }else if(
+      riskText.includes("tolerable") ||
+      (riskValue >= 5 && riskValue <= 14)
+    ){
+
       tolerable++;
-    }else if(riskText.includes("acceptable") || (riskValue >= 1 && riskValue <= 4)){
+
+    }else if(
+      riskText.includes("acceptable") ||
+      (riskValue >= 1 && riskValue <= 4)
+    ){
+
       acceptable++;
+
     }else{
+
       notAssessed++;
+
     }
 
     const residualData = getResidualData(r);
+
     const residualText = residualData.text;
     const residualValue = residualData.value;
 
-    if(residualText.includes("not acceptable") || residualText.includes("red") || residualValue >= 15){
+    if(
+      residualText.includes("not acceptable") ||
+      residualText.includes("red") ||
+      residualValue >= 15
+    ){
+
       residualNotAcceptable++;
-    }else if(residualText.includes("tolerable") || residualText.includes("yellow") || (residualValue >= 5 && residualValue <= 14)){
+
+    }else if(
+      residualText.includes("tolerable") ||
+      residualText.includes("yellow") ||
+      (residualValue >= 5 && residualValue <= 14)
+    ){
+
       residualTolerable++;
-    }else if(residualText.includes("acceptable") || residualText.includes("green") || (residualValue >= 1 && residualValue <= 4)){
+
+    }else if(
+      residualText.includes("acceptable") ||
+      residualText.includes("green") ||
+      (residualValue >= 1 && residualValue <= 4)
+    ){
+
       residualAcceptable++;
+
     }else{
+
       residualNotAssessed++;
+
     }
 
     const dateValue = getDate(r);
 
     if(dateValue){
+
       const month = dateValue.toString().substring(0,7);
+
       months[month] = (months[month] || 0) + 1;
+
     }
 
-    const category = r.category || r.eventType || r.reportType || "Other";
-    categories[category] = (categories[category] || 0) + 1;
+    const category =
+      r.category ||
+      r.eventType ||
+      r.reportType ||
+      "Other";
+
+    categories[category] =
+      (categories[category] || 0) + 1;
 
   });
 
   fratReports.forEach(f => {
-    const value = Number(f.score || f.total || f.fratScore || f.fratValue || f.value || 0);
+
+    const value = Number(
+      f.score ||
+      f.total ||
+      f.fratScore ||
+      f.fratValue ||
+      f.value ||
+      0
+    );
+
     const fratText = JSON.stringify(f).toLowerCase();
 
-    if(value >= 16 || fratText.includes("no go") || fratText.includes("nogo") || fratText.includes("red") || fratText.includes("rojo")){
+    if(
+      value >= 16 ||
+      fratText.includes("no go") ||
+      fratText.includes("nogo") ||
+      fratText.includes("red") ||
+      fratText.includes("rojo")
+    ){
+
       fratNoGo++;
-    }else if(value >= 10 || fratText.includes("high") || fratText.includes("yellow") || fratText.includes("amarillo")){
+
+    }else if(
+      value >= 10 ||
+      fratText.includes("high") ||
+      fratText.includes("yellow") ||
+      fratText.includes("amarillo")
+    ){
+
       fratHigh++;
+
     }
+
   });
 
-  const safetyScore = total === 0 ? 100 : Math.max(0, Math.round(100 - ((notAcceptable * 10) + (open * 2))));
+  const safetyScore =
+    total === 0
+    ? 100
+    : Math.max(
+        0,
+        Math.round(
+          100 - (
+            (notAcceptable * 10) +
+            (open * 2)
+          )
+        )
+      );
 
   setText("totalReports", total);
   setText("openReports", open);
@@ -236,51 +359,161 @@ function renderDashboard(){
   createPie(
     "residualRiskChart",
     ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
-    [residualAcceptable,residualTolerable,residualNotAcceptable,residualNotAssessed],
+    [
+      residualAcceptable,
+      residualTolerable,
+      residualNotAcceptable,
+      residualNotAssessed
+    ],
     "Residual Risk Distribution"
   );
 
-  createBar("statusChart", ["Open","Closed"], [open,closed], "Open vs Closed Reports");
+  createBar(
+    "statusChart",
+    ["Open","Closed"],
+    [open,closed],
+    "Open vs Closed Reports"
+  );
 
-  createBar("monthChart", Object.keys(months), Object.values(months), "Reports by Month");
+  createBar(
+    "monthChart",
+    Object.keys(months),
+    Object.values(months),
+    "Reports by Month"
+  );
 
-  createBar("categoryChart", Object.keys(categories), Object.values(categories), "Reports by Category");
+  createBar(
+    "categoryChart",
+    Object.keys(categories),
+    Object.values(categories),
+    "Reports by Category"
+  );
 
-  createBar("fratChart", ["Total FRAT","High Risk","No Go"], [fratReports.length,fratHigh,fratNoGo], "FRAT Monitoring");
+  /* =========================
+     FRAT CUSTOM COLORS
+  ========================== */
+
+  destroyChart("fratChart");
+
+  charts["fratChart"] = new Chart(
+    document.getElementById("fratChart"),
+    {
+
+      type:"bar",
+
+      data:{
+        labels:[
+          "Total FRAT",
+          "High Risk",
+          "No Go"
+        ],
+
+        datasets:[{
+
+          label:"FRAT Monitoring",
+
+          data:[
+            fratReports.length,
+            fratHigh,
+            fratNoGo
+          ],
+
+          backgroundColor:[
+            "#0b2a66",
+            "#f1c40f",
+            "#e74c3c"
+          ],
+
+          borderRadius:10
+
+        }]
+      },
+
+      options:{
+
+        responsive:true,
+
+        plugins:{
+
+          legend:{display:false},
+
+          title:{
+            display:true,
+            text:"FRAT Monitoring"
+          }
+
+        },
+
+        scales:{
+          y:{
+            beginAtZero:true,
+            ticks:{precision:0}
+          }
+        }
+
+      }
+
+    }
+  );
+
 }
 
 function loadSMSReports(){
+
   const reportsRef = ref(db, "smsReports");
 
   onValue(reportsRef, snapshot => {
+
     const data = snapshot.val() || {};
+
     smsReports = Object.values(data);
+
     renderDashboard();
+
   });
+
 }
 
 function loadFRATReports(){
-  const paths = ["fratReports","FRATReports","frat","FRAT","fratData"];
+
+  const paths = [
+    "fratReports",
+    "FRATReports",
+    "frat",
+    "FRAT",
+    "fratData"
+  ];
+
   let all = [];
 
   paths.forEach(path => {
+
     const fratRef = ref(db, path);
 
     onValue(fratRef, snapshot => {
+
       const data = snapshot.val();
 
       if(data){
+
         Object.values(data).forEach(v => {
+
           if(v && typeof v === "object"){
             all.push(v);
           }
+
         });
+
       }
 
       fratReports = all;
+
       renderDashboard();
+
     });
+
   });
+
 }
 
 window.goBack = function(){
@@ -288,8 +521,10 @@ window.goBack = function(){
 }
 
 window.onload = function(){
+
   loadSMSReports();
   loadFRATReports();
+
 }
 
 </script>
@@ -305,7 +540,12 @@ window.onload = function(){
 body{
   font-family:Arial,sans-serif;
   min-height:100vh;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  background:linear-gradient(
+    135deg,
+    #071f47,
+    #0b2a66,
+    #1450b8
+  );
   padding:30px;
 }
 
@@ -342,29 +582,54 @@ h1{
 
 .cards{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  grid-template-columns:repeat(
+    auto-fit,
+    minmax(220px,1fr)
+  );
   gap:20px;
 }
 
 .card{
-  background:linear-gradient(135deg,#071f47,#0b2a66);
+  background:linear-gradient(
+    135deg,
+    #071f47,
+    #0b2a66
+  );
+
   color:white;
+
   border-radius:22px;
+
   padding:28px;
+
   text-align:center;
+
   box-shadow:0 10px 22px rgba(0,0,0,0.25);
 }
 
 .card.red{
-  background:linear-gradient(135deg,#c0392b,#e74c3c);
+  background:linear-gradient(
+    135deg,
+    #c0392b,
+    #e74c3c
+  );
 }
 
 .card.green{
-  background:linear-gradient(135deg,#138d75,#2ecc71);
+  background:linear-gradient(
+    135deg,
+    #138d75,
+    #2ecc71
+  );
 }
 
 .card.yellow{
-  background:linear-gradient(135deg,#b7950b,#f1c40f);
+  background:linear-gradient(
+    135deg,
+    #b7950b,
+    #f1c40f
+  );
+
   color:#071f47;
 }
 
@@ -404,15 +669,25 @@ canvas{
 }
 
 .back-btn{
+
   margin-top:35px;
+
   width:100%;
+
   padding:18px;
+
   border:none;
+
   border-radius:16px;
+
   background:#c0392b;
+
   color:white;
+
   font-size:20px;
+
   font-weight:bold;
+
   cursor:pointer;
 }
 
@@ -507,6 +782,8 @@ canvas{
 
   <div class="charts-columns">
 
+    <!-- LEFT -->
+
     <div class="charts-column">
 
       <div class="chart-box">
@@ -522,6 +799,8 @@ canvas{
       </div>
 
     </div>
+
+    <!-- RIGHT -->
 
     <div class="charts-column">
 
