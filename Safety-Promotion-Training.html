@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Safety Promotion Training</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  padding:30px;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  background:white;
+  border-radius:30px;
+  padding:45px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.35);
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  font-size:54px;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#555;
+  font-size:18px;
+  margin-bottom:35px;
+}
+
+.training-box{
+  background:#f4f6f8;
+  border-radius:24px;
+  padding:25px;
+  margin-bottom:25px;
+  box-shadow:0 8px 18px rgba(0,0,0,0.12);
+}
+
+.training-row{
+  display:grid;
+  grid-template-columns: 1fr 2fr auto;
+  gap:18px;
+  align-items:center;
+}
+
+.training-title{
+  color:#071f47;
+  font-size:24px;
+  font-weight:bold;
+  border-left:8px solid #071f47;
+  padding-left:12px;
+}
+
+.video-input{
+  width:100%;
+  padding:15px;
+  border:2px solid #cfd6e0;
+  border-radius:14px;
+  font-size:16px;
+}
+
+.save-btn{
+  background:#071f47;
+  color:white;
+  border:none;
+  padding:15px 22px;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.save-btn:hover{
+  background:#0b2a66;
+}
+
+.video-frame{
+  margin-top:20px;
+  display:none;
+}
+
+.video-frame iframe{
+  width:100%;
+  height:360px;
+  border:none;
+  border-radius:18px;
+  box-shadow:0 8px 18px rgba(0,0,0,0.18);
+}
+
+.back-btn{
+  margin-top:25px;
+  width:100%;
+  padding:18px;
+  border:none;
+  border-radius:16px;
+  background:#c0392b;
+  color:white;
+  font-size:20px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.back-btn:hover{
+  background:#922b21;
+}
+
+@media(max-width:800px){
+  h1{
+    font-size:38px;
+  }
+
+  .training-row{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Safety Promotion Training</h1>
+
+  <div class="subtitle">
+    Training videos for Safety Promotion and SMS awareness
+  </div>
+
+  <div class="training-box">
+    <div class="training-row">
+      <div class="training-title">Human Factors</div>
+      <input class="video-input" id="humanFactorsLink" type="text" placeholder="Paste video link here">
+      <button class="save-btn" onclick="loadVideo('humanFactorsLink','humanFactorsVideo')">Load Video</button>
+    </div>
+    <div class="video-frame" id="humanFactorsVideo"></div>
+  </div>
+
+  <div class="training-box">
+    <div class="training-row">
+      <div class="training-title">Introduction to SMS</div>
+      <input class="video-input" id="smsIntroLink" type="text" placeholder="Paste video link here">
+      <button class="save-btn" onclick="loadVideo('smsIntroLink','smsIntroVideo')">Load Video</button>
+    </div>
+    <div class="video-frame" id="smsIntroVideo"></div>
+  </div>
+
+  <div class="training-box">
+    <div class="training-row">
+      <div class="training-title">Safety Culture</div>
+      <input class="video-input" id="safetyCultureLink" type="text" placeholder="Paste video link here">
+      <button class="save-btn" onclick="loadVideo('safetyCultureLink','safetyCultureVideo')">Load Video</button>
+    </div>
+    <div class="video-frame" id="safetyCultureVideo"></div>
+  </div>
+
+  <button class="back-btn" onclick="goBack()">
+    Back to Safety Promotion
+  </button>
+
+</div>
+
+<script>
+function convertToEmbed(url){
+  if(url.includes("youtube.com/watch?v=")){
+    return url.replace("watch?v=","embed/");
+  }
+
+  if(url.includes("youtu.be/")){
+    const videoId = url.split("youtu.be/")[1].split("?")[0];
+    return "https://www.youtube.com/embed/" + videoId;
+  }
+
+  if(url.includes("drive.google.com")){
+    return url.replace("/view","/preview");
+  }
+
+  return url;
+}
+
+function loadVideo(inputId, frameId){
+  const link = document.getElementById(inputId).value.trim();
+  const frameBox = document.getElementById(frameId);
+
+  if(link === ""){
+    alert("Please paste a video link first.");
+    return;
+  }
+
+  const embedLink = convertToEmbed(link);
+
+  frameBox.innerHTML = `
+    <iframe src="${embedLink}" allowfullscreen></iframe>
+  `;
+
+  frameBox.style.display = "block";
+}
+
+function goBack(){
+  location.href = "Safety-Promotion.html";
+}
+</script>
+
+</body>
+</html>
