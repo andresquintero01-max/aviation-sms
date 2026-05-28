@@ -28,15 +28,40 @@ let charts = {};
 let smsReports = [];
 let fratReports = [];
 
-function setText(id,value){ document.getElementById(id).innerText = value; }
-function destroyChart(id){ if(charts[id]) charts[id].destroy(); }
+function setText(id,value){
+  document.getElementById(id).innerText = value;
+}
+
+function destroyChart(id){
+  if(charts[id]) charts[id].destroy();
+}
 
 function createBar(id, labels, values, title){
   destroyChart(id);
   charts[id] = new Chart(document.getElementById(id), {
     type:"bar",
-    data:{ labels, datasets:[{ label:title, data:values, backgroundColor:"#0b2a66", borderRadius:10 }] },
-    options:{ responsive:true, plugins:{ legend:{display:false}, title:{display:true,text:title} }, scales:{ y:{ beginAtZero:true, ticks:{precision:0} } } }
+    data:{
+      labels,
+      datasets:[{
+        label:title,
+        data:values,
+        backgroundColor:"#0b2a66",
+        borderRadius:10
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{display:false},
+        title:{display:true,text:title}
+      },
+      scales:{
+        y:{
+          beginAtZero:true,
+          ticks:{precision:0}
+        }
+      }
+    }
   });
 }
 
@@ -44,13 +69,33 @@ function createPie(id, labels, values, title){
   destroyChart(id);
   charts[id] = new Chart(document.getElementById(id), {
     type:"doughnut",
-    data:{ labels, datasets:[{ data:values, backgroundColor:["#2ecc71","#f1c40f","#e74c3c","#95a5a6"] }] },
-    options:{ responsive:true, plugins:{ title:{display:true,text:title} } }
+    data:{
+      labels,
+      datasets:[{
+        data:values,
+        backgroundColor:["#2ecc71","#f1c40f","#e74c3c","#95a5a6"]
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        title:{display:true,text:title},
+        legend:{position:"top"}
+      }
+    }
   });
 }
 
 function isReportClosed(r){
-  const status = (r.residualRiskStatus || r.residualStatus || r.residualRiskClosed || r.status || r.reportStatus || "").toString().toLowerCase();
+  const status = (
+    r.residualRiskStatus ||
+    r.residualStatus ||
+    r.residualRiskClosed ||
+    r.status ||
+    r.reportStatus ||
+    ""
+  ).toString().toLowerCase();
+
   return status.includes("closed") || status === "true" || status === "yes";
 }
 
@@ -64,10 +109,14 @@ function getResidualData(r){
 
   Object.keys(r).forEach(key => {
     const lowerKey = key.toLowerCase();
+
     if(lowerKey.includes("residual")){
       const fieldValue = r[key];
       text += " " + String(fieldValue).toLowerCase();
-      if(!isNaN(Number(fieldValue))) value = Number(fieldValue);
+
+      if(!isNaN(Number(fieldValue))){
+        value = Number(fieldValue);
+      }
     }
   });
 
@@ -77,10 +126,18 @@ function getResidualData(r){
 function renderDashboard(){
 
   let total = smsReports.length;
-  let open = 0, closed = 0;
+  let open = 0;
+  let closed = 0;
 
-  let acceptable = 0, tolerable = 0, notAcceptable = 0, notAssessed = 0;
-  let residualAcceptable = 0, residualTolerable = 0, residualNotAcceptable = 0, residualNotAssessed = 0;
+  let acceptable = 0;
+  let tolerable = 0;
+  let notAcceptable = 0;
+  let notAssessed = 0;
+
+  let residualAcceptable = 0;
+  let residualTolerable = 0;
+  let residualNotAcceptable = 0;
+  let residualNotAssessed = 0;
 
   let months = {};
   let categories = {};
@@ -92,27 +149,50 @@ function renderDashboard(){
     if(isReportClosed(r)) closed++;
     else open++;
 
-    const riskText = (r.riskLevel || r.riskAssessment || r.initialRiskLevel || r.riskCategory || "").toString().toLowerCase();
+    const riskText = (
+      r.riskLevel ||
+      r.riskAssessment ||
+      r.initialRiskLevel ||
+      r.riskCategory ||
+      ""
+    ).toString().toLowerCase();
 
     const riskValue = Number(
-      r.riskValue || r.riskScore || r.risk || r.initialRiskValue || r.initialRiskScore || r.initialRisk || 0
+      r.riskValue ||
+      r.riskScore ||
+      r.risk ||
+      r.initialRiskValue ||
+      r.initialRiskScore ||
+      r.initialRisk ||
+      0
     );
 
-    if(riskText.includes("not") || riskValue >= 15) notAcceptable++;
-    else if(riskText.includes("tolerable") || (riskValue >= 5 && riskValue <= 14)) tolerable++;
-    else if(riskText.includes("acceptable") || (riskValue >= 1 && riskValue <= 4)) acceptable++;
-    else notAssessed++;
+    if(riskText.includes("not") || riskValue >= 15){
+      notAcceptable++;
+    }else if(riskText.includes("tolerable") || (riskValue >= 5 && riskValue <= 14)){
+      tolerable++;
+    }else if(riskText.includes("acceptable") || (riskValue >= 1 && riskValue <= 4)){
+      acceptable++;
+    }else{
+      notAssessed++;
+    }
 
     const residualData = getResidualData(r);
     const residualText = residualData.text;
     const residualValue = residualData.value;
 
-    if(residualText.includes("not acceptable") || residualText.includes("red") || residualValue >= 15) residualNotAcceptable++;
-    else if(residualText.includes("tolerable") || residualText.includes("yellow") || (residualValue >= 5 && residualValue <= 14)) residualTolerable++;
-    else if(residualText.includes("acceptable") || residualText.includes("green") || (residualValue >= 1 && residualValue <= 4)) residualAcceptable++;
-    else residualNotAssessed++;
+    if(residualText.includes("not acceptable") || residualText.includes("red") || residualValue >= 15){
+      residualNotAcceptable++;
+    }else if(residualText.includes("tolerable") || residualText.includes("yellow") || (residualValue >= 5 && residualValue <= 14)){
+      residualTolerable++;
+    }else if(residualText.includes("acceptable") || residualText.includes("green") || (residualValue >= 1 && residualValue <= 4)){
+      residualAcceptable++;
+    }else{
+      residualNotAssessed++;
+    }
 
     const dateValue = getDate(r);
+
     if(dateValue){
       const month = dateValue.toString().substring(0,7);
       months[month] = (months[month] || 0) + 1;
@@ -127,8 +207,11 @@ function renderDashboard(){
     const value = Number(f.score || f.total || f.fratScore || f.fratValue || f.value || 0);
     const fratText = JSON.stringify(f).toLowerCase();
 
-    if(value >= 16 || fratText.includes("no go") || fratText.includes("nogo") || fratText.includes("red") || fratText.includes("rojo")) fratNoGo++;
-    else if(value >= 10 || fratText.includes("high") || fratText.includes("yellow") || fratText.includes("amarillo")) fratHigh++;
+    if(value >= 16 || fratText.includes("no go") || fratText.includes("nogo") || fratText.includes("red") || fratText.includes("rojo")){
+      fratNoGo++;
+    }else if(value >= 10 || fratText.includes("high") || fratText.includes("yellow") || fratText.includes("amarillo")){
+      fratHigh++;
+    }
   });
 
   const safetyScore = total === 0 ? 100 : Math.max(0, Math.round(100 - ((notAcceptable * 10) + (open * 2))));
@@ -143,11 +226,21 @@ function renderDashboard(){
   setText("fratHigh", fratHigh);
   setText("fratNoGo", fratNoGo);
 
+  createPie(
+    "riskChart",
+    ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
+    [acceptable,tolerable,notAcceptable,notAssessed],
+    "Risk Distribution"
+  );
+
+  createPie(
+    "residualRiskChart",
+    ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
+    [residualAcceptable,residualTolerable,residualNotAcceptable,residualNotAssessed],
+    "Residual Risk Distribution"
+  );
+
   createBar("statusChart", ["Open","Closed"], [open,closed], "Open vs Closed Reports");
-
-  createPie("riskChart", ["Acceptable","Tolerable","Not Acceptable","Not Assessed"], [acceptable,tolerable,notAcceptable,notAssessed], "Risk Distribution");
-
-  createPie("residualRiskChart", ["Acceptable","Tolerable","Not Acceptable","Not Assessed"], [residualAcceptable,residualTolerable,residualNotAcceptable,residualNotAssessed], "Residual Risk Distribution");
 
   createBar("monthChart", Object.keys(months), Object.values(months), "Reports by Month");
 
@@ -158,6 +251,7 @@ function renderDashboard(){
 
 function loadSMSReports(){
   const reportsRef = ref(db, "smsReports");
+
   onValue(reportsRef, snapshot => {
     const data = snapshot.val() || {};
     smsReports = Object.values(data);
@@ -171,13 +265,18 @@ function loadFRATReports(){
 
   paths.forEach(path => {
     const fratRef = ref(db, path);
+
     onValue(fratRef, snapshot => {
       const data = snapshot.val();
+
       if(data){
         Object.values(data).forEach(v => {
-          if(v && typeof v === "object") all.push(v);
+          if(v && typeof v === "object"){
+            all.push(v);
+          }
         });
       }
+
       fratReports = all;
       renderDashboard();
     });
@@ -278,11 +377,18 @@ h1{
   font-size:16px;
 }
 
-.charts{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
+.charts-columns{
+  display:flex;
   gap:28px;
   margin-top:25px;
+  align-items:flex-start;
+}
+
+.charts-column{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:28px;
 }
 
 .chart-box{
@@ -290,10 +396,6 @@ h1{
   border-radius:22px;
   padding:25px;
   box-shadow:0 8px 18px rgba(0,0,0,0.12);
-}
-
-.chart-wide{
-  grid-column:1 / -1;
 }
 
 canvas{
@@ -324,12 +426,8 @@ canvas{
     font-size:38px;
   }
 
-  .charts{
-    grid-template-columns:1fr;
-  }
-
-  .chart-wide{
-    grid-column:auto;
+  .charts-columns{
+    flex-direction:column;
   }
 
 }
@@ -407,30 +505,38 @@ canvas{
     Charts
   </div>
 
-  <div class="charts">
+  <div class="charts-columns">
 
-    <div class="chart-box chart-wide">
-      <canvas id="statusChart"></canvas>
+    <div class="charts-column">
+
+      <div class="chart-box">
+        <canvas id="riskChart"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <canvas id="statusChart"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <canvas id="monthChart"></canvas>
+      </div>
+
     </div>
 
-    <div class="chart-box">
-      <canvas id="riskChart"></canvas>
-    </div>
+    <div class="charts-column">
 
-    <div class="chart-box">
-      <canvas id="residualRiskChart"></canvas>
-    </div>
+      <div class="chart-box">
+        <canvas id="residualRiskChart"></canvas>
+      </div>
 
-    <div class="chart-box">
-      <canvas id="monthChart"></canvas>
-    </div>
+      <div class="chart-box">
+        <canvas id="categoryChart"></canvas>
+      </div>
 
-    <div class="chart-box">
-      <canvas id="categoryChart"></canvas>
-    </div>
+      <div class="chart-box">
+        <canvas id="fratChart"></canvas>
+      </div>
 
-    <div class="chart-box">
-      <canvas id="fratChart"></canvas>
     </div>
 
   </div>
