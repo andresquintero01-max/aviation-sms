@@ -3,10 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SMS Aviation System 371</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>371Q SMS Aviation System</title>
 
 <style>
 
@@ -20,7 +17,7 @@ body{
     font-family:Arial, sans-serif;
     min-height:100vh;
     background:
-    linear-gradient(rgba(5,20,55,0.82), rgba(5,20,55,0.88)),
+    linear-gradient(rgba(5,20,55,0.85), rgba(5,20,55,0.90)),
     url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
     background-size:cover;
     background-position:center;
@@ -35,12 +32,12 @@ body{
 
 .main-container{
     width:100%;
-    max-width:1050px;
+    max-width:1150px;
     background:rgba(255,255,255,0.96);
-    backdrop-filter:blur(8px);
-    border-radius:36px;
-    padding:55px;
-    box-shadow:0 25px 60px rgba(0,0,0,0.35);
+    backdrop-filter:blur(10px);
+    border-radius:38px;
+    padding:60px;
+    box-shadow:0 25px 65px rgba(0,0,0,0.40);
     position:relative;
     overflow:hidden;
     animation:fadeIn 0.8s ease;
@@ -51,56 +48,41 @@ body{
 .main-container::before{
     content:"";
     position:absolute;
-    width:450px;
-    height:450px;
-    background:radial-gradient(circle,rgba(32,119,255,0.18),transparent 70%);
-    top:-200px;
-    right:-160px;
+    width:500px;
+    height:500px;
+    background:radial-gradient(circle,rgba(32,119,255,0.20),transparent 70%);
+    top:-220px;
+    right:-180px;
 }
 
-/* LOGO */
+/* MAIN 371Q */
 
-.logo{
-    width:105px;
-    height:105px;
-    margin:auto;
-    margin-bottom:24px;
-    border-radius:50%;
-    background:linear-gradient(135deg,#0b2a66,#1976ff);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    box-shadow:0 10px 25px rgba(0,0,0,0.25);
-    color:white;
-    font-size:48px;
+.main-brand{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.brand-371q{
+    font-size:150px;
+    font-weight:900;
+    line-height:1;
+    letter-spacing:8px;
+    background:linear-gradient(135deg,#0b2a66,#1976ff,#64b5ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-shadow:0 12px 25px rgba(20,80,184,0.25);
+    animation:pulse371 2.5s infinite;
 }
 
 /* TITLE */
 
 h1{
     text-align:center;
-    font-size:72px;
+    font-size:58px;
     color:#071f47;
-    margin-bottom:18px;
+    margin-bottom:20px;
     font-weight:800;
-    letter-spacing:1px;
-    line-height:1.2;
-}
-
-/* 371 TITLE EFFECT */
-
-.sms371-title{
-    display:inline-block;
-    margin-left:12px;
-    padding:5px 20px;
-    border-radius:20px;
-    background:linear-gradient(135deg,#1450b8,#4da3ff);
-    color:white;
-    font-size:62px;
-    font-weight:900;
-    letter-spacing:5px;
-    box-shadow:0 10px 25px rgba(20,80,184,0.35);
-    animation:pulse371 2s infinite;
+    letter-spacing:2px;
 }
 
 /* SUBTITLE */
@@ -108,27 +90,19 @@ h1{
 .subtitle{
     text-align:center;
     color:#5d6b82;
-    font-size:21px;
-    margin-bottom:48px;
+    font-size:22px;
+    margin-bottom:50px;
     line-height:1.8;
-    max-width:850px;
+    max-width:920px;
     margin-left:auto;
     margin-right:auto;
 }
 
-/* SUBTITLE 371 */
+/* HIGHLIGHT */
 
-.sms371{
-    font-size:34px;
-    font-weight:900;
+.highlight{
     color:#1450b8;
-    padding:4px 14px;
-    border-radius:14px;
-    background:linear-gradient(135deg,#dbe9ff,#ffffff);
-    box-shadow:0 4px 12px rgba(20,80,184,0.25);
-    letter-spacing:2px;
-    display:inline-block;
-    margin:0 4px;
+    font-weight:900;
 }
 
 /* MENU */
@@ -136,7 +110,7 @@ h1{
 .menu{
     display:flex;
     flex-direction:column;
-    gap:24px;
+    gap:25px;
 }
 
 /* BUTTON CARD */
@@ -144,12 +118,12 @@ h1{
 .btn{
     text-decoration:none;
     background:white;
-    border-radius:30px;
-    padding:26px 30px;
+    border-radius:32px;
+    padding:28px 32px;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    box-shadow:0 10px 28px rgba(0,0,0,0.10);
+    box-shadow:0 12px 30px rgba(0,0,0,0.10);
     transition:0.35s;
     position:relative;
     overflow:hidden;
@@ -157,7 +131,7 @@ h1{
 
 .btn:hover{
     transform:translateY(-6px) scale(1.01);
-    box-shadow:0 18px 35px rgba(0,0,0,0.18);
+    box-shadow:0 20px 38px rgba(0,0,0,0.18);
 }
 
 /* LEFT COLOR LINE */
@@ -174,23 +148,23 @@ h1{
 /* BUTTON COLORS */
 
 .dashboard::before{
-    background:#1359d8;
+    background:#1976ff;
 }
 
 .policy::before{
-    background:#2368ff;
+    background:#2979ff;
 }
 
 .hazard::before{
-    background:#00a2d8;
+    background:#00b4d8;
 }
 
 .assurance::before{
-    background:#22b573;
+    background:#22c55e;
 }
 
 .promotion::before{
-    background:#6f52d9;
+    background:#8b5cf6;
 }
 
 /* LEFT SECTION */
@@ -198,80 +172,80 @@ h1{
 .btn-left{
     display:flex;
     align-items:center;
-    gap:22px;
+    gap:24px;
 }
 
 /* ICON */
 
 .icon{
-    width:88px;
-    height:88px;
+    width:90px;
+    height:90px;
     border-radius:50%;
     display:flex;
     justify-content:center;
     align-items:center;
     color:white;
-    font-size:38px;
-    box-shadow:0 8px 18px rgba(0,0,0,0.18);
+    font-size:40px;
+    box-shadow:0 10px 20px rgba(0,0,0,0.18);
 }
 
 /* ICON COLORS */
 
 .dashboard .icon{
-    background:linear-gradient(135deg,#0b2a66,#1359d8);
+    background:linear-gradient(135deg,#0b2a66,#1976ff);
 }
 
 .policy .icon{
-    background:linear-gradient(135deg,#1359d8,#2f80ff);
+    background:linear-gradient(135deg,#1450b8,#4da3ff);
 }
 
 .hazard .icon{
-    background:linear-gradient(135deg,#0096c7,#00b4d8);
+    background:linear-gradient(135deg,#0096c7,#00d4ff);
 }
 
 .assurance .icon{
-    background:linear-gradient(135deg,#1b9c5a,#37d487);
+    background:linear-gradient(135deg,#15803d,#4ade80);
 }
 
 .promotion .icon{
-    background:linear-gradient(135deg,#5c3fc9,#8c6eff);
+    background:linear-gradient(135deg,#5b35d5,#a78bfa);
 }
 
 /* TEXT */
 
 .text h2{
     color:#071f47;
-    font-size:38px;
-    margin-bottom:6px;
+    font-size:40px;
+    margin-bottom:8px;
 }
 
 .text p{
     color:#56657d;
     font-size:20px;
     line-height:1.5;
-    max-width:520px;
+    max-width:560px;
 }
 
 /* ARROW */
 
 .arrow{
-    font-size:52px;
+    font-size:58px;
     color:#0b2a66;
     transition:0.3s;
 }
 
 .btn:hover .arrow{
-    transform:translateX(8px);
+    transform:translateX(10px);
 }
 
 /* FOOTER */
 
 .footer{
-    margin-top:45px;
+    margin-top:48px;
     text-align:center;
     color:#4d5d77;
     font-size:15px;
-    letter-spacing:3px;
+    letter-spacing:4px;
     font-weight:bold;
 }
 
@@ -292,43 +266,36 @@ h1{
 
     0%{
         transform:scale(1);
-        box-shadow:0 10px 25px rgba(20,80,184,0.35);
     }
 
     50%{
-        transform:scale(1.08);
-        box-shadow:0 14px 32px rgba(20,80,184,0.55);
+        transform:scale(1.04);
     }
 
     100%{
         transform:scale(1);
-        box-shadow:0 10px 25px rgba(20,80,184,0.35);
     }
 
 }
 
 /* RESPONSIVE */
 
-@media(max-width:850px){
+@media(max-width:900px){
 
     .main-container{
         padding:35px 22px;
     }
 
-    h1{
-        font-size:46px;
+    .brand-371q{
+        font-size:90px;
     }
 
-    .sms371-title{
+    h1{
         font-size:40px;
     }
 
     .subtitle{
         font-size:17px;
-    }
-
-    .sms371{
-        font-size:26px;
     }
 
     .btn{
@@ -359,24 +326,29 @@ h1{
 
 <div class="main-container">
 
-    <!-- LOGO -->
-    <div class="logo">✈</div>
+    <!-- MAIN 371Q -->
+    <div class="main-brand">
+
+        <div class="brand-371q">
+            371Q
+        </div>
+
+    </div>
 
     <!-- TITLE -->
     <h1>
         SMS Aviation System
-        <span class="sms371-title">371</span>
     </h1>
 
     <!-- SUBTITLE -->
     <div class="subtitle">
 
-        SKY QUALITY has developed its advanced technological platform
-        <span class="sms371">SMS 371</span>,
-        an integrated Safety Management System designed to provide
-        real-time operational safety monitoring, hazard tracking,
-        risk analysis, performance indicators, and proactive safety
-        decision-making across the organization.
+        SKY QUALITY has developed
+        <span class="highlight">371Q</span>,
+        an advanced integrated Safety Management System platform
+        designed to provide real-time operational safety visibility,
+        hazard tracking, risk analysis, safety performance monitoring,
+        and proactive decision-making across the organization.
 
     </div>
 
@@ -502,7 +474,7 @@ h1{
 
     <!-- FOOTER -->
     <div class="footer">
-        AVIATION SAFETY MANAGEMENT PLATFORM
+        ONE SYSTEM • REAL-TIME SAFETY • TOTAL CONTROL
     </div>
 
 </div>
