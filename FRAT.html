@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flight Risk Assessment Tool (FRAT)</title>
 
 <style>
@@ -15,131 +16,291 @@
 body{
   font-family:Arial, sans-serif;
   min-height:100vh;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  background:
+  linear-gradient(rgba(5,20,55,0.82), rgba(5,20,55,0.88)),
+  url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:30px;
+  padding:35px;
 }
 
 /* MAIN CONTAINER */
+
 .container{
   width:100%;
-  max-width:650px;
-  background:#f4f4f4;
-  padding:50px;
-  border-radius:28px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.3);
-  text-align:center;
+  max-width:1100px;
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(8px);
+  padding:55px;
+  border-radius:35px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.35);
+  position:relative;
+  overflow:hidden;
+  animation:fadeIn 0.8s ease;
 }
 
-/* MAIN TITLE */
+/* LIGHT EFFECT */
+
+.container::before{
+  content:"";
+  position:absolute;
+  width:420px;
+  height:420px;
+  background:radial-gradient(circle,rgba(28,99,219,0.15),transparent 70%);
+  top:-180px;
+  right:-120px;
+}
+
+/* LOGO */
+
+.logo{
+  width:100px;
+  height:100px;
+  margin:auto;
+  border-radius:50%;
+  background:linear-gradient(135deg,#0b2a66,#1c63db);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:42px;
+  box-shadow:0 12px 25px rgba(0,0,0,0.25);
+  margin-bottom:22px;
+}
+
+/* TITLE */
+
 h1{
-  font-size:58px;
+  text-align:center;
   color:#071f47;
-  margin-bottom:18px;
-  font-weight:bold;
+  font-size:62px;
+  margin-bottom:12px;
+  font-weight:800;
+  line-height:1.2;
 }
 
 /* DESCRIPTION */
+
 .description{
-  font-size:18px;
-  color:#666;
-  margin-bottom:45px;
-}
-
-/* SECTION */
-.section{
-  margin-bottom:35px;
-}
-
-/* SUBTITLE */
-.subtitle{
-  font-size:24px;
-  color:#222;
-  font-weight:bold;
+  text-align:center;
+  color:#56657d;
+  font-size:21px;
   margin-bottom:18px;
+  line-height:1.6;
 }
 
-/* BUTTON LINKS */
-a.btn{
-  text-decoration:none;
+/* LINE */
+
+.title-line{
+  width:220px;
+  height:4px;
+  margin:0 auto 45px;
+  border-radius:10px;
+  background:linear-gradient(90deg,transparent,#1c63db,transparent);
 }
 
-/* MAIN BUTTONS */
-.main-btn{
-  width:100%;
-  max-width:420px;
-  background:linear-gradient(135deg,#071f47,#0b2a66);
+/* GRID */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:28px;
+}
+
+/* CARD */
+
+.card{
+  background:white;
+  border-radius:30px;
+  padding:30px;
+  box-shadow:0 12px 28px rgba(0,0,0,0.10);
+  position:relative;
+  overflow:hidden;
+  transition:0.35s;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-height:320px;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 18px 35px rgba(0,0,0,0.18);
+}
+
+/* LEFT BORDER */
+
+.card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:8px;
+  height:100%;
+}
+
+.card:nth-child(1)::before{
+  background:#1c63db;
+}
+
+.card:nth-child(2)::before{
+  background:#22b573;
+}
+
+/* ICON */
+
+.icon{
+  width:82px;
+  height:82px;
+  border-radius:50%;
   color:white;
-  border:none;
-  padding:22px;
-  border-radius:18px;
-  cursor:pointer;
-  font-size:20px;
-  font-weight:bold;
-  transition:0.3s;
-  box-shadow:0 10px 22px rgba(0,0,0,0.25);
-}
-
-.main-btn:hover{
-  transform:translateY(-5px) scale(1.02);
-  background:linear-gradient(135deg,#0b2a66,#1c63db);
-  box-shadow:0 15px 28px rgba(0,0,0,0.3);
-}
-
-/* SMALL TEXT */
-.small-text{
-  display:block;
-  font-size:14px;
-  margin-top:6px;
-  font-weight:normal;
-  opacity:0.9;
-}
-
-/* BUTTON CONTAINER */
-.bottom-buttons{
-  margin-top:30px;
   display:flex;
   justify-content:center;
-  gap:18px;
+  align-items:center;
+  font-size:36px;
+  box-shadow:0 10px 22px rgba(0,0,0,0.20);
+  margin-bottom:20px;
+}
+
+.card:nth-child(1) .icon{
+  background:linear-gradient(135deg,#0b2a66,#1c63db);
+}
+
+.card:nth-child(2) .icon{
+  background:linear-gradient(135deg,#168f58,#22b573);
+}
+
+/* TEXT */
+
+.card h2{
+  color:#071f47;
+  font-size:32px;
+  margin-bottom:14px;
+}
+
+.card p{
+  color:#56657d;
+  font-size:17px;
+  line-height:1.5;
+  margin-bottom:25px;
+}
+
+/* BUTTON */
+
+.card button{
+  width:100%;
+  padding:18px;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  color:white;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 10px 22px rgba(0,0,0,0.18);
+}
+
+.card button:hover{
+  transform:translateY(-3px);
+  background:linear-gradient(135deg,#0b2a66,#1c63db);
+}
+
+/* BUTTON AREA */
+
+.bottom-buttons{
+  margin-top:45px;
+  display:flex;
+  justify-content:center;
+  gap:20px;
   flex-wrap:wrap;
 }
 
 /* BACK BUTTON */
+
 .back-btn{
-  background:linear-gradient(135deg,#c40000,#ff2b2b);
+  background:linear-gradient(135deg,#d40000,#ff2b2b);
   color:white;
   text-decoration:none;
-  padding:15px 28px;
+  padding:18px 35px;
   border-radius:16px;
-  font-size:17px;
+  font-size:18px;
   font-weight:bold;
   transition:0.3s;
-  box-shadow:0 8px 18px rgba(0,0,0,0.2);
+  box-shadow:0 10px 22px rgba(0,0,0,0.20);
 }
 
 .back-btn:hover{
-  transform:translateY(-3px) scale(1.03);
-  background:linear-gradient(135deg,#ff2b2b,#ff5b5b);
+  transform:translateY(-4px);
+  background:linear-gradient(135deg,#ff2b2b,#ff4d4d);
 }
 
 /* HOME BUTTON */
+
 .home-btn{
   background:linear-gradient(135deg,#071f47,#1450b8);
   color:white;
   text-decoration:none;
-  padding:15px 28px;
+  padding:18px 35px;
   border-radius:16px;
-  font-size:17px;
+  font-size:18px;
   font-weight:bold;
   transition:0.3s;
-  box-shadow:0 8px 18px rgba(0,0,0,0.2);
+  box-shadow:0 10px 22px rgba(0,0,0,0.20);
 }
 
 .home-btn:hover{
-  transform:translateY(-3px) scale(1.03);
+  transform:translateY(-4px);
   background:linear-gradient(135deg,#1450b8,#2f7dff);
+}
+
+/* FOOTER */
+
+.footer{
+  margin-top:35px;
+  text-align:center;
+  color:#51617b;
+  font-size:14px;
+  letter-spacing:3px;
+  font-weight:bold;
+}
+
+/* ANIMATION */
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+
+@media(max-width:850px){
+
+  .container{
+    padding:35px 22px;
+  }
+
+  h1{
+    font-size:44px;
+  }
+
+  .description{
+    font-size:18px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
 }
 
 </style>
@@ -150,63 +311,91 @@ a.btn{
 
 <div class="container">
 
-  <!-- MAIN TITLE -->
-  <h1>Flight Risk Assessment Tool (FRAT)</h1>
+  <!-- LOGO -->
+  <div class="logo">✈</div>
+
+  <!-- TITLE -->
+  <h1>Flight Risk Assessment Tool</h1>
 
   <!-- DESCRIPTION -->
   <div class="description">
-    Flight operational risk assessment and management system
+    Flight operational risk assessment and aviation safety management system
   </div>
 
-  <!-- FRAT REPORT -->
-  <div class="section">
+  <div class="title-line"></div>
 
-    <div class="subtitle">
-      FRAT Report
+  <!-- GRID -->
+
+  <div class="grid">
+
+    <!-- FRAT REPORT -->
+
+    <div class="card">
+
+      <div>
+        <div class="icon">📝</div>
+
+        <h2>FRAT Report</h2>
+
+        <p>
+          Create, evaluate and manage operational
+          flight risk assessments including crew,
+          weather, aircraft and mission factors.
+        </p>
+      </div>
+
+      <button onclick="location.href='FRAT-Report.html'">
+        Open FRAT Report ›
+      </button>
+
     </div>
 
-    <a class="btn" href="FRAT-Report.html">
-      <button class="main-btn">
-        Open FRAT Report
-        <span class="small-text">
-          Create and manage FRAT assessments
-        </span>
+    <!-- FRAT DATABASE -->
+
+    <div class="card">
+
+      <div>
+        <div class="icon">🗂</div>
+
+        <h2>FRAT Database</h2>
+
+        <p>
+          Review, monitor and track completed
+          FRAT assessments, risk levels,
+          trends and operational exposure.
+        </p>
+      </div>
+
+      <button onclick="location.href='FRAT-Database.html'">
+        Open FRAT Database ›
       </button>
-    </a>
 
-  </div>
-
-  <!-- FRAT DATABASE -->
-  <div class="section">
-
-    <div class="subtitle">
-      FRAT Database
     </div>
-
-    <a class="btn" href="FRAT-Database.html">
-      <button class="main-btn">
-        Open FRAT Database
-        <span class="small-text">
-          Review and track FRAT reports
-        </span>
-      </button>
-    </a>
 
   </div>
 
   <!-- BOTTOM BUTTONS -->
+
   <div class="bottom-buttons">
 
     <!-- BACK BUTTON -->
+
     <a class="back-btn" href="Risk-Management-Tools.html">
-      Back to Risk Management Tools
+      ← Back to Risk Management Tools
     </a>
 
     <!-- HOME BUTTON -->
+
     <a class="home-btn" href="index.html">
       Home
     </a>
 
+  </div>
+
+  <!-- FOOTER -->
+
+  <div class="footer">
+    AVIATION SAFETY MANAGEMENT PLATFORM
   </div>
 
 </div>
