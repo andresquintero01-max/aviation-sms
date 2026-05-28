@@ -2,94 +2,296 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SMS Aviation System</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <style>
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 body{
-  font-family:Arial, sans-serif;
-  min-height:100vh;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:30px;
+    font-family:Arial, sans-serif;
+    min-height:100vh;
+    background:
+    linear-gradient(rgba(5,20,55,0.82), rgba(5,20,55,0.88)),
+    url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:35px;
+    overflow-x:hidden;
 }
 
-/* MAIN CARD */
+/* MAIN CONTAINER */
+
 .main-container{
-  width:100%;
-  max-width:650px;
-  background:white;
-  border-radius:28px;
-  padding:45px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.3);
-  text-align:center;
+    width:100%;
+    max-width:900px;
+    background:rgba(255,255,255,0.96);
+    backdrop-filter:blur(8px);
+    border-radius:36px;
+    padding:50px;
+    box-shadow:0 25px 60px rgba(0,0,0,0.35);
+    position:relative;
+    overflow:hidden;
+}
+
+/* TOP LIGHT EFFECT */
+
+.main-container::before{
+    content:"";
+    position:absolute;
+    width:400px;
+    height:400px;
+    background:radial-gradient(circle,rgba(32,119,255,0.18),transparent 70%);
+    top:-180px;
+    right:-150px;
+}
+
+/* LOGO */
+
+.logo{
+    width:95px;
+    height:95px;
+    margin:auto;
+    margin-bottom:20px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#0b2a66,#1976ff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+    color:white;
+    font-size:42px;
 }
 
 /* TITLE */
+
 h1{
-  font-size:48px;
-  color:#071f47;
-  margin-bottom:15px;
+    text-align:center;
+    font-size:64px;
+    color:#071f47;
+    margin-bottom:12px;
+    font-weight:800;
+    letter-spacing:1px;
 }
 
 /* SUBTITLE */
+
 .subtitle{
-  font-size:18px;
-  color:#555;
-  margin-bottom:40px;
+    text-align:center;
+    color:#5d6b82;
+    font-size:22px;
+    margin-bottom:45px;
+    position:relative;
+}
+
+.subtitle::before,
+.subtitle::after{
+    content:"";
+    width:80px;
+    height:2px;
+    background:#d2dbea;
+    position:absolute;
+    top:50%;
+}
+
+.subtitle::before{
+    left:120px;
+}
+
+.subtitle::after{
+    right:120px;
 }
 
 /* MENU */
+
 .menu{
-  display:flex;
-  flex-direction:column;
-  gap:20px;
+    display:flex;
+    flex-direction:column;
+    gap:24px;
 }
 
-/* BUTTONS */
+/* BUTTON CARD */
+
 .btn{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#071f47,#0b2a66);
-  color:white;
-  text-decoration:none;
-  padding:22px;
-  border-radius:18px;
-  font-size:22px;
-  font-weight:bold;
-  transition:0.3s;
-  box-shadow:0 10px 22px rgba(0,0,0,0.2);
+    text-decoration:none;
+    background:white;
+    border-radius:28px;
+    padding:24px 30px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow:0 10px 28px rgba(0,0,0,0.10);
+    transition:0.35s;
+    position:relative;
+    overflow:hidden;
 }
 
 .btn:hover{
-  transform:translateY(-5px) scale(1.02);
-  background:linear-gradient(135deg,#0b2a66,#1c63db);
-  box-shadow:0 15px 28px rgba(0,0,0,0.3);
+    transform:translateY(-6px) scale(1.01);
+    box-shadow:0 18px 35px rgba(0,0,0,0.18);
 }
 
-/* BUTTON DESCRIPTION */
-.btn span{
-  font-size:15px;
-  font-weight:normal;
-  display:block;
-  margin-top:5px;
-  opacity:0.9;
+/* LEFT COLOR LINE */
+
+.btn::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    width:8px;
+    height:100%;
+}
+
+/* BUTTON COLORS */
+
+.dashboard::before{
+    background:#1359d8;
+}
+
+.policy::before{
+    background:#2368ff;
+}
+
+.hazard::before{
+    background:#00a2d8;
+}
+
+.assurance::before{
+    background:#22b573;
+}
+
+.promotion::before{
+    background:#6f52d9;
+}
+
+/* LEFT SECTION */
+
+.btn-left{
+    display:flex;
+    align-items:center;
+    gap:22px;
+}
+
+/* ICON CIRCLE */
+
+.icon{
+    width:88px;
+    height:88px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-size:38px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.18);
+}
+
+/* ICON COLORS */
+
+.dashboard .icon{
+    background:linear-gradient(135deg,#0b2a66,#1359d8);
+}
+
+.policy .icon{
+    background:linear-gradient(135deg,#1359d8,#2f80ff);
+}
+
+.hazard .icon{
+    background:linear-gradient(135deg,#0096c7,#00b4d8);
+}
+
+.assurance .icon{
+    background:linear-gradient(135deg,#1b9c5a,#37d487);
+}
+
+.promotion .icon{
+    background:linear-gradient(135deg,#5c3fc9,#8c6eff);
+}
+
+/* TEXTS */
+
+.text h2{
+    color:#071f47;
+    font-size:38px;
+    margin-bottom:6px;
+}
+
+.text p{
+    color:#56657d;
+    font-size:20px;
+    line-height:1.5;
+    max-width:500px;
+}
+
+/* ARROW */
+
+.arrow{
+    font-size:48px;
+    color:#0b2a66;
+    transition:0.3s;
+}
+
+.btn:hover .arrow{
+    transform:translateX(8px);
 }
 
 /* FOOTER */
+
 .footer{
-  margin-top:35px;
-  color:#777;
-  font-size:14px;
+    margin-top:45px;
+    text-align:center;
+    color:#4d5d77;
+    font-size:16px;
+    letter-spacing:2px;
+    font-weight:bold;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:850px){
+
+    h1{
+        font-size:46px;
+    }
+
+    .subtitle{
+        font-size:18px;
+    }
+
+    .subtitle::before,
+    .subtitle::after{
+        display:none;
+    }
+
+    .btn{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+    }
+
+    .arrow{
+        align-self:flex-end;
+    }
+
+    .text h2{
+        font-size:30px;
+    }
+
+    .text p{
+        font-size:17px;
+    }
+
 }
 
 </style>
@@ -100,63 +302,151 @@ h1{
 
 <div class="main-container">
 
-  <!-- TITLE -->
-  <h1>SMS Aviation System</h1>
+    <!-- LOGO -->
+    <div class="logo">✈</div>
 
-  <!-- SUBTITLE -->
-  <div class="subtitle">
-    Safety Management System Portal
-  </div>
+    <!-- TITLE -->
+    <h1>SMS Aviation System</h1>
 
-  <!-- MENU -->
-  <div class="menu">
+    <!-- SUBTITLE -->
+    <div class="subtitle">
+        Safety Management System Portal
+    </div>
 
-    <!-- DASHBOARD -->
-    <a class="btn" href="Dashboard.html">
-      <div>
-        Dashboard
-        <span>General overview of SMS reports, indicators and system status</span>
-      </div>
-    </a>
+    <!-- MENU -->
+    <div class="menu">
 
-    <!-- SMS POLICY -->
-    <a class="btn" href="SMS-Policy.html">
-      <div>
-        SMS Policy
-        <span>Policies, manuals, objectives and emergency plans</span>
-      </div>
-    </a>
+        <!-- DASHBOARD -->
+        <a class="btn dashboard" href="Dashboard.html">
 
-    <!-- HAZARD IDENTIFICATION -->
-    <a class="btn" href="Hazard-Identification.html">
-      <div>
-        Hazard Identification
-        <span>Hazard reporting and risk identification system</span>
-      </div>
-    </a>
+            <div class="btn-left">
 
-    <!-- SAFETY ASSURANCE -->
-    <a class="btn" href="Safety-Assurance.html">
-      <div>
-        Safety Assurance
-        <span>Audits, inspections and safety performance monitoring</span>
-      </div>
-    </a>
+                <div class="icon">
+                    📊
+                </div>
 
-    <!-- SAFETY PROMOTION -->
-    <a class="btn" href="Safety-Promotion.html">
-      <div>
-        Safety Promotion
-        <span>Training, communication and safety culture</span>
-      </div>
-    </a>
+                <div class="text">
+                    <h2>Dashboard</h2>
+                    <p>
+                        General overview of SMS reports,
+                        indicators and system status
+                    </p>
+                </div>
 
-  </div>
+            </div>
 
-  <!-- FOOTER -->
-  <div class="footer">
-    Aviation Safety Management Platform
-  </div>
+            <div class="arrow">
+                ›
+            </div>
+
+        </a>
+
+        <!-- SMS POLICY -->
+        <a class="btn policy" href="SMS-Policy.html">
+
+            <div class="btn-left">
+
+                <div class="icon">
+                    📄
+                </div>
+
+                <div class="text">
+                    <h2>SMS Policy</h2>
+                    <p>
+                        Policies, manuals, objectives
+                        and emergency plans
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                ›
+            </div>
+
+        </a>
+
+        <!-- HAZARD IDENTIFICATION -->
+        <a class="btn hazard" href="Hazard-Identification.html">
+
+            <div class="btn-left">
+
+                <div class="icon">
+                    ⚠
+                </div>
+
+                <div class="text">
+                    <h2>Hazard Identification</h2>
+                    <p>
+                        Hazard reporting and risk
+                        identification system
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                ›
+            </div>
+
+        </a>
+
+        <!-- SAFETY ASSURANCE -->
+        <a class="btn assurance" href="Safety-Assurance.html">
+
+            <div class="btn-left">
+
+                <div class="icon">
+                    ✔
+                </div>
+
+                <div class="text">
+                    <h2>Safety Assurance</h2>
+                    <p>
+                        Audits, inspections and safety
+                        performance monitoring
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                ›
+            </div>
+
+        </a>
+
+        <!-- SAFETY PROMOTION -->
+        <a class="btn promotion" href="Safety-Promotion.html">
+
+            <div class="btn-left">
+
+                <div class="icon">
+                    👥
+                </div>
+
+                <div class="text">
+                    <h2>Safety Promotion</h2>
+                    <p>
+                        Training, communication
+                        and safety culture
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="arrow">
+                ›
+            </div>
+
+        </a>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        AVIATION SAFETY MANAGEMENT PLATFORM
+    </div>
 
 </div>
 
