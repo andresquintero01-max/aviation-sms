@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+
 *{
   margin:0;
   padding:0;
@@ -15,99 +16,292 @@
 body{
   font-family:Arial, sans-serif;
   min-height:100vh;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  background:
+  linear-gradient(rgba(5,20,55,0.82), rgba(5,20,55,0.88)),
+  url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
   padding:35px;
 }
 
+/* MAIN CONTAINER */
+
 .container{
-  max-width:1200px;
+  max-width:1250px;
   margin:auto;
-  background:white;
-  border-radius:30px;
-  padding:45px;
-  box-shadow:0 20px 55px rgba(0,0,0,0.35);
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(8px);
+  border-radius:35px;
+  padding:55px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.35);
+  position:relative;
+  overflow:hidden;
+  animation:fadeIn 0.8s ease;
 }
+
+.container::before{
+  content:"";
+  position:absolute;
+  width:420px;
+  height:420px;
+  background:radial-gradient(circle,rgba(111,82,217,0.16),transparent 70%);
+  top:-180px;
+  right:-120px;
+}
+
+/* LOGO */
+
+.logo{
+  width:100px;
+  height:100px;
+  margin:auto;
+  border-radius:50%;
+  background:linear-gradient(135deg,#5b35d5,#8b5cf6);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:44px;
+  box-shadow:0 12px 25px rgba(0,0,0,0.25);
+  margin-bottom:22px;
+}
+
+/* TITLE */
 
 h1{
   text-align:center;
   color:#071f47;
-  font-size:52px;
-  margin-bottom:10px;
+  font-size:64px;
+  margin-bottom:12px;
+  font-weight:800;
 }
+
+/* SUBTITLE */
 
 .subtitle{
   text-align:center;
-  color:#555;
-  font-size:18px;
-  margin-bottom:40px;
+  color:#56657d;
+  font-size:21px;
+  margin-bottom:18px;
 }
+
+/* LINE */
+
+.title-line{
+  width:220px;
+  height:4px;
+  margin:0 auto 45px;
+  border-radius:10px;
+  background:linear-gradient(90deg,transparent,#8b5cf6,transparent);
+}
+
+/* GRID */
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:25px;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:28px;
 }
 
+/* CARD */
+
 .card{
-  background:#f4f6f8;
-  border-radius:24px;
-  padding:28px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.15);
-  border-left:8px solid #1450b8;
-  transition:0.3s;
+  background:white;
+  border-radius:30px;
+  padding:30px;
+  box-shadow:0 12px 28px rgba(0,0,0,0.10);
+  position:relative;
+  overflow:hidden;
+  transition:0.35s;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-height:330px;
 }
 
 .card:hover{
   transform:translateY(-6px);
-  box-shadow:0 14px 28px rgba(0,0,0,0.25);
+  box-shadow:0 18px 35px rgba(0,0,0,0.18);
 }
+
+/* LEFT BORDER */
+
+.card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:8px;
+  height:100%;
+}
+
+.card:nth-child(1)::before{
+  background:#1c63db;
+}
+
+.card:nth-child(2)::before{
+  background:#22b573;
+}
+
+.card:nth-child(3)::before{
+  background:#ff9800;
+}
+
+.card:nth-child(4)::before{
+  background:#8b5cf6;
+}
+
+.card:nth-child(5)::before{
+  background:#00a2d8;
+}
+
+.card:nth-child(6)::before{
+  background:#d946ef;
+}
+
+/* ICON */
+
+.icon{
+  width:82px;
+  height:82px;
+  border-radius:50%;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:36px;
+  box-shadow:0 10px 22px rgba(0,0,0,0.20);
+  margin-bottom:20px;
+}
+
+.card:nth-child(1) .icon{
+  background:linear-gradient(135deg,#0b2a66,#1c63db);
+}
+
+.card:nth-child(2) .icon{
+  background:linear-gradient(135deg,#168f58,#22b573);
+}
+
+.card:nth-child(3) .icon{
+  background:linear-gradient(135deg,#ff7b00,#ffb347);
+}
+
+.card:nth-child(4) .icon{
+  background:linear-gradient(135deg,#5b35d5,#8b5cf6);
+}
+
+.card:nth-child(5) .icon{
+  background:linear-gradient(135deg,#0077b6,#00b4d8);
+}
+
+.card:nth-child(6) .icon{
+  background:linear-gradient(135deg,#a21caf,#e879f9);
+}
+
+/* TEXT */
 
 .card h2{
   color:#071f47;
-  font-size:24px;
-  margin-bottom:15px;
+  font-size:29px;
+  margin-bottom:14px;
 }
 
 .card p{
-  color:#444;
-  font-size:16px;
+  color:#56657d;
+  font-size:17px;
   line-height:1.5;
-  margin-bottom:18px;
+  margin-bottom:25px;
 }
+
+/* BUTTON */
 
 .card button{
   width:100%;
-  padding:14px;
+  padding:18px;
   border:none;
-  border-radius:14px;
-  background:linear-gradient(135deg,#071f47,#1450b8);
+  border-radius:18px;
+  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
   color:white;
-  font-size:16px;
+  font-size:18px;
   font-weight:bold;
   cursor:pointer;
   transition:0.3s;
+  box-shadow:0 10px 22px rgba(0,0,0,0.18);
 }
 
 .card button:hover{
-  background:linear-gradient(135deg,#1450b8,#071f47);
+  transform:translateY(-3px);
+  background:linear-gradient(135deg,#0b2a66,#1c63db);
 }
+
+/* BACK BUTTON */
 
 .back{
   display:block;
-  margin:40px auto 0;
-  padding:14px 36px;
+  margin:45px auto 0;
+  padding:18px 45px;
   border:none;
-  border-radius:14px;
-  background:#d71920;
+  border-radius:16px;
+  background:linear-gradient(135deg,#d40000,#ff2b2b);
   color:white;
-  font-size:16px;
+  font-size:22px;
   font-weight:bold;
   cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 10px 22px rgba(0,0,0,0.25);
 }
 
 .back:hover{
-  background:#a50f15;
+  transform:translateY(-4px);
+  background:linear-gradient(135deg,#ff2b2b,#ff4d4d);
 }
+
+/* FOOTER */
+
+.footer{
+  margin-top:35px;
+  text-align:center;
+  color:#51617b;
+  font-size:14px;
+  letter-spacing:3px;
+  font-weight:bold;
+}
+
+/* ANIMATION */
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+
+@media(max-width:800px){
+
+  .container{
+    padding:35px 22px;
+  }
+
+  h1{
+    font-size:44px;
+  }
+
+  .subtitle{
+    font-size:18px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
 </style>
 </head>
 
@@ -115,50 +309,102 @@ h1{
 
 <div class="container">
 
+  <!-- LOGO -->
+  <div class="logo">👥</div>
+
+  <!-- TITLE -->
   <h1>Safety Promotion Culture</h1>
-  <p class="subtitle">Safety communication, awareness, learning, and operational culture modules</p>
+
+  <!-- SUBTITLE -->
+  <p class="subtitle">
+    Safety communication, awareness, learning, and operational culture modules
+  </p>
+
+  <div class="title-line"></div>
 
   <div class="grid">
 
     <div class="card">
-      <h2>Safety Bulletins and Alerts</h2>
-      <p>Publish operational safety alerts, immediate warnings, recent events, aircraft damage notifications, FOD alerts, LOTO alerts, and important SMS communications.</p>
-      <button onclick="location.href='Safety-Bulletins-Alerts.html'">Open Module</button>
+      <div>
+        <div class="icon">📢</div>
+        <h2>Safety Bulletins and Alerts</h2>
+        <p>
+          Publish operational safety alerts, immediate warnings, recent events,
+          aircraft damage notifications, FOD alerts, LOTO alerts, and important SMS communications.
+        </p>
+      </div>
+      <button onclick="location.href='Safety-Bulletins-Alerts.html'">Open Module ›</button>
     </div>
 
     <div class="card">
-      <h2>Lessons Learned</h2>
-      <p>Document lessons learned from SMS reports, investigations, root cause analysis, corrective actions, and operational events to prevent recurrence.</p>
-      <button onclick="location.href='Lessons-Learned.html'">Open Module</button>
+      <div>
+        <div class="icon">💡</div>
+        <h2>Lessons Learned</h2>
+        <p>
+          Document lessons learned from SMS reports, investigations,
+          root cause analysis, corrective actions, and operational events to prevent recurrence.
+        </p>
+      </div>
+      <button onclick="location.href='Lessons-Learned.html'">Open Module ›</button>
     </div>
 
     <div class="card">
-      <h2>Safety Campaigns</h2>
-      <p>Create and manage safety campaigns such as FOD prevention, ramp safety, LOTO awareness, tool control, towing safety, and PPE compliance.</p>
-      <button onclick="location.href='Safety-Campaigns.html'">Open Module</button>
+      <div>
+        <div class="icon">🎯</div>
+        <h2>Safety Campaigns</h2>
+        <p>
+          Create and manage safety campaigns such as FOD prevention,
+          ramp safety, LOTO awareness, tool control, towing safety, and PPE compliance.
+        </p>
+      </div>
+      <button onclick="location.href='Safety-Campaigns.html'">Open Module ›</button>
     </div>
 
     <div class="card">
-      <h2>Safety Meetings</h2>
-      <p>Register toolbox talks, safety meetings, attendance records, discussed topics, follow-up actions, and meeting minutes.</p>
-      <button onclick="location.href='Safety-Meetings.html'">Open Module</button>
+      <div>
+        <div class="icon">🗓</div>
+        <h2>Safety Meetings</h2>
+        <p>
+          Register toolbox talks, safety meetings, attendance records,
+          discussed topics, follow-up actions, and meeting minutes.
+        </p>
+      </div>
+      <button onclick="location.href='Safety-Meetings.html'">Open Module ›</button>
     </div>
 
     <div class="card">
-      <h2>Safety Newsletter</h2>
-      <p>Create monthly safety newsletters with KPIs, SPIs, FRAT trends, risk distribution, aircraft damages, recurrent events, and safety highlights.</p>
-      <button onclick="location.href='Safety-Newsletter.html'">Open Module</button>
+      <div>
+        <div class="icon">📰</div>
+        <h2>Safety Newsletter</h2>
+        <p>
+          Create monthly safety newsletters with KPIs, SPIs, FRAT trends,
+          risk distribution, aircraft damages, recurrent events, and safety highlights.
+        </p>
+      </div>
+      <button onclick="location.href='Safety-Newsletter.html'">Open Module ›</button>
     </div>
 
     <div class="card">
-      <h2>Employee Recognition</h2>
-      <p>Recognize employees for proactive safety reporting, hazard identification, prevention actions, operational discipline, and positive safety behavior.</p>
-      <button onclick="location.href='Employee-Recognition.html'">Open Module</button>
+      <div>
+        <div class="icon">🏆</div>
+        <h2>Employee Recognition</h2>
+        <p>
+          Recognize employees for proactive safety reporting,
+          hazard identification, prevention actions, operational discipline, and positive safety behavior.
+        </p>
+      </div>
+      <button onclick="location.href='Employee-Recognition.html'">Open Module ›</button>
     </div>
 
   </div>
 
-  <button class="back" onclick="location.href='Safety-Promotion.html'">Back</button>
+  <button class="back" onclick="location.href='Safety-Promotion.html'">
+    ← Back
+  </button>
+
+  <div class="footer">
+    AVIATION SAFETY MANAGEMENT PLATFORM
+  </div>
 
 </div>
 
