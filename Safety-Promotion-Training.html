@@ -4,6 +4,116 @@
 <meta charset="UTF-8">
 <title>Safety Promotion Training</title>
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, set, remove, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+function convertToEmbed(url){
+  if(url.includes("youtube.com/watch?v=")){
+    return url.replace("watch?v=","embed/");
+  }
+
+  if(url.includes("youtu.be/")){
+    const videoId = url.split("youtu.be/")[1].split("?")[0];
+    return "https://www.youtube.com/embed/" + videoId;
+  }
+
+  if(url.includes("drive.google.com")){
+    return url.replace("/view","/preview");
+  }
+
+  return url;
+}
+
+function showVideo(frameId, link){
+  const frameBox = document.getElementById(frameId);
+
+  if(!link){
+    frameBox.innerHTML = "";
+    frameBox.style.display = "none";
+    return;
+  }
+
+  const embedLink = convertToEmbed(link);
+
+  frameBox.innerHTML = `
+    <iframe src="${embedLink}" allowfullscreen></iframe>
+  `;
+
+  frameBox.style.display = "block";
+}
+
+window.saveVideo = function(key, inputId, frameId){
+  const link = document.getElementById(inputId).value.trim();
+
+  if(link === ""){
+    alert("Please paste a video link first.");
+    return;
+  }
+
+  set(ref(db, "safetyPromotionTraining/" + key), {
+    videoLink: link,
+    savedAt: new Date().toISOString()
+  });
+
+  showVideo(frameId, link);
+  alert("Video saved successfully.");
+}
+
+window.deleteVideo = function(key, inputId, frameId){
+  remove(ref(db, "safetyPromotionTraining/" + key));
+
+  document.getElementById(inputId).value = "";
+  showVideo(frameId, "");
+
+  alert("Video deleted successfully.");
+}
+
+function loadSavedVideos(){
+  const trainingRef = ref(db, "safetyPromotionTraining");
+
+  onValue(trainingRef, snapshot => {
+    const data = snapshot.val() || {};
+
+    if(data.humanFactors && data.humanFactors.videoLink){
+      document.getElementById("humanFactorsLink").value = data.humanFactors.videoLink;
+      showVideo("humanFactorsVideo", data.humanFactors.videoLink);
+    }
+
+    if(data.introductionSMS && data.introductionSMS.videoLink){
+      document.getElementById("smsIntroLink").value = data.introductionSMS.videoLink;
+      showVideo("smsIntroVideo", data.introductionSMS.videoLink);
+    }
+
+    if(data.safetyCulture && data.safetyCulture.videoLink){
+      document.getElementById("safetyCultureLink").value = data.safetyCulture.videoLink;
+      showVideo("safetyCultureVideo", data.safetyCulture.videoLink);
+    }
+  });
+}
+
+window.goBack = function(){
+  location.href = "Safety-Promotion.html";
+}
+
+window.onload = function(){
+  loadSavedVideos();
+}
+</script>
+
 <style>
 *{
   margin:0;
@@ -51,7 +161,7 @@ h1{
 
 .training-row{
   display:grid;
-  grid-template-columns: 1fr 2fr auto;
+  grid-template-columns:1fr 2fr auto auto;
   gap:18px;
   align-items:center;
 }
@@ -85,6 +195,21 @@ h1{
 
 .save-btn:hover{
   background:#0b2a66;
+}
+
+.delete-btn{
+  background:#c0392b;
+  color:white;
+  border:none;
+  padding:15px 22px;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.delete-btn:hover{
+  background:#922b21;
 }
 
 .video-frame{
@@ -143,7 +268,8 @@ h1{
     <div class="training-row">
       <div class="training-title">Human Factors</div>
       <input class="video-input" id="humanFactorsLink" type="text" placeholder="Paste video link here">
-      <button class="save-btn" onclick="loadVideo('humanFactorsLink','humanFactorsVideo')">Load Video</button>
+      <button class="save-btn" onclick="saveVideo('humanFactors','humanFactorsLink','humanFactorsVideo')">Save</button>
+      <button class="delete-btn" onclick="deleteVideo('humanFactors','humanFactorsLink','humanFactorsVideo')">Delete</button>
     </div>
     <div class="video-frame" id="humanFactorsVideo"></div>
   </div>
@@ -152,7 +278,8 @@ h1{
     <div class="training-row">
       <div class="training-title">Introduction to SMS</div>
       <input class="video-input" id="smsIntroLink" type="text" placeholder="Paste video link here">
-      <button class="save-btn" onclick="loadVideo('smsIntroLink','smsIntroVideo')">Load Video</button>
+      <button class="save-btn" onclick="saveVideo('introductionSMS','smsIntroLink','smsIntroVideo')">Save</button>
+      <button class="delete-btn" onclick="deleteVideo('introductionSMS','smsIntroLink','smsIntroVideo')">Delete</button>
     </div>
     <div class="video-frame" id="smsIntroVideo"></div>
   </div>
@@ -161,7 +288,8 @@ h1{
     <div class="training-row">
       <div class="training-title">Safety Culture</div>
       <input class="video-input" id="safetyCultureLink" type="text" placeholder="Paste video link here">
-      <button class="save-btn" onclick="loadVideo('safetyCultureLink','safetyCultureVideo')">Load Video</button>
+      <button class="save-btn" onclick="saveVideo('safetyCulture','safetyCultureLink','safetyCultureVideo')">Save</button>
+      <button class="delete-btn" onclick="deleteVideo('safetyCulture','safetyCultureLink','safetyCultureVideo')">Delete</button>
     </div>
     <div class="video-frame" id="safetyCultureVideo"></div>
   </div>
@@ -171,47 +299,6 @@ h1{
   </button>
 
 </div>
-
-<script>
-function convertToEmbed(url){
-  if(url.includes("youtube.com/watch?v=")){
-    return url.replace("watch?v=","embed/");
-  }
-
-  if(url.includes("youtu.be/")){
-    const videoId = url.split("youtu.be/")[1].split("?")[0];
-    return "https://www.youtube.com/embed/" + videoId;
-  }
-
-  if(url.includes("drive.google.com")){
-    return url.replace("/view","/preview");
-  }
-
-  return url;
-}
-
-function loadVideo(inputId, frameId){
-  const link = document.getElementById(inputId).value.trim();
-  const frameBox = document.getElementById(frameId);
-
-  if(link === ""){
-    alert("Please paste a video link first.");
-    return;
-  }
-
-  const embedLink = convertToEmbed(link);
-
-  frameBox.innerHTML = `
-    <iframe src="${embedLink}" allowfullscreen></iframe>
-  `;
-
-  frameBox.style.display = "block";
-}
-
-function goBack(){
-  location.href = "Safety-Promotion.html";
-}
-</script>
 
 </body>
 </html>
