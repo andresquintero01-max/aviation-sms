@@ -50,7 +50,7 @@ function createBar(id, labels, values, title){
         label:title,
         data:values,
         backgroundColor:"#0b2a66",
-        borderRadius:10
+        borderRadius:12
       }]
     },
 
@@ -59,7 +59,15 @@ function createBar(id, labels, values, title){
 
       plugins:{
         legend:{display:false},
-        title:{display:true,text:title}
+        title:{
+          display:true,
+          text:title,
+          color:"#555",
+          font:{
+            size:22,
+            weight:"bold"
+          }
+        }
       },
 
       scales:{
@@ -99,15 +107,23 @@ function createPie(id, labels, values, title){
       responsive:true,
 
       plugins:{
+
         title:{
           display:true,
-          text:title
+          text:title,
+          color:"#555",
+          font:{
+            size:22,
+            weight:"bold"
+          }
         },
 
         legend:{
           position:"top"
         }
+
       }
+
     }
 
   });
@@ -390,7 +406,7 @@ function renderDashboard(){
   );
 
   /* =========================
-     FRAT CUSTOM COLORS
+     FRAT CHART
   ========================== */
 
   destroyChart("fratChart");
@@ -410,7 +426,7 @@ function renderDashboard(){
 
         datasets:[{
 
-          label:"FRAT Monitoring",
+          label:"FRAT",
 
           data:[
             fratReports.length,
@@ -419,12 +435,12 @@ function renderDashboard(){
           ],
 
           backgroundColor:[
-            "#0b2a66",
+            "#082567",
             "#f1c40f",
             "#e74c3c"
           ],
 
-          borderRadius:10
+          borderRadius:12
 
         }]
       },
@@ -439,7 +455,12 @@ function renderDashboard(){
 
           title:{
             display:true,
-            text:"FRAT Monitoring"
+            text:"FRAT Monitoring",
+            color:"#555",
+            font:{
+              size:24,
+              weight:"bold"
+            }
           }
 
         },
@@ -550,10 +571,10 @@ body{
 }
 
 .container{
-  max-width:1400px;
+  max-width:1450px;
   margin:auto;
   background:white;
-  border-radius:30px;
+  border-radius:35px;
   padding:35px;
   box-shadow:0 20px 50px rgba(0,0,0,0.35);
 }
@@ -561,32 +582,30 @@ body{
 h1{
   text-align:center;
   color:#071f47;
-  font-size:56px;
+  font-size:60px;
   margin-bottom:8px;
 }
 
 .subtitle{
   text-align:center;
-  color:#555;
-  font-size:18px;
-  margin-bottom:30px;
+  color:#666;
+  font-size:20px;
+  margin-bottom:35px;
 }
 
 .section-title{
   color:#071f47;
-  font-size:28px;
-  margin:35px 0 18px;
+  font-size:30px;
+  margin:40px 0 20px;
   border-left:8px solid #071f47;
-  padding-left:12px;
+  padding-left:14px;
+  font-weight:bold;
 }
 
 .cards{
   display:grid;
-  grid-template-columns:repeat(
-    auto-fit,
-    minmax(220px,1fr)
-  );
-  gap:20px;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:22px;
 }
 
 .card{
@@ -598,21 +617,31 @@ h1{
 
   color:white;
 
-  border-radius:22px;
+  border-radius:28px;
 
-  padding:28px;
+  padding:35px;
 
   text-align:center;
 
-  box-shadow:0 10px 22px rgba(0,0,0,0.25);
+  box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
 .card.red{
   background:linear-gradient(
     135deg,
-    #c0392b,
-    #e74c3c
+    #d63031,
+    #ff3b30
   );
+}
+
+.card.yellow{
+  background:linear-gradient(
+    135deg,
+    #cfa000,
+    #ffd400
+  );
+
+  color:#071f47;
 }
 
 .card.green{
@@ -623,29 +652,19 @@ h1{
   );
 }
 
-.card.yellow{
-  background:linear-gradient(
-    135deg,
-    #b7950b,
-    #f1c40f
-  );
-
-  color:#071f47;
-}
-
 .card h2{
-  font-size:42px;
-  margin-bottom:8px;
+  font-size:64px;
+  margin-bottom:12px;
 }
 
 .card p{
-  font-size:16px;
+  font-size:22px;
 }
 
 .charts-columns{
   display:flex;
-  gap:28px;
-  margin-top:25px;
+  gap:30px;
+  margin-top:30px;
   align-items:flex-start;
 }
 
@@ -653,41 +672,97 @@ h1{
   flex:1;
   display:flex;
   flex-direction:column;
-  gap:28px;
+  gap:30px;
 }
 
 .chart-box{
   background:#f4f6f8;
-  border-radius:22px;
-  padding:25px;
-  box-shadow:0 8px 18px rgba(0,0,0,0.12);
+  border-radius:28px;
+  padding:30px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.12);
 }
 
 canvas{
   width:100% !important;
-  max-height:360px;
+  max-height:380px;
+}
+
+/* =========================
+   FRAT SECTION
+========================= */
+
+.frat-title-wrapper{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:30px;
+  margin-top:50px;
+  margin-bottom:25px;
+}
+
+.frat-line{
+  flex:1;
+  height:3px;
+  background:#d9d9d9;
+}
+
+.frat-main-title{
+  font-size:72px;
+  font-weight:900;
+  color:#071f47;
+  position:relative;
+}
+
+.frat-main-title::after{
+  content:"";
+  width:130px;
+  height:6px;
+  background:#0b2a66;
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:-12px;
+  border-radius:10px;
+}
+
+.frat-container{
+  margin-top:50px;
+}
+
+.frat-card-container{
+  background:#f7f7f7;
+  border-radius:30px;
+  padding:28px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.10);
+}
+
+.frat-monitor-title{
+  font-size:28px;
+  color:#071f47;
+  font-weight:bold;
+  margin-bottom:25px;
+  border-left:8px solid #071f47;
+  padding-left:12px;
+}
+
+.frat-chart-box{
+  margin-top:35px;
+  background:#f7f7f7;
+  border-radius:30px;
+  padding:30px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.10);
 }
 
 .back-btn{
-
-  margin-top:35px;
-
+  margin-top:40px;
   width:100%;
-
-  padding:18px;
-
+  padding:20px;
   border:none;
-
-  border-radius:16px;
-
+  border-radius:18px;
   background:#c0392b;
-
   color:white;
-
-  font-size:20px;
-
+  font-size:22px;
   font-weight:bold;
-
   cursor:pointer;
 }
 
@@ -695,14 +770,14 @@ canvas{
   background:#922b21;
 }
 
-@media(max-width:700px){
-
-  h1{
-    font-size:38px;
-  }
+@media(max-width:900px){
 
   .charts-columns{
     flex-direction:column;
+  }
+
+  .frat-main-title{
+    font-size:50px;
   }
 
 }
@@ -719,6 +794,8 @@ canvas{
   <div class="subtitle">
     Safety Management System Performance Overview
   </div>
+
+  <!-- EXECUTIVE SUMMARY -->
 
   <div class="section-title">
     Executive Summary
@@ -753,28 +830,7 @@ canvas{
 
   </div>
 
-  <div class="section-title">
-    FRAT Monitoring
-  </div>
-
-  <div class="cards">
-
-    <div class="card">
-      <h2 id="fratTotal">0</h2>
-      <p>Total FRAT</p>
-    </div>
-
-    <div class="card yellow">
-      <h2 id="fratHigh">0</h2>
-      <p>High Risk FRAT</p>
-    </div>
-
-    <div class="card red">
-      <h2 id="fratNoGo">0</h2>
-      <p>No Go FRAT</p>
-    </div>
-
-  </div>
+  <!-- CHARTS -->
 
   <div class="section-title">
     Charts
@@ -812,13 +868,68 @@ canvas{
         <canvas id="categoryChart"></canvas>
       </div>
 
-      <div class="chart-box">
-        <canvas id="fratChart"></canvas>
+    </div>
+
+  </div>
+
+  <!-- =========================
+       FRAT SECTION
+  ========================== -->
+
+  <div class="frat-container">
+
+    <div class="frat-title-wrapper">
+
+      <div class="frat-line"></div>
+
+      <div class="frat-main-title">
+        FRAT
+      </div>
+
+      <div class="frat-line"></div>
+
+    </div>
+
+    <!-- FRAT CARDS -->
+
+    <div class="frat-card-container">
+
+      <div class="frat-monitor-title">
+        FRAT Monitoring
+      </div>
+
+      <div class="cards">
+
+        <div class="card">
+          <h2 id="fratTotal">0</h2>
+          <p>Total FRAT</p>
+        </div>
+
+        <div class="card yellow">
+          <h2 id="fratHigh">0</h2>
+          <p>High Risk FRAT</p>
+        </div>
+
+        <div class="card red">
+          <h2 id="fratNoGo">0</h2>
+          <p>No Go FRAT</p>
+        </div>
+
       </div>
 
     </div>
 
+    <!-- FRAT GRAPH -->
+
+    <div class="frat-chart-box">
+
+      <canvas id="fratChart"></canvas>
+
+    </div>
+
   </div>
+
+  <!-- BUTTON -->
 
   <button class="back-btn" onclick="goBack()">
     Back to Home
