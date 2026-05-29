@@ -478,6 +478,48 @@ h1{
     </div>
 
 </div>
+<script>
+const PASSWORD = "Tom";
+const SESSION_HOURS = 6;
 
+function checkAccess(){
+
+    const loginTime = localStorage.getItem("smsLoginTime");
+
+    if(loginTime){
+
+        const elapsed =
+        Date.now() - parseInt(loginTime);
+
+        const hours =
+        elapsed / (1000 * 60 * 60);
+
+        if(hours < SESSION_HOURS){
+            return;
+        }
+    }
+
+    let enteredPassword =
+    prompt("371Q Security Access\n\nEnter Password:");
+
+    while(enteredPassword !== PASSWORD){
+
+        if(enteredPassword === null){
+            location.href = "https://google.com";
+            return;
+        }
+
+        enteredPassword =
+        prompt("Incorrect Password\n\nEnter Password:");
+    }
+
+    localStorage.setItem(
+        "smsLoginTime",
+        Date.now()
+    );
+}
+
+checkAccess();
+</script>
 </body>
 </html>
