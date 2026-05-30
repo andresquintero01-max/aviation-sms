@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>371Q Executive SMS Dashboard</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMS Executive Dashboard</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -30,8 +29,7 @@ let smsReports = [];
 let fratReports = [];
 
 function setText(id,value){
-  const el = document.getElementById(id);
-  if(el) el.innerText = value;
+  document.getElementById(id).innerText = value;
 }
 
 function destroyChart(id){
@@ -51,32 +49,20 @@ function createBar(id, labels, values, title){
       datasets:[{
         label:title,
         data:values,
-        backgroundColor:[
-          "#0b2a66",
-          "#1f5cc4",
-          "#138d75",
-          "#f1c40f",
-          "#e74c3c",
-          "#6c5ce7"
-        ],
-        borderRadius:10,
-        borderSkipped:false,
-        maxBarThickness:85,
-        categoryPercentage:0.70,
-        barPercentage:0.80
+        backgroundColor:"#0b2a66",
+        borderRadius:12
       }]
     },
 
     options:{
       responsive:true,
-      maintainAspectRatio:false,
 
       plugins:{
         legend:{display:false},
         title:{
           display:true,
           text:title,
-          color:"#071f47",
+          color:"#555",
           font:{
             size:22,
             weight:"bold"
@@ -88,9 +74,6 @@ function createBar(id, labels, values, title){
         y:{
           beginAtZero:true,
           ticks:{precision:0}
-        },
-        x:{
-          grid:{display:false}
         }
       }
     }
@@ -116,31 +99,31 @@ function createPie(id, labels, values, title){
           "#f1c40f",
           "#e74c3c",
           "#95a5a6"
-        ],
-        borderWidth:4,
-        borderColor:"#ffffff"
+        ]
       }]
     },
 
     options:{
       responsive:true,
-      maintainAspectRatio:false,
-      cutout:"65%",
 
       plugins:{
+
         title:{
           display:true,
           text:title,
-          color:"#071f47",
+          color:"#555",
           font:{
             size:22,
             weight:"bold"
           }
         },
+
         legend:{
-          position:"bottom"
+          position:"top"
         }
+
       }
+
     }
 
   });
@@ -160,7 +143,6 @@ function isReportClosed(r){
 
   return (
     status.includes("closed") ||
-    status.includes("completed") ||
     status === "true" ||
     status === "yes"
   );
@@ -245,19 +227,27 @@ function renderDashboard(){
     );
 
     if(riskText.includes("not") || riskValue >= 15){
+
       notAcceptable++;
+
     }else if(
       riskText.includes("tolerable") ||
       (riskValue >= 5 && riskValue <= 14)
     ){
+
       tolerable++;
+
     }else if(
       riskText.includes("acceptable") ||
       (riskValue >= 1 && riskValue <= 4)
     ){
+
       acceptable++;
+
     }else{
+
       notAssessed++;
+
     }
 
     const residualData = getResidualData(r);
@@ -270,35 +260,46 @@ function renderDashboard(){
       residualText.includes("red") ||
       residualValue >= 15
     ){
+
       residualNotAcceptable++;
+
     }else if(
       residualText.includes("tolerable") ||
       residualText.includes("yellow") ||
       (residualValue >= 5 && residualValue <= 14)
     ){
+
       residualTolerable++;
+
     }else if(
       residualText.includes("acceptable") ||
       residualText.includes("green") ||
       (residualValue >= 1 && residualValue <= 4)
     ){
+
       residualAcceptable++;
+
     }else{
+
       residualNotAssessed++;
+
     }
 
     const dateValue = getDate(r);
 
     if(dateValue){
+
       const month = dateValue.toString().substring(0,7);
+
       months[month] = (months[month] || 0) + 1;
+
     }
 
     const category =
       r.category ||
       r.eventType ||
       r.reportType ||
-      "SMS Reports";
+      "Other";
 
     categories[category] =
       (categories[category] || 0) + 1;
@@ -325,14 +326,18 @@ function renderDashboard(){
       fratText.includes("red") ||
       fratText.includes("rojo")
     ){
+
       fratNoGo++;
+
     }else if(
       value >= 10 ||
       fratText.includes("high") ||
       fratText.includes("yellow") ||
       fratText.includes("amarillo")
     ){
+
       fratHigh++;
+
     }
 
   });
@@ -345,8 +350,7 @@ function renderDashboard(){
         Math.round(
           100 - (
             (notAcceptable * 10) +
-            (open * 2) +
-            (fratNoGo * 8)
+            (open * 2)
           )
         )
       );
@@ -361,22 +365,11 @@ function renderDashboard(){
   setText("fratHigh", fratHigh);
   setText("fratNoGo", fratNoGo);
 
-  setText("totalSystemRecords", total + fratReports.length);
-  setText("activeRiskItems", open + notAcceptable + fratNoGo);
-
-  if(safetyScore >= 85){
-    setText("executiveReadiness", "Strong");
-  }else if(safetyScore >= 70){
-    setText("executiveReadiness", "Monitor");
-  }else{
-    setText("executiveReadiness", "Action Required");
-  }
-
   createPie(
     "riskChart",
     ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
     [acceptable,tolerable,notAcceptable,notAssessed],
-    "Initial Risk Distribution"
+    "Risk Distribution"
   );
 
   createPie(
@@ -395,7 +388,7 @@ function renderDashboard(){
     "statusChart",
     ["Open","Closed"],
     [open,closed],
-    "SMS Report Status"
+    "Open vs Closed Reports"
   );
 
   createBar(
@@ -412,59 +405,77 @@ function renderDashboard(){
     "Reports by Category"
   );
 
+  /* =========================
+     FRAT CHART
+  ========================== */
+
   destroyChart("fratChart");
 
-  charts["fratChart"] = new Chart(document.getElementById("fratChart"), {
+  charts["fratChart"] = new Chart(
+    document.getElementById("fratChart"),
+    {
 
-    type:"bar",
+      type:"bar",
 
-    data:{
-      labels:["Total FRAT","High Risk","No Go"],
-      datasets:[{
-        label:"FRAT",
-        data:[fratReports.length,fratHigh,fratNoGo],
-        backgroundColor:[
-          "#0b2a66",
-          "#e74c3c",
-          "#b00020"
+      data:{
+        labels:[
+          "Total FRAT",
+          "High Risk",
+          "No Go"
         ],
-        borderRadius:10,
-        borderSkipped:false,
-        maxBarThickness:95,
-        categoryPercentage:0.75,
-        barPercentage:0.85
-      }]
-    },
 
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
+        datasets:[{
 
-      plugins:{
-        legend:{display:false},
-        title:{
-          display:true,
-          text:"FRAT Operational Monitoring",
-          color:"#071f47",
-          font:{
-            size:24,
-            weight:"bold"
-          }
-        }
+          label:"FRAT",
+
+          data:[
+            fratReports.length,
+            fratHigh,
+            fratNoGo
+          ],
+
+          backgroundColor:[
+            "#082567",
+            "#f1c40f",
+            "#e74c3c"
+          ],
+
+          borderRadius:12
+
+        }]
       },
 
-      scales:{
-        y:{
-          beginAtZero:true,
-          ticks:{precision:0}
-        },
-        x:{
-          grid:{display:false}
-        }
-      }
-    }
+      options:{
 
-  });
+        responsive:true,
+
+        plugins:{
+
+          legend:{display:false},
+
+          title:{
+            display:true,
+            text:"FRAT Monitoring",
+            color:"#555",
+            font:{
+              size:24,
+              weight:"bold"
+            }
+          }
+
+        },
+
+        scales:{
+          y:{
+            beginAtZero:true,
+            ticks:{precision:0}
+          }
+        }
+
+      }
+
+    }
+  );
 
 }
 
@@ -528,12 +539,14 @@ function loadFRATReports(){
 
 window.goBack = function(){
   location.href = "index.html";
-};
+}
 
 window.onload = function(){
+
   loadSMSReports();
   loadFRATReports();
-};
+
+}
 
 </script>
 
@@ -546,301 +559,221 @@ window.onload = function(){
 }
 
 body{
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
   min-height:100vh;
-  background:
-    radial-gradient(circle at top left, rgba(20,80,184,0.55), transparent 35%),
-    linear-gradient(135deg,#03152f,#071f47,#0b2a66,#1450b8);
+  background:linear-gradient(
+    135deg,
+    #071f47,
+    #0b2a66,
+    #1450b8
+  );
   padding:30px;
-  color:#1f2937;
 }
 
 .container{
-  max-width:1500px;
+  max-width:1450px;
   margin:auto;
-  background:rgba(255,255,255,0.96);
-  border-radius:38px;
-  padding:38px;
-  box-shadow:0 30px 80px rgba(0,0,0,0.38);
+  background:white;
+  border-radius:35px;
+  padding:35px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.35);
 }
 
-.hero{
-  background:
-    linear-gradient(135deg,rgba(7,31,71,0.95),rgba(11,42,102,0.95)),
-    url("https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1600&auto=format&fit=crop");
-  background-size:cover;
-  background-position:center;
-  color:white;
-  border-radius:34px;
-  padding:48px;
-  box-shadow:0 20px 45px rgba(0,0,0,0.35);
+h1{
+  text-align:center;
+  color:#071f47;
+  font-size:60px;
+  margin-bottom:8px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#666;
+  font-size:20px;
   margin-bottom:35px;
-  position:relative;
-  overflow:hidden;
-}
-
-.hero h1{
-  font-size:62px;
-  margin-bottom:12px;
-  line-height:1.05;
-}
-
-.hero p{
-  font-size:21px;
-  opacity:0.92;
-  max-width:850px;
-}
-
-.hero-badges{
-  display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-  margin-top:25px;
-}
-
-.hero-badge{
-  background:rgba(255,255,255,0.15);
-  border:1px solid rgba(255,255,255,0.25);
-  padding:10px 16px;
-  border-radius:30px;
-  font-weight:bold;
-  font-size:14px;
 }
 
 .section-title{
   color:#071f47;
-  font-size:31px;
-  margin:42px 0 20px;
-  border-left:9px solid #1450b8;
-  padding-left:15px;
-  font-weight:900;
+  font-size:30px;
+  margin:40px 0 20px;
+  border-left:8px solid #071f47;
+  padding-left:14px;
+  font-weight:bold;
 }
 
 .cards{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:22px;
 }
 
 .card{
-  background:linear-gradient(135deg,#071f47,#0b2a66);
+  background:linear-gradient(
+    135deg,
+    #071f47,
+    #0b2a66
+  );
+
   color:white;
-  border-radius:30px;
-  padding:32px;
+
+  border-radius:28px;
+
+  padding:35px;
+
   text-align:center;
-  box-shadow:0 14px 30px rgba(0,0,0,0.24);
-  position:relative;
-  overflow:hidden;
-  transition:0.25s ease;
-}
 
-.card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 22px 42px rgba(0,0,0,0.30);
-}
-
-.card::after{
-  content:"";
-  position:absolute;
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  background:rgba(255,255,255,0.08);
-  right:-35px;
-  bottom:-35px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
 .card.red{
-  background:linear-gradient(135deg,#b00020,#ff3b30);
+  background:linear-gradient(
+    135deg,
+    #d63031,
+    #ff3b30
+  );
 }
 
 .card.yellow{
-  background:linear-gradient(135deg,#f1c40f,#ffd86b);
+  background:linear-gradient(
+    135deg,
+    #cfa000,
+    #ffd400
+  );
+
   color:#071f47;
 }
 
 .card.green{
-  background:linear-gradient(135deg,#138d75,#2ecc71);
-}
-
-.card.purple{
-  background:linear-gradient(135deg,#341f97,#6c5ce7);
+  background:linear-gradient(
+    135deg,
+    #138d75,
+    #2ecc71
+  );
 }
 
 .card h2{
-  font-size:60px;
-  margin-bottom:10px;
-  position:relative;
-  z-index:1;
+  font-size:64px;
+  margin-bottom:12px;
 }
 
 .card p{
-  font-size:19px;
-  font-weight:bold;
-  position:relative;
-  z-index:1;
-}
-
-.executive-strip{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:22px;
-  margin-top:24px;
-}
-
-.strip-box{
-  background:#f4f7fb;
-  border-radius:24px;
-  padding:26px;
-  border:1px solid #dce3ef;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
-}
-
-.strip-box h3{
-  color:#071f47;
-  font-size:21px;
-  margin-bottom:10px;
-}
-
-.strip-box strong{
-  font-size:34px;
-  color:#1450b8;
+  font-size:22px;
 }
 
 .charts-columns{
-  display:grid;
-  grid-template-columns:1fr 1fr;
+  display:flex;
   gap:30px;
   margin-top:30px;
-  align-items:start;
+  align-items:flex-start;
 }
 
 .charts-column{
+  flex:1;
   display:flex;
   flex-direction:column;
   gap:30px;
 }
 
 .chart-box{
-  background:linear-gradient(180deg,#ffffff,#f4f7fb);
-  border-radius:30px;
+  background:#f4f6f8;
+  border-radius:28px;
   padding:30px;
-  box-shadow:0 12px 28px rgba(0,0,0,0.12);
-  border:1px solid #e1e7f0;
-  min-height:360px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.12);
 }
 
 canvas{
   width:100% !important;
-  height:300px !important;
-  max-height:300px !important;
+  max-height:380px;
 }
 
-.frat-container{
-  margin-top:55px;
-}
+/* =========================
+   FRAT SECTION
+========================= */
 
 .frat-title-wrapper{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:28px;
-  margin-bottom:30px;
+  gap:30px;
+  margin-top:50px;
+  margin-bottom:25px;
 }
 
 .frat-line{
   flex:1;
   height:3px;
-  background:linear-gradient(90deg,transparent,#1450b8,transparent);
+  background:#d9d9d9;
 }
 
 .frat-main-title{
-  font-size:76px;
+  font-size:72px;
   font-weight:900;
   color:#071f47;
-  letter-spacing:2px;
   position:relative;
 }
 
 .frat-main-title::after{
-  content:"Flight Risk Assessment Tool";
+  content:"";
+  width:130px;
+  height:6px;
+  background:#0b2a66;
   position:absolute;
   left:50%;
   transform:translateX(-50%);
-  bottom:-22px;
-  font-size:15px;
-  color:#666;
-  letter-spacing:1px;
-  white-space:nowrap;
+  bottom:-12px;
+  border-radius:10px;
+}
+
+.frat-container{
+  margin-top:50px;
 }
 
 .frat-card-container{
-  margin-top:45px;
-  background:linear-gradient(135deg,#f8fbff,#eef3fb);
-  border-radius:32px;
-  padding:30px;
-  border:1px solid #dce3ef;
-  box-shadow:0 12px 28px rgba(0,0,0,0.10);
+  background:#f7f7f7;
+  border-radius:30px;
+  padding:28px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.10);
 }
 
 .frat-monitor-title{
-  font-size:29px;
+  font-size:28px;
   color:#071f47;
-  font-weight:900;
+  font-weight:bold;
   margin-bottom:25px;
-  border-left:9px solid #1450b8;
-  padding-left:13px;
+  border-left:8px solid #071f47;
+  padding-left:12px;
 }
 
 .frat-chart-box{
   margin-top:35px;
-  background:linear-gradient(180deg,#ffffff,#f4f7fb);
-  border-radius:32px;
+  background:#f7f7f7;
+  border-radius:30px;
   padding:30px;
-  border:1px solid #e1e7f0;
-  box-shadow:0 12px 28px rgba(0,0,0,0.12);
-  min-height:360px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.10);
 }
 
 .back-btn{
-  margin-top:42px;
+  margin-top:40px;
   width:100%;
-  padding:21px;
+  padding:20px;
   border:none;
-  border-radius:20px;
-  background:linear-gradient(135deg,#b00020,#e74c3c);
+  border-radius:18px;
+  background:#c0392b;
   color:white;
   font-size:22px;
   font-weight:bold;
   cursor:pointer;
-  box-shadow:0 10px 22px rgba(176,0,32,0.32);
 }
 
 .back-btn:hover{
-  transform:translateY(-2px);
-  background:linear-gradient(135deg,#922b21,#c0392b);
+  background:#922b21;
 }
 
 @media(max-width:900px){
 
-  body{
-    padding:15px;
-  }
-
-  .container{
-    padding:22px;
-  }
-
-  .hero{
-    padding:32px;
-  }
-
-  .hero h1{
-    font-size:40px;
-  }
-
   .charts-columns{
-    grid-template-columns:1fr;
+    flex-direction:column;
   }
 
   .frat-main-title{
@@ -856,23 +789,17 @@ canvas{
 
 <div class="container">
 
-  <div class="hero">
-    <h1>371Q Executive SMS Dashboard</h1>
+  <h1>SMS Executive Dashboard</h1>
 
-    <p>
-      Real-time Safety Management System intelligence for reports, risk control,
-      corrective actions, residual risk, and FRAT operational monitoring.
-    </p>
-
-    <div class="hero-badges">
-      <div class="hero-badge">SMS Performance</div>
-      <div class="hero-badge">Risk Intelligence</div>
-      <div class="hero-badge">FRAT Monitoring</div>
-      <div class="hero-badge">Executive Overview</div>
-    </div>
+  <div class="subtitle">
+    Safety Management System Performance Overview
   </div>
 
-  <div class="section-title">Executive Summary</div>
+  <!-- EXECUTIVE SUMMARY -->
+
+  <div class="section-title">
+    Executive Summary
+  </div>
 
   <div class="cards">
 
@@ -896,35 +823,22 @@ canvas{
       <p>Not Acceptable Risk</p>
     </div>
 
-    <div class="card purple">
+    <div class="card">
       <h2 id="safetyScore">100%</h2>
       <p>Executive Safety Score</p>
     </div>
 
   </div>
 
-  <div class="executive-strip">
+  <!-- CHARTS -->
 
-    <div class="strip-box">
-      <h3>Total System Records</h3>
-      <strong id="totalSystemRecords">0</strong>
-    </div>
-
-    <div class="strip-box">
-      <h3>Active Risk Items</h3>
-      <strong id="activeRiskItems">0</strong>
-    </div>
-
-    <div class="strip-box">
-      <h3>Executive Readiness</h3>
-      <strong id="executiveReadiness">Strong</strong>
-    </div>
-
+  <div class="section-title">
+    Charts
   </div>
 
-  <div class="section-title">Executive Charts</div>
-
   <div class="charts-columns">
+
+    <!-- LEFT -->
 
     <div class="charts-column">
 
@@ -942,6 +856,8 @@ canvas{
 
     </div>
 
+    <!-- RIGHT -->
+
     <div class="charts-column">
 
       <div class="chart-box">
@@ -956,17 +872,31 @@ canvas{
 
   </div>
 
+  <!-- =========================
+       FRAT SECTION
+  ========================== -->
+
   <div class="frat-container">
 
     <div class="frat-title-wrapper">
+
       <div class="frat-line"></div>
-      <div class="frat-main-title">FRAT</div>
+
+      <div class="frat-main-title">
+        FRAT
+      </div>
+
       <div class="frat-line"></div>
+
     </div>
+
+    <!-- FRAT CARDS -->
 
     <div class="frat-card-container">
 
-      <div class="frat-monitor-title">FRAT Operational Monitoring</div>
+      <div class="frat-monitor-title">
+        FRAT Monitoring
+      </div>
 
       <div class="cards">
 
@@ -975,7 +905,7 @@ canvas{
           <p>Total FRAT</p>
         </div>
 
-        <div class="card red">
+        <div class="card yellow">
           <h2 id="fratHigh">0</h2>
           <p>High Risk FRAT</p>
         </div>
@@ -989,15 +919,24 @@ canvas{
 
     </div>
 
+    <!-- FRAT GRAPH -->
+
     <div class="frat-chart-box">
+
       <canvas id="fratChart"></canvas>
+
     </div>
 
   </div>
 
-  <button class="back-btn" onclick="goBack()">Back to Home</button>
+  <!-- BUTTON -->
+
+  <button class="back-btn" onclick="goBack()">
+    Back to Home
+  </button>
 
 </div>
 
 </body>
 </html>
+
