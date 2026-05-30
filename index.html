@@ -28,8 +28,6 @@ body{
     overflow-x:hidden;
 }
 
-/* LOGIN LANDING */
-
 .login-container{
     width:100%;
     max-width:950px;
@@ -92,8 +90,6 @@ body{
 .login-box button:hover{
     background:#0b2a66;
 }
-
-/* SYSTEM CONTAINER */
 
 .main-container{
     width:100%;
@@ -159,6 +155,17 @@ h1{
 .highlight{
     color:#1450b8;
     font-weight:900;
+}
+
+.alert-status{
+    text-align:center;
+    background:#ecfdf5;
+    color:#166534;
+    border:1px solid #86efac;
+    padding:12px;
+    border-radius:14px;
+    margin-bottom:25px;
+    font-weight:bold;
 }
 
 .menu{
@@ -314,7 +321,6 @@ h1{
 
 <body>
 
-<!-- LOGIN LANDING PAGE -->
 <div class="login-container" id="loginPage">
 
     <div class="login-371q">371Q</div>
@@ -341,7 +347,6 @@ h1{
 
 </div>
 
-<!-- MAIN SYSTEM -->
 <div class="main-container" id="systemPage">
 
     <div class="main-brand">
@@ -357,6 +362,10 @@ h1{
         designed to provide real-time operational safety visibility,
         hazard tracking, risk analysis, safety performance monitoring,
         and proactive decision-making across the organization.
+    </div>
+
+    <div class="alert-status" id="alertStatus">
+        🔔 New report alerts active
     </div>
 
     <div class="menu">
@@ -424,15 +433,142 @@ h1{
 
 </div>
 
-<script>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+    authDomain: "aviation-sms.firebaseapp.com",
+    databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+    projectId: "aviation-sms",
+    storageBucket: "aviation-sms.appspot.com",
+    messagingSenderId: "78041845314",
+    appId: "1:78041845314:web:3207f8f3fca3b7af5b3fd5"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
 const USERNAME = "Tom";
 const PASSWORD = "Tom";
 const SESSION_HOURS = 6;
 
+let reportAlertStarted = false;
+let initialReportsLoaded = false;
+
 function showSystem(){
     document.getElementById("loginPage").style.display = "none";
     document.getElementById("systemPage").style.display = "block";
+
+    requestNotificationPermission();
+    startReportAlerts();
+}
+
+function requestNotificationPermission(){
+
+    if(!("Notification" in window)){
+        document.getElementById("alertStatus").innerHTML = "⚠ Browser notifications not supported";
+        return;
+    }
+
+    if(Notification.permission === "default"){
+        Notification.requestPermission();
+    }
+
+    if(Notification.permission === "granted"){
+        document.getElementById("alertStatus").innerHTML = "🔔 New report alerts active";
+    }else{
+        document.getElementById("alertStatus").innerHTML = "🔔 Alerts active inside system / browser notification not allowed";
+    }
+}
+
+function playAlertSound(){
+    try{
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        oscillator.frequency.value = 880;
+        oscillator.type = "sine";
+
+        gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        oscillator.start();
+
+        setTimeout(()=>{
+            oscillator.stop();
+            audioCtx.close();
+        },500);
+
+    }catch(error){
+        console.log("Sound alert not available");
+    }
+}
+
+function sendReportNotification(report){
+
+    const title =
+        report.title ||
+        report.reportTitle ||
+        report.hazardTitle ||
+        report.reportId ||
+        "New SMS Report";
+
+    const risk =
+        report.riskLevel ||
+        report.initialRisk ||
+        report.residualRisk ||
+        report.risk ||
+        "Pending Risk Review";
+
+    const location =
+        report.location ||
+        report.station ||
+        "Location not entered";
+
+    playAlertSound();
+
+    if("Notification" in window && Notification.permission === "granted"){
+        const notification = new Notification("New SMS Report Received", {
+            body: `${title} | Risk: ${risk} | Location: ${location}`,
+            icon: "https://cdn-icons-png.flaticon.com/512/1827/1827370.png"
+        });
+
+        notification.onclick = function(){
+            window.focus();
+            window.location.href = "SMS-Database.html";
+        };
+    }
+
+    alert("New SMS Report Received:\n\n" + title + "\nRisk: " + risk + "\nLocation: " + location);
+}
+
+function startReportAlerts(){
+
+    if(reportAlertStarted) return;
+    reportAlertStarted = true;
+
+    const reportsRef = ref(database, "smsReports");
+
+    onChildAdded(reportsRef, (snapshot)=>{
+
+        const report = snapshot.val();
+
+        if(!initialReportsLoaded){
+            return;
+        }
+
+        sendReportNotification(report);
+
+    });
+
+    setTimeout(()=>{
+        initialReportsLoaded = true;
+    },3000);
 }
 
 function checkSession(){
@@ -450,7 +586,7 @@ function checkSession(){
     }
 }
 
-function login(){
+window.login = function(){
 
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
@@ -463,11 +599,11 @@ function login(){
     }else{
         alert("Invalid Username or Password");
     }
-}
+};
 
 document.addEventListener("keydown", function(e){
     if(e.key === "Enter"){
-        login();
+        window.login();
     }
 });
 
