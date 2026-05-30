@@ -44,7 +44,8 @@ h1{
 
 .video-box,
 .quiz-box,
-.result-box{
+.result-box,
+.records-box{
   background:#f4f6f8;
   border-radius:22px;
   padding:25px;
@@ -78,35 +79,13 @@ button{
   margin-top:15px;
 }
 
-.save-btn{
-  background:#071f47;
-  color:white;
-}
-
-.add-btn{
-  background:#ff9800;
-  color:white;
-}
-
-.submit-btn{
-  background:#198754;
-  color:white;
-}
-
-.back-btn{
-  background:#b91c1c;
-  color:white;
-}
-
-.home-btn{
-  background:#333;
-  color:white;
-}
-
-.play-btn{
-  background:#1450b8;
-  color:white;
-}
+.save-btn{ background:#071f47; color:white; }
+.add-btn{ background:#ff9800; color:white; }
+.submit-btn{ background:#198754; color:white; }
+.back-btn{ background:#b91c1c; color:white; }
+.home-btn{ background:#333; color:white; }
+.play-btn{ background:#1450b8; color:white; }
+.print-btn{ background:#198754; color:white; }
 
 iframe{
   width:100%;
@@ -161,6 +140,33 @@ iframe{
   margin-bottom:25px;
 }
 
+.record-card{
+  background:white;
+  padding:16px;
+  border-radius:14px;
+  margin-top:12px;
+  box-shadow:0 5px 14px rgba(0,0,0,0.08);
+  color:#071f47;
+}
+
+@media print{
+  .video-box,
+  .quiz-box,
+  .top-buttons,
+  .add-btn,
+  .result-box{
+    display:none;
+  }
+
+  body{
+    background:white;
+  }
+
+  .container{
+    box-shadow:none;
+  }
+}
+
 @media(max-width:800px){
   .container{
     padding:25px;
@@ -194,6 +200,10 @@ iframe{
 
     <button class="home-btn" onclick="location.href='index.html'">
       🏠 Home
+    </button>
+
+    <button class="print-btn" onclick="window.print()">
+      🖨 Print Records
     </button>
   </div>
 
@@ -266,6 +276,11 @@ iframe{
   </div>
 
   <div class="result-box hidden" id="resultBox"></div>
+
+  <div class="records-box">
+    <h2>Training Completion Records</h2>
+    <div id="recordsList"></div>
+  </div>
 
 </div>
 
@@ -349,14 +364,8 @@ function newEmployee(){
   document.getElementById("employeeName").value = "";
   document.getElementById("employeeId").value = "";
 
-  const q1 =
-  document.querySelectorAll("input[name='q1']");
-
-  const q2 =
-  document.querySelectorAll("input[name='q2']");
-
-  q1.forEach(r => r.checked = false);
-  q2.forEach(r => r.checked = false);
+  document.querySelectorAll("input[name='q1']").forEach(r => r.checked = false);
+  document.querySelectorAll("input[name='q2']").forEach(r => r.checked = false);
 
   document.getElementById("quizBox").scrollIntoView({
     behavior:"smooth"
@@ -420,6 +429,8 @@ function submitQuiz(){
 
     document.getElementById("quizBox").classList.add("hidden");
 
+    displayRecords();
+
   }else{
 
     videoPlayed = false;
@@ -434,6 +445,43 @@ function submitQuiz(){
 
   resultBox.classList.remove("hidden");
 }
+
+function displayRecords(){
+
+  const records =
+  JSON.parse(localStorage.getItem("whatIsSMSTrainingRecords")) || [];
+
+  const recordsList =
+  document.getElementById("recordsList");
+
+  recordsList.innerHTML = "";
+
+  if(records.length === 0){
+    recordsList.innerHTML = "<p>No completed training records yet.</p>";
+    return;
+  }
+
+  records.forEach(function(record, index){
+
+    const div =
+    document.createElement("div");
+
+    div.className =
+    "record-card";
+
+    div.innerHTML =
+    `<strong>${index + 1}. ${record.employeeName}</strong><br>
+    Company ID: ${record.employeeId}<br>
+    Course: ${record.course}<br>
+    Result: ${record.result}<br>
+    Date: ${record.date}`;
+
+    recordsList.appendChild(div);
+
+  });
+}
+
+displayRecords();
 
 </script>
 
