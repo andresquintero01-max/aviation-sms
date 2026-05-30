@@ -28,7 +28,72 @@ body{
     overflow-x:hidden;
 }
 
-/* MAIN CONTAINER */
+/* LOGIN LANDING */
+
+.login-container{
+    width:100%;
+    max-width:950px;
+    background:rgba(255,255,255,0.96);
+    border-radius:38px;
+    padding:60px;
+    text-align:center;
+    box-shadow:0 25px 65px rgba(0,0,0,0.40);
+    animation:fadeIn 0.8s ease;
+}
+
+.login-371q{
+    font-size:140px;
+    font-weight:900;
+    background:linear-gradient(135deg,#0b2a66,#1976ff,#64b5ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:15px;
+}
+
+.login-container h1{
+    color:#071f47;
+    font-size:50px;
+    margin-bottom:15px;
+}
+
+.login-container p{
+    color:#5d6b82;
+    font-size:20px;
+    line-height:1.6;
+    margin-bottom:35px;
+}
+
+.login-box{
+    max-width:420px;
+    margin:auto;
+}
+
+.login-box input{
+    width:100%;
+    padding:16px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:12px;
+    font-size:17px;
+}
+
+.login-box button{
+    width:100%;
+    padding:17px;
+    background:#071f47;
+    color:white;
+    border:none;
+    border-radius:12px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.login-box button:hover{
+    background:#0b2a66;
+}
+
+/* SYSTEM CONTAINER */
 
 .main-container{
     width:100%;
@@ -41,9 +106,8 @@ body{
     position:relative;
     overflow:hidden;
     animation:fadeIn 0.8s ease;
+    display:none;
 }
-
-/* LIGHT EFFECT */
 
 .main-container::before{
     content:"";
@@ -54,8 +118,6 @@ body{
     top:-220px;
     right:-180px;
 }
-
-/* MAIN 371Q */
 
 .main-brand{
     text-align:center;
@@ -74,8 +136,6 @@ body{
     animation:pulse371 2.5s infinite;
 }
 
-/* TITLE */
-
 h1{
     text-align:center;
     font-size:58px;
@@ -84,8 +144,6 @@ h1{
     font-weight:800;
     letter-spacing:2px;
 }
-
-/* SUBTITLE */
 
 .subtitle{
     text-align:center;
@@ -98,22 +156,16 @@ h1{
     margin-right:auto;
 }
 
-/* HIGHLIGHT */
-
 .highlight{
     color:#1450b8;
     font-weight:900;
 }
-
-/* MENU */
 
 .menu{
     display:flex;
     flex-direction:column;
     gap:25px;
 }
-
-/* BUTTON CARD */
 
 .btn{
     text-decoration:none;
@@ -134,8 +186,6 @@ h1{
     box-shadow:0 20px 38px rgba(0,0,0,0.18);
 }
 
-/* LEFT COLOR LINE */
-
 .btn::before{
     content:"";
     position:absolute;
@@ -145,37 +195,17 @@ h1{
     height:100%;
 }
 
-/* BUTTON COLORS */
-
-.dashboard::before{
-    background:#1976ff;
-}
-
-.policy::before{
-    background:#2979ff;
-}
-
-.hazard::before{
-    background:#00b4d8;
-}
-
-.assurance::before{
-    background:#22c55e;
-}
-
-.promotion::before{
-    background:#8b5cf6;
-}
-
-/* LEFT SECTION */
+.dashboard::before{ background:#1976ff; }
+.policy::before{ background:#2979ff; }
+.hazard::before{ background:#00b4d8; }
+.assurance::before{ background:#22c55e; }
+.promotion::before{ background:#8b5cf6; }
 
 .btn-left{
     display:flex;
     align-items:center;
     gap:24px;
 }
-
-/* ICON */
 
 .icon{
     width:90px;
@@ -189,29 +219,11 @@ h1{
     box-shadow:0 10px 20px rgba(0,0,0,0.18);
 }
 
-/* ICON COLORS */
-
-.dashboard .icon{
-    background:linear-gradient(135deg,#0b2a66,#1976ff);
-}
-
-.policy .icon{
-    background:linear-gradient(135deg,#1450b8,#4da3ff);
-}
-
-.hazard .icon{
-    background:linear-gradient(135deg,#0096c7,#00d4ff);
-}
-
-.assurance .icon{
-    background:linear-gradient(135deg,#15803d,#4ade80);
-}
-
-.promotion .icon{
-    background:linear-gradient(135deg,#5b35d5,#a78bfa);
-}
-
-/* TEXT */
+.dashboard .icon{ background:linear-gradient(135deg,#0b2a66,#1976ff); }
+.policy .icon{ background:linear-gradient(135deg,#1450b8,#4da3ff); }
+.hazard .icon{ background:linear-gradient(135deg,#0096c7,#00d4ff); }
+.assurance .icon{ background:linear-gradient(135deg,#15803d,#4ade80); }
+.promotion .icon{ background:linear-gradient(135deg,#5b35d5,#a78bfa); }
 
 .text h2{
     color:#071f47;
@@ -226,8 +238,6 @@ h1{
     max-width:560px;
 }
 
-/* ARROW */
-
 .arrow{
     font-size:58px;
     color:#0b2a66;
@@ -238,8 +248,6 @@ h1{
     transform:translateX(10px);
 }
 
-/* FOOTER */
-
 .footer{
     margin-top:48px;
     text-align:center;
@@ -249,52 +257,36 @@ h1{
     font-weight:bold;
 }
 
-/* ANIMATIONS */
-
 @keyframes fadeIn{
-    from{
-        opacity:0;
-        transform:translateY(20px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    from{ opacity:0; transform:translateY(20px); }
+    to{ opacity:1; transform:translateY(0); }
 }
 
 @keyframes pulse371{
-
-    0%{
-        transform:scale(1);
-    }
-
-    50%{
-        transform:scale(1.04);
-    }
-
-    100%{
-        transform:scale(1);
-    }
-
+    0%{ transform:scale(1); }
+    50%{ transform:scale(1.04); }
+    100%{ transform:scale(1); }
 }
-
-/* RESPONSIVE */
 
 @media(max-width:900px){
 
+    .login-container,
     .main-container{
         padding:35px 22px;
     }
 
+    .login-371q,
     .brand-371q{
         font-size:90px;
     }
 
-    h1{
-        font-size:40px;
+    h1,
+    .login-container h1{
+        font-size:38px;
     }
 
-    .subtitle{
+    .subtitle,
+    .login-container p{
         font-size:17px;
     }
 
@@ -315,211 +307,173 @@ h1{
     .text p{
         font-size:17px;
     }
-
 }
 
 </style>
-
 </head>
 
 <body>
 
-<div class="main-container">
+<!-- LOGIN LANDING PAGE -->
+<div class="login-container" id="loginPage">
 
-    <!-- MAIN 371Q -->
-    <div class="main-brand">
+    <div class="login-371q">371Q</div>
 
-        <div class="brand-371q">
-            371Q
-        </div>
+    <h1>Professional Aviation Safety Software</h1>
+
+    <p>
+        Integrated Safety Management System platform for hazard tracking,
+        risk analysis, safety assurance, safety promotion and real-time
+        operational safety visibility.
+    </p>
+
+    <div class="login-box">
+
+        <input type="text" id="username" placeholder="Username">
+
+        <input type="password" id="password" placeholder="Password">
+
+        <button onclick="login()">
+            ENTER SYSTEM
+        </button>
 
     </div>
 
-    <!-- TITLE -->
-    <h1>
-        Professional Aviation Safety Software
-    </h1>
+</div>
 
-    <!-- SUBTITLE -->
+<!-- MAIN SYSTEM -->
+<div class="main-container" id="systemPage">
+
+    <div class="main-brand">
+        <div class="brand-371q">371Q</div>
+    </div>
+
+    <h1>Professional Aviation Safety Software</h1>
+
     <div class="subtitle">
-
         SKY QUALITY has developed
         <span class="highlight">371Q</span>,
         an advanced integrated Safety Management System platform
         designed to provide real-time operational safety visibility,
         hazard tracking, risk analysis, safety performance monitoring,
         and proactive decision-making across the organization.
-
     </div>
 
-    <!-- MENU -->
     <div class="menu">
 
-        <!-- DASHBOARD -->
         <a class="btn dashboard" href="Dashboard.html">
-
             <div class="btn-left">
-
-                <div class="icon">
-                    📊
-                </div>
-
+                <div class="icon">📊</div>
                 <div class="text">
                     <h2>Dashboard</h2>
-                    <p>
-                        General overview of SMS reports,
-                        indicators and system status
-                    </p>
+                    <p>General overview of SMS reports, indicators and system status</p>
                 </div>
-
             </div>
-
             <div class="arrow">›</div>
-
         </a>
 
-        <!-- SMS POLICY -->
         <a class="btn policy" href="SMS-Policy.html">
-
             <div class="btn-left">
-
-                <div class="icon">
-                    📄
-                </div>
-
+                <div class="icon">📄</div>
                 <div class="text">
                     <h2>SMS Policy</h2>
-                    <p>
-                        Policies, manuals, objectives
-                        and emergency plans
-                    </p>
+                    <p>Policies, manuals, objectives and emergency plans</p>
                 </div>
-
             </div>
-
             <div class="arrow">›</div>
-
         </a>
 
-        <!-- HAZARD IDENTIFICATION -->
         <a class="btn hazard" href="Hazard-Identification.html">
-
             <div class="btn-left">
-
-                <div class="icon">
-                    ⚠
-                </div>
-
+                <div class="icon">⚠</div>
                 <div class="text">
                     <h2>Hazard Identification</h2>
-                    <p>
-                        Hazard reporting and risk
-                        identification system
-                    </p>
+                    <p>Hazard reporting and risk identification system</p>
                 </div>
-
             </div>
-
             <div class="arrow">›</div>
-
         </a>
 
-        <!-- SAFETY ASSURANCE -->
         <a class="btn assurance" href="Safety-Assurance.html">
-
             <div class="btn-left">
-
-                <div class="icon">
-                    ✔
-                </div>
-
+                <div class="icon">✔</div>
                 <div class="text">
                     <h2>Safety Assurance</h2>
-                    <p>
-                        Audits, inspections and safety
-                        performance monitoring
-                    </p>
+                    <p>Audits, inspections and safety performance monitoring</p>
                 </div>
-
             </div>
-
             <div class="arrow">›</div>
-
         </a>
 
-        <!-- SAFETY PROMOTION -->
         <a class="btn promotion" href="Safety-Promotion.html">
-
             <div class="btn-left">
-
-                <div class="icon">
-                    👥
-                </div>
-
+                <div class="icon">👥</div>
                 <div class="text">
                     <h2>Safety Promotion</h2>
-                    <p>
-                        Training, communication
-                        and safety culture
-                    </p>
+                    <p>Training, communication and safety culture</p>
                 </div>
-
             </div>
-
             <div class="arrow">›</div>
-
         </a>
 
     </div>
 
-    <!-- FOOTER -->
     <div class="footer">
         ONE SYSTEM • REAL-TIME SAFETY • TOTAL CONTROL
     </div>
 
 </div>
+
 <script>
+
+const USERNAME = "Tom";
 const PASSWORD = "Tom";
 const SESSION_HOURS = 6;
 
-function checkAccess(){
+function showSystem(){
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("systemPage").style.display = "block";
+}
+
+function checkSession(){
 
     const loginTime = localStorage.getItem("smsLoginTime");
 
     if(loginTime){
 
-        const elapsed =
-        Date.now() - parseInt(loginTime);
-
-        const hours =
-        elapsed / (1000 * 60 * 60);
+        const elapsed = Date.now() - parseInt(loginTime);
+        const hours = elapsed / (1000 * 60 * 60);
 
         if(hours < SESSION_HOURS){
-            return;
+            showSystem();
         }
     }
-
-    let enteredPassword =
-    prompt("371Q Security Access\n\nEnter Password:");
-
-    while(enteredPassword !== PASSWORD){
-
-        if(enteredPassword === null){
-            location.href = "https://google.com";
-            return;
-        }
-
-        enteredPassword =
-        prompt("Incorrect Password\n\nEnter Password:");
-    }
-
-    localStorage.setItem(
-        "smsLoginTime",
-        Date.now()
-    );
 }
 
-checkAccess();
+function login(){
+
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+
+    if(user === USERNAME && pass === PASSWORD){
+
+        localStorage.setItem("smsLoginTime", Date.now());
+        showSystem();
+
+    }else{
+        alert("Invalid Username or Password");
+    }
+}
+
+document.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        login();
+    }
+});
+
+checkSession();
+
 </script>
+
 </body>
 </html>
