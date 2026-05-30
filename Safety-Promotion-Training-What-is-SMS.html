@@ -87,6 +87,17 @@ button{
 .play-btn{ background:#1450b8; color:white; }
 .print-btn{ background:#198754; color:white; }
 
+.delete-btn{
+  background:#dc2626;
+  color:white;
+  padding:10px 16px;
+  border-radius:10px;
+}
+
+.delete-btn:hover{
+  background:#b91c1c;
+}
+
 iframe{
   width:100%;
   height:420px;
@@ -147,6 +158,14 @@ iframe{
   margin-top:12px;
   box-shadow:0 5px 14px rgba(0,0,0,0.08);
   color:#071f47;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.record-info{
+  line-height:1.6;
 }
 
 @media print{
@@ -154,7 +173,8 @@ iframe{
   .quiz-box,
   .top-buttons,
   .add-btn,
-  .result-box{
+  .result-box,
+  .delete-btn{
     display:none;
   }
 
@@ -179,6 +199,11 @@ iframe{
   iframe{
     height:260px;
   }
+
+  .record-card{
+    flex-direction:column;
+    align-items:flex-start;
+  }
 }
 </style>
 </head>
@@ -194,6 +219,7 @@ iframe{
   </div>
 
   <div class="top-buttons">
+
     <button class="back-btn" onclick="location.href='Safety-Promotion-Training.html'">
       ← Back
     </button>
@@ -205,6 +231,7 @@ iframe{
     <button class="print-btn" onclick="window.print()">
       🖨 Print Records
     </button>
+
   </div>
 
   <div class="video-box">
@@ -287,6 +314,7 @@ iframe{
 <script>
 
 let videoPlayed = false;
+const DELETE_PASSWORD = "Tom";
 
 const savedVideo =
 localStorage.getItem("whatIsSMSVideo");
@@ -470,15 +498,54 @@ function displayRecords(){
     "record-card";
 
     div.innerHTML =
-    `<strong>${index + 1}. ${record.employeeName}</strong><br>
-    Company ID: ${record.employeeId}<br>
-    Course: ${record.course}<br>
-    Result: ${record.result}<br>
-    Date: ${record.date}`;
+    `<div class="record-info">
+      <strong>${index + 1}. ${record.employeeName}</strong><br>
+      Company ID: ${record.employeeId}<br>
+      Course: ${record.course}<br>
+      Result: ${record.result}<br>
+      Date: ${record.date}
+    </div>
+
+    <button class="delete-btn" onclick="deleteRecord(${index})">
+      🗑 Delete
+    </button>`;
 
     recordsList.appendChild(div);
 
   });
+}
+
+function deleteRecord(index){
+
+  const password =
+  prompt("Enter password to delete this record:");
+
+  if(password === null){
+    return;
+  }
+
+  if(password !== DELETE_PASSWORD){
+    alert("Incorrect password. Record was not deleted.");
+    return;
+  }
+
+  if(!confirm("Are you sure you want to delete this employee training record?")){
+    return;
+  }
+
+  let records =
+  JSON.parse(localStorage.getItem("whatIsSMSTrainingRecords")) || [];
+
+  records.splice(index, 1);
+
+  localStorage.setItem(
+    "whatIsSMSTrainingRecords",
+    JSON.stringify(records)
+  );
+
+  displayRecords();
+
+  alert("Record deleted successfully.");
 }
 
 displayRecords();
