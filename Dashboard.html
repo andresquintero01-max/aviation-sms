@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SMS Executive Dashboard</title>
+<title>371Q Executive Safety Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
@@ -25,533 +25,368 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 let charts = {};
-let smsReports = [];
-let fratReports = [];
+let allData = {
+  sms: [],
+  frat: [],
+  moc: [],
+  training: []
+};
 
-function setText(id,value){
-  document.getElementById(id).innerText = value;
+function $(id){ return document.getElementById(id); }
+
+function setText(id, value){
+  const el = $(id);
+  if(el) el.innerText = value;
 }
 
 function destroyChart(id){
   if(charts[id]) charts[id].destroy();
 }
 
-function createBar(id, labels, values, title){
+function normalizeText(value){
+  return (value || "").toString().toLowerCase();
+}
 
+function getRiskValue(r){
+  return Number(
+    r.riskScore ||
+    r.riskValue ||
+    r.initialRiskScore ||
+    r.initialRiskValue ||
+    r.totalRisk ||
+    r.score ||
+    0
+  );
+}
+
+function getResidualValue(r){
+  return Number(
+    r.residualRiskScore ||
+    r.residualRiskValue ||
+    r.residualScore ||
+    r.residualValue ||
+    0
+  );
+}
+
+function getDate(r){
+  return r.date || r.reportDate || r.eventDate || r.createdAt || r.createdDate || "";
+}
+
+function isClosed(r){
+  const text = normalizeText(
+    r.status ||
+    r.reportStatus ||
+    r.residualRiskStatus ||
+    r.closed ||
+    r.correctiveActionStatus
+  );
+
+  return text.includes("closed") ||
+         text.includes("close") ||
+         text.includes("completed") ||
+         text.includes("done") ||
+         text === "true" ||
+         text === "yes";
+}
+
+function classifyRisk(r, residual=false){
+  const text = residual
+    ? normalizeText(JSON.stringify(r)).split("residual").join(" residual ")
+    : normalizeText(JSON.stringify(r));
+
+  const value = residual ? getResidualValue(r) : getRiskValue(r);
+
+  if(text.includes("not acceptable") || text.includes("unacceptable") || text.includes("red") || value >= 15){
+    return "Not Acceptable";
+  }
+
+  if(text.includes("tolerable") || text.includes("medium") || text.includes("yellow") || (value >= 5 && value <= 14)){
+    return "Tolerable";
+  }
+
+  if(text.includes("acceptable") || text.includes("low") || text.includes("green") || (value >= 1 && value <= 4)){
+    return "Acceptable";
+  }
+
+  return "Not Assessed";
+}
+
+function detectRecordTitle(r){
+  return r.title || r.reportTitle || r.reportId || r.changeTitle || r.trainingTitle || r.courseName || r.aircraft || "Untitled Record";
+}
+
+function createDoughnut(id, labels, values, title){
   destroyChart(id);
 
-  charts[id] = new Chart(document.getElementById(id), {
-
-    type:"bar",
-
+  charts[id] = new Chart($(id), {
+    type:"doughnut",
     data:{
       labels,
       datasets:[{
-        label:title,
         data:values,
-        backgroundColor:"#0b2a66",
-        borderRadius:12
+        backgroundColor:["#1abc9c","#f1c40f","#e74c3c","#95a5a6"]
       }]
     },
-
     options:{
       responsive:true,
+      plugins:{
+        title:{
+          display:true,
+          text:title,
+          color:"#071f47",
+          font:{size:22, weight:"bold"}
+        },
+        legend:{position:"bottom"}
+      }
+    }
+  });
+}
 
+function createBar(id, labels, values, title){
+  destroyChart(id);
+
+  charts[id] = new Chart($(id), {
+    type:"bar",
+    data:{
+      labels,
+      datasets:[{
+        data:values,
+        backgroundColor:"#0b2a66",
+        borderRadius:14
+      }]
+    },
+    options:{
+      responsive:true,
       plugins:{
         legend:{display:false},
         title:{
           display:true,
           text:title,
-          color:"#555",
-          font:{
-            size:22,
-            weight:"bold"
-          }
+          color:"#071f47",
+          font:{size:22, weight:"bold"}
         }
       },
-
       scales:{
-        y:{
-          beginAtZero:true,
-          ticks:{precision:0}
-        }
+        y:{beginAtZero:true, ticks:{precision:0}}
       }
     }
-
   });
-
-}
-
-function createPie(id, labels, values, title){
-
-  destroyChart(id);
-
-  charts[id] = new Chart(document.getElementById(id), {
-
-    type:"doughnut",
-
-    data:{
-      labels,
-      datasets:[{
-        data:values,
-        backgroundColor:[
-          "#2ecc71",
-          "#f1c40f",
-          "#e74c3c",
-          "#95a5a6"
-        ]
-      }]
-    },
-
-    options:{
-      responsive:true,
-
-      plugins:{
-
-        title:{
-          display:true,
-          text:title,
-          color:"#555",
-          font:{
-            size:22,
-            weight:"bold"
-          }
-        },
-
-        legend:{
-          position:"top"
-        }
-
-      }
-
-    }
-
-  });
-
-}
-
-function isReportClosed(r){
-
-  const status = (
-    r.residualRiskStatus ||
-    r.residualStatus ||
-    r.residualRiskClosed ||
-    r.status ||
-    r.reportStatus ||
-    ""
-  ).toString().toLowerCase();
-
-  return (
-    status.includes("closed") ||
-    status === "true" ||
-    status === "yes"
-  );
-
-}
-
-function getDate(r){
-  return r.date || r.reportDate || r.eventDate || r.createdAt || "";
-}
-
-function getResidualData(r){
-
-  let text = "";
-  let value = 0;
-
-  Object.keys(r).forEach(key => {
-
-    const lowerKey = key.toLowerCase();
-
-    if(lowerKey.includes("residual")){
-
-      const fieldValue = r[key];
-
-      text += " " + String(fieldValue).toLowerCase();
-
-      if(!isNaN(Number(fieldValue))){
-        value = Number(fieldValue);
-      }
-
-    }
-
-  });
-
-  return { text, value };
-
 }
 
 function renderDashboard(){
+  const sms = allData.sms;
+  const frat = allData.frat;
+  const moc = allData.moc;
+  const training = allData.training;
 
-  let total = smsReports.length;
+  const totalRecords = sms.length + frat.length + moc.length + training.length;
 
-  let open = 0;
-  let closed = 0;
+  const openSMS = sms.filter(r => !isClosed(r)).length;
+  const closedSMS = sms.filter(r => isClosed(r)).length;
 
-  let acceptable = 0;
-  let tolerable = 0;
-  let notAcceptable = 0;
-  let notAssessed = 0;
+  const initialRisk = {
+    "Acceptable":0,
+    "Tolerable":0,
+    "Not Acceptable":0,
+    "Not Assessed":0
+  };
 
-  let residualAcceptable = 0;
-  let residualTolerable = 0;
-  let residualNotAcceptable = 0;
-  let residualNotAssessed = 0;
+  const residualRisk = {
+    "Acceptable":0,
+    "Tolerable":0,
+    "Not Acceptable":0,
+    "Not Assessed":0
+  };
 
-  let months = {};
-  let categories = {};
+  sms.forEach(r => {
+    initialRisk[classifyRisk(r, false)]++;
+    residualRisk[classifyRisk(r, true)]++;
+  });
 
   let fratHigh = 0;
   let fratNoGo = 0;
 
-  smsReports.forEach(r => {
+  frat.forEach(r => {
+    const text = normalizeText(JSON.stringify(r));
+    const value = Number(r.score || r.total || r.fratScore || r.fratValue || 0);
 
-    if(isReportClosed(r)) closed++;
-    else open++;
-
-    const riskText = (
-      r.riskLevel ||
-      r.riskAssessment ||
-      r.initialRiskLevel ||
-      r.riskCategory ||
-      ""
-    ).toString().toLowerCase();
-
-    const riskValue = Number(
-      r.riskValue ||
-      r.riskScore ||
-      r.risk ||
-      r.initialRiskValue ||
-      r.initialRiskScore ||
-      r.initialRisk ||
-      0
-    );
-
-    if(riskText.includes("not") || riskValue >= 15){
-
-      notAcceptable++;
-
-    }else if(
-      riskText.includes("tolerable") ||
-      (riskValue >= 5 && riskValue <= 14)
-    ){
-
-      tolerable++;
-
-    }else if(
-      riskText.includes("acceptable") ||
-      (riskValue >= 1 && riskValue <= 4)
-    ){
-
-      acceptable++;
-
-    }else{
-
-      notAssessed++;
-
-    }
-
-    const residualData = getResidualData(r);
-
-    const residualText = residualData.text;
-    const residualValue = residualData.value;
-
-    if(
-      residualText.includes("not acceptable") ||
-      residualText.includes("red") ||
-      residualValue >= 15
-    ){
-
-      residualNotAcceptable++;
-
-    }else if(
-      residualText.includes("tolerable") ||
-      residualText.includes("yellow") ||
-      (residualValue >= 5 && residualValue <= 14)
-    ){
-
-      residualTolerable++;
-
-    }else if(
-      residualText.includes("acceptable") ||
-      residualText.includes("green") ||
-      (residualValue >= 1 && residualValue <= 4)
-    ){
-
-      residualAcceptable++;
-
-    }else{
-
-      residualNotAssessed++;
-
-    }
-
-    const dateValue = getDate(r);
-
-    if(dateValue){
-
-      const month = dateValue.toString().substring(0,7);
-
-      months[month] = (months[month] || 0) + 1;
-
-    }
-
-    const category =
-      r.category ||
-      r.eventType ||
-      r.reportType ||
-      "Other";
-
-    categories[category] =
-      (categories[category] || 0) + 1;
-
-  });
-
-  fratReports.forEach(f => {
-
-    const value = Number(
-      f.score ||
-      f.total ||
-      f.fratScore ||
-      f.fratValue ||
-      f.value ||
-      0
-    );
-
-    const fratText = JSON.stringify(f).toLowerCase();
-
-    if(
-      value >= 16 ||
-      fratText.includes("no go") ||
-      fratText.includes("nogo") ||
-      fratText.includes("red") ||
-      fratText.includes("rojo")
-    ){
-
+    if(value >= 16 || text.includes("no go") || text.includes("nogo") || text.includes("red")){
       fratNoGo++;
-
-    }else if(
-      value >= 10 ||
-      fratText.includes("high") ||
-      fratText.includes("yellow") ||
-      fratText.includes("amarillo")
-    ){
-
+    }else if(value >= 10 || text.includes("high") || text.includes("yellow")){
       fratHigh++;
-
     }
-
   });
 
-  const safetyScore =
-    total === 0
-    ? 100
-    : Math.max(
-        0,
-        Math.round(
-          100 - (
-            (notAcceptable * 10) +
-            (open * 2)
-          )
-        )
-      );
+  let mocOpen = moc.filter(r => !isClosed(r)).length;
+  let trainingCompleted = training.filter(r => isClosed(r) || normalizeText(JSON.stringify(r)).includes("completed")).length;
 
-  setText("totalReports", total);
-  setText("openReports", open);
-  setText("closedReports", closed);
-  setText("notAcceptable", notAcceptable);
-  setText("safetyScore", safetyScore + "%");
+  let safetyScore = totalRecords === 0 ? 100 :
+    Math.max(0, Math.round(100 - (initialRisk["Not Acceptable"] * 8) - (openSMS * 2) - (fratNoGo * 10)));
 
-  setText("fratTotal", fratReports.length);
+  setText("totalRecords", totalRecords);
+  setText("smsTotal", sms.length);
+  setText("fratTotal", frat.length);
+  setText("mocTotal", moc.length);
+  setText("trainingTotal", training.length);
+  setText("openSMS", openSMS);
+  setText("closedSMS", closedSMS);
+  setText("notAcceptableRisk", initialRisk["Not Acceptable"]);
   setText("fratHigh", fratHigh);
   setText("fratNoGo", fratNoGo);
+  setText("mocOpen", mocOpen);
+  setText("trainingCompleted", trainingCompleted);
+  setText("safetyScore", safetyScore + "%");
 
-  createPie(
-    "riskChart",
-    ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
-    [acceptable,tolerable,notAcceptable,notAssessed],
-    "Risk Distribution"
+  createDoughnut(
+    "moduleChart",
+    ["SMS Reports","FRAT","Management of Change","Training"],
+    [sms.length, frat.length, moc.length, training.length],
+    "Records by Safety Module"
   );
 
-  createPie(
-    "residualRiskChart",
+  createDoughnut(
+    "riskChart",
     ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
     [
-      residualAcceptable,
-      residualTolerable,
-      residualNotAcceptable,
-      residualNotAssessed
+      initialRisk["Acceptable"],
+      initialRisk["Tolerable"],
+      initialRisk["Not Acceptable"],
+      initialRisk["Not Assessed"]
+    ],
+    "Initial Risk Distribution"
+  );
+
+  createDoughnut(
+    "residualChart",
+    ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
+    [
+      residualRisk["Acceptable"],
+      residualRisk["Tolerable"],
+      residualRisk["Not Acceptable"],
+      residualRisk["Not Assessed"]
     ],
     "Residual Risk Distribution"
   );
 
   createBar(
-    "statusChart",
-    ["Open","Closed"],
-    [open,closed],
-    "Open vs Closed Reports"
+    "actionChart",
+    ["Open SMS","Closed SMS","Open MOC","Training Completed","FRAT No Go"],
+    [openSMS, closedSMS, mocOpen, trainingCompleted, fratNoGo],
+    "Executive Action Status"
   );
 
-  createBar(
-    "monthChart",
-    Object.keys(months),
-    Object.values(months),
-    "Reports by Month"
-  );
-
-  createBar(
-    "categoryChart",
-    Object.keys(categories),
-    Object.values(categories),
-    "Reports by Category"
-  );
-
-  /* =========================
-     FRAT CHART
-  ========================== */
-
-  destroyChart("fratChart");
-
-  charts["fratChart"] = new Chart(
-    document.getElementById("fratChart"),
-    {
-
-      type:"bar",
-
-      data:{
-        labels:[
-          "Total FRAT",
-          "High Risk",
-          "No Go"
-        ],
-
-        datasets:[{
-
-          label:"FRAT",
-
-          data:[
-            fratReports.length,
-            fratHigh,
-            fratNoGo
-          ],
-
-          backgroundColor:[
-            "#082567",
-            "#f1c40f",
-            "#e74c3c"
-          ],
-
-          borderRadius:12
-
-        }]
-      },
-
-      options:{
-
-        responsive:true,
-
-        plugins:{
-
-          legend:{display:false},
-
-          title:{
-            display:true,
-            text:"FRAT Monitoring",
-            color:"#555",
-            font:{
-              size:24,
-              weight:"bold"
-            }
-          }
-
-        },
-
-        scales:{
-          y:{
-            beginAtZero:true,
-            ticks:{precision:0}
-          }
-        }
-
-      }
-
-    }
-  );
-
+  renderRecentRecords();
 }
 
-function loadSMSReports(){
+function renderRecentRecords(){
+  const table = $("recentRecords");
+  table.innerHTML = "";
 
-  const reportsRef = ref(db, "smsReports");
+  let combined = [];
 
-  onValue(reportsRef, snapshot => {
-
-    const data = snapshot.val() || {};
-
-    smsReports = Object.values(data);
-
-    renderDashboard();
-
+  Object.keys(allData).forEach(module => {
+    allData[module].forEach(r => {
+      combined.push({
+        module: module.toUpperCase(),
+        title: detectRecordTitle(r),
+        date: getDate(r),
+        status: isClosed(r) ? "Closed / Completed" : "Open / Active",
+        risk: classifyRisk(r, false)
+      });
+    });
   });
 
+  combined.sort((a,b) => String(b.date).localeCompare(String(a.date)));
+  combined = combined.slice(0,10);
+
+  if(combined.length === 0){
+    table.innerHTML = `
+      <tr>
+        <td colspan="5">No records found in Firebase.</td>
+      </tr>
+    `;
+    return;
+  }
+
+  combined.forEach(r => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td><span class="badge">${r.module}</span></td>
+      <td>${r.title}</td>
+      <td>${r.date || "No Date"}</td>
+      <td>${r.status}</td>
+      <td class="${r.risk.replaceAll(" ","").toLowerCase()}">${r.risk}</td>
+    `;
+
+    table.appendChild(tr);
+  });
 }
 
-function loadFRATReports(){
+function readFirebaseGroup(groupName, paths){
+  paths.forEach(path => {
+    const dbRef = ref(db, path);
 
-  const paths = [
+    onValue(dbRef, snapshot => {
+      const data = snapshot.val() || {};
+      let records = [];
+
+      Object.keys(data).forEach(key => {
+        if(data[key] && typeof data[key] === "object"){
+          records.push({...data[key], firebaseKey:key, firebasePath:path});
+        }
+      });
+
+      allData[groupName] = [
+        ...allData[groupName].filter(r => r.firebasePath !== path),
+        ...records
+      ];
+
+      renderDashboard();
+    });
+  });
+}
+
+window.goBack = function(){
+  location.href = "index.html";
+};
+
+window.onload = function(){
+  readFirebaseGroup("sms", [
+    "smsReports",
+    "SMSReports",
+    "reports",
+    "safetyReports"
+  ]);
+
+  readFirebaseGroup("frat", [
     "fratReports",
     "FRATReports",
     "frat",
     "FRAT",
     "fratData"
-  ];
+  ]);
 
-  let all = [];
+  readFirebaseGroup("moc", [
+    "managementOfChange",
+    "ManagementOfChange",
+    "mocReports",
+    "MOCReports",
+    "changeManagement"
+  ]);
 
-  paths.forEach(path => {
-
-    const fratRef = ref(db, path);
-
-    onValue(fratRef, snapshot => {
-
-      const data = snapshot.val();
-
-      if(data){
-
-        Object.values(data).forEach(v => {
-
-          if(v && typeof v === "object"){
-            all.push(v);
-          }
-
-        });
-
-      }
-
-      fratReports = all;
-
-      renderDashboard();
-
-    });
-
-  });
-
-}
-
-window.goBack = function(){
-  location.href = "index.html";
-}
-
-window.onload = function(){
-
-  loadSMSReports();
-  loadFRATReports();
-
-}
-
+  readFirebaseGroup("training", [
+    "training",
+    "Training",
+    "trainingRecords",
+    "safetyTraining",
+    "readAndSign"
+  ]);
+};
 </script>
 
 <style>
-
 *{
   margin:0;
   padding:0;
@@ -559,198 +394,175 @@ window.onload = function(){
 }
 
 body{
-  font-family:Arial,sans-serif;
+  font-family:Arial, sans-serif;
   min-height:100vh;
-  background:linear-gradient(
-    135deg,
-    #071f47,
-    #0b2a66,
-    #1450b8
-  );
+  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
   padding:30px;
 }
 
 .container{
-  max-width:1450px;
+  max-width:1500px;
   margin:auto;
   background:white;
-  border-radius:35px;
-  padding:35px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.35);
+  border-radius:34px;
+  padding:38px;
+  box-shadow:0 25px 60px rgba(0,0,0,0.35);
 }
 
-h1{
+.header{
   text-align:center;
-  color:#071f47;
-  font-size:60px;
-  margin-bottom:8px;
-}
-
-.subtitle{
-  text-align:center;
-  color:#666;
-  font-size:20px;
   margin-bottom:35px;
 }
 
-.section-title{
+.header h1{
+  font-size:58px;
   color:#071f47;
-  font-size:30px;
+  margin-bottom:8px;
+}
+
+.header p{
+  font-size:20px;
+  color:#666;
+}
+
+.section-title{
   margin:40px 0 20px;
-  border-left:8px solid #071f47;
-  padding-left:14px;
+  font-size:30px;
+  color:#071f47;
+  border-left:9px solid #071f47;
+  padding-left:15px;
   font-weight:bold;
 }
 
-.cards{
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:22px;
+}
+
+.kpi{
+  background:linear-gradient(135deg,#071f47,#0b2a66);
+  color:white;
+  border-radius:26px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.22);
+}
+
+.kpi h2{
+  font-size:54px;
+  margin-bottom:10px;
+}
+
+.kpi p{
+  font-size:18px;
+}
+
+.green{
+  background:linear-gradient(135deg,#138d75,#2ecc71);
+}
+
+.yellow{
+  background:linear-gradient(135deg,#f1c40f,#ffd86b);
+  color:#071f47;
+}
+
+.red{
+  background:linear-gradient(135deg,#c0392b,#ff3b30);
+}
+
+.module-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:22px;
 }
 
-.card{
-  background:linear-gradient(
-    135deg,
-    #071f47,
-    #0b2a66
-  );
-
-  color:white;
-
-  border-radius:28px;
-
-  padding:35px;
-
-  text-align:center;
-
-  box-shadow:0 10px 25px rgba(0,0,0,0.25);
+.module-card{
+  background:#f4f6f8;
+  border-radius:25px;
+  padding:25px;
+  border-top:8px solid #071f47;
+  box-shadow:0 8px 20px rgba(0,0,0,0.12);
 }
 
-.card.red{
-  background:linear-gradient(
-    135deg,
-    #d63031,
-    #ff3b30
-  );
-}
-
-.card.yellow{
-  background:linear-gradient(
-    135deg,
-    #cfa000,
-    #ffd400
-  );
-
+.module-card h3{
+  font-size:26px;
   color:#071f47;
-}
-
-.card.green{
-  background:linear-gradient(
-    135deg,
-    #138d75,
-    #2ecc71
-  );
-}
-
-.card h2{
-  font-size:64px;
   margin-bottom:12px;
 }
 
-.card p{
-  font-size:22px;
+.module-card p{
+  font-size:16px;
+  color:#555;
+  line-height:1.5;
 }
 
-.charts-columns{
-  display:flex;
-  gap:30px;
-  margin-top:30px;
-  align-items:flex-start;
-}
-
-.charts-column{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  gap:30px;
+.charts{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
+  gap:28px;
 }
 
 .chart-box{
   background:#f4f6f8;
+  padding:28px;
   border-radius:28px;
-  padding:30px;
   box-shadow:0 8px 20px rgba(0,0,0,0.12);
 }
 
 canvas{
   width:100% !important;
-  max-height:380px;
+  max-height:370px;
 }
 
-/* =========================
-   FRAT SECTION
-========================= */
-
-.frat-title-wrapper{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:30px;
-  margin-top:50px;
-  margin-bottom:25px;
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#f4f6f8;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 8px 20px rgba(0,0,0,0.12);
 }
 
-.frat-line{
-  flex:1;
-  height:3px;
-  background:#d9d9d9;
+th{
+  background:#071f47;
+  color:white;
+  padding:16px;
+  text-align:left;
 }
 
-.frat-main-title{
-  font-size:72px;
-  font-weight:900;
-  color:#071f47;
-  position:relative;
+td{
+  padding:15px;
+  border-bottom:1px solid #ddd;
+  color:#333;
 }
 
-.frat-main-title::after{
-  content:"";
-  width:130px;
-  height:6px;
-  background:#0b2a66;
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  bottom:-12px;
-  border-radius:10px;
-}
-
-.frat-container{
-  margin-top:50px;
-}
-
-.frat-card-container{
-  background:#f7f7f7;
-  border-radius:30px;
-  padding:28px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.10);
-}
-
-.frat-monitor-title{
-  font-size:28px;
-  color:#071f47;
+.badge{
+  background:#071f47;
+  color:white;
+  padding:7px 12px;
+  border-radius:20px;
   font-weight:bold;
-  margin-bottom:25px;
-  border-left:8px solid #071f47;
-  padding-left:12px;
 }
 
-.frat-chart-box{
-  margin-top:35px;
-  background:#f7f7f7;
-  border-radius:30px;
-  padding:30px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.10);
+.acceptable{
+  color:#138d75;
+  font-weight:bold;
+}
+
+.tolerable{
+  color:#b7950b;
+  font-weight:bold;
+}
+
+.notacceptable{
+  color:#c0392b;
+  font-weight:bold;
+}
+
+.notassessed{
+  color:#7f8c8d;
+  font-weight:bold;
 }
 
 .back-btn{
@@ -770,18 +582,15 @@ canvas{
   background:#922b21;
 }
 
-@media(max-width:900px){
-
-  .charts-columns{
-    flex-direction:column;
+@media(max-width:700px){
+  .header h1{
+    font-size:40px;
   }
 
-  .frat-main-title{
-    font-size:50px;
+  .charts{
+    grid-template-columns:1fr;
   }
-
 }
-
 </style>
 </head>
 
@@ -789,151 +598,105 @@ canvas{
 
 <div class="container">
 
-  <h1>SMS Executive Dashboard</h1>
-
-  <div class="subtitle">
-    Safety Management System Performance Overview
+  <div class="header">
+    <h1>371Q Executive Safety Dashboard</h1>
+    <p>Professional Safety Software Tool | Real-Time SMS Performance Overview</p>
   </div>
 
-  <!-- EXECUTIVE SUMMARY -->
+  <div class="section-title">Executive Summary</div>
 
-  <div class="section-title">
-    Executive Summary
-  </div>
-
-  <div class="cards">
-
-    <div class="card">
-      <h2 id="totalReports">0</h2>
-      <p>Total SMS Reports</p>
+  <div class="kpi-grid">
+    <div class="kpi">
+      <h2 id="totalRecords">0</h2>
+      <p>Total Safety Records</p>
     </div>
 
-    <div class="card yellow">
-      <h2 id="openReports">0</h2>
-      <p>Open Reports</p>
-    </div>
-
-    <div class="card green">
-      <h2 id="closedReports">0</h2>
-      <p>Closed Reports</p>
-    </div>
-
-    <div class="card red">
-      <h2 id="notAcceptable">0</h2>
-      <p>Not Acceptable Risk</p>
-    </div>
-
-    <div class="card">
+    <div class="kpi">
       <h2 id="safetyScore">100%</h2>
       <p>Executive Safety Score</p>
     </div>
 
+    <div class="kpi yellow">
+      <h2 id="openSMS">0</h2>
+      <p>Open SMS Reports</p>
+    </div>
+
+    <div class="kpi green">
+      <h2 id="closedSMS">0</h2>
+      <p>Closed SMS Reports</p>
+    </div>
+
+    <div class="kpi red">
+      <h2 id="notAcceptableRisk">0</h2>
+      <p>Not Acceptable Risks</p>
+    </div>
   </div>
 
-  <!-- CHARTS -->
+  <div class="section-title">Safety Modules</div>
 
-  <div class="section-title">
-    Charts
+  <div class="module-grid">
+    <div class="module-card">
+      <h3>SMS Reports</h3>
+      <p><strong id="smsTotal">0</strong> records loaded from safety reports, hazards, investigations and corrective actions.</p>
+    </div>
+
+    <div class="module-card">
+      <h3>FRAT</h3>
+      <p><strong id="fratTotal">0</strong> FRAT records. High Risk: <strong id="fratHigh">0</strong> | No Go: <strong id="fratNoGo">0</strong></p>
+    </div>
+
+    <div class="module-card">
+      <h3>Management of Change</h3>
+      <p><strong id="mocTotal">0</strong> change records. Open actions: <strong id="mocOpen">0</strong></p>
+    </div>
+
+    <div class="module-card">
+      <h3>Training & Read and Sign</h3>
+      <p><strong id="trainingTotal">0</strong> training records. Completed: <strong id="trainingCompleted">0</strong></p>
+    </div>
   </div>
 
-  <div class="charts-columns">
+  <div class="section-title">Executive Charts</div>
 
-    <!-- LEFT -->
-
-    <div class="charts-column">
-
-      <div class="chart-box">
-        <canvas id="riskChart"></canvas>
-      </div>
-
-      <div class="chart-box">
-        <canvas id="statusChart"></canvas>
-      </div>
-
-      <div class="chart-box">
-        <canvas id="monthChart"></canvas>
-      </div>
-
+  <div class="charts">
+    <div class="chart-box">
+      <canvas id="moduleChart"></canvas>
     </div>
 
-    <!-- RIGHT -->
-
-    <div class="charts-column">
-
-      <div class="chart-box">
-        <canvas id="residualRiskChart"></canvas>
-      </div>
-
-      <div class="chart-box">
-        <canvas id="categoryChart"></canvas>
-      </div>
-
+    <div class="chart-box">
+      <canvas id="riskChart"></canvas>
     </div>
 
+    <div class="chart-box">
+      <canvas id="residualChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <canvas id="actionChart"></canvas>
+    </div>
   </div>
 
-  <!-- =========================
-       FRAT SECTION
-  ========================== -->
+  <div class="section-title">Latest Safety Records</div>
 
-  <div class="frat-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Module</th>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Risk</th>
+      </tr>
+    </thead>
 
-    <div class="frat-title-wrapper">
+    <tbody id="recentRecords">
+      <tr>
+        <td colspan="5">Loading Firebase records...</td>
+      </tr>
+    </tbody>
+  </table>
 
-      <div class="frat-line"></div>
-
-      <div class="frat-main-title">
-        FRAT
-      </div>
-
-      <div class="frat-line"></div>
-
-    </div>
-
-    <!-- FRAT CARDS -->
-
-    <div class="frat-card-container">
-
-      <div class="frat-monitor-title">
-        FRAT Monitoring
-      </div>
-
-      <div class="cards">
-
-        <div class="card">
-          <h2 id="fratTotal">0</h2>
-          <p>Total FRAT</p>
-        </div>
-
-        <div class="card yellow">
-          <h2 id="fratHigh">0</h2>
-          <p>High Risk FRAT</p>
-        </div>
-
-        <div class="card red">
-          <h2 id="fratNoGo">0</h2>
-          <p>No Go FRAT</p>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- FRAT GRAPH -->
-
-    <div class="frat-chart-box">
-
-      <canvas id="fratChart"></canvas>
-
-    </div>
-
-  </div>
-
-  <!-- BUTTON -->
-
-  <button class="back-btn" onclick="goBack()">
-    Back to Home
-  </button>
+  <button class="back-btn" onclick="goBack()">Back to Home</button>
 
 </div>
 
