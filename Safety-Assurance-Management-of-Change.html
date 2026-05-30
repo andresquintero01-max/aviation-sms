@@ -28,15 +28,10 @@ body{
     box-shadow:0 20px 55px rgba(0,0,0,0.35);
 }
 
-.header{
-    text-align:center;
-    margin-bottom:35px;
-}
+.header{text-align:center;margin-bottom:35px;}
 
 .logo{
-    width:95px;
-    height:95px;
-    margin:auto;
+    width:95px;height:95px;margin:auto;
     border-radius:50%;
     background:linear-gradient(135deg,#5b35d5,#8b5cf6);
     color:white;
@@ -55,10 +50,7 @@ h1{
     font-weight:800;
 }
 
-.subtitle{
-    font-size:20px;
-    color:#56657d;
-}
+.subtitle{font-size:20px;color:#56657d;}
 
 .title-line{
     width:220px;
@@ -89,9 +81,7 @@ h1{
     gap:20px;
 }
 
-.full{
-    grid-column:1 / 3;
-}
+.full{grid-column:1 / 3;}
 
 label{
     display:block;
@@ -101,9 +91,7 @@ label{
     font-size:15px;
 }
 
-input,
-select,
-textarea{
+input,select,textarea{
     width:100%;
     padding:14px;
     border-radius:14px;
@@ -112,13 +100,6 @@ textarea{
     outline:none;
     transition:0.3s;
     background:white;
-}
-
-input:focus,
-select:focus,
-textarea:focus{
-    border-color:#7b4dff;
-    box-shadow:0 0 0 3px rgba(123,77,255,0.15);
 }
 
 textarea{
@@ -157,34 +138,14 @@ textarea{
     box-shadow:0 5px 14px rgba(0,0,0,0.08);
 }
 
-.matrix-head{
-    background:#071f47;
-}
+.matrix-head{background:#071f47;}
+.risk-cell{cursor:pointer;transition:0.2s;}
+.risk-cell:hover{transform:scale(1.04);}
 
-.risk-cell{
-    cursor:pointer;
-    transition:0.2s;
-}
-
-.risk-cell:hover{
-    transform:scale(1.04);
-}
-
-.acceptable{
-    background:#22b573;
-}
-
-.tolerable{
-    background:#f59e0b;
-}
-
-.high{
-    background:#ff6600;
-}
-
-.notacceptable{
-    background:#d90000;
-}
+.acceptable{background:#22b573;}
+.tolerable{background:#f59e0b;}
+.high{background:#ff6600;}
+.notacceptable{background:#d90000;}
 
 .selected-risk{
     outline:5px solid #000;
@@ -245,43 +206,16 @@ button{
     box-shadow:0 10px 20px rgba(0,0,0,0.18);
 }
 
-button:hover{
-    transform:translateY(-4px);
-}
+button:hover{transform:translateY(-4px);}
 
-.save{
-    background:linear-gradient(135deg,#168f58,#22b573);
-    color:white;
-}
+.save{background:linear-gradient(135deg,#168f58,#22b573);color:white;}
+.print{background:linear-gradient(135deg,#0b2a66,#1c63db);color:white;}
+.back{background:linear-gradient(135deg,#d40000,#ff2b2b);color:white;}
+.home{background:linear-gradient(135deg,#071f47,#123b8b);color:white;}
+.open{background:linear-gradient(135deg,#5b35d5,#8b5cf6);color:white;}
+.delete{background:linear-gradient(135deg,#8b0000,#e60000);color:white;}
 
-.print{
-    background:linear-gradient(135deg,#0b2a66,#1c63db);
-    color:white;
-}
-
-.back{
-    background:linear-gradient(135deg,#d40000,#ff2b2b);
-    color:white;
-}
-
-.home{
-    background:linear-gradient(135deg,#071f47,#123b8b);
-    color:white;
-}
-
-.open{
-    background:linear-gradient(135deg,#5b35d5,#8b5cf6);
-    color:white;
-}
-
-.delete{
-    background:linear-gradient(135deg,#8b0000,#e60000);
-    color:white;
-}
-
-.records-box{
-    margin-top:35px;
-}
+.records-box{margin-top:35px;}
 
 .record-card{
     background:#f4f6f8;
@@ -306,9 +240,7 @@ button:hover{
     margin-bottom:8px;
 }
 
-.required{
-    color:red;
-}
+.required{color:red;}
 
 .footer{
     margin-top:35px;
@@ -320,26 +252,43 @@ button:hover{
 }
 
 @media(max-width:900px){
-    .grid,
-    .checkbox-grid{
-        grid-template-columns:1fr;
-    }
+    .grid,.checkbox-grid{grid-template-columns:1fr;}
+    .full{grid-column:1;}
+    h1{font-size:40px;}
+    .container{padding:28px;}
+    .risk-matrix{grid-template-columns:80px repeat(5,1fr);font-size:12px;}
+}
 
-    .full{
-        grid-column:1;
-    }
-
-    h1{
-        font-size:40px;
+/* PRINT ONLY REPORT */
+@media print{
+    body{
+        background:white !important;
+        padding:0 !important;
     }
 
     .container{
-        padding:28px;
+        box-shadow:none !important;
+        border-radius:0 !important;
+        padding:20px !important;
+        max-width:100% !important;
     }
 
-    .risk-matrix{
-        grid-template-columns:80px repeat(5,1fr);
-        font-size:12px;
+    .actions,
+    .records-box,
+    .footer,
+    button{
+        display:none !important;
+    }
+
+    .section{
+        page-break-inside:avoid;
+        box-shadow:none !important;
+        border:1px solid #ccc;
+    }
+
+    input,select,textarea{
+        border:none !important;
+        background:white !important;
     }
 }
 </style>
@@ -349,318 +298,297 @@ button:hover{
 
 <div class="container">
 
-    <div class="header">
-        <div class="logo">🔄</div>
-        <h1>Management of Change</h1>
-        <div class="subtitle">
-            Evaluate operational changes, risk impacts, approvals and safety mitigation actions
-        </div>
-        <div class="title-line"></div>
+<div class="header">
+    <div class="logo">🔄</div>
+    <h1>Management of Change</h1>
+    <div class="subtitle">Evaluate operational changes, risk impacts, approvals and safety mitigation actions</div>
+    <div class="title-line"></div>
+</div>
+
+<div class="section">
+<h2>1. Change Request</h2>
+
+<div class="grid">
+    <div>
+        <label>Title <span class="required">*</span></label>
+        <input id="title" type="text">
     </div>
 
-    <div class="section">
-        <h2>1. Change Request</h2>
-
-        <div class="grid">
-
-            <div>
-                <label>Title <span class="required">*</span></label>
-                <input id="title" type="text" placeholder="Example: New Tool Control Process">
-            </div>
-
-            <div>
-                <label>Date</label>
-                <input id="date" type="date">
-            </div>
-
-            <div>
-                <label>Requested By</label>
-                <input id="requestedBy" type="text" placeholder="Employee name">
-            </div>
-
-            <div>
-                <label>Department</label>
-                <input id="department" type="text" placeholder="Maintenance / Operations / Safety">
-            </div>
-
-            <div>
-                <label>Type of Change</label>
-                <select id="typeOfChange">
-                    <option value="">Select type</option>
-                    <option>Operational Change</option>
-                    <option>Technical Change</option>
-                    <option>Facility Change</option>
-                    <option>Procedure Change</option>
-                    <option>Organizational Change</option>
-                    <option>Software/System Change</option>
-                </select>
-            </div>
-
-            <div>
-                <label>Implementation Date</label>
-                <input id="implementationDate" type="date">
-            </div>
-
-            <div class="full">
-                <label>Description of Change</label>
-                <textarea id="description" placeholder="Describe the proposed operational change..."></textarea>
-            </div>
-
-            <div class="full">
-                <label>Reason for Change</label>
-                <textarea id="reason" placeholder="Explain why this change is necessary..."></textarea>
-            </div>
-
-        </div>
-
-        <button class="save" onclick="saveReport()">Save Section</button>
+    <div>
+        <label>Date</label>
+        <input id="date" type="date">
     </div>
 
-    <div class="section">
-        <h2>2. Areas Affected</h2>
-
-        <div class="checkbox-grid">
-            <label class="check-item"><input class="area" value="Maintenance" type="checkbox"> Maintenance</label>
-            <label class="check-item"><input class="area" value="Ground Handling" type="checkbox"> Ground Handling</label>
-            <label class="check-item"><input class="area" value="Flight Operations" type="checkbox"> Flight Operations</label>
-            <label class="check-item"><input class="area" value="Safety" type="checkbox"> Safety</label>
-            <label class="check-item"><input class="area" value="Training" type="checkbox"> Training</label>
-            <label class="check-item"><input class="area" value="Quality Assurance" type="checkbox"> Quality Assurance</label>
-            <label class="check-item"><input class="area" value="Tooling" type="checkbox"> Tooling</label>
-            <label class="check-item"><input class="area" value="Facilities" type="checkbox"> Facilities</label>
-            <label class="check-item"><input class="area" value="Documentation" type="checkbox"> Documentation</label>
-        </div>
-
-        <button class="save" onclick="saveReport()">Save Section</button>
+    <div>
+        <label>Requested By</label>
+        <input id="requestedBy" type="text">
     </div>
 
-    <div class="section">
-        <h2>3. Initial Risk Assessment</h2>
-
-        <div class="grid">
-            <div class="full">
-                <label>Hazards Identified</label>
-                <textarea id="hazards" placeholder="List identified hazards associated with the change..."></textarea>
-            </div>
-
-            <div class="full">
-                <label>Existing Controls</label>
-                <textarea id="existingControls" placeholder="Describe existing safety controls..."></textarea>
-            </div>
-        </div>
-
-        <label style="margin-top:20px;">Initial Risk Matrix</label>
-        <div id="initialMatrix" class="risk-matrix"></div>
-
-        <div class="risk-result">
-            Initial Risk Selected: <span id="initialRiskText">Not selected</span>
-        </div>
-
-        <button class="save" onclick="saveReport()">Save Section</button>
+    <div>
+        <label>Department</label>
+        <input id="department" type="text">
     </div>
 
-    <div class="section">
-        <h2>4. Action Plan / Mitigation</h2>
-
-        <div class="grid">
-
-            <div class="full">
-                <label>Additional Mitigations Required</label>
-                <textarea id="additionalMitigations" placeholder="Describe additional mitigation actions..."></textarea>
-            </div>
-
-            <div class="full">
-                <label>Implementation Actions</label>
-                <textarea id="implementationActions" placeholder="Describe implementation activities..."></textarea>
-            </div>
-
-            <div>
-                <label>Responsible Person</label>
-                <input id="responsiblePerson" type="text" placeholder="Responsible employee">
-            </div>
-
-            <div>
-                <label>Target Date</label>
-                <input id="targetDate" type="date">
-            </div>
-
-        </div>
-
-        <button class="save" onclick="saveReport()">Save Section</button>
+    <div>
+        <label>Type of Change</label>
+        <select id="typeOfChange">
+            <option value="">Select type</option>
+            <option>Operational Change</option>
+            <option>Technical Change</option>
+            <option>Facility Change</option>
+            <option>Procedure Change</option>
+            <option>Organizational Change</option>
+            <option>Software/System Change</option>
+        </select>
     </div>
 
-    <div class="section">
-        <h2>5. Residual Risk Assessment</h2>
-
-        <p style="color:#56657d;margin-bottom:15px;">
-            Evaluate the risk again after mitigation actions are defined.
-        </p>
-
-        <div id="residualMatrix" class="risk-matrix"></div>
-
-        <div class="risk-result">
-            Residual Risk Selected: <span id="residualRiskText">Not selected</span>
-        </div>
-
-        <button class="save" onclick="saveReport()">Save Section</button>
+    <div>
+        <label>Implementation Date</label>
+        <input id="implementationDate" type="date">
     </div>
 
-    <div class="section">
-        <h2>6. Approval Workflow</h2>
-
-        <div class="grid">
-
-            <div>
-                <label>Safety Manager Approval</label>
-                <select id="safetyApproval">
-                    <option>Pending</option>
-                    <option>Approved</option>
-                    <option>Rejected</option>
-                </select>
-            </div>
-
-            <div>
-                <label>Quality Manager Approval</label>
-                <select id="qualityApproval">
-                    <option>Pending</option>
-                    <option>Approved</option>
-                    <option>Rejected</option>
-                </select>
-            </div>
-
-            <div>
-                <label>Maintenance Manager Approval</label>
-                <select id="maintenanceApproval">
-                    <option>Pending</option>
-                    <option>Approved</option>
-                    <option>Rejected</option>
-                </select>
-            </div>
-
-            <div>
-                <label>Operations Manager Approval</label>
-                <select id="operationsApproval">
-                    <option>Pending</option>
-                    <option>Approved</option>
-                    <option>Rejected</option>
-                </select>
-            </div>
-
-            <div class="full">
-                <label>Approval Comments</label>
-                <textarea id="approvalComments" placeholder="Comments or restrictions..."></textarea>
-            </div>
-
-        </div>
-
-        <button class="save" onclick="saveReport()">Save Section</button>
+    <div class="full">
+        <label>Description of Change</label>
+        <textarea id="description"></textarea>
     </div>
 
-    <div class="section">
-        <h2>7. Implementation Tracking</h2>
+    <div class="full">
+        <label>Reason for Change</label>
+        <textarea id="reason"></textarea>
+    </div>
+</div>
 
-        <div class="grid">
+<button class="save" onclick="saveReport()">Save Section</button>
+</div>
 
-            <div>
-                <label>Status</label>
-                <select id="status">
-                    <option>Draft</option>
-                    <option>Under Review</option>
-                    <option>Approved</option>
-                    <option>In Progress</option>
-                    <option>Implemented</option>
-                    <option>Closed</option>
-                </select>
-            </div>
+<div class="section">
+<h2>2. Areas Affected</h2>
 
-            <div>
-                <label>Completion Date</label>
-                <input id="completionDate" type="date">
-            </div>
+<div class="checkbox-grid">
+    <label class="check-item"><input class="area" value="Maintenance" type="checkbox"> Maintenance</label>
+    <label class="check-item"><input class="area" value="Ground Handling" type="checkbox"> Ground Handling</label>
+    <label class="check-item"><input class="area" value="Flight Operations" type="checkbox"> Flight Operations</label>
+    <label class="check-item"><input class="area" value="Safety" type="checkbox"> Safety</label>
+    <label class="check-item"><input class="area" value="Training" type="checkbox"> Training</label>
+    <label class="check-item"><input class="area" value="Quality Assurance" type="checkbox"> Quality Assurance</label>
+    <label class="check-item"><input class="area" value="Tooling" type="checkbox"> Tooling</label>
+    <label class="check-item"><input class="area" value="Facilities" type="checkbox"> Facilities</label>
+    <label class="check-item"><input class="area" value="Documentation" type="checkbox"> Documentation</label>
+</div>
 
-        </div>
+<button class="save" onclick="saveReport()">Save Section</button>
+</div>
 
-        <div class="status-bar">
-            <div class="status draft">Draft</div>
-            <div class="status review">Under Review</div>
-            <div class="status approved">Approved</div>
-            <div class="status progress">Implemented</div>
-            <div class="status closed">Closed</div>
-        </div>
+<div class="section">
+<h2>3. Initial Risk Assessment</h2>
 
-        <button class="save" onclick="saveReport()">Save Section</button>
+<div class="grid">
+    <div class="full">
+        <label>Hazards Identified</label>
+        <textarea id="hazards"></textarea>
     </div>
 
-    <div class="section">
-        <h2>8. Post-Implementation Review</h2>
+    <div class="full">
+        <label>Existing Controls</label>
+        <textarea id="existingControls"></textarea>
+    </div>
+</div>
 
-        <div class="grid">
+<label style="margin-top:20px;">Initial Risk Matrix</label>
+<div id="initialMatrix" class="risk-matrix"></div>
 
-            <div>
-                <label>Was the Change Effective?</label>
-                <select id="changeEffective">
-                    <option>Pending Review</option>
-                    <option>Yes</option>
-                    <option>No</option>
-                    <option>Partially Effective</option>
-                </select>
-            </div>
+<div class="risk-result">
+    Initial Risk Selected: <span id="initialRiskText">Not selected</span>
+</div>
 
-            <div>
-                <label>New Hazards Identified?</label>
-                <select id="newHazards">
-                    <option>No</option>
-                    <option>Yes</option>
-                    <option>Pending Review</option>
-                </select>
-            </div>
+<button class="save" onclick="saveReport()">Save Section</button>
+</div>
 
-            <div class="full">
-                <label>Lessons Learned</label>
-                <textarea id="lessonsLearned" placeholder="Describe lessons learned..."></textarea>
-            </div>
+<div class="section">
+<h2>4. Action Plan / Mitigation</h2>
 
-            <div class="full">
-                <label>Follow-up Actions</label>
-                <textarea id="followUpActions" placeholder="Additional follow-up actions..."></textarea>
-            </div>
-
-        </div>
-
-        <button class="save" onclick="saveReport()">Save Section</button>
+<div class="grid">
+    <div class="full">
+        <label>Additional Mitigations Required</label>
+        <textarea id="additionalMitigations"></textarea>
     </div>
 
-    <div class="section">
-        <h2>9. Attachments / References</h2>
-
-        <div class="grid">
-            <div class="full">
-                <label>Reference Documents</label>
-                <textarea id="referenceDocuments" placeholder="Procedures, manuals, training records, photos or reports..."></textarea>
-            </div>
-        </div>
-
-        <button class="save" onclick="saveReport()">Save Section</button>
+    <div class="full">
+        <label>Implementation Actions</label>
+        <textarea id="implementationActions"></textarea>
     </div>
 
-    <div class="actions">
-        <button class="save" onclick="saveReport()">Final Save</button>
-
-        <button class="print" onclick="window.print()">Print File</button>
-
-        <button class="back" onclick="window.location.href='Safety-Assurance.html'">← Back</button>
-
-        <button class="home" onclick="window.location.href='index.html'">Home</button>
+    <div>
+        <label>Responsible Person</label>
+        <input id="responsiblePerson" type="text">
     </div>
 
-    <div class="records-box">
-        <h2 style="color:#071f47;margin-bottom:20px;">Saved Management of Change Reports</h2>
-        <div id="recordsList"></div>
+    <div>
+        <label>Target Date</label>
+        <input id="targetDate" type="date">
+    </div>
+</div>
+
+<button class="save" onclick="saveReport()">Save Section</button>
+</div>
+
+<div class="section">
+<h2>5. Residual Risk Assessment</h2>
+
+<div id="residualMatrix" class="risk-matrix"></div>
+
+<div class="risk-result">
+    Residual Risk Selected: <span id="residualRiskText">Not selected</span>
+</div>
+
+<button class="save" onclick="saveReport()">Save Section</button>
+</div>
+
+<div class="section">
+<h2>6. Approval Workflow</h2>
+
+<div class="grid">
+    <div>
+        <label>Safety Manager Approval</label>
+        <select id="safetyApproval">
+            <option>Pending</option>
+            <option>Approved</option>
+            <option>Rejected</option>
+        </select>
     </div>
 
-    <div class="footer">
-        AVIATION SAFETY MANAGEMENT PLATFORM
+    <div>
+        <label>Quality Manager Approval</label>
+        <select id="qualityApproval">
+            <option>Pending</option>
+            <option>Approved</option>
+            <option>Rejected</option>
+        </select>
     </div>
+
+    <div>
+        <label>Maintenance Manager Approval</label>
+        <select id="maintenanceApproval">
+            <option>Pending</option>
+            <option>Approved</option>
+            <option>Rejected</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Operations Manager Approval</label>
+        <select id="operationsApproval">
+            <option>Pending</option>
+            <option>Approved</option>
+            <option>Rejected</option>
+        </select>
+    </div>
+
+    <div class="full">
+        <label>Approval Comments</label>
+        <textarea id="approvalComments"></textarea>
+    </div>
+</div>
+
+<button class="save" onclick="saveReport()">Save Section</button>
+</div>
+
+<div class="section">
+<h2>7. Implementation Tracking</h2>
+
+<div class="grid">
+    <div>
+        <label>Status</label>
+        <select id="status">
+            <option>Draft</option>
+            <option>Under Review</option>
+            <option>Approved</option>
+            <option>In Progress</option>
+            <option>Implemented</option>
+            <option>Closed</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Completion Date</label>
+        <input id="completionDate" type="date">
+    </div>
+</div>
+
+<div class="status-bar">
+    <div class="status draft">Draft</div>
+    <div class="status review">Under Review</div>
+    <div class="status approved">Approved</div>
+    <div class="status progress">Implemented</div>
+    <div class="status closed">Closed</div>
+</div>
+
+<button class="save" onclick="saveReport()">Save Section</button>
+</div>
+
+<div class="section">
+<h2>8. Post-Implementation Review</h2>
+
+<div class="grid">
+    <div>
+        <label>Was the Change Effective?</label>
+        <select id="changeEffective">
+            <option>Pending Review</option>
+            <option>Yes</option>
+            <option>No</option>
+            <option>Partially Effective</option>
+        </select>
+    </div>
+
+    <div>
+        <label>New Hazards Identified?</label>
+        <select id="newHazards">
+            <option>No</option>
+            <option>Yes</option>
+            <option>Pending Review</option>
+        </select>
+    </div>
+
+    <div class="full">
+        <label>Lessons Learned</label>
+        <textarea id="lessonsLearned"></textarea>
+    </div>
+
+    <div class="full">
+        <label>Follow-up Actions</label>
+        <textarea id="followUpActions"></textarea>
+    </div>
+</div>
+
+<button class="save" onclick="saveReport()">Save Section</button>
+</div>
+
+<div class="section">
+<h2>9. Attachments / References</h2>
+
+<div class="grid">
+    <div class="full">
+        <label>Reference Documents</label>
+        <textarea id="referenceDocuments"></textarea>
+    </div>
+</div>
+
+<button class="save" onclick="saveReport()">Save Section</button>
+</div>
+
+<div class="actions">
+    <button class="save" onclick="saveReport()">Final Save</button>
+    <button class="print" onclick="window.print()">Print File</button>
+    <button class="back" onclick="window.location.href='Safety-Assurance.html'">← Back</button>
+    <button class="home" onclick="window.location.href='index.html'">Home</button>
+</div>
+
+<div class="records-box">
+    <h2 style="color:#071f47;margin-bottom:20px;">Saved Management of Change Reports</h2>
+    <div id="recordsList"></div>
+</div>
+
+<div class="footer">AVIATION SAFETY MANAGEMENT PLATFORM</div>
 
 </div>
 
@@ -668,7 +596,6 @@ button:hover{
 let currentKey = null;
 let initialRisk = "";
 let residualRisk = "";
-
 const STORAGE_KEY = "managementOfChangeReports";
 
 window.onload = function(){
@@ -683,45 +610,32 @@ window.onload = function(){
 };
 
 function getVal(id){
-    const el = document.getElementById(id);
-    return el ? el.value : "";
+    return document.getElementById(id)?.value || "";
 }
 
 function setVal(id,value){
     const el = document.getElementById(id);
-    if(el){
-        el.value = value || "";
-    }
+    if(el) el.value = value || "";
 }
 
 function getAreas(){
     let areas = [];
-
-    document.querySelectorAll(".area").forEach(function(box){
-        if(box.checked){
-            areas.push(box.value);
-        }
+    document.querySelectorAll(".area").forEach(box=>{
+        if(box.checked) areas.push(box.value);
     });
-
     return areas;
 }
 
 function setAreas(areas){
-    document.querySelectorAll(".area").forEach(function(box){
+    document.querySelectorAll(".area").forEach(box=>{
         box.checked = Array.isArray(areas) && areas.includes(box.value);
     });
 }
 
 function getReports(){
-    const saved = localStorage.getItem(STORAGE_KEY);
-
-    if(!saved){
-        return {};
-    }
-
     try{
-        return JSON.parse(saved);
-    }catch(error){
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    }catch{
         return {};
     }
 }
@@ -732,13 +646,11 @@ function setReports(reports){
 
 function validateTitle(){
     const title = getVal("title").trim();
-
     if(!title){
         alert("Title is required before saving.");
         document.getElementById("title").focus();
         return false;
     }
-
     return true;
 }
 
@@ -778,9 +690,7 @@ function collectData(){
 }
 
 function saveReport(){
-    if(!validateTitle()){
-        return;
-    }
+    if(!validateTitle()) return;
 
     const reports = getReports();
     const data = collectData();
@@ -789,92 +699,60 @@ function saveReport(){
         currentKey = "MOC-" + Date.now();
         data.createdAt = new Date().toLocaleString();
     }else{
-        if(reports[currentKey] && reports[currentKey].createdAt){
-            data.createdAt = reports[currentKey].createdAt;
-        }else{
-            data.createdAt = new Date().toLocaleString();
-        }
+        data.createdAt = reports[currentKey]?.createdAt || new Date().toLocaleString();
     }
 
     reports[currentKey] = data;
     setReports(reports);
-
     alert("Management of Change saved successfully.");
     loadRecords();
 }
 
-function riskLevel(severity,probability){
-    const score = Number(severity) * Number(probability);
-
-    if(score <= 4){
-        return "Acceptable";
-    }
-
-    if(score <= 9){
-        return "Tolerable";
-    }
-
-    if(score <= 16){
-        return "High Risk";
-    }
-
+function riskLevel(s,p){
+    const score = Number(s) * Number(p);
+    if(score <= 4) return "Acceptable";
+    if(score <= 9) return "Tolerable";
+    if(score <= 16) return "High Risk";
     return "Not Acceptable";
 }
 
 function riskClass(level){
-    if(level === "Acceptable"){
-        return "acceptable";
-    }
-
-    if(level === "Tolerable"){
-        return "tolerable";
-    }
-
-    if(level === "High Risk"){
-        return "high";
-    }
-
+    if(level === "Acceptable") return "acceptable";
+    if(level === "Tolerable") return "tolerable";
+    if(level === "High Risk") return "high";
     return "notacceptable";
 }
 
 function buildMatrix(containerId,type){
     const container = document.getElementById(containerId);
-
-    if(!container){
-        return;
-    }
-
     container.innerHTML = "";
 
-    const headers = ["S / P","P1","P2","P3","P4","P5"];
-
-    headers.forEach(function(header){
+    ["S / P","P1","P2","P3","P4","P5"].forEach(h=>{
         const div = document.createElement("div");
         div.className = "matrix-cell matrix-head";
-        div.textContent = header;
+        div.textContent = h;
         container.appendChild(div);
     });
 
-    for(let s = 1; s <= 5; s++){
-        const rowHeader = document.createElement("div");
-        rowHeader.className = "matrix-cell matrix-head";
-        rowHeader.textContent = "S" + s;
-        container.appendChild(rowHeader);
+    for(let s=1;s<=5;s++){
+        const row = document.createElement("div");
+        row.className = "matrix-cell matrix-head";
+        row.textContent = "S" + s;
+        container.appendChild(row);
 
-        for(let p = 1; p <= 5; p++){
+        for(let p=1;p<=5;p++){
             const level = riskLevel(s,p);
-
             const cell = document.createElement("div");
             cell.className = "matrix-cell risk-cell " + riskClass(level);
             cell.textContent = level;
-            cell.setAttribute("data-type",type);
-            cell.setAttribute("data-severity",s);
-            cell.setAttribute("data-probability",p);
-            cell.setAttribute("data-level",level);
+            cell.dataset.type = type;
+            cell.dataset.severity = s;
+            cell.dataset.probability = p;
+            cell.dataset.level = level;
 
-            cell.addEventListener("click",function(){
+            cell.onclick = function(){
                 selectRisk(this);
-            });
+            };
 
             container.appendChild(cell);
         }
@@ -882,15 +760,14 @@ function buildMatrix(containerId,type){
 }
 
 function selectRisk(cell){
-    const type = cell.getAttribute("data-type");
-    const severity = cell.getAttribute("data-severity");
-    const probability = cell.getAttribute("data-probability");
-    const level = cell.getAttribute("data-level");
-
+    const type = cell.dataset.type;
+    const severity = cell.dataset.severity;
+    const probability = cell.dataset.probability;
+    const level = cell.dataset.level;
     const matrixId = type === "initial" ? "initialMatrix" : "residualMatrix";
 
-    document.querySelectorAll("#" + matrixId + " .risk-cell").forEach(function(item){
-        item.classList.remove("selected-risk");
+    document.querySelectorAll("#" + matrixId + " .risk-cell").forEach(c=>{
+        c.classList.remove("selected-risk");
     });
 
     cell.classList.add("selected-risk");
@@ -909,11 +786,6 @@ function selectRisk(cell){
 function loadRecords(){
     const reports = getReports();
     const list = document.getElementById("recordsList");
-
-    if(!list){
-        return;
-    }
-
     list.innerHTML = "";
 
     const keys = Object.keys(reports).reverse();
@@ -923,9 +795,8 @@ function loadRecords(){
         return;
     }
 
-    keys.forEach(function(key){
+    keys.forEach(key=>{
         const r = reports[key];
-
         const card = document.createElement("div");
         card.className = "record-card";
 
@@ -939,7 +810,6 @@ function loadRecords(){
                     <p><strong>Initial Risk:</strong> ${r.initialRisk || "Not selected"}</p>
                     <p><strong>Residual Risk:</strong> ${r.residualRisk || "Not selected"}</p>
                 </div>
-
                 <div>
                     <button class="open" onclick="openRecord('${key}')">Open / Edit</button>
                     <button class="delete" onclick="deleteRecord('${key}')">Delete</button>
@@ -954,10 +824,7 @@ function loadRecords(){
 function openRecord(key){
     const reports = getReports();
     const r = reports[key];
-
-    if(!r){
-        return;
-    }
+    if(!r) return;
 
     currentKey = key;
 
@@ -969,9 +836,7 @@ function openRecord(key){
     setVal("implementationDate",r.implementationDate);
     setVal("description",r.description);
     setVal("reason",r.reason);
-
     setAreas(r.areasAffected);
-
     setVal("hazards",r.hazards);
     setVal("existingControls",r.existingControls);
     setVal("additionalMitigations",r.additionalMitigations);
@@ -1000,21 +865,19 @@ function openRecord(key){
     restoreRiskSelection("initialMatrix",initialRisk);
     restoreRiskSelection("residualMatrix",residualRisk);
 
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+    window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function restoreRiskSelection(matrixId,riskText){
-    document.querySelectorAll("#" + matrixId + " .risk-cell").forEach(function(cell){
+    document.querySelectorAll("#" + matrixId + " .risk-cell").forEach(cell=>{
         cell.classList.remove("selected-risk");
 
-        const level = cell.getAttribute("data-level");
-        const severity = cell.getAttribute("data-severity");
-        const probability = cell.getAttribute("data-probability");
-
-        const cellText = level + " - Severity " + severity + " / Probability " + probability;
+        const cellText =
+            cell.dataset.level +
+            " - Severity " +
+            cell.dataset.severity +
+            " / Probability " +
+            cell.dataset.probability;
 
         if(cellText === riskText){
             cell.classList.add("selected-risk");
@@ -1025,9 +888,7 @@ function restoreRiskSelection(matrixId,riskText){
 function deleteRecord(key){
     if(confirm("Are you sure you want to delete this Management of Change report?")){
         const reports = getReports();
-
         delete reports[key];
-
         setReports(reports);
 
         if(currentKey === key){
