@@ -13,24 +13,25 @@ body{
 }
 
 .container{
-  max-width:800px;
+  max-width:900px;
   margin:auto;
   background:white;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 2px 10px rgba(0,0,0,0.1);
+  padding:25px;
+  border-radius:16px;
+  box-shadow:0 2px 14px rgba(0,0,0,0.12);
 }
 
 h1{
   text-align:center;
   color:#071f47;
+  font-size:38px;
 }
 
 .box{
   margin-top:20px;
-  padding:15px;
+  padding:20px;
   border:1px solid #ddd;
-  border-radius:8px;
+  border-radius:12px;
 }
 
 button{
@@ -73,6 +74,21 @@ button.closed{
   background:#e9f5ff;
   border-radius:8px;
   font-weight:bold;
+  color:#071f47;
+}
+
+.definition-box{
+  margin-top:20px;
+  padding:18px;
+  border-left:8px solid #071f47;
+  background:#f8fbff;
+  border-radius:10px;
+  line-height:1.5;
+}
+
+.definition-box h3{
+  margin-top:0;
+  color:#071f47;
 }
 
 .investigation-box{
@@ -147,42 +163,55 @@ button.closed{
 
 .matrix-grid{
   display:grid;
-  grid-template-columns: 40px repeat(5, 60px);
-  gap:5px;
+  grid-template-columns: 45px repeat(5, 85px);
+  gap:7px;
+}
+
+.header-cell,
+.side-cell{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:bold;
+  color:#071f47;
+  font-size:18px;
 }
 
 .cell{
-  width:60px;
-  height:60px;
+  width:85px;
+  height:65px;
   display:flex;
   justify-content:center;
   align-items:center;
   font-weight:bold;
   color:white;
-  border-radius:6px;
+  border-radius:10px;
   cursor:pointer;
   position:relative;
+  font-size:20px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.15);
+  transition:0.2s;
+}
+
+.cell:hover{
+  transform:scale(1.07);
 }
 
 .cell.selected{
   outline:4px solid #071f47;
-  transform:scale(1.05);
+  transform:scale(1.07);
 }
 
 .low{background:#2ecc71;}
 .medium{background:#f1c40f;color:black;}
-.high{background:#e74c3c;}
+.high{background:#e67e22;}
+.extreme{background:#e74c3c;}
 
-.tooltip{
-  position:absolute;
-  background:#071f47;
-  color:white;
-  padding:6px;
+input, select{
+  padding:9px;
+  margin:5px;
+  border:1px solid #ccc;
   border-radius:6px;
-  font-size:12px;
-  width:160px;
-  display:none;
-  z-index:10;
 }
 </style>
 </head>
@@ -197,7 +226,7 @@ button.closed{
 
 <div class="box">
 
-<h3>Risk Assessment</h3>
+<h3>ICAO Risk Assessment Matrix 5x5</h3>
 
 <p>Probability:</p>
 <div id="pBtns"></div>
@@ -212,6 +241,11 @@ button.closed{
 <p><b>Risk Save:</b> <span id="savedRisk">N/A</span></p>
 
 <div class="matrix" id="matrix"></div>
+
+<div class="definition-box" id="definitionBox">
+<h3>Risk Definition</h3>
+Press any cell in the matrix to see the severity and probability definitions.
+</div>
 
 <div class="bottom">
 <button id="saveRiskBtn" onclick="saveRisk()">Save Risk</button>
@@ -282,6 +316,11 @@ button.closed{
 
 <div class="matrix" id="residualMatrix"></div>
 
+<div class="definition-box" id="residualDefinitionBox">
+<h3>Residual Risk Definition</h3>
+Press any cell in the residual matrix to see the severity and probability definitions.
+</div>
+
 <div class="bottom">
 <button id="saveResidualRiskBtn" onclick="saveResidualRisk()">Save Risk</button>
 <button onclick="goBack()" style="background:red;">Back</button>
@@ -319,8 +358,60 @@ const storage = getStorage(app);
 
 const key = new URLSearchParams(window.location.search).get("key");
 
-let p=0,s=0,risk=0,cpaCounter=0;
-let rp=0,rs=0,residualRisk=0;
+let p="",s="",risk="",cpaCounter=0;
+let rp="",rs="",residualRisk="";
+
+const severityDefinitions = {
+A:{name:"Catastrophic",es:"Catastrófica",desc:"Destruction of equipment or multiple fatalities."},
+B:{name:"Hazardous",es:"Peligrosa",desc:"Large reduction in safety margins, serious injuries, or major aircraft damage."},
+C:{name:"Major",es:"Mayor",desc:"Significant reduction in safety, minor injuries, or considerable increase in workload."},
+D:{name:"Minor",es:"Menor",desc:"Operational limitations, minor inconvenience, or small safety impact."},
+E:{name:"Negligible",es:"Insignificante",desc:"Minimal consequences or no appreciable impact on safety."}
+};
+
+const probabilityDefinitions = {
+5:{name:"Frequent",es:"Frecuente",desc:"Likely to occur many times."},
+4:{name:"Occasional",es:"Ocasional",desc:"Likely to occur sometimes."},
+3:{name:"Remote",es:"Remota",desc:"Unlikely, but may occur."},
+2:{name:"Improbable",es:"Improbable",desc:"Very unlikely to occur."},
+1:{name:"Extremely Improbable",es:"Extremadamente Improbable",desc:"Almost inconceivable, but still possible."}
+};
+
+function getRiskClass(severity, probability){
+const code = severity + probability;
+
+const extreme = ["A5","A4","A3","B5","B4","C5"];
+const high = ["A2","B3","C4","D5"];
+const medium = ["A1","B2","C3","D4","E5","B1","C2","D3","E4"];
+const low = ["C1","D2","E3","D1","E2","E1"];
+
+if(extreme.includes(code)) return "extreme";
+if(high.includes(code)) return "high";
+if(medium.includes(code)) return "medium";
+if(low.includes(code)) return "low";
+return "low";
+}
+
+function getRiskLevel(severity, probability){
+const riskClass = getRiskClass(severity, probability);
+
+if(riskClass==="extreme") return "HIGH / EXTREME 🔴";
+if(riskClass==="high") return "HIGH 🟠";
+if(riskClass==="medium") return "MEDIUM 🟡";
+return "LOW 🟢";
+}
+
+function showDefinition(boxId, severity, probability, code){
+const sev = severityDefinitions[severity];
+const prob = probabilityDefinitions[probability];
+
+document.getElementById(boxId).innerHTML = `
+<h3>Risk Selected: ${code}</h3>
+<p><b>Severity ${severity} - ${sev.name} (${sev.es}):</b><br>${sev.desc}</p>
+<p><b>Probability ${probability} - ${prob.name} (${prob.es}):</b><br>${prob.desc}</p>
+<p><b>Risk Level:</b> ${getRiskLevel(severity, probability)}</p>
+`;
+}
 
 get(ref(db,"smsReports/"+key)).then(s=>{
 if(s.exists()){
@@ -411,10 +502,10 @@ update(ref(db,"smsReports/"+key+"/investigationModules"),{
 
 };
 
-function createButtons(id,type){
+function createProbabilityButtons(id,type){
 const c=document.getElementById(id);
 
-for(let i=1;i<=5;i++){
+[5,4,3,2,1].forEach(i=>{
 let b=document.createElement("button");
 b.innerText=i;
 
@@ -423,20 +514,17 @@ for(let x of c.children)x.classList.remove("active");
 b.classList.add("active");
 
 if(type==="p")p=i;
-if(type==="s")s=i;
+if(type==="rp")rp=i;
 };
 
 c.appendChild(b);
-}
+});
 }
 
-createButtons("pBtns","p");
-createButtons("sBtns","s");
-
-function createResidualButtons(id,type){
+function createSeverityButtons(id,type){
 const c=document.getElementById(id);
 
-for(let i=1;i<=5;i++){
+["A","B","C","D","E"].forEach(i=>{
 let b=document.createElement("button");
 b.innerText=i;
 
@@ -444,16 +532,19 @@ b.onclick=()=>{
 for(let x of c.children)x.classList.remove("active");
 b.classList.add("active");
 
-if(type==="rp")rp=i;
+if(type==="s")s=i;
 if(type==="rs")rs=i;
 };
 
 c.appendChild(b);
-}
+});
 }
 
-createResidualButtons("rpBtns","rp");
-createResidualButtons("rsBtns","rs");
+createProbabilityButtons("pBtns","p");
+createSeverityButtons("sBtns","s");
+
+createProbabilityButtons("rpBtns","rp");
+createSeverityButtons("rsBtns","rs");
 
 function setButtonActive(containerId,value){
 const c=document.getElementById(containerId);
@@ -465,16 +556,17 @@ btn.classList.add("active");
 }
 }
 
-function getRiskLevel(value){
-return value<=5?"LOW 🟢":value<=12?"MEDIUM 🟡":"HIGH 🔴";
+window.calculateRisk=function(){
+
+if(!p || !s){
+alert("Please select Probability and Severity.");
+return;
 }
 
-window.calculateRisk=function(){
-risk=p*s;
+risk=s+p;
 
-let lvl = getRiskLevel(risk);
-
-result.innerText="Risk: "+risk+" → "+lvl;
+result.innerText="Risk: "+risk+" → "+getRiskLevel(s,p);
+showDefinition("definitionBox",s,p,risk);
 renderMatrix();
 };
 
@@ -493,11 +585,16 @@ btn.classList.add("closed");
 };
 
 window.calculateResidualRisk=function(){
-residualRisk=rp*rs;
 
-let lvl = getRiskLevel(residualRisk);
+if(!rp || !rs){
+alert("Please select Probability and Severity.");
+return;
+}
 
-residualResult.innerText="Risk: "+residualRisk+" → "+lvl;
+residualRisk=rs+rp;
+
+residualResult.innerText="Risk: "+residualRisk+" → "+getRiskLevel(rs,rp);
+showDefinition("residualDefinitionBox",rs,rp,residualRisk);
 renderResidualMatrix();
 };
 
@@ -525,48 +622,27 @@ grid.className="matrix-grid";
 
 grid.appendChild(document.createElement("div"));
 
-for(let pValue=1;pValue<=5;pValue++){
+[5,4,3,2,1].forEach(pValue=>{
 let x=document.createElement("div");
-x.innerText="P"+pValue;
-x.style.fontWeight="bold";
-x.style.textAlign="center";
+x.className="header-cell";
+x.innerText=pValue;
 grid.appendChild(x);
-}
+});
 
-const dp={
-1:"Very unlikely",
-2:"Unlikely",
-3:"Possible",
-4:"Likely",
-5:"Very likely"
-};
-
-const ds={
-1:"Minor",
-2:"Low",
-3:"Medium",
-4:"High",
-5:"Catastrophic"
-};
-
-for(let sValue=5;sValue>=1;sValue--){
+["A","B","C","D","E"].forEach(sValue=>{
 
 let y=document.createElement("div");
-y.innerText="S"+sValue;
-y.style.fontWeight="bold";
-y.style.display="flex";
-y.style.alignItems="center";
-y.style.justifyContent="center";
-
+y.className="side-cell";
+y.innerText=sValue;
 grid.appendChild(y);
 
-for(let pValue=1;pValue<=5;pValue++){
+[5,4,3,2,1].forEach(pValue=>{
 
-let v=pValue*sValue;
+let code=sValue+pValue;
 
 let cell=document.createElement("div");
-cell.className="cell "+(v<=5?"low":v<=12?"medium":"high");
-cell.innerText=v;
+cell.className="cell "+getRiskClass(sValue,pValue);
+cell.innerText=code;
 
 if(p===pValue && s===sValue){
 cell.classList.add("selected");
@@ -575,12 +651,13 @@ cell.classList.add("selected");
 cell.onclick=()=>{
 p=pValue;
 s=sValue;
-risk=v;
+risk=code;
 
 setButtonActive("pBtns",p);
 setButtonActive("sBtns",s);
 
-result.innerText="Risk: "+risk+" → "+getRiskLevel(risk);
+result.innerText="Risk: "+risk+" → "+getRiskLevel(s,p);
+showDefinition("definitionBox",s,p,risk);
 
 document.querySelectorAll("#matrix .cell").forEach(c=>{
 c.classList.remove("selected");
@@ -589,19 +666,9 @@ c.classList.remove("selected");
 cell.classList.add("selected");
 };
 
-cell.onmouseover=()=>{
-let t=document.createElement("div");
-t.className="tooltip";
-t.innerText=`P:${dp[pValue]} | S:${ds[sValue]}`;
-cell.appendChild(t);
-t.style.display="block";
-};
-
-cell.onmouseout=()=>cell.querySelector(".tooltip")?.remove();
-
 grid.appendChild(cell);
-}
-}
+});
+});
 
 m.appendChild(grid);
 }
@@ -616,48 +683,27 @@ grid.className="matrix-grid";
 
 grid.appendChild(document.createElement("div"));
 
-for(let pValue=1;pValue<=5;pValue++){
+[5,4,3,2,1].forEach(pValue=>{
 let x=document.createElement("div");
-x.innerText="P"+pValue;
-x.style.fontWeight="bold";
-x.style.textAlign="center";
+x.className="header-cell";
+x.innerText=pValue;
 grid.appendChild(x);
-}
+});
 
-const dp={
-1:"Very unlikely",
-2:"Unlikely",
-3:"Possible",
-4:"Likely",
-5:"Very likely"
-};
-
-const ds={
-1:"Minor",
-2:"Low",
-3:"Medium",
-4:"High",
-5:"Catastrophic"
-};
-
-for(let sValue=5;sValue>=1;sValue--){
+["A","B","C","D","E"].forEach(sValue=>{
 
 let y=document.createElement("div");
-y.innerText="S"+sValue;
-y.style.fontWeight="bold";
-y.style.display="flex";
-y.style.alignItems="center";
-y.style.justifyContent="center";
-
+y.className="side-cell";
+y.innerText=sValue;
 grid.appendChild(y);
 
-for(let pValue=1;pValue<=5;pValue++){
+[5,4,3,2,1].forEach(pValue=>{
 
-let v=pValue*sValue;
+let code=sValue+pValue;
 
 let cell=document.createElement("div");
-cell.className="cell "+(v<=5?"low":v<=12?"medium":"high");
-cell.innerText=v;
+cell.className="cell "+getRiskClass(sValue,pValue);
+cell.innerText=code;
 
 if(rp===pValue && rs===sValue){
 cell.classList.add("selected");
@@ -666,12 +712,13 @@ cell.classList.add("selected");
 cell.onclick=()=>{
 rp=pValue;
 rs=sValue;
-residualRisk=v;
+residualRisk=code;
 
 setButtonActive("rpBtns",rp);
 setButtonActive("rsBtns",rs);
 
-residualResult.innerText="Risk: "+residualRisk+" → "+getRiskLevel(residualRisk);
+residualResult.innerText="Risk: "+residualRisk+" → "+getRiskLevel(rs,rp);
+showDefinition("residualDefinitionBox",rs,rp,residualRisk);
 
 document.querySelectorAll("#residualMatrix .cell").forEach(c=>{
 c.classList.remove("selected");
@@ -680,19 +727,9 @@ c.classList.remove("selected");
 cell.classList.add("selected");
 };
 
-cell.onmouseover=()=>{
-let t=document.createElement("div");
-t.className="tooltip";
-t.innerText=`P:${dp[pValue]} | S:${ds[sValue]}`;
-cell.appendChild(t);
-t.style.display="block";
-};
-
-cell.onmouseout=()=>cell.querySelector(".tooltip")?.remove();
-
 grid.appendChild(cell);
-}
-}
+});
+});
 
 m.appendChild(grid);
 }
