@@ -86,10 +86,6 @@ button{
     color:white;
 }
 
-.save-btn:hover{
-    background:#0b2a66;
-}
-
 .print-btn{
     background:#198754;
     color:white;
@@ -102,6 +98,11 @@ button{
 
 .home-btn{
     background:#333;
+    color:white;
+}
+
+.add-btn{
+    background:#ff9800;
     color:white;
 }
 
@@ -152,8 +153,16 @@ button{
     display:flex;
     gap:10px;
     flex-wrap:wrap;
-    justify-content:center;
+    justify-content:space-between;
+    align-items:center;
     margin-bottom:30px;
+}
+
+.left-buttons,
+.right-buttons{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
 }
 
 .status{
@@ -184,6 +193,24 @@ button{
     padding:25px;
 }
 
+@media print{
+    .form-box,
+    .top-buttons,
+    .actions{
+        display:none;
+    }
+
+    body{
+        background:white;
+        padding:0;
+    }
+
+    .container{
+        box-shadow:none;
+        border-radius:0;
+    }
+}
+
 @media(max-width:800px){
     .container{
         padding:25px;
@@ -191,6 +218,16 @@ button{
 
     h1{
         font-size:36px;
+    }
+
+    .top-buttons{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .left-buttons,
+    .right-buttons{
+        justify-content:center;
     }
 }
 </style>
@@ -207,12 +244,20 @@ button{
     </div>
 
     <div class="top-buttons">
-        <button class="back-btn" onclick="goBack()">Back to Safety Promotion</button>
-        <button class="home-btn" onclick="goHome()">Home</button>
-        <button class="print-btn" onclick="window.print()">Print Page</button>
+
+        <div class="left-buttons">
+            <button class="back-btn" onclick="goBack()">Back to Safety Promotion Culture</button>
+            <button class="print-btn" onclick="window.print()">Print Page</button>
+        </div>
+
+        <div class="right-buttons">
+            <button class="add-btn" onclick="newBulletin()">➕ Add New Bulletin</button>
+            <button class="home-btn" onclick="goHome()">Home</button>
+        </div>
+
     </div>
 
-    <div class="form-box">
+    <div class="form-box" id="formBox">
 
         <label>Type</label>
         <select id="type">
@@ -236,8 +281,8 @@ button{
         <label>Description</label>
         <textarea id="description" placeholder="Write the safety message, lesson learned, hazard, corrective action or communication here..."></textarea>
 
-        <label>Upload File</label>
-        <input type="file" id="fileUpload" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx">
+        <label>Google Drive Link</label>
+        <input type="url" id="driveLink" placeholder="Paste Google Drive link here">
 
         <button class="save-btn" onclick="saveBulletin()">Save Bulletin / Alert</button>
 
@@ -272,8 +317,8 @@ function saveBulletin(){
     const description =
     document.getElementById("description").value;
 
-    const fileInput =
-    document.getElementById("fileUpload");
+    const driveLink =
+    document.getElementById("driveLink").value;
 
     if(title.trim() === ""){
         alert("Please enter a title.");
@@ -288,55 +333,20 @@ function saveBulletin(){
         date:date,
         area:area,
         description:description,
-        fileName:"",
-        fileData:""
+        driveLink:driveLink
     };
 
-    if(fileInput.files.length > 0){
+    bulletins.push(bulletin);
 
-        const file =
-        fileInput.files[0];
+    localStorage.setItem(
+        "safetyBulletinsAlerts",
+        JSON.stringify(bulletins)
+    );
 
-        const reader =
-        new FileReader();
+    clearForm();
+    displayBulletins();
 
-        reader.onload = function(e){
-
-            bulletin.fileName =
-            file.name;
-
-            bulletin.fileData =
-            e.target.result;
-
-            bulletins.push(bulletin);
-
-            localStorage.setItem(
-                "safetyBulletinsAlerts",
-                JSON.stringify(bulletins)
-            );
-
-            clearForm();
-            displayBulletins();
-
-            alert("Safety Bulletin / Alert saved successfully.");
-        };
-
-        reader.readAsDataURL(file);
-
-    }else{
-
-        bulletins.push(bulletin);
-
-        localStorage.setItem(
-            "safetyBulletinsAlerts",
-            JSON.stringify(bulletins)
-        );
-
-        clearForm();
-        displayBulletins();
-
-        alert("Safety Bulletin / Alert saved successfully.");
-    }
+    alert("Safety Bulletin / Alert saved successfully.");
 }
 
 function displayBulletins(){
@@ -383,14 +393,14 @@ function displayBulletins(){
             </div>
 
             <div class="meta" style="margin-top:12px;">
-                <strong>Attachment:</strong>
-                ${item.fileName || "No file uploaded"}
+                <strong>Google Drive Link:</strong>
+                ${item.driveLink ? "Available" : "No link added"}
             </div>
 
             <div class="actions">
                 ${
-                    item.fileData
-                    ? `<button class="open-btn" onclick="openFile(${item.id})">Open File</button>`
+                    item.driveLink
+                    ? `<button class="open-btn" onclick="openDriveLink(${item.id})">Open Drive Link</button>`
                     : ""
                 }
 
@@ -405,23 +415,17 @@ function displayBulletins(){
     });
 }
 
-function openFile(id){
+function openDriveLink(id){
 
     const item =
     bulletins.find(b => b.id === id);
 
-    if(!item || !item.fileData){
-        alert("No file available.");
+    if(!item || !item.driveLink){
+        alert("No Google Drive link available.");
         return;
     }
 
-    const win =
-    window.open();
-
-    win.document.write(`
-        <iframe src="${item.fileData}" 
-        style="width:100%;height:100vh;border:none;"></iframe>
-    `);
+    window.open(item.driveLink, "_blank");
 }
 
 function deleteBulletin(id){
@@ -440,6 +444,15 @@ function deleteBulletin(id){
     }
 }
 
+function newBulletin(){
+
+    clearForm();
+
+    document.getElementById("formBox").scrollIntoView({
+        behavior:"smooth"
+    });
+}
+
 function clearForm(){
 
     document.getElementById("type").value = "Bulletin";
@@ -448,11 +461,11 @@ function clearForm(){
     document.getElementById("date").value = "";
     document.getElementById("area").value = "";
     document.getElementById("description").value = "";
-    document.getElementById("fileUpload").value = "";
+    document.getElementById("driveLink").value = "";
 }
 
 function goBack(){
-    window.location.href = "Safety-Promotion.html";
+    window.location.href = "Safety-Promotion-Culture.html";
 }
 
 function goHome(){
