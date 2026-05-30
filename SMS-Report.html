@@ -178,7 +178,8 @@ textarea:focus{
 }
 
 button,
-.back{
+.back,
+.database-btn{
   width:100%;
   min-height:62px;
   display:flex;
@@ -202,7 +203,18 @@ button{
 button:hover{
   transform:translateY(-4px);
   background:linear-gradient(135deg,#0b2a66,#1c63db);
-  box-shadow:0 15px 28px rgba(0,0,0,0.28);
+}
+
+.database-btn{
+  margin-top:20px;
+  background:linear-gradient(135deg,#00a2ff,#00d4ff);
+  color:white;
+  box-shadow:0 10px 22px rgba(0,0,0,0.25);
+}
+
+.database-btn:hover{
+  transform:translateY(-4px);
+  background:linear-gradient(135deg,#00b7ff,#4de1ff);
 }
 
 .back{
@@ -286,6 +298,10 @@ button:hover{
     <button onclick="sendReport()">
       Send Report
     </button>
+
+    <a class="database-btn" href="SMS-Database.html">
+      📊 Open SMS Database
+    </a>
 
     <a class="back" href="Hazard-Identification.html">
       ← Back to Hazard Identification
