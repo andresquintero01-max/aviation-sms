@@ -54,17 +54,16 @@ function createBar(id, labels, values, title){
         backgroundColor:[
           "#0b2a66",
           "#1f5cc4",
+          "#138d75",
           "#f1c40f",
           "#e74c3c",
-          "#138d75",
           "#6c5ce7"
         ],
         borderRadius:10,
         borderSkipped:false,
-        barThickness:55,
-        maxBarThickness:65,
-        categoryPercentage:0.45,
-        barPercentage:0.75
+        maxBarThickness:85,
+        categoryPercentage:0.70,
+        barPercentage:0.80
       }]
     },
 
@@ -413,12 +412,59 @@ function renderDashboard(){
     "Reports by Category"
   );
 
-  createBar(
-    "fratChart",
-    ["Total FRAT","High Risk","No Go"],
-    [fratReports.length,fratHigh,fratNoGo],
-    "FRAT Operational Monitoring"
-  );
+  destroyChart("fratChart");
+
+  charts["fratChart"] = new Chart(document.getElementById("fratChart"), {
+
+    type:"bar",
+
+    data:{
+      labels:["Total FRAT","High Risk","No Go"],
+      datasets:[{
+        label:"FRAT",
+        data:[fratReports.length,fratHigh,fratNoGo],
+        backgroundColor:[
+          "#0b2a66",
+          "#e74c3c",
+          "#b00020"
+        ],
+        borderRadius:10,
+        borderSkipped:false,
+        maxBarThickness:95,
+        categoryPercentage:0.75,
+        barPercentage:0.85
+      }]
+    },
+
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+
+      plugins:{
+        legend:{display:false},
+        title:{
+          display:true,
+          text:"FRAT Operational Monitoring",
+          color:"#071f47",
+          font:{
+            size:24,
+            weight:"bold"
+          }
+        }
+      },
+
+      scales:{
+        y:{
+          beginAtZero:true,
+          ticks:{precision:0}
+        },
+        x:{
+          grid:{display:false}
+        }
+      }
+    }
+
+  });
 
 }
 
@@ -929,7 +975,7 @@ canvas{
           <p>Total FRAT</p>
         </div>
 
-        <div class="card yellow">
+        <div class="card red">
           <h2 id="fratHigh">0</h2>
           <p>High Risk FRAT</p>
         </div>
