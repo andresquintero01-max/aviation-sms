@@ -164,6 +164,11 @@ button.closed{
   position:relative;
 }
 
+.cell.selected{
+  outline:4px solid #071f47;
+  transform:scale(1.05);
+}
+
 .low{background:#2ecc71;}
 .medium{background:#f1c40f;color:black;}
 .high{background:#e74c3c;}
@@ -186,7 +191,7 @@ button.closed{
 
 <div class="container">
 
-<h1>SMS Report Detail</h1>
+<h1>Risk Detail</h1>
 
 <div class="box" id="reportBox">Loading report...</div>
 
@@ -450,10 +455,24 @@ c.appendChild(b);
 createResidualButtons("rpBtns","rp");
 createResidualButtons("rsBtns","rs");
 
+function setButtonActive(containerId,value){
+const c=document.getElementById(containerId);
+for(let btn of c.children){
+btn.classList.remove("active");
+if(btn.innerText == value){
+btn.classList.add("active");
+}
+}
+}
+
+function getRiskLevel(value){
+return value<=5?"LOW 🟢":value<=12?"MEDIUM 🟡":"HIGH 🔴";
+}
+
 window.calculateRisk=function(){
 risk=p*s;
 
-let lvl = risk<=5?"LOW 🟢":risk<=12?"MEDIUM 🟡":"HIGH 🔴";
+let lvl = getRiskLevel(risk);
 
 result.innerText="Risk: "+risk+" → "+lvl;
 renderMatrix();
@@ -476,7 +495,7 @@ btn.classList.add("closed");
 window.calculateResidualRisk=function(){
 residualRisk=rp*rs;
 
-let lvl = residualRisk<=5?"LOW 🟢":residualRisk<=12?"MEDIUM 🟡":"HIGH 🔴";
+let lvl = getRiskLevel(residualRisk);
 
 residualResult.innerText="Risk: "+residualRisk+" → "+lvl;
 renderResidualMatrix();
@@ -506,9 +525,9 @@ grid.className="matrix-grid";
 
 grid.appendChild(document.createElement("div"));
 
-for(let p=1;p<=5;p++){
+for(let pValue=1;pValue<=5;pValue++){
 let x=document.createElement("div");
-x.innerText="P"+p;
+x.innerText="P"+pValue;
 x.style.fontWeight="bold";
 x.style.textAlign="center";
 grid.appendChild(x);
@@ -530,10 +549,10 @@ const ds={
 5:"Catastrophic"
 };
 
-for(let s=5;s>=1;s--){
+for(let sValue=5;sValue>=1;sValue--){
 
 let y=document.createElement("div");
-y.innerText="S"+s;
+y.innerText="S"+sValue;
 y.style.fontWeight="bold";
 y.style.display="flex";
 y.style.alignItems="center";
@@ -541,18 +560,39 @@ y.style.justifyContent="center";
 
 grid.appendChild(y);
 
-for(let p=1;p<=5;p++){
+for(let pValue=1;pValue<=5;pValue++){
 
-let v=p*s;
+let v=pValue*sValue;
 
 let cell=document.createElement("div");
 cell.className="cell "+(v<=5?"low":v<=12?"medium":"high");
 cell.innerText=v;
 
+if(p===pValue && s===sValue){
+cell.classList.add("selected");
+}
+
+cell.onclick=()=>{
+p=pValue;
+s=sValue;
+risk=v;
+
+setButtonActive("pBtns",p);
+setButtonActive("sBtns",s);
+
+result.innerText="Risk: "+risk+" → "+getRiskLevel(risk);
+
+document.querySelectorAll("#matrix .cell").forEach(c=>{
+c.classList.remove("selected");
+});
+
+cell.classList.add("selected");
+};
+
 cell.onmouseover=()=>{
 let t=document.createElement("div");
 t.className="tooltip";
-t.innerText=`P:${dp[p]} | S:${ds[s]}`;
+t.innerText=`P:${dp[pValue]} | S:${ds[sValue]}`;
 cell.appendChild(t);
 t.style.display="block";
 };
@@ -576,9 +616,9 @@ grid.className="matrix-grid";
 
 grid.appendChild(document.createElement("div"));
 
-for(let p=1;p<=5;p++){
+for(let pValue=1;pValue<=5;pValue++){
 let x=document.createElement("div");
-x.innerText="P"+p;
+x.innerText="P"+pValue;
 x.style.fontWeight="bold";
 x.style.textAlign="center";
 grid.appendChild(x);
@@ -600,10 +640,10 @@ const ds={
 5:"Catastrophic"
 };
 
-for(let s=5;s>=1;s--){
+for(let sValue=5;sValue>=1;sValue--){
 
 let y=document.createElement("div");
-y.innerText="S"+s;
+y.innerText="S"+sValue;
 y.style.fontWeight="bold";
 y.style.display="flex";
 y.style.alignItems="center";
@@ -611,18 +651,39 @@ y.style.justifyContent="center";
 
 grid.appendChild(y);
 
-for(let p=1;p<=5;p++){
+for(let pValue=1;pValue<=5;pValue++){
 
-let v=p*s;
+let v=pValue*sValue;
 
 let cell=document.createElement("div");
 cell.className="cell "+(v<=5?"low":v<=12?"medium":"high");
 cell.innerText=v;
 
+if(rp===pValue && rs===sValue){
+cell.classList.add("selected");
+}
+
+cell.onclick=()=>{
+rp=pValue;
+rs=sValue;
+residualRisk=v;
+
+setButtonActive("rpBtns",rp);
+setButtonActive("rsBtns",rs);
+
+residualResult.innerText="Risk: "+residualRisk+" → "+getRiskLevel(residualRisk);
+
+document.querySelectorAll("#residualMatrix .cell").forEach(c=>{
+c.classList.remove("selected");
+});
+
+cell.classList.add("selected");
+};
+
 cell.onmouseover=()=>{
 let t=document.createElement("div");
 t.className="tooltip";
-t.innerText=`P:${dp[p]} | S:${ds[s]}`;
+t.innerText=`P:${dp[pValue]} | S:${ds[sValue]}`;
 cell.appendChild(t);
 t.style.display="block";
 };
@@ -829,7 +890,7 @@ cpaHtml = `<p>No CPA records saved.</p>`;
 printBody = `
 <h1>SMS Full File</h1>
 
-<h2>Report Detail</h2>
+<h2>Risk Detail</h2>
 <div class="print-card">
 <p><b>ID:</b> ${d.reportId || ""}</p>
 <p><b>Date:</b> ${d.date || ""}</p>
@@ -884,9 +945,9 @@ ${cpaHtml}
 }else{
 
 printBody = `
-<h1>SMS Report Detail</h1>
+<h1>Risk Detail</h1>
 
-<h2>Report Detail</h2>
+<h2>Risk Detail</h2>
 <div class="print-card">
 <p><b>ID:</b> ${d.reportId || ""}</p>
 <p><b>Date:</b> ${d.date || ""}</p>
@@ -904,7 +965,7 @@ printWindow.document.write(`
 <!DOCTYPE html>
 <html>
 <head>
-<title>${fiveWhysSaved ? "SMS Full File" : "SMS Report Detail"}</title>
+<title>${fiveWhysSaved ? "SMS Full File" : "Risk Detail"}</title>
 
 <style>
 body{
