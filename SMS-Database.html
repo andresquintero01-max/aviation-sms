@@ -373,19 +373,30 @@ if(value === undefined || value === null || value === ""){
 return "risk-empty";
 }
 
-if(value === "NOT ASSESSED"){
+value = String(value).toUpperCase();
+
+if(value === "NOT ASSESSED" || value === "N/A"){
 return "risk-empty";
 }
 
-if(value <= 5){
+const low = ["C1","D2","E3","D1","E2","E1"];
+const medium = ["A1","B2","C3","D4","E5","B1","C2","D3","E4"];
+const high = ["A2","B3","C4","D5"];
+const extreme = ["A5","A4","A3","B5","B4","C5"];
+
+if(low.includes(value)){
 return "risk-green";
 }
 
-if(value <= 12){
+if(medium.includes(value)){
 return "risk-yellow";
 }
 
+if(high.includes(value) || extreme.includes(value)){
 return "risk-red";
+}
+
+return "risk-empty";
 
 }
 
@@ -397,15 +408,30 @@ if(value === undefined || value === null || value === ""){
 return "NOT ASSESSED";
 }
 
-if(value <= 5){
+value = String(value).toUpperCase();
+
+if(value === "NOT ASSESSED" || value === "N/A"){
+return "NOT ASSESSED";
+}
+
+const low = ["C1","D2","E3","D1","E2","E1"];
+const medium = ["A1","B2","C3","D4","E5","B1","C2","D3","E4"];
+const high = ["A2","B3","C4","D5"];
+const extreme = ["A5","A4","A3","B5","B4","C5"];
+
+if(low.includes(value)){
 return "ACCEPTABLE 🟢";
 }
 
-if(value <= 12){
+if(medium.includes(value)){
 return "TOLERABLE 🟡";
 }
 
+if(high.includes(value) || extreme.includes(value)){
 return "NOT ACCEPTABLE 🔴";
+}
+
+return "NOT ASSESSED";
 
 }
 
