@@ -327,7 +327,11 @@ function loadVideo(){
   convertToEmbed(link);
 
   document.getElementById("videoFrame").innerHTML =
-  `<iframe src="${embedLink}" allowfullscreen></iframe>`;
+`<iframe
+src="${embedLink}"
+allow="autoplay; encrypted-media"
+allowfullscreen>
+</iframe>`;
 
   videoPlayed = true;
 }
