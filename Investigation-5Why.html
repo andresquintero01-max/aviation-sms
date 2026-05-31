@@ -6,143 +6,122 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
   margin:0;
-  font-family:'Segoe UI', Arial, sans-serif;
+  font-family:'Segoe UI',Arial,sans-serif;
   min-height:100vh;
-  background:
-  radial-gradient(circle at top left, rgba(255,152,0,0.28), transparent 30%),
-  radial-gradient(circle at bottom right, rgba(20,80,184,0.38), transparent 35%),
-  linear-gradient(135deg,#020617,#071f47,#1450b8);
-  padding:35px;
-}
-
-.container{
-  max-width:1050px;
-  margin:auto;
-  background:rgba(255,255,255,0.97);
-  border-radius:34px;
-  padding:45px;
-  box-shadow:0 28px 75px rgba(0,0,0,0.45);
-  border:1px solid rgba(255,255,255,0.45);
+  background:linear-gradient(135deg,#020617,#071f47,#1450b8);
 }
 
 .header{
   text-align:center;
-  margin-bottom:30px;
-}
-
-.badge{
-  display:inline-block;
-  background:linear-gradient(135deg,#ff9800,#f97316);
   color:white;
-  padding:9px 20px;
-  border-radius:999px;
-  font-weight:bold;
-  font-size:14px;
-  letter-spacing:0.5px;
-  margin-bottom:14px;
-  box-shadow:0 8px 20px rgba(249,115,22,0.35);
+  padding:28px 20px;
+  background:linear-gradient(135deg,#071f47,#1450b8);
 }
 
-h1{
-  color:#071f47;
+.header h1{
   font-size:52px;
   margin:0;
-  letter-spacing:0.5px;
 }
 
-.subtitle{
-  color:#64748b;
-  font-size:19px;
-  margin-top:10px;
+.header p{
+  font-size:20px;
+  margin:8px 0 0;
+  color:#dbeafe;
+}
+
+.container{
+  max-width:1250px;
+  margin:25px auto;
+  background:white;
+  border-radius:30px;
+  padding:30px;
+  box-shadow:0 25px 70px rgba(0,0,0,0.35);
 }
 
 .report-box{
-  background:linear-gradient(135deg,#e9f5ff,#f8fbff);
-  border-left:9px solid #1450b8;
-  padding:22px;
-  border-radius:20px;
-  margin-bottom:28px;
-  font-size:19px;
-  box-shadow:0 10px 24px rgba(20,80,184,0.14);
-}
-
-.progress-strip{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:10px;
-  margin-bottom:28px;
-}
-
-.step{
-  background:linear-gradient(135deg,#071f47,#1450b8);
-  color:white;
-  text-align:center;
-  padding:13px 8px;
-  border-radius:16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#f8fafc;
+  border-radius:18px;
+  padding:18px 25px;
+  margin-bottom:25px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
   font-weight:bold;
-  box-shadow:0 8px 18px rgba(7,31,71,0.25);
+  color:#071f47;
 }
 
-.question-card{
+.why-flow{
+  display:grid;
+  grid-template-columns:1fr 70px 1fr;
+  gap:18px;
+  align-items:center;
+}
+
+.card{
   background:white;
   border-radius:24px;
-  padding:25px;
-  margin-top:22px;
-  box-shadow:0 12px 30px rgba(15,23,42,0.12);
+  padding:22px;
+  box-shadow:0 12px 28px rgba(15,23,42,0.12);
   border:1px solid #e2e8f0;
   position:relative;
-  overflow:hidden;
 }
 
-.question-card::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:9px;
-  height:100%;
-  background:linear-gradient(180deg,#ff9800,#1450b8);
-}
-
-.question-title{
+.card h3{
+  margin:0 0 8px;
   color:#071f47;
-  font-size:24px;
-  font-weight:800;
-  margin-bottom:8px;
-  padding-left:8px;
+  font-size:23px;
 }
 
-.helper{
+.card p{
+  margin:0 0 12px;
   color:#64748b;
-  font-size:15px;
-  margin-bottom:15px;
-  padding-left:8px;
+  font-size:14px;
+  line-height:1.5;
 }
 
-label{
-  font-weight:800;
-  color:#334155;
-  display:block;
-  margin:14px 0 7px;
+.start{
+  grid-column:1 / 4;
+  border-left:8px solid #f97316;
+  background:linear-gradient(135deg,#fff7ed,#ffffff);
+}
+
+.why1{border-left:8px solid #2563eb;background:linear-gradient(135deg,#eff6ff,#ffffff);}
+.why2{border-left:8px solid #0f766e;background:linear-gradient(135deg,#ecfdf5,#ffffff);}
+.why3{border-left:8px solid #9333ea;background:linear-gradient(135deg,#faf5ff,#ffffff);}
+.why4{border-left:8px solid #dc2626;background:linear-gradient(135deg,#fff1f2,#ffffff);}
+
+.root{
+  grid-column:1 / 4;
+  border-left:8px solid #15803d;
+  background:linear-gradient(135deg,#f0fdf4,#ffffff);
+}
+
+.arrow-box{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#1450b8;
+  font-size:42px;
+  font-weight:bold;
 }
 
 input,
 textarea{
   width:100%;
-  padding:15px;
+  padding:14px;
   border:1px solid #cbd5e1;
-  border-radius:16px;
-  font-size:16px;
-  box-sizing:border-box;
-  background:#f8fafc;
+  border-radius:14px;
+  font-size:15px;
+  resize:vertical;
   outline:none;
+  background:#f8fafc;
   transition:0.25s;
+  margin-top:8px;
 }
 
 input:focus,
@@ -153,91 +132,76 @@ textarea:focus{
 }
 
 textarea{
-  min-height:110px;
-  resize:vertical;
+  min-height:95px;
+}
+
+label{
+  font-weight:800;
+  color:#334155;
+  display:block;
+  margin-top:12px;
 }
 
 .actions{
-  text-align:center;
-  margin-top:35px;
-  padding-top:20px;
+  margin-top:30px;
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
   border-top:1px solid #e2e8f0;
+  padding-top:25px;
 }
 
 button{
-  padding:14px 24px;
-  margin:8px;
   border:none;
-  border-radius:16px;
   color:white;
+  padding:15px 26px;
+  border-radius:16px;
   font-size:16px;
-  cursor:pointer;
   font-weight:bold;
-  box-shadow:0 10px 24px rgba(0,0,0,0.22);
+  cursor:pointer;
+  box-shadow:0 12px 28px rgba(0,0,0,0.22);
   transition:0.25s;
-}
-
-.save{
-  background:linear-gradient(135deg,#15803d,#22c55e);
-}
-
-.delete{
-  background:linear-gradient(135deg,#b91c1c,#ef4444);
-}
-
-.print{
-  background:linear-gradient(135deg,#071f47,#1450b8);
-}
-
-.back{
-  background:linear-gradient(135deg,#374151,#6b7280);
 }
 
 button:hover{
   transform:translateY(-3px) scale(1.03);
-  filter:brightness(1.05);
 }
 
+.save{background:linear-gradient(135deg,#15803d,#22c55e);}
+.delete{background:linear-gradient(135deg,#b91c1c,#ef4444);}
+.print{background:linear-gradient(135deg,#071f47,#1450b8);}
+.back{background:linear-gradient(135deg,#374151,#6b7280);}
+.home{background:linear-gradient(135deg,#0f766e,#14b8a6);}
+
 @media print{
-  body{
-    background:white;
-    padding:10px;
+  body{background:white;}
+  .header{color:#071f47;background:white;}
+  .container{box-shadow:none;}
+  .actions,.arrow-box{display:none;}
+  .card{box-shadow:none;break-inside:avoid;}
+}
+
+@media(max-width:850px){
+  .why-flow{
+    display:block;
   }
 
-  .container{
-    box-shadow:none;
-    padding:15px;
+  .card{
+    margin-bottom:18px;
   }
 
-  button,
-  .actions,
-  .progress-strip,
-  .badge{
+  .arrow-box{
     display:none;
   }
 
-  .question-card{
-    box-shadow:none;
-    break-inside:avoid;
-  }
-}
-
-@media(max-width:800px){
-  body{
-    padding:20px;
+  .header h1{
+    font-size:36px;
   }
 
-  .container{
-    padding:25px;
-    border-radius:24px;
-  }
-
-  h1{
-    font-size:38px;
-  }
-
-  .progress-strip{
-    grid-template-columns:1fr;
+  .report-box{
+    flex-direction:column;
+    align-items:flex-start;
   }
 }
 </style>
@@ -245,67 +209,73 @@ button:hover{
 
 <body>
 
+<div class="header">
+  <h1>Investigation - 5 Why</h1>
+  <p>Root Cause Analysis Flow</p>
+</div>
+
 <div class="container">
 
-<div class="header">
-  <div class="badge">ROOT CAUSE ANALYSIS</div>
-  <h1>Investigation - 5 Why</h1>
-  <div class="subtitle">Professional Safety Investigation Module</div>
-</div>
-
 <div class="report-box">
-<b>Report ID:</b> <span id="reportId">Loading...</span>
+  <div>Report ID: <span id="reportId">Loading...</span></div>
+  <div>Saved at: <span id="savedAt">Not saved yet</span></div>
 </div>
 
-<div class="progress-strip">
-  <div class="step">Why 1</div>
-  <div class="step">Why 2</div>
-  <div class="step">Why 3</div>
-  <div class="step">Why 4</div>
-  <div class="step">Root Cause</div>
+<div class="why-flow">
+
+<div class="card start">
+  <h3>📌 1. What happened?</h3>
+  <p>Describe the event, condition, finding, or safety issue clearly.</p>
+  <label>Answer</label>
+  <textarea id="q1Answer" placeholder="Describe what happened..."></textarea>
 </div>
 
-<div class="question-card">
-<div class="question-title">1. What happened?</div>
-<div class="helper">Describe the event, condition, or finding clearly.</div>
-<label>Answer</label>
-<textarea id="q1Answer" placeholder="Describe what happened"></textarea>
+<div class="card why1">
+  <h3>❓ 2. Why did it happen?</h3>
+  <p>Identify the first direct reason or contributing factor.</p>
+  <label>Question</label>
+  <input id="q2Question" placeholder="Enter question 2">
+  <label>Answer</label>
+  <textarea id="q2Answer" placeholder="Enter answer 2..."></textarea>
 </div>
 
-<div class="question-card">
-<div class="question-title">2. Why did it happen?</div>
-<div class="helper">Identify the first reason or contributing factor.</div>
-<label>Question</label>
-<input id="q2Question" placeholder="Enter question 2">
-<label>Answer</label>
-<textarea id="q2Answer" placeholder="Enter answer 2"></textarea>
+<div class="arrow-box">➜</div>
+
+<div class="card why2">
+  <h3>🔎 3. Why?</h3>
+  <p>Go deeper into the condition, process, or human factor.</p>
+  <label>Question</label>
+  <input id="q3Question" placeholder="Enter question 3">
+  <label>Answer</label>
+  <textarea id="q3Answer" placeholder="Enter answer 3..."></textarea>
 </div>
 
-<div class="question-card">
-<div class="question-title">3. Why?</div>
-<div class="helper">Go one level deeper into the cause.</div>
-<label>Question</label>
-<input id="q3Question" placeholder="Enter question 3">
-<label>Answer</label>
-<textarea id="q3Answer" placeholder="Enter answer 3"></textarea>
+<div class="card why3">
+  <h3>🧩 4. Why?</h3>
+  <p>Identify what allowed the issue to continue or not be detected.</p>
+  <label>Question</label>
+  <input id="q4Question" placeholder="Enter question 4">
+  <label>Answer</label>
+  <textarea id="q4Answer" placeholder="Enter answer 4..."></textarea>
 </div>
 
-<div class="question-card">
-<div class="question-title">4. Why?</div>
-<div class="helper">Continue identifying the system or process weakness.</div>
-<label>Question</label>
-<input id="q4Question" placeholder="Enter question 4">
-<label>Answer</label>
-<textarea id="q4Answer" placeholder="Enter answer 4"></textarea>
+<div class="arrow-box">➜</div>
+
+<div class="card why4">
+  <h3>⚠️ 5. Why?</h3>
+  <p>Identify the system weakness or final contributing factor.</p>
+  <label>Question</label>
+  <input id="q5Question" placeholder="Enter question 5">
+  <label>Answer</label>
+  <textarea id="q5Answer" placeholder="Enter answer 5..."></textarea>
 </div>
 
-<div class="question-card">
-<div class="question-title">5. Why?</div>
-<div class="helper">Identify the root cause or main process failure.</div>
-<label>Question</label>
-<input id="q5Question" placeholder="Enter question 5">
-<label>Answer</label>
-<textarea id="q5Answer" placeholder="Enter answer 5"></textarea>
+<div class="card root">
+  <h3>✅ Root Cause / Main Finding</h3>
+  <p>This should represent the deepest process, control, training, supervision, or system weakness identified.</p>
+  <textarea id="rootCause" placeholder="Write the final root cause or main finding..."></textarea>
+</div>
+
 </div>
 
 <div class="actions">
@@ -313,6 +283,7 @@ button:hover{
 <button class="delete" onclick="deleteInvestigation()">🗑 Delete</button>
 <button class="print" onclick="window.print()">🖨 Print</button>
 <button class="back" onclick="goBack()">⬅ Back to SMS Report Detail</button>
+<button class="home" onclick="goHome()">🏠 Home</button>
 </div>
 
 </div>
@@ -365,6 +336,9 @@ get(ref(db,"smsReports/"+key)).then(snapshot=>{
 
       q5Question.value = x.q5Question || "";
       q5Answer.value = x.q5Answer || "";
+
+      rootCause.value = x.rootCause || "";
+      savedAt.innerText = x.savedAt || "Saved";
     }
   }
 });
@@ -387,9 +361,12 @@ window.saveInvestigation = function(){
     q5Question:q5Question.value,
     q5Answer:q5Answer.value,
 
+    rootCause:rootCause.value,
+
     status:"Saved",
     savedAt:new Date().toISOString()
   }).then(()=>{
+    savedAt.innerText = new Date().toISOString();
     alert("Investigation 5 Why saved successfully.");
   });
 
@@ -414,6 +391,9 @@ window.deleteInvestigation = function(){
       q5Question.value = "";
       q5Answer.value = "";
 
+      rootCause.value = "";
+      savedAt.innerText = "Not saved yet";
+
       alert("Investigation 5 Why deleted.");
     });
   }
@@ -422,6 +402,10 @@ window.deleteInvestigation = function(){
 
 window.goBack = function(){
   location.href = "Risk-Detail.html?key=" + key;
+};
+
+window.goHome = function(){
+  location.href = "index.html";
 };
 
 </script>
