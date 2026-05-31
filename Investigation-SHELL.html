@@ -1,1 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SHELL Investigation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Segoe UI',Arial,sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#071f47,#0b2a66,#0f766e);
+  padding:30px;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  background:white;
+  border-radius:30px;
+  padding:40px;
+  box-shadow:0 25px 60px rgba(0,0,0,0.35);
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  font-size:48px;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#475569;
+  font-size:18px;
+  margin-bottom:30px;
+}
+
+.nav{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  margin-bottom:30px;
+  flex-wrap:wrap;
+}
+
+.nav a{
+  text-decoration:none;
+  background:#071f47;
+  color:white;
+  padding:13px 22px;
+  border-radius:14px;
+  font-weight:bold;
+  box-shadow:0 8px 18px rgba(0,0,0,0.2);
+}
+
+.nav a.home{
+  background:#0f766e;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:22px;
+}
+
+.card{
+  border-radius:24px;
+  padding:25px;
+  color:white;
+  box-shadow:0 12px 30px rgba(0,0,0,0.18);
+}
+
+.software{background:linear-gradient(135deg,#2563eb,#1e40af);}
+.hardware{background:linear-gradient(135deg,#dc2626,#991b1b);}
+.environment{background:linear-gradient(135deg,#16a34a,#166534);}
+.liveware{background:linear-gradient(135deg,#9333ea,#581c87);}
+
+.card h2{
+  font-size:28px;
+  margin-bottom:8px;
+}
+
+.card p{
+  font-size:15px;
+  margin-bottom:15px;
+  opacity:0.95;
+}
+
+textarea{
+  width:100%;
+  min-height:150px;
+  resize:vertical;
+  border:none;
+  border-radius:16px;
+  padding:15px;
+  font-size:16px;
+  outline:none;
+}
+
+.actions{
+  text-align:center;
+  margin-top:30px;
+}
+
+button{
+  background:#f97316;
+  color:white;
+  border:none;
+  padding:16px 35px;
+  font-size:18px;
+  font-weight:bold;
+  border-radius:18px;
+  cursor:pointer;
+  box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+button:hover{
+  background:#ea580c;
+  transform:scale(1.03);
+}
+
+.saved{
+  margin-top:35px;
+  background:#f8fafc;
+  border-radius:24px;
+  padding:25px;
+}
+
+.saved h2{
+  color:#071f47;
+  margin-bottom:15px;
+}
+
+.record{
+  background:white;
+  border-left:8px solid #071f47;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:15px;
+  box-shadow:0 5px 16px rgba(0,0,0,0.12);
+}
+
+.record strong{
+  color:#071f47;
+}
+
+.date{
+  font-size:13px;
+  color:#64748b;
+  margin-bottom:10px;
+}
+
+@media(max-width:800px){
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  h1{
+    font-size:36px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>SHELL Investigation Model</h1>
+  <p class="subtitle">
+    Human Factors analysis connected to the selected Risk Detail report
+  </p>
+
+  <div class="nav">
+    <a id="backRisk" href="Risk-Detail.html">⬅ Back to Risk Detail</a>
+    <a class="home" href="index.html">🏠 Home</a>
+  </div>
+
+  <div class="form-grid">
+
+    <div class="card software">
+      <h2>S - Software</h2>
+      <p>Procedures, manuals, task cards, forms, instructions, policies, or documentation.</p>
+      <textarea id="software" placeholder="Describe any procedure, manual, form, or documentation issue..."></textarea>
+    </div>
+
+    <div class="card hardware">
+      <h2>H - Hardware</h2>
+      <p>Tools, equipment, aircraft parts, GSE, materials, systems, or physical resources.</p>
+      <textarea id="hardware" placeholder="Describe any tool, equipment, aircraft, or material issue..."></textarea>
+    </div>
+
+    <div class="card environment">
+      <h2>E - Environment</h2>
+      <p>Work area, lighting, weather, noise, time pressure, shift, access, or workplace conditions.</p>
+      <textarea id="environment" placeholder="Describe any environmental or workplace condition..."></textarea>
+    </div>
+
+    <div class="card liveware">
+      <h2>L - Liveware</h2>
+      <p>People, communication, supervision, training, fatigue, awareness, teamwork, or behavior.</p>
+      <textarea id="liveware" placeholder="Describe any human factor, communication, training, or supervision issue..."></textarea>
+    </div>
+
+  </div>
+
+  <div class="actions">
+    <button onclick="saveSHELL()">💾 Save SHELL Investigation</button>
+  </div>
+
+  <div class="saved">
+    <h2>Saved SHELL Investigations</h2>
+    <div id="records">Loading...</div>
+  </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.appspot.com",
+  messagingSenderId: "75686468930",
+  appId: "1:75686468930:web:4d8d9bca4c4ddf8bcb2f3a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const params = new URLSearchParams(window.location.search);
+const reportId = params.get("id") || params.get("reportId") || "general";
+
+document.getElementById("backRisk").href = "Risk-Detail.html?id=" + reportId;
+
+window.saveSHELL = function(){
+
+  const software = document.getElementById("software").value.trim();
+  const hardware = document.getElementById("hardware").value.trim();
+  const environment = document.getElementById("environment").value.trim();
+  const liveware = document.getElementById("liveware").value.trim();
+
+  if(!software && !hardware && !environment && !liveware){
+    alert("Please enter at least one SHELL analysis field before saving.");
+    return;
+  }
+
+  const shellRef = push(ref(db, "shellInvestigations/" + reportId));
+
+  set(shellRef, {
+    reportId: reportId,
+    software: software,
+    hardware: hardware,
+    environment: environment,
+    liveware: liveware,
+    createdAt: new Date().toLocaleString()
+  })
+  .then(() => {
+    alert("SHELL Investigation saved successfully.");
+
+    document.getElementById("software").value = "";
+    document.getElementById("hardware").value = "";
+    document.getElementById("environment").value = "";
+    document.getElementById("liveware").value = "";
+  })
+  .catch(error => {
+    alert("Error saving SHELL Investigation: " + error.message);
+  });
+};
+
+function loadSHELL(){
+
+  const recordsDiv = document.getElementById("records");
+
+  onValue(ref(db, "shellInvestigations/" + reportId), snapshot => {
+
+    recordsDiv.innerHTML = "";
+
+    if(!snapshot.exists()){
+      recordsDiv.innerHTML = "No SHELL investigations saved yet.";
+      return;
+    }
+
+    snapshot.forEach(child => {
+      const data = child.val();
+
+      recordsDiv.innerHTML += `
+        <div class="record">
+          <div class="date">${data.createdAt || ""}</div>
+
+          <p><strong>Software:</strong><br>${data.software || "N/A"}</p><br>
+          <p><strong>Hardware:</strong><br>${data.hardware || "N/A"}</p><br>
+          <p><strong>Environment:</strong><br>${data.environment || "N/A"}</p><br>
+          <p><strong>Liveware:</strong><br>${data.liveware || "N/A"}</p>
+        </div>
+      `;
+    });
+  });
+}
+
+loadSHELL();
+
+</script>
+
+</body>
+</html>
