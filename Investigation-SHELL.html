@@ -6,159 +6,133 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
   margin:0;
-  font-family:'Segoe UI', Arial, sans-serif;
+  font-family:'Segoe UI',Arial,sans-serif;
   min-height:100vh;
-  background:
-  radial-gradient(circle at top left, rgba(20,184,166,0.35), transparent 32%),
-  radial-gradient(circle at bottom right, rgba(147,51,234,0.28), transparent 35%),
-  linear-gradient(135deg,#020617,#071f47,#0f766e);
-  padding:35px;
-}
-
-.container{
-  max-width:1100px;
-  margin:auto;
-  background:rgba(255,255,255,0.97);
-  border-radius:34px;
-  padding:45px;
-  box-shadow:0 28px 75px rgba(0,0,0,0.45);
-  border:1px solid rgba(255,255,255,0.45);
+  background:linear-gradient(135deg,#020617,#071f47,#0f766e);
 }
 
 .header{
   text-align:center;
-  margin-bottom:30px;
-}
-
-.badge{
-  display:inline-block;
-  background:linear-gradient(135deg,#0f766e,#14b8a6);
   color:white;
-  padding:9px 20px;
-  border-radius:999px;
-  font-weight:bold;
-  font-size:14px;
-  letter-spacing:0.5px;
-  margin-bottom:14px;
-  box-shadow:0 8px 20px rgba(20,184,166,0.35);
+  padding:28px 20px;
+  background:linear-gradient(135deg,#071f47,#0f766e);
 }
 
-h1{
-  color:#071f47;
+.header h1{
   font-size:52px;
   margin:0;
-  letter-spacing:0.5px;
 }
 
-.subtitle{
-  color:#64748b;
-  font-size:19px;
-  margin-top:10px;
+.header p{
+  font-size:20px;
+  margin:8px 0 0;
+  color:#dbeafe;
+}
+
+.container{
+  max-width:1250px;
+  margin:25px auto;
+  background:white;
+  border-radius:30px;
+  padding:30px;
+  box-shadow:0 25px 70px rgba(0,0,0,0.35);
 }
 
 .report-box{
-  background:linear-gradient(135deg,#ecfeff,#f8fbff);
-  border-left:9px solid #0f766e;
-  padding:22px;
-  border-radius:20px;
-  margin-bottom:28px;
-  font-size:19px;
-  box-shadow:0 10px 24px rgba(20,184,166,0.14);
-}
-
-.shell-strip{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-  margin-bottom:28px;
-}
-
-.strip-card{
-  background:white;
-  border-radius:20px;
-  padding:18px;
-  text-align:center;
-  box-shadow:0 10px 24px rgba(15,23,42,0.12);
-  border:1px solid #e2e8f0;
-}
-
-.strip-card strong{
-  display:block;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#f8fafc;
+  border-radius:18px;
+  padding:18px 25px;
+  margin-bottom:25px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+  font-weight:bold;
   color:#071f47;
-  font-size:18px;
-  margin-bottom:5px;
 }
 
-.strip-card span{
-  color:#64748b;
-  font-size:14px;
+.shell-diagram{
+  display:grid;
+  grid-template-columns:1fr 260px 1fr;
+  grid-template-rows:auto auto;
+  gap:25px;
+  align-items:center;
+  position:relative;
 }
 
-.question-card{
+.center-shell{
+  grid-column:2;
+  grid-row:1 / 3;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.shell-core{
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#0f766e,#14b8a6,#071f47);
+  color:white;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:25px;
+  box-shadow:0 22px 50px rgba(15,118,110,0.35);
+  border:8px solid white;
+}
+
+.shell-core h2{
+  font-size:52px;
+  margin:0;
+  letter-spacing:4px;
+}
+
+.shell-core p{
+  margin:10px 0 0;
+  font-size:16px;
+  color:#dbeafe;
+  font-weight:bold;
+}
+
+.card{
   background:white;
   border-radius:24px;
-  padding:25px;
-  margin-top:22px;
-  box-shadow:0 12px 30px rgba(15,23,42,0.12);
+  padding:22px;
+  box-shadow:0 12px 28px rgba(15,23,42,0.12);
   border:1px solid #e2e8f0;
   position:relative;
-  overflow:hidden;
 }
 
-.question-card::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:9px;
-  height:100%;
-}
-
-.software::before{background:linear-gradient(180deg,#2563eb,#38bdf8);}
-.hardware::before{background:linear-gradient(180deg,#dc2626,#fb7185);}
-.environment::before{background:linear-gradient(180deg,#16a34a,#86efac);}
-.liveware::before{background:linear-gradient(180deg,#7e22ce,#c084fc);}
-
-.question-title{
+.card h3{
+  margin:0 0 8px;
   color:#071f47;
-  font-size:24px;
-  font-weight:800;
-  margin-bottom:8px;
-  padding-left:8px;
+  font-size:23px;
 }
 
-.description{
+.card p{
+  margin:0 0 12px;
   color:#64748b;
-  font-size:15px;
-  margin-bottom:15px;
-  padding-left:8px;
+  font-size:14px;
   line-height:1.5;
-}
-
-label{
-  font-weight:800;
-  color:#334155;
-  display:block;
-  margin:14px 0 7px;
 }
 
 textarea{
   width:100%;
-  padding:15px;
-  border:1px solid #cbd5e1;
-  border-radius:16px;
-  font-size:16px;
-  box-sizing:border-box;
   min-height:115px;
+  border:1px solid #cbd5e1;
+  border-radius:14px;
+  padding:13px;
+  font-size:15px;
   resize:vertical;
-  background:#f8fafc;
   outline:none;
+  background:#f8fafc;
   transition:0.25s;
 }
 
@@ -168,91 +142,142 @@ textarea:focus{
   box-shadow:0 0 0 4px rgba(15,118,110,0.16);
 }
 
+.software{
+  grid-column:1;
+  grid-row:1;
+  border-left:8px solid #2563eb;
+  background:linear-gradient(135deg,#eff6ff,#ffffff);
+}
+
+.hardware{
+  grid-column:3;
+  grid-row:1;
+  border-left:8px solid #dc2626;
+  background:linear-gradient(135deg,#fff1f2,#ffffff);
+}
+
+.environment{
+  grid-column:1;
+  grid-row:2;
+  border-left:8px solid #16a34a;
+  background:linear-gradient(135deg,#f0fdf4,#ffffff);
+}
+
+.liveware{
+  grid-column:3;
+  grid-row:2;
+  border-left:8px solid #9333ea;
+  background:linear-gradient(135deg,#faf5ff,#ffffff);
+}
+
+.arrow{
+  position:absolute;
+  height:4px;
+  background:#0f766e;
+  z-index:0;
+}
+
+.arrow.left-top{
+  left:31%;
+  top:25%;
+  width:13%;
+}
+
+.arrow.right-top{
+  right:31%;
+  top:25%;
+  width:13%;
+}
+
+.arrow.left-bottom{
+  left:31%;
+  top:75%;
+  width:13%;
+}
+
+.arrow.right-bottom{
+  right:31%;
+  top:75%;
+  width:13%;
+}
+
+.arrow::after{
+  content:"";
+  position:absolute;
+  right:-10px;
+  top:-6px;
+  border-left:12px solid #0f766e;
+  border-top:8px solid transparent;
+  border-bottom:8px solid transparent;
+}
+
 .actions{
-  text-align:center;
-  margin-top:35px;
-  padding-top:20px;
+  margin-top:30px;
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
   border-top:1px solid #e2e8f0;
+  padding-top:25px;
 }
 
 button{
-  padding:14px 24px;
-  margin:8px;
   border:none;
-  border-radius:16px;
   color:white;
+  padding:15px 26px;
+  border-radius:16px;
   font-size:16px;
-  cursor:pointer;
   font-weight:bold;
-  box-shadow:0 10px 24px rgba(0,0,0,0.22);
+  cursor:pointer;
+  box-shadow:0 12px 28px rgba(0,0,0,0.22);
   transition:0.25s;
-}
-
-.save{
-  background:linear-gradient(135deg,#15803d,#22c55e);
-}
-
-.delete{
-  background:linear-gradient(135deg,#b91c1c,#ef4444);
-}
-
-.print{
-  background:linear-gradient(135deg,#071f47,#1450b8);
-}
-
-.back{
-  background:linear-gradient(135deg,#374151,#6b7280);
-}
-
-.home{
-  background:linear-gradient(135deg,#0f766e,#14b8a6);
 }
 
 button:hover{
   transform:translateY(-3px) scale(1.03);
-  filter:brightness(1.05);
 }
+
+.save{background:linear-gradient(135deg,#15803d,#22c55e);}
+.delete{background:linear-gradient(135deg,#b91c1c,#ef4444);}
+.print{background:linear-gradient(135deg,#071f47,#1450b8);}
+.back{background:linear-gradient(135deg,#374151,#6b7280);}
+.home{background:linear-gradient(135deg,#0f766e,#14b8a6);}
 
 @media print{
-  body{
-    background:white;
-    padding:10px;
-  }
-
-  .container{
-    box-shadow:none;
-    padding:15px;
-  }
-
-  button,
-  .actions,
-  .badge,
-  .shell-strip{
-    display:none;
-  }
-
-  .question-card{
-    box-shadow:none;
-    break-inside:avoid;
-  }
+  body{background:white;}
+  .header{color:#071f47;background:white;}
+  .container{box-shadow:none;}
+  .actions,.arrow{display:none;}
+  .card{box-shadow:none;break-inside:avoid;}
 }
 
-@media(max-width:800px){
-  body{
-    padding:20px;
+@media(max-width:950px){
+  .shell-diagram{
+    display:block;
   }
 
-  .container{
-    padding:25px;
+  .card,
+  .shell-core{
+    margin-bottom:18px;
+  }
+
+  .shell-core{
+    width:100%;
+    height:auto;
     border-radius:24px;
   }
 
-  h1{
-    font-size:38px;
+  .arrow{
+    display:none;
   }
 
-  .shell-strip{
-    grid-template-columns:1fr;
+  .header h1{
+    font-size:36px;
+  }
+
+  .report-box{
+    flex-direction:column;
+    align-items:flex-start;
   }
 }
 </style>
@@ -260,71 +285,56 @@ button:hover{
 
 <body>
 
+<div class="header">
+  <h1>Investigation - SHELL</h1>
+  <p>Software • Hardware • Environment • Liveware</p>
+</div>
+
 <div class="container">
 
-<div class="header">
-  <div class="badge">SHELL MODEL</div>
-  <h1>Investigation - SHELL</h1>
-  <div class="subtitle">Human Factors Investigation Module</div>
-</div>
-
 <div class="report-box">
-<b>Report ID:</b> <span id="reportId">Loading...</span>
+  <div>Report ID: <span id="reportId">Loading...</span></div>
+  <div>Saved at: <span id="savedAt">Not saved yet</span></div>
 </div>
 
-<div class="shell-strip">
-  <div class="strip-card">
-    <strong>S</strong>
-    <span>Software</span>
+<div class="shell-diagram">
+
+<div class="card software">
+  <h3>📘 S - Software</h3>
+  <p>Procedures, manuals, task cards, forms, instructions, policies, or documentation.</p>
+  <textarea id="software" placeholder="Describe any procedure, manual, form, or documentation issue..."></textarea>
+</div>
+
+<div class="card hardware">
+  <h3>🛠 H - Hardware</h3>
+  <p>Tools, equipment, aircraft parts, GSE, materials, systems, or physical resources.</p>
+  <textarea id="hardware" placeholder="Describe any tool, equipment, aircraft, or material issue..."></textarea>
+</div>
+
+<div class="center-shell">
+  <div class="shell-core">
+    <h2>SHELL</h2>
+    <p>Human Factors Interaction Model</p>
   </div>
-  <div class="strip-card">
-    <strong>H</strong>
-    <span>Hardware</span>
-  </div>
-  <div class="strip-card">
-    <strong>E</strong>
-    <span>Environment</span>
-  </div>
-  <div class="strip-card">
-    <strong>L</strong>
-    <span>Liveware</span>
-  </div>
 </div>
 
-<div class="question-card software">
-<div class="question-title">S - Software</div>
-<div class="description">
-Procedures, manuals, task cards, forms, instructions, policies, or documentation.
-</div>
-<label>Analysis</label>
-<textarea id="software" placeholder="Describe any procedure, manual, form, or documentation issue..."></textarea>
+<div class="card environment">
+  <h3>🌦 E - Environment</h3>
+  <p>Work area, lighting, weather, noise, time pressure, shift, access, or workplace conditions.</p>
+  <textarea id="environment" placeholder="Describe any environmental or workplace condition..."></textarea>
 </div>
 
-<div class="question-card hardware">
-<div class="question-title">H - Hardware</div>
-<div class="description">
-Tools, equipment, aircraft parts, GSE, materials, systems, or physical resources.
-</div>
-<label>Analysis</label>
-<textarea id="hardware" placeholder="Describe any tool, equipment, aircraft, or material issue..."></textarea>
+<div class="card liveware">
+  <h3>👥 L - Liveware</h3>
+  <p>People, communication, supervision, training, fatigue, awareness, teamwork, or behavior.</p>
+  <textarea id="liveware" placeholder="Describe any human factor, communication, training, or supervision issue..."></textarea>
 </div>
 
-<div class="question-card environment">
-<div class="question-title">E - Environment</div>
-<div class="description">
-Work area, lighting, weather, noise, time pressure, shift, access, or workplace conditions.
-</div>
-<label>Analysis</label>
-<textarea id="environment" placeholder="Describe any environmental or workplace condition..."></textarea>
-</div>
+<div class="arrow left-top"></div>
+<div class="arrow right-top"></div>
+<div class="arrow left-bottom"></div>
+<div class="arrow right-bottom"></div>
 
-<div class="question-card liveware">
-<div class="question-title">L - Liveware</div>
-<div class="description">
-People, communication, supervision, training, fatigue, awareness, teamwork, or behavior.
-</div>
-<label>Analysis</label>
-<textarea id="liveware" placeholder="Describe any human factor, communication, training, or supervision issue..."></textarea>
 </div>
 
 <div class="actions">
@@ -376,6 +386,7 @@ get(ref(db,"smsReports/"+key)).then(snapshot=>{
       hardware.value = x.hardware || "";
       environment.value = x.environment || "";
       liveware.value = x.liveware || "";
+      savedAt.innerText = x.savedAt || "Saved";
     }
   }
 });
@@ -390,6 +401,7 @@ window.saveInvestigation = function(){
     status:"Saved",
     savedAt:new Date().toISOString()
   }).then(()=>{
+    savedAt.innerText = new Date().toISOString();
     alert("SHELL Investigation saved successfully.");
   });
 
@@ -404,6 +416,7 @@ window.deleteInvestigation = function(){
       hardware.value = "";
       environment.value = "";
       liveware.value = "";
+      savedAt.innerText = "Not saved yet";
 
       alert("SHELL Investigation deleted.");
     });
