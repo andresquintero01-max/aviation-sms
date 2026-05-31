@@ -2,106 +2,91 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SHELL Investigation</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investigation - SHELL</title>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
 body{
-  font-family:'Segoe UI',Arial,sans-serif;
-  min-height:100vh;
+  margin:0;
+  font-family:Arial, sans-serif;
   background:linear-gradient(135deg,#071f47,#0b2a66,#0f766e);
   padding:30px;
 }
 
 .container{
-  max-width:1100px;
+  max-width:950px;
   margin:auto;
   background:white;
-  border-radius:30px;
-  padding:40px;
-  box-shadow:0 25px 60px rgba(0,0,0,0.35);
+  border-radius:22px;
+  padding:35px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.35);
 }
 
 h1{
   text-align:center;
   color:#071f47;
-  font-size:48px;
+  font-size:42px;
   margin-bottom:10px;
 }
 
 .subtitle{
   text-align:center;
-  color:#475569;
+  color:#666;
   font-size:18px;
   margin-bottom:30px;
 }
 
-.nav{
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  margin-bottom:30px;
-  flex-wrap:wrap;
+.report-box{
+  background:#e9f5ff;
+  border-left:8px solid #071f47;
+  padding:18px;
+  border-radius:12px;
+  margin-bottom:25px;
+  font-size:18px;
 }
 
-.nav a{
-  text-decoration:none;
-  background:#071f47;
-  color:white;
-  padding:13px 22px;
-  border-radius:14px;
+.question-card{
+  background:#f8fbff;
+  border:1px solid #d7e6ff;
+  border-radius:16px;
+  padding:20px;
+  margin-top:18px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.software{border-left:8px solid #2563eb;}
+.hardware{border-left:8px solid #dc2626;}
+.environment{border-left:8px solid #16a34a;}
+.liveware{border-left:8px solid #9333ea;}
+
+.question-title{
+  color:#071f47;
+  font-size:20px;
   font-weight:bold;
-  box-shadow:0 8px 18px rgba(0,0,0,0.2);
+  margin-bottom:10px;
 }
 
-.nav a.home{
-  background:#0f766e;
+.description{
+  color:#555;
+  margin-bottom:10px;
+  line-height:1.5;
 }
 
-.form-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:22px;
-}
-
-.card{
-  border-radius:24px;
-  padding:25px;
-  color:white;
-  box-shadow:0 12px 30px rgba(0,0,0,0.18);
-}
-
-.software{background:linear-gradient(135deg,#2563eb,#1e40af);}
-.hardware{background:linear-gradient(135deg,#dc2626,#991b1b);}
-.environment{background:linear-gradient(135deg,#16a34a,#166534);}
-.liveware{background:linear-gradient(135deg,#9333ea,#581c87);}
-
-.card h2{
-  font-size:28px;
-  margin-bottom:8px;
-}
-
-.card p{
-  font-size:15px;
-  margin-bottom:15px;
-  opacity:0.95;
+label{
+  font-weight:bold;
+  color:#333;
+  display:block;
+  margin:12px 0 6px;
 }
 
 textarea{
   width:100%;
-  min-height:150px;
-  resize:vertical;
-  border:none;
-  border-radius:16px;
-  padding:15px;
+  padding:13px;
+  border:1px solid #cfd8e3;
+  border-radius:10px;
   font-size:16px;
-  outline:none;
+  box-sizing:border-box;
+  min-height:110px;
+  resize:vertical;
 }
 
 .actions{
@@ -110,61 +95,31 @@ textarea{
 }
 
 button{
-  background:#f97316;
-  color:white;
+  padding:12px 20px;
+  margin:8px;
   border:none;
-  padding:16px 35px;
-  font-size:18px;
-  font-weight:bold;
-  border-radius:18px;
+  border-radius:10px;
+  color:white;
+  font-size:16px;
   cursor:pointer;
-  box-shadow:0 10px 25px rgba(0,0,0,0.25);
+  font-weight:bold;
 }
 
+.save{background:#16803c;}
+.delete{background:#c62828;}
+.print{background:#0b2a66;}
+.back{background:#555;}
+.home{background:#0f766e;}
+
 button:hover{
-  background:#ea580c;
+  opacity:0.88;
   transform:scale(1.03);
 }
 
-.saved{
-  margin-top:35px;
-  background:#f8fafc;
-  border-radius:24px;
-  padding:25px;
-}
-
-.saved h2{
-  color:#071f47;
-  margin-bottom:15px;
-}
-
-.record{
-  background:white;
-  border-left:8px solid #071f47;
-  border-radius:16px;
-  padding:18px;
-  margin-bottom:15px;
-  box-shadow:0 5px 16px rgba(0,0,0,0.12);
-}
-
-.record strong{
-  color:#071f47;
-}
-
-.date{
-  font-size:13px;
-  color:#64748b;
-  margin-bottom:10px;
-}
-
-@media(max-width:800px){
-  .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  h1{
-    font-size:36px;
-  }
+@media print{
+  body{background:white;}
+  .container{box-shadow:none;}
+  button{display:none;}
 }
 </style>
 </head>
@@ -173,144 +128,140 @@ button:hover{
 
 <div class="container">
 
-  <h1>SHELL Investigation Model</h1>
-  <p class="subtitle">
-    Human Factors analysis connected to the selected Risk Detail report
-  </p>
+<h1>Investigation - SHELL</h1>
+<div class="subtitle">Human Factors Investigation Module</div>
 
-  <div class="nav">
-    <a id="backRisk" href="Risk-Detail.html">⬅ Back to Risk Detail</a>
-    <a class="home" href="index.html">🏠 Home</a>
-  </div>
+<div class="report-box">
+<b>Report ID:</b> <span id="reportId">Loading...</span>
+</div>
 
-  <div class="form-grid">
+<div class="question-card software">
+<div class="question-title">S - Software</div>
+<div class="description">
+Procedures, manuals, task cards, forms, instructions, policies, or documentation.
+</div>
+<label>Analysis</label>
+<textarea id="software" placeholder="Describe any procedure, manual, form, or documentation issue..."></textarea>
+</div>
 
-    <div class="card software">
-      <h2>S - Software</h2>
-      <p>Procedures, manuals, task cards, forms, instructions, policies, or documentation.</p>
-      <textarea id="software" placeholder="Describe any procedure, manual, form, or documentation issue..."></textarea>
-    </div>
+<div class="question-card hardware">
+<div class="question-title">H - Hardware</div>
+<div class="description">
+Tools, equipment, aircraft parts, GSE, materials, systems, or physical resources.
+</div>
+<label>Analysis</label>
+<textarea id="hardware" placeholder="Describe any tool, equipment, aircraft, or material issue..."></textarea>
+</div>
 
-    <div class="card hardware">
-      <h2>H - Hardware</h2>
-      <p>Tools, equipment, aircraft parts, GSE, materials, systems, or physical resources.</p>
-      <textarea id="hardware" placeholder="Describe any tool, equipment, aircraft, or material issue..."></textarea>
-    </div>
+<div class="question-card environment">
+<div class="question-title">E - Environment</div>
+<div class="description">
+Work area, lighting, weather, noise, time pressure, shift, access, or workplace conditions.
+</div>
+<label>Analysis</label>
+<textarea id="environment" placeholder="Describe any environmental or workplace condition..."></textarea>
+</div>
 
-    <div class="card environment">
-      <h2>E - Environment</h2>
-      <p>Work area, lighting, weather, noise, time pressure, shift, access, or workplace conditions.</p>
-      <textarea id="environment" placeholder="Describe any environmental or workplace condition..."></textarea>
-    </div>
+<div class="question-card liveware">
+<div class="question-title">L - Liveware</div>
+<div class="description">
+People, communication, supervision, training, fatigue, awareness, teamwork, or behavior.
+</div>
+<label>Analysis</label>
+<textarea id="liveware" placeholder="Describe any human factor, communication, training, or supervision issue..."></textarea>
+</div>
 
-    <div class="card liveware">
-      <h2>L - Liveware</h2>
-      <p>People, communication, supervision, training, fatigue, awareness, teamwork, or behavior.</p>
-      <textarea id="liveware" placeholder="Describe any human factor, communication, training, or supervision issue..."></textarea>
-    </div>
-
-  </div>
-
-  <div class="actions">
-    <button onclick="saveSHELL()">💾 Save SHELL Investigation</button>
-  </div>
-
-  <div class="saved">
-    <h2>Saved SHELL Investigations</h2>
-    <div id="records">Loading...</div>
-  </div>
+<div class="actions">
+<button class="save" onclick="saveInvestigation()">Save</button>
+<button class="delete" onclick="deleteInvestigation()">Delete</button>
+<button class="print" onclick="window.print()">Print</button>
+<button class="back" onclick="goBack()">Back to SMS Report Detail</button>
+<button class="home" onclick="goHome()">Home</button>
+</div>
 
 </div>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+import { getDatabase, ref, get, update, remove }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
-  authDomain: "aviation-sms.firebaseapp.com",
-  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
-  projectId: "aviation-sms",
-  storageBucket: "aviation-sms.appspot.com",
-  messagingSenderId: "75686468930",
-  appId: "1:75686468930:web:4d8d9bca4c4ddf8bcb2f3a"
+apiKey: "xxx",
+authDomain: "aviation-sms.firebaseapp.com",
+databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+projectId: "aviation-sms",
+storageBucket: "aviation-sms.firebasestorage.app",
+messagingSenderId: "147000937860",
+appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const params = new URLSearchParams(window.location.search);
-const reportId = params.get("id") || params.get("reportId") || "general";
+const key = new URLSearchParams(window.location.search).get("key");
 
-document.getElementById("backRisk").href = "Risk-Detail.html?id=" + reportId;
-
-window.saveSHELL = function(){
-
-  const software = document.getElementById("software").value.trim();
-  const hardware = document.getElementById("hardware").value.trim();
-  const environment = document.getElementById("environment").value.trim();
-  const liveware = document.getElementById("liveware").value.trim();
-
-  if(!software && !hardware && !environment && !liveware){
-    alert("Please enter at least one SHELL analysis field before saving.");
-    return;
-  }
-
-  const shellRef = push(ref(db, "shellInvestigations/" + reportId));
-
-  set(shellRef, {
-    reportId: reportId,
-    software: software,
-    hardware: hardware,
-    environment: environment,
-    liveware: liveware,
-    createdAt: new Date().toLocaleString()
-  })
-  .then(() => {
-    alert("SHELL Investigation saved successfully.");
-
-    document.getElementById("software").value = "";
-    document.getElementById("hardware").value = "";
-    document.getElementById("environment").value = "";
-    document.getElementById("liveware").value = "";
-  })
-  .catch(error => {
-    alert("Error saving SHELL Investigation: " + error.message);
-  });
-};
-
-function loadSHELL(){
-
-  const recordsDiv = document.getElementById("records");
-
-  onValue(ref(db, "shellInvestigations/" + reportId), snapshot => {
-
-    recordsDiv.innerHTML = "";
-
-    if(!snapshot.exists()){
-      recordsDiv.innerHTML = "No SHELL investigations saved yet.";
-      return;
-    }
-
-    snapshot.forEach(child => {
-      const data = child.val();
-
-      recordsDiv.innerHTML += `
-        <div class="record">
-          <div class="date">${data.createdAt || ""}</div>
-
-          <p><strong>Software:</strong><br>${data.software || "N/A"}</p><br>
-          <p><strong>Hardware:</strong><br>${data.hardware || "N/A"}</p><br>
-          <p><strong>Environment:</strong><br>${data.environment || "N/A"}</p><br>
-          <p><strong>Liveware:</strong><br>${data.liveware || "N/A"}</p>
-        </div>
-      `;
-    });
-  });
+if(!key){
+  alert("No report key found.");
 }
 
-loadSHELL();
+get(ref(db,"smsReports/"+key)).then(snapshot=>{
+  if(snapshot.exists()){
+    const d = snapshot.val();
+
+    document.getElementById("reportId").innerText = d.reportId || "N/A";
+
+    if(d.investigationSHELL){
+      const x = d.investigationSHELL;
+
+      software.value = x.software || "";
+      hardware.value = x.hardware || "";
+      environment.value = x.environment || "";
+      liveware.value = x.liveware || "";
+    }
+  }
+});
+
+window.saveInvestigation = function(){
+
+  update(ref(db,"smsReports/"+key+"/investigationSHELL"),{
+    software:software.value,
+    hardware:hardware.value,
+    environment:environment.value,
+    liveware:liveware.value,
+    status:"Saved",
+    savedAt:new Date().toISOString()
+  }).then(()=>{
+    alert("SHELL Investigation saved successfully.");
+  });
+
+};
+
+window.deleteInvestigation = function(){
+
+  if(confirm("Do you want to delete this SHELL investigation?")){
+    remove(ref(db,"smsReports/"+key+"/investigationSHELL")).then(()=>{
+
+      software.value = "";
+      hardware.value = "";
+      environment.value = "";
+      liveware.value = "";
+
+      alert("SHELL Investigation deleted.");
+    });
+  }
+
+};
+
+window.goBack = function(){
+  location.href = "Risk-Detail.html?key=" + key;
+};
+
+window.goHome = function(){
+  location.href = "index.html";
+};
 
 </script>
 
