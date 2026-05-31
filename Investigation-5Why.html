@@ -3,114 +3,242 @@
 <head>
 <meta charset="UTF-8">
 <title>Investigation - 5 Why</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
-  padding:30px;
+  font-family:'Segoe UI', Arial, sans-serif;
+  min-height:100vh;
+  background:
+  radial-gradient(circle at top left, rgba(255,152,0,0.28), transparent 30%),
+  radial-gradient(circle at bottom right, rgba(20,80,184,0.38), transparent 35%),
+  linear-gradient(135deg,#020617,#071f47,#1450b8);
+  padding:35px;
 }
 
 .container{
-  max-width:950px;
+  max-width:1050px;
   margin:auto;
-  background:white;
-  border-radius:22px;
-  padding:35px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.35);
+  background:rgba(255,255,255,0.97);
+  border-radius:34px;
+  padding:45px;
+  box-shadow:0 28px 75px rgba(0,0,0,0.45);
+  border:1px solid rgba(255,255,255,0.45);
 }
 
-h1{
+.header{
   text-align:center;
-  color:#071f47;
-  font-size:42px;
-  margin-bottom:10px;
-}
-
-.subtitle{
-  text-align:center;
-  color:#666;
-  font-size:18px;
   margin-bottom:30px;
 }
 
+.badge{
+  display:inline-block;
+  background:linear-gradient(135deg,#ff9800,#f97316);
+  color:white;
+  padding:9px 20px;
+  border-radius:999px;
+  font-weight:bold;
+  font-size:14px;
+  letter-spacing:0.5px;
+  margin-bottom:14px;
+  box-shadow:0 8px 20px rgba(249,115,22,0.35);
+}
+
+h1{
+  color:#071f47;
+  font-size:52px;
+  margin:0;
+  letter-spacing:0.5px;
+}
+
+.subtitle{
+  color:#64748b;
+  font-size:19px;
+  margin-top:10px;
+}
+
 .report-box{
-  background:#e9f5ff;
-  border-left:8px solid #071f47;
-  padding:18px;
-  border-radius:12px;
-  margin-bottom:25px;
-  font-size:18px;
+  background:linear-gradient(135deg,#e9f5ff,#f8fbff);
+  border-left:9px solid #1450b8;
+  padding:22px;
+  border-radius:20px;
+  margin-bottom:28px;
+  font-size:19px;
+  box-shadow:0 10px 24px rgba(20,80,184,0.14);
+}
+
+.progress-strip{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+  margin-bottom:28px;
+}
+
+.step{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+  color:white;
+  text-align:center;
+  padding:13px 8px;
+  border-radius:16px;
+  font-weight:bold;
+  box-shadow:0 8px 18px rgba(7,31,71,0.25);
 }
 
 .question-card{
-  background:#f8fbff;
-  border:1px solid #d7e6ff;
-  border-radius:16px;
-  padding:20px;
-  margin-top:18px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  background:white;
+  border-radius:24px;
+  padding:25px;
+  margin-top:22px;
+  box-shadow:0 12px 30px rgba(15,23,42,0.12);
+  border:1px solid #e2e8f0;
+  position:relative;
+  overflow:hidden;
+}
+
+.question-card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:9px;
+  height:100%;
+  background:linear-gradient(180deg,#ff9800,#1450b8);
 }
 
 .question-title{
   color:#071f47;
-  font-size:20px;
-  font-weight:bold;
-  margin-bottom:10px;
+  font-size:24px;
+  font-weight:800;
+  margin-bottom:8px;
+  padding-left:8px;
+}
+
+.helper{
+  color:#64748b;
+  font-size:15px;
+  margin-bottom:15px;
+  padding-left:8px;
 }
 
 label{
-  font-weight:bold;
-  color:#333;
+  font-weight:800;
+  color:#334155;
   display:block;
-  margin:12px 0 6px;
+  margin:14px 0 7px;
 }
 
-input, textarea{
+input,
+textarea{
   width:100%;
-  padding:13px;
-  border:1px solid #cfd8e3;
-  border-radius:10px;
+  padding:15px;
+  border:1px solid #cbd5e1;
+  border-radius:16px;
   font-size:16px;
   box-sizing:border-box;
+  background:#f8fafc;
+  outline:none;
+  transition:0.25s;
+}
+
+input:focus,
+textarea:focus{
+  background:white;
+  border-color:#1450b8;
+  box-shadow:0 0 0 4px rgba(20,80,184,0.14);
 }
 
 textarea{
-  min-height:95px;
+  min-height:110px;
   resize:vertical;
 }
 
 .actions{
   text-align:center;
-  margin-top:30px;
+  margin-top:35px;
+  padding-top:20px;
+  border-top:1px solid #e2e8f0;
 }
 
 button{
-  padding:12px 20px;
+  padding:14px 24px;
   margin:8px;
   border:none;
-  border-radius:10px;
+  border-radius:16px;
   color:white;
   font-size:16px;
   cursor:pointer;
   font-weight:bold;
+  box-shadow:0 10px 24px rgba(0,0,0,0.22);
+  transition:0.25s;
 }
 
-.save{background:#16803c;}
-.delete{background:#c62828;}
-.print{background:#0b2a66;}
-.back{background:#555;}
+.save{
+  background:linear-gradient(135deg,#15803d,#22c55e);
+}
+
+.delete{
+  background:linear-gradient(135deg,#b91c1c,#ef4444);
+}
+
+.print{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+}
+
+.back{
+  background:linear-gradient(135deg,#374151,#6b7280);
+}
 
 button:hover{
-  opacity:0.88;
-  transform:scale(1.03);
+  transform:translateY(-3px) scale(1.03);
+  filter:brightness(1.05);
 }
 
 @media print{
-  body{background:white;}
-  .container{box-shadow:none;}
-  button{display:none;}
+  body{
+    background:white;
+    padding:10px;
+  }
+
+  .container{
+    box-shadow:none;
+    padding:15px;
+  }
+
+  button,
+  .actions,
+  .progress-strip,
+  .badge{
+    display:none;
+  }
+
+  .question-card{
+    box-shadow:none;
+    break-inside:avoid;
+  }
+}
+
+@media(max-width:800px){
+  body{
+    padding:20px;
+  }
+
+  .container{
+    padding:25px;
+    border-radius:24px;
+  }
+
+  h1{
+    font-size:38px;
+  }
+
+  .progress-strip{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -119,21 +247,34 @@ button:hover{
 
 <div class="container">
 
-<h1>Investigation - 5 Why</h1>
-<div class="subtitle">Root Cause Analysis Module</div>
+<div class="header">
+  <div class="badge">ROOT CAUSE ANALYSIS</div>
+  <h1>Investigation - 5 Why</h1>
+  <div class="subtitle">Professional Safety Investigation Module</div>
+</div>
 
 <div class="report-box">
 <b>Report ID:</b> <span id="reportId">Loading...</span>
 </div>
 
+<div class="progress-strip">
+  <div class="step">Why 1</div>
+  <div class="step">Why 2</div>
+  <div class="step">Why 3</div>
+  <div class="step">Why 4</div>
+  <div class="step">Root Cause</div>
+</div>
+
 <div class="question-card">
 <div class="question-title">1. What happened?</div>
+<div class="helper">Describe the event, condition, or finding clearly.</div>
 <label>Answer</label>
 <textarea id="q1Answer" placeholder="Describe what happened"></textarea>
 </div>
 
 <div class="question-card">
 <div class="question-title">2. Why did it happen?</div>
+<div class="helper">Identify the first reason or contributing factor.</div>
 <label>Question</label>
 <input id="q2Question" placeholder="Enter question 2">
 <label>Answer</label>
@@ -142,6 +283,7 @@ button:hover{
 
 <div class="question-card">
 <div class="question-title">3. Why?</div>
+<div class="helper">Go one level deeper into the cause.</div>
 <label>Question</label>
 <input id="q3Question" placeholder="Enter question 3">
 <label>Answer</label>
@@ -150,6 +292,7 @@ button:hover{
 
 <div class="question-card">
 <div class="question-title">4. Why?</div>
+<div class="helper">Continue identifying the system or process weakness.</div>
 <label>Question</label>
 <input id="q4Question" placeholder="Enter question 4">
 <label>Answer</label>
@@ -158,6 +301,7 @@ button:hover{
 
 <div class="question-card">
 <div class="question-title">5. Why?</div>
+<div class="helper">Identify the root cause or main process failure.</div>
 <label>Question</label>
 <input id="q5Question" placeholder="Enter question 5">
 <label>Answer</label>
@@ -165,10 +309,10 @@ button:hover{
 </div>
 
 <div class="actions">
-<button class="save" onclick="saveInvestigation()">Save</button>
-<button class="delete" onclick="deleteInvestigation()">Delete</button>
-<button class="print" onclick="window.print()">Print</button>
-<button class="back" onclick="goBack()">Back to SMS Report Detail</button>
+<button class="save" onclick="saveInvestigation()">💾 Save</button>
+<button class="delete" onclick="deleteInvestigation()">🗑 Delete</button>
+<button class="print" onclick="window.print()">🖨 Print</button>
+<button class="back" onclick="goBack()">⬅ Back to SMS Report Detail</button>
 </div>
 
 </div>
