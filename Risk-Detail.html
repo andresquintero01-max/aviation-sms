@@ -5,17 +5,15 @@
 <title>Risk Detail</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
-  font-family:'Segoe UI', Arial, sans-serif;
+  font-family:'Segoe UI',Arial,sans-serif;
   margin:0;
   padding:35px;
   min-height:100vh;
   background:
-  linear-gradient(rgba(5,20,55,0.86), rgba(5,20,55,0.92)),
+  linear-gradient(rgba(5,20,55,0.86),rgba(5,20,55,0.92)),
   url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
   background-size:cover;
   background-position:center;
@@ -44,10 +42,7 @@ h1{
   margin-bottom:30px;
 }
 
-.box,
-.investigation-box,
-.cpa-box,
-.attachment-box{
+.box,.investigation-box,.cpa-box,.attachment-box{
   margin-top:25px;
   padding:28px;
   border-radius:26px;
@@ -81,17 +76,16 @@ button:hover{
   background:linear-gradient(135deg,#0b2a66,#1c63db);
 }
 
-button.closed,
-.module-btn.completed{
-  background:linear-gradient(135deg,#15803d,#22c55e) !important;
+button.closed,.module-btn.completed{
+  background:linear-gradient(135deg,#15803d,#22c55e)!important;
 }
 
 .back-btn{
-  background:linear-gradient(135deg,#dc2626,#ef4444) !important;
+  background:linear-gradient(135deg,#dc2626,#ef4444)!important;
 }
 
 .print-file-btn{
-  background:linear-gradient(135deg,#111827,#374151) !important;
+  background:linear-gradient(135deg,#111827,#374151)!important;
   width:100%;
   margin-top:30px;
   font-size:20px;
@@ -128,12 +122,11 @@ button.closed,
 
 .matrix-grid{
   display:grid;
-  grid-template-columns:55px repeat(5, 95px);
+  grid-template-columns:55px repeat(5,95px);
   gap:9px;
 }
 
-.header-cell,
-.side-cell{
+.header-cell,.side-cell{
   display:flex;
   justify-content:center;
   align-items:center;
@@ -157,22 +150,15 @@ button.closed,
   transition:0.25s;
 }
 
-.cell:hover{
-  transform:scale(1.08);
-}
-
-.cell.selected{
-  outline:5px solid #071f47;
-  transform:scale(1.08);
-}
+.cell:hover{transform:scale(1.08);}
+.cell.selected{outline:5px solid #071f47;transform:scale(1.08);}
 
 .low{background:linear-gradient(135deg,#16a34a,#22c55e);}
 .medium{background:linear-gradient(135deg,#facc15,#f59e0b);color:#111827;}
 .high{background:linear-gradient(135deg,#f97316,#ea580c);}
 .extreme{background:linear-gradient(135deg,#dc2626,#ef4444);}
 
-input,
-select{
+input,select{
   padding:14px;
   margin:7px;
   border:1px solid #cbd5e1;
@@ -181,14 +167,7 @@ select{
   outline:none;
 }
 
-input:focus,
-select:focus{
-  border-color:#1450b8;
-  box-shadow:0 0 0 3px rgba(20,80,184,0.15);
-}
-
-.cpa-item,
-.attachment-item{
+.cpa-item,.attachment-item{
   background:#f8fafc;
   padding:16px;
   margin-top:12px;
@@ -201,7 +180,7 @@ select:focus{
   position:absolute;
   right:12px;
   top:12px;
-  background:linear-gradient(135deg,#dc2626,#ef4444) !important;
+  background:linear-gradient(135deg,#dc2626,#ef4444)!important;
   border-radius:10px;
   padding:7px 10px;
   font-size:13px;
@@ -227,28 +206,36 @@ select:focus{
   border-left:8px solid #1450b8;
 }
 
-@media(max-width:800px){
+#printInvestigationData{
+  display:none;
+}
+
+@media print{
   body{
-    padding:20px;
+    background:white!important;
+    padding:10px;
+  }
+
+  button,.bottom,.investigation-box{
+    display:none!important;
   }
 
   .container{
-    padding:24px;
+    box-shadow:none;
+    padding:15px;
   }
 
-  h1{
-    font-size:40px;
+  #printInvestigationData{
+    display:block!important;
   }
+}
 
-  .matrix-grid{
-    grid-template-columns:45px repeat(5, 78px);
-  }
-
-  .cell{
-    width:78px;
-    height:62px;
-    font-size:18px;
-  }
+@media(max-width:800px){
+  body{padding:20px;}
+  .container{padding:24px;}
+  h1{font-size:40px;}
+  .matrix-grid{grid-template-columns:45px repeat(5,78px);}
+  .cell{width:78px;height:62px;font-size:18px;}
 }
 </style>
 </head>
@@ -263,12 +250,10 @@ select:focus{
 <div class="box" id="reportBox">Loading report...</div>
 
 <div class="box">
-
 <h3>Initial Risk Assessment</h3>
 <p>Select the applicable cell directly in the risk matrix.</p>
 
 <div class="result" id="result">No risk selected yet.</div>
-
 <p><b>Risk Saved:</b> <span id="savedRisk">N/A</span></p>
 
 <div class="matrix" id="matrix"></div>
@@ -282,16 +267,14 @@ Press any cell in the matrix to see the severity and probability definitions.
 <button id="saveRiskBtn" onclick="saveRisk()">Save Risk</button>
 <button class="back-btn" onclick="goBack()">Back</button>
 </div>
-
 </div>
 
 <div class="investigation-box">
 <h3>Investigation Modules</h3>
 
-<button id="investigationBtn" class="module-btn" onclick="toggleInvestigationModule('investigation','investigationBtn')">Investigation</button>
 <button id="fiveWhysBtn" class="module-btn" onclick="openFiveWhys()">5 Whys</button>
-<button id="shellBtn" class="module-btn" onclick="toggleInvestigationModule('shell','shellBtn')">SHELL</button>
-<button id="contributingFactorsBtn" class="module-btn" onclick="toggleInvestigationModule('contributingFactors','contributingFactorsBtn')">Contributing Factors</button>
+<button id="shellBtn" class="module-btn" onclick="openSHELL()">SHELL</button>
+<button id="bowTieBtn" class="module-btn" onclick="openBowTie()">Bow-Tie</button>
 
 </div>
 
@@ -325,12 +308,10 @@ Press any cell in the matrix to see the severity and probability definitions.
 </div>
 
 <div class="box">
-
 <h3>Residual Risk Assessment</h3>
 <p>After CPA implementation, select the applicable cell directly in the residual risk matrix.</p>
 
 <div class="result" id="residualResult">No residual risk selected yet.</div>
-
 <p><b>Residual Risk Saved:</b> <span id="savedResidualRisk">N/A</span></p>
 
 <div class="matrix" id="residualMatrix"></div>
@@ -344,7 +325,13 @@ Press any cell in the residual matrix to see the severity and probability defini
 <button id="saveResidualRiskBtn" onclick="saveResidualRisk()">Save Risk</button>
 <button class="back-btn" onclick="goBack()">Back</button>
 </div>
+</div>
 
+<div class="box" id="printInvestigationData">
+<h3>Investigation Information</h3>
+<div id="fiveWhysPrint"><b>5 Whys:</b> N/A</div><br>
+<div id="shellPrint"><b>SHELL:</b> N/A</div><br>
+<div id="bowTiePrint"><b>Bow-Tie:</b> N/A</div>
 </div>
 
 <button class="print-file-btn" onclick="printFullFile()">Print File</button>
@@ -358,7 +345,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getDatabase, ref, get, update, push, remove }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject }
+import { getStorage, ref as storageRef, deleteObject }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
@@ -398,7 +385,6 @@ const probabilityDefinitions = {
 
 function getRiskClass(severity, probability){
 const code = severity + probability;
-
 const extreme = ["A5","A4","A3","B5","B4","C5"];
 const high = ["A2","B3","C4","D5"];
 const medium = ["A1","B2","C3","D4","E5","B1","C2","D3","E4"];
@@ -413,7 +399,6 @@ return "low";
 
 function getRiskLevel(severity, probability){
 const riskClass = getRiskClass(severity, probability);
-
 if(riskClass==="extreme") return "HIGH / EXTREME 🔴";
 if(riskClass==="high") return "HIGH 🟠";
 if(riskClass==="medium") return "MEDIUM 🟡";
@@ -470,16 +455,12 @@ loadInvestigationModules(d.investigationModules);
 loadCPA(d.CPA);
 renderMatrix();
 renderResidualMatrix();
+loadPrintInvestigationData();
 }
 });
 
 function loadInvestigationModules(data){
-
 if(!data)return;
-
-if(data.investigation===true){
-document.getElementById("investigationBtn").classList.add("completed");
-}
 
 if(data.fiveWhys===true){
 document.getElementById("fiveWhysBtn").classList.add("completed");
@@ -489,48 +470,40 @@ if(data.shell===true){
 document.getElementById("shellBtn").classList.add("completed");
 }
 
-if(data.contributingFactors===true){
-document.getElementById("contributingFactorsBtn").classList.add("completed");
+if(data.bowTie===true || data.contributingFactors===true){
+document.getElementById("bowTieBtn").classList.add("completed");
 }
-
 }
 
 window.openFiveWhys=function(){
-
 update(ref(db,"smsReports/"+key+"/investigationModules"),{
 fiveWhys:true
 }).then(()=>{
 document.getElementById("fiveWhysBtn").classList.add("completed");
 location.href="Investigation-5Why.html?key="+key;
 });
-
 };
 
-window.toggleInvestigationModule=function(moduleName,buttonId){
-
-const btn=document.getElementById(buttonId);
-const isCompleted=btn.classList.contains("completed");
-
-if(isCompleted){
-btn.classList.remove("completed");
-
+window.openSHELL=function(){
 update(ref(db,"smsReports/"+key+"/investigationModules"),{
-[moduleName]:false
+shell:true
+}).then(()=>{
+document.getElementById("shellBtn").classList.add("completed");
+location.href="Investigation-SHELL.html?key="+key;
 });
+};
 
-}else{
-btn.classList.add("completed");
-
+window.openBowTie=function(){
 update(ref(db,"smsReports/"+key+"/investigationModules"),{
-[moduleName]:true
+bowTie:true,
+contributingFactors:false
+}).then(()=>{
+document.getElementById("bowTieBtn").classList.add("completed");
+location.href="Investigation-Bow-Tie.html?key="+key;
 });
-
-}
-
 };
 
 window.saveRisk=function(){
-
 if(!risk){
 alert("Please select a risk cell first.");
 return;
@@ -549,7 +522,6 @@ btn.classList.add("closed");
 };
 
 window.saveResidualRisk=function(){
-
 if(!residualRisk){
 alert("Please select a residual risk cell first.");
 return;
@@ -568,13 +540,11 @@ btn.classList.add("closed");
 };
 
 function renderMatrix(){
-
 const m=document.getElementById("matrix");
 m.innerHTML="";
 
 const grid=document.createElement("div");
 grid.className="matrix-grid";
-
 grid.appendChild(document.createElement("div"));
 
 [5,4,3,2,1].forEach(pValue=>{
@@ -585,36 +555,25 @@ grid.appendChild(x);
 });
 
 ["A","B","C","D","E"].forEach(sValue=>{
-
 let y=document.createElement("div");
 y.className="side-cell";
 y.innerText=sValue;
 grid.appendChild(y);
 
 [5,4,3,2,1].forEach(pValue=>{
-
 let code=sValue+pValue;
-
 let cell=document.createElement("div");
 cell.className="cell "+getRiskClass(sValue,pValue);
 cell.innerText=code;
-
-if(p===pValue && s===sValue){
-cell.classList.add("selected");
-}
 
 cell.onclick=()=>{
 p=pValue;
 s=sValue;
 risk=code;
-
 result.innerText="Risk: "+risk+" → "+getRiskLevel(s,p);
 showDefinition("definitionBox",s,p,risk);
 
-document.querySelectorAll("#matrix .cell").forEach(c=>{
-c.classList.remove("selected");
-});
-
+document.querySelectorAll("#matrix .cell").forEach(c=>c.classList.remove("selected"));
 cell.classList.add("selected");
 };
 
@@ -626,13 +585,11 @@ m.appendChild(grid);
 }
 
 function renderResidualMatrix(){
-
 const m=document.getElementById("residualMatrix");
 m.innerHTML="";
 
 const grid=document.createElement("div");
 grid.className="matrix-grid";
-
 grid.appendChild(document.createElement("div"));
 
 [5,4,3,2,1].forEach(pValue=>{
@@ -643,23 +600,16 @@ grid.appendChild(x);
 });
 
 ["A","B","C","D","E"].forEach(sValue=>{
-
 let y=document.createElement("div");
 y.className="side-cell";
 y.innerText=sValue;
 grid.appendChild(y);
 
 [5,4,3,2,1].forEach(pValue=>{
-
 let code=sValue+pValue;
-
 let cell=document.createElement("div");
 cell.className="cell "+getRiskClass(sValue,pValue);
 cell.innerText=code;
-
-if(rp===pValue && rs===sValue){
-cell.classList.add("selected");
-}
 
 cell.onclick=()=>{
 rp=pValue;
@@ -669,10 +619,7 @@ residualRisk=code;
 residualResult.innerText="Risk: "+residualRisk+" → "+getRiskLevel(rs,rp);
 showDefinition("residualDefinitionBox",rs,rp,residualRisk);
 
-document.querySelectorAll("#residualMatrix .cell").forEach(c=>{
-c.classList.remove("selected");
-});
-
+document.querySelectorAll("#residualMatrix .cell").forEach(c=>c.classList.remove("selected"));
 cell.classList.add("selected");
 };
 
@@ -697,15 +644,12 @@ pdfName:"",
 pdfPath:""
 }).then(()=>{
 get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
-if(s.exists()){
-loadCPA(s.val());
-}
+if(s.exists()) loadCPA(s.val());
 });
 });
 };
 
 window.addDriveLink=async function(id,cpaNumber){
-
 const driveLink = prompt("Paste Google Drive document link for CPA Attachment "+cpaNumber);
 
 if(!driveLink){
@@ -720,15 +664,11 @@ pdfPath:""
 });
 
 get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
-if(s.exists()){
-loadCPA(s.val());
-}
+if(s.exists()) loadCPA(s.val());
 });
-
 };
 
 window.sendCPAEmail=function(email,type,action,date,cpaNumber,pdfUrl){
-
 const subject = encodeURIComponent("CPA "+cpaNumber+" - Corrective Preventive Action");
 
 const body = encodeURIComponent(
@@ -744,7 +684,6 @@ window.location.href="mailto:"+email+"?subject="+subject+"&body="+body;
 };
 
 window.deleteCPA=async function(id,pdfPath){
-
 if(pdfPath){
 try{
 await deleteObject(storageRef(storage,pdfPath));
@@ -763,19 +702,20 @@ loadCPA(null);
 };
 
 function loadCPA(data){
-
 const c=document.getElementById("cpaContainer");
 const a=document.getElementById("attachmentContainer");
 
 c.innerHTML="";
 a.innerHTML="";
 
-if(!data){cpaCounter=0;return;}
+if(!data){
+cpaCounter=0;
+return;
+}
 
 cpaCounter=Object.keys(data).length;
 
 Object.entries(data).forEach(([id,x],i)=>{
-
 let div=document.createElement("div");
 div.className="cpa-item";
 
@@ -805,8 +745,51 @@ a.appendChild(att);
 });
 }
 
+function formatObjectData(data){
+let html = "";
+
+Object.entries(data).forEach(([id,x])=>{
+html += `<div style="margin-bottom:12px;padding:12px;border:1px solid #ddd;border-radius:12px;">`;
+
+Object.entries(x).forEach(([k,v])=>{
+if(typeof v !== "object"){
+html += `<b>${k}:</b> ${v || "N/A"}<br>`;
+}
+});
+
+html += `</div>`;
+});
+
+return html;
+}
+
+function loadPrintInvestigationData(){
+
+get(ref(db,"fiveWhysInvestigations/"+key)).then(snap=>{
+if(snap.exists()){
+fiveWhysPrint.innerHTML = "<b>5 Whys:</b><br>" + formatObjectData(snap.val());
+}
+});
+
+get(ref(db,"shellInvestigations/"+key)).then(snap=>{
+if(snap.exists()){
+shellPrint.innerHTML = "<b>SHELL:</b><br>" + formatObjectData(snap.val());
+}
+});
+
+get(ref(db,"bowTieInvestigations/"+key)).then(snap=>{
+if(snap.exists()){
+bowTiePrint.innerHTML = "<b>Bow-Tie:</b><br>" + formatObjectData(snap.val());
+}
+});
+
+}
+
 window.printFullFile=function(){
+loadPrintInvestigationData();
+setTimeout(()=>{
 window.print();
+},700);
 };
 
 window.goBack=()=>location.href="SMS-Database.html";
