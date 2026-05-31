@@ -3,123 +3,257 @@
 <head>
 <meta charset="UTF-8">
 <title>Investigation - SHELL</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#0f766e);
-  padding:30px;
+  font-family:'Segoe UI', Arial, sans-serif;
+  min-height:100vh;
+  background:
+  radial-gradient(circle at top left, rgba(20,184,166,0.35), transparent 32%),
+  radial-gradient(circle at bottom right, rgba(147,51,234,0.28), transparent 35%),
+  linear-gradient(135deg,#020617,#071f47,#0f766e);
+  padding:35px;
 }
 
 .container{
-  max-width:950px;
+  max-width:1100px;
   margin:auto;
-  background:white;
-  border-radius:22px;
-  padding:35px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.35);
+  background:rgba(255,255,255,0.97);
+  border-radius:34px;
+  padding:45px;
+  box-shadow:0 28px 75px rgba(0,0,0,0.45);
+  border:1px solid rgba(255,255,255,0.45);
 }
 
-h1{
+.header{
   text-align:center;
-  color:#071f47;
-  font-size:42px;
-  margin-bottom:10px;
-}
-
-.subtitle{
-  text-align:center;
-  color:#666;
-  font-size:18px;
   margin-bottom:30px;
 }
 
+.badge{
+  display:inline-block;
+  background:linear-gradient(135deg,#0f766e,#14b8a6);
+  color:white;
+  padding:9px 20px;
+  border-radius:999px;
+  font-weight:bold;
+  font-size:14px;
+  letter-spacing:0.5px;
+  margin-bottom:14px;
+  box-shadow:0 8px 20px rgba(20,184,166,0.35);
+}
+
+h1{
+  color:#071f47;
+  font-size:52px;
+  margin:0;
+  letter-spacing:0.5px;
+}
+
+.subtitle{
+  color:#64748b;
+  font-size:19px;
+  margin-top:10px;
+}
+
 .report-box{
-  background:#e9f5ff;
-  border-left:8px solid #071f47;
+  background:linear-gradient(135deg,#ecfeff,#f8fbff);
+  border-left:9px solid #0f766e;
+  padding:22px;
+  border-radius:20px;
+  margin-bottom:28px;
+  font-size:19px;
+  box-shadow:0 10px 24px rgba(20,184,166,0.14);
+}
+
+.shell-strip{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-bottom:28px;
+}
+
+.strip-card{
+  background:white;
+  border-radius:20px;
   padding:18px;
-  border-radius:12px;
-  margin-bottom:25px;
+  text-align:center;
+  box-shadow:0 10px 24px rgba(15,23,42,0.12);
+  border:1px solid #e2e8f0;
+}
+
+.strip-card strong{
+  display:block;
+  color:#071f47;
   font-size:18px;
+  margin-bottom:5px;
+}
+
+.strip-card span{
+  color:#64748b;
+  font-size:14px;
 }
 
 .question-card{
-  background:#f8fbff;
-  border:1px solid #d7e6ff;
-  border-radius:16px;
-  padding:20px;
-  margin-top:18px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  background:white;
+  border-radius:24px;
+  padding:25px;
+  margin-top:22px;
+  box-shadow:0 12px 30px rgba(15,23,42,0.12);
+  border:1px solid #e2e8f0;
+  position:relative;
+  overflow:hidden;
 }
 
-.software{border-left:8px solid #2563eb;}
-.hardware{border-left:8px solid #dc2626;}
-.environment{border-left:8px solid #16a34a;}
-.liveware{border-left:8px solid #9333ea;}
+.question-card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:9px;
+  height:100%;
+}
+
+.software::before{background:linear-gradient(180deg,#2563eb,#38bdf8);}
+.hardware::before{background:linear-gradient(180deg,#dc2626,#fb7185);}
+.environment::before{background:linear-gradient(180deg,#16a34a,#86efac);}
+.liveware::before{background:linear-gradient(180deg,#7e22ce,#c084fc);}
 
 .question-title{
   color:#071f47;
-  font-size:20px;
-  font-weight:bold;
-  margin-bottom:10px;
+  font-size:24px;
+  font-weight:800;
+  margin-bottom:8px;
+  padding-left:8px;
 }
 
 .description{
-  color:#555;
-  margin-bottom:10px;
+  color:#64748b;
+  font-size:15px;
+  margin-bottom:15px;
+  padding-left:8px;
   line-height:1.5;
 }
 
 label{
-  font-weight:bold;
-  color:#333;
+  font-weight:800;
+  color:#334155;
   display:block;
-  margin:12px 0 6px;
+  margin:14px 0 7px;
 }
 
 textarea{
   width:100%;
-  padding:13px;
-  border:1px solid #cfd8e3;
-  border-radius:10px;
+  padding:15px;
+  border:1px solid #cbd5e1;
+  border-radius:16px;
   font-size:16px;
   box-sizing:border-box;
-  min-height:110px;
+  min-height:115px;
   resize:vertical;
+  background:#f8fafc;
+  outline:none;
+  transition:0.25s;
+}
+
+textarea:focus{
+  background:white;
+  border-color:#0f766e;
+  box-shadow:0 0 0 4px rgba(15,118,110,0.16);
 }
 
 .actions{
   text-align:center;
-  margin-top:30px;
+  margin-top:35px;
+  padding-top:20px;
+  border-top:1px solid #e2e8f0;
 }
 
 button{
-  padding:12px 20px;
+  padding:14px 24px;
   margin:8px;
   border:none;
-  border-radius:10px;
+  border-radius:16px;
   color:white;
   font-size:16px;
   cursor:pointer;
   font-weight:bold;
+  box-shadow:0 10px 24px rgba(0,0,0,0.22);
+  transition:0.25s;
 }
 
-.save{background:#16803c;}
-.delete{background:#c62828;}
-.print{background:#0b2a66;}
-.back{background:#555;}
-.home{background:#0f766e;}
+.save{
+  background:linear-gradient(135deg,#15803d,#22c55e);
+}
+
+.delete{
+  background:linear-gradient(135deg,#b91c1c,#ef4444);
+}
+
+.print{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+}
+
+.back{
+  background:linear-gradient(135deg,#374151,#6b7280);
+}
+
+.home{
+  background:linear-gradient(135deg,#0f766e,#14b8a6);
+}
 
 button:hover{
-  opacity:0.88;
-  transform:scale(1.03);
+  transform:translateY(-3px) scale(1.03);
+  filter:brightness(1.05);
 }
 
 @media print{
-  body{background:white;}
-  .container{box-shadow:none;}
-  button{display:none;}
+  body{
+    background:white;
+    padding:10px;
+  }
+
+  .container{
+    box-shadow:none;
+    padding:15px;
+  }
+
+  button,
+  .actions,
+  .badge,
+  .shell-strip{
+    display:none;
+  }
+
+  .question-card{
+    box-shadow:none;
+    break-inside:avoid;
+  }
+}
+
+@media(max-width:800px){
+  body{
+    padding:20px;
+  }
+
+  .container{
+    padding:25px;
+    border-radius:24px;
+  }
+
+  h1{
+    font-size:38px;
+  }
+
+  .shell-strip{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -128,11 +262,33 @@ button:hover{
 
 <div class="container">
 
-<h1>Investigation - SHELL</h1>
-<div class="subtitle">Human Factors Investigation Module</div>
+<div class="header">
+  <div class="badge">SHELL MODEL</div>
+  <h1>Investigation - SHELL</h1>
+  <div class="subtitle">Human Factors Investigation Module</div>
+</div>
 
 <div class="report-box">
 <b>Report ID:</b> <span id="reportId">Loading...</span>
+</div>
+
+<div class="shell-strip">
+  <div class="strip-card">
+    <strong>S</strong>
+    <span>Software</span>
+  </div>
+  <div class="strip-card">
+    <strong>H</strong>
+    <span>Hardware</span>
+  </div>
+  <div class="strip-card">
+    <strong>E</strong>
+    <span>Environment</span>
+  </div>
+  <div class="strip-card">
+    <strong>L</strong>
+    <span>Liveware</span>
+  </div>
 </div>
 
 <div class="question-card software">
@@ -172,11 +328,11 @@ People, communication, supervision, training, fatigue, awareness, teamwork, or b
 </div>
 
 <div class="actions">
-<button class="save" onclick="saveInvestigation()">Save</button>
-<button class="delete" onclick="deleteInvestigation()">Delete</button>
-<button class="print" onclick="window.print()">Print</button>
-<button class="back" onclick="goBack()">Back to SMS Report Detail</button>
-<button class="home" onclick="goHome()">Home</button>
+<button class="save" onclick="saveInvestigation()">💾 Save</button>
+<button class="delete" onclick="deleteInvestigation()">🗑 Delete</button>
+<button class="print" onclick="window.print()">🖨 Print</button>
+<button class="back" onclick="goBack()">⬅ Back to SMS Report Detail</button>
+<button class="home" onclick="goHome()">🏠 Home</button>
 </div>
 
 </div>
