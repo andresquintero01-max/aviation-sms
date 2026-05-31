@@ -117,12 +117,6 @@ h1{
   outline:none;
 }
 
-.filter-panel input:focus,
-.filter-panel select:focus{
-  border-color:#1450b8;
-  box-shadow:0 0 0 3px rgba(20,80,184,0.15);
-}
-
 .record{
   background:white;
   margin-bottom:26px;
@@ -156,10 +150,6 @@ h1{
 .report-id a{
   color:#5e2ca5;
   text-decoration:none;
-}
-
-.report-id a:hover{
-  text-decoration:underline;
 }
 
 .actions-row{
@@ -238,12 +228,6 @@ h1{
   font-weight:bold;
   font-size:14px;
   box-shadow:0 8px 18px rgba(0,0,0,0.22);
-  transition:0.2s;
-}
-
-.edit-btn:hover{
-  transform:translateY(-2px);
-  background:linear-gradient(135deg,#0b2a66,#1450b8);
 }
 
 .save-btn{
@@ -255,12 +239,6 @@ h1{
   cursor:pointer;
   font-weight:bold;
   font-size:14px;
-  box-shadow:0 8px 18px rgba(0,0,0,0.22);
-  transition:0.2s;
-}
-
-.save-btn:hover{
-  transform:translateY(-2px);
 }
 
 .delete-btn{
@@ -274,12 +252,6 @@ h1{
   font-size:18px;
   font-weight:bold;
   box-shadow:0 8px 18px rgba(0,0,0,0.22);
-  transition:0.2s;
-}
-
-.delete-btn:hover{
-  transform:translateY(-2px) scale(1.05);
-  background:linear-gradient(135deg,#991b1b,#dc2626);
 }
 
 .info{
@@ -291,6 +263,16 @@ h1{
   padding:18px;
   border-radius:16px;
   border:1px solid #e5e7eb;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px 22px;
+}
+
+.full-info{
+  grid-column:1 / 3;
 }
 
 .label{
@@ -305,11 +287,11 @@ h1{
   padding:20px;
   border-radius:18px;
   border:1px solid #dbe3ef;
-  box-shadow:inset 0 2px 8px rgba(0,0,0,0.04);
 }
 
 .edit-area input,
-.edit-area textarea{
+.edit-area textarea,
+.edit-area select{
   width:100%;
   padding:13px;
   margin-top:8px;
@@ -318,14 +300,6 @@ h1{
   border-radius:12px;
   font-family:'Segoe UI', Arial, sans-serif;
   font-size:14px;
-  box-sizing:border-box;
-  outline:none;
-}
-
-.edit-area input:focus,
-.edit-area textarea:focus{
-  border-color:#1450b8;
-  box-shadow:0 0 0 3px rgba(20,80,184,0.15);
 }
 
 .edit-area textarea{
@@ -363,12 +337,6 @@ h1{
   font-weight:bold;
   font-size:17px;
   box-shadow:0 10px 25px rgba(0,0,0,0.28);
-  transition:0.2s;
-}
-
-.back:hover{
-  transform:translateY(-3px);
-  background:linear-gradient(135deg,#991b1b,#dc2626);
 }
 
 .empty{
@@ -390,10 +358,7 @@ h1{
     font-size:42px;
   }
 
-  .top-row{
-    flex-direction:column;
-  }
-
+  .top-row,
   .status-box{
     flex-direction:column;
   }
@@ -402,8 +367,13 @@ h1{
     width:100%;
   }
 
-  .filter-grid{
+  .filter-grid,
+  .info-grid{
     grid-template-columns:1fr;
+  }
+
+  .full-info{
+    grid-column:1;
   }
 }
 
@@ -444,16 +414,14 @@ Real-Time Safety Management System Database
 
     <div class="filter-grid">
 
-      <input type="text" id="searchInput" placeholder="Search ID, event, solution..." oninput="applyFilters()">
+      <input type="text" id="searchInput" placeholder="Search title, name, aircraft, airport..." oninput="applyFilters()">
 
       <input type="date" id="dateFilter" onchange="applyFilters()">
 
-      <select id="riskFilter" onchange="applyFilters()">
-        <option value="">All Risk Levels</option>
-        <option value="ACCEPTABLE">Acceptable</option>
-        <option value="TOLERABLE">Tolerable</option>
-        <option value="NOT ACCEPTABLE">Not Acceptable</option>
-        <option value="NOT ASSESSED">Not Assessed</option>
+      <select id="typeFilter" onchange="applyFilters()">
+        <option value="">All Report Types</option>
+        <option value="MOR">MOR</option>
+        <option value="VOR">VOR</option>
       </select>
 
       <select id="statusFilter" onchange="applyFilters()">
@@ -490,39 +458,25 @@ update
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
-
 apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
-
 authDomain: "aviation-sms.firebaseapp.com",
-
 databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
-
 projectId: "aviation-sms",
-
 storageBucket: "aviation-sms.firebasestorage.app",
-
 messagingSenderId: "147000937860",
-
 appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
-
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getDatabase(app);
-
 const container = document.getElementById("data");
 
 let allReports = [];
-
-/* FILTER PANEL */
 
 window.toggleFilters = function(){
   const panel = document.getElementById("filterPanel");
   panel.style.display = panel.style.display === "block" ? "none" : "block";
 };
-
-/* DELETE */
 
 window.deleteReport = function(key){
 
@@ -545,55 +499,46 @@ applyFilters();
 
 };
 
-/* EDIT */
-
 window.showEdit = function(key){
 
-const editBox =
-document.getElementById("edit-"+key);
+const editBox = document.getElementById("edit-"+key);
 
-if(editBox.style.display === "block"){
-editBox.style.display = "none";
-}else{
-editBox.style.display = "block";
-}
+editBox.style.display =
+editBox.style.display === "block" ? "none" : "block";
 
 };
 
-/* SAVE EDIT */
-
 window.saveEdit = function(key){
 
-const newReportId =
-document.getElementById("edit-reportId-"+key).value;
+const title =
+document.getElementById("edit-title-"+key).value;
 
-const newWhatHappened =
-document.getElementById("edit-whatHappened-"+key).value;
-
-const newDate =
-document.getElementById("edit-date-"+key).value;
-
-const newSolution =
-document.getElementById("edit-solution-"+key).value;
+if(!title.trim()){
+alert("Title is required.");
+return;
+}
 
 update(ref(db,"smsReports/"+key),{
 
-reportId:newReportId,
-whatHappened:newWhatHappened,
-date:newDate,
-solution:newSolution
+title:title,
+reporterName:document.getElementById("edit-reporterName-"+key).value,
+date:document.getElementById("edit-date-"+key).value,
+flightNumber:document.getElementById("edit-flightNumber-"+key).value,
+aircraftRegistration:document.getElementById("edit-aircraftRegistration-"+key).value,
+airport:document.getElementById("edit-airport-"+key).value,
+destination:document.getElementById("edit-destination-"+key).value,
+reportType:document.getElementById("edit-reportType-"+key).value,
+whatHappened:document.getElementById("edit-whatHappened-"+key).value,
+recommendation:document.getElementById("edit-recommendation-"+key).value
 
 }).then(()=>{
 
 alert("Report updated successfully.");
-
 location.reload();
 
 });
 
 };
-
-/* RISK CLASS */
 
 function getRiskClass(value){
 
@@ -628,8 +573,6 @@ return "risk-empty";
 
 }
 
-/* RISK TEXT */
-
 function getRiskText(value){
 
 if(value === undefined || value === null || value === ""){
@@ -663,8 +606,6 @@ return "NOT ASSESSED";
 
 }
 
-/* RENDER REPORTS */
-
 function renderReports(reports){
 
 container.innerHTML = "";
@@ -689,52 +630,35 @@ const item = report.item;
 const div = document.createElement("div");
 
 div.className = "record";
-
 div.id = "record-"+key;
 
 const riskAssessmentStatus =
 item.riskClosed === true
-
 ? '<div class="status close">RISK ASSESSMENT CLOSED</div>'
-
 : '<div class="status open">RISK ASSESSMENT OPEN</div>';
 
 const residualRiskAssessmentStatus =
 item.residualRiskClosed === true
-
 ? '<div class="status close">RESIDUAL RISK CLOSED</div>'
-
 : '<div class="status open">RESIDUAL RISK OPEN</div>';
 
 const riskClass =
-item.riskClosed === true
-? getRiskClass(item.risk)
-: "risk-empty";
+item.riskClosed === true ? getRiskClass(item.risk) : "risk-empty";
 
 const residualClass =
-item.residualRiskClosed === true
-? getRiskClass(item.residualRisk)
-: "risk-empty";
+item.residualRiskClosed === true ? getRiskClass(item.residualRisk) : "risk-empty";
 
 const riskText =
-item.riskClosed === true
-? getRiskText(item.risk)
-: "NOT ASSESSED";
+item.riskClosed === true ? getRiskText(item.risk) : "NOT ASSESSED";
 
 const residualText =
-item.residualRiskClosed === true
-? getRiskText(item.residualRisk)
-: "NOT ASSESSED";
+item.residualRiskClosed === true ? getRiskText(item.residualRisk) : "NOT ASSESSED";
 
 const riskValue =
-item.riskClosed === true
-? item.risk
-: "N/A";
+item.riskClosed === true ? item.risk : "N/A";
 
 const residualValue =
-item.residualRiskClosed === true
-? item.residualRisk
-: "N/A";
+item.residualRiskClosed === true ? item.residualRisk : "N/A";
 
 div.innerHTML = `
 
@@ -742,10 +666,16 @@ div.innerHTML = `
 
 <div class="report-id">
 
-ID:
+Title:
 <a href="Risk-Detail.html?key=${key}">
-${item.reportId || "N/A"}
+${item.title || item.reportId || "N/A"}
 </a>
+
+<br>
+
+<span style="font-size:14px;color:#64748b;">
+ID: ${item.reportId || "N/A"}
+</span>
 
 </div>
 
@@ -758,14 +688,10 @@ ${item.reportId || "N/A"}
 ${riskAssessmentStatus}
 
 <div class="risk-value ${riskClass}">
-
 Risk:
 ${riskValue}
-
 <br><br>
-
 ${riskText}
-
 </div>
 
 </div>
@@ -775,32 +701,22 @@ ${riskText}
 ${residualRiskAssessmentStatus}
 
 <div class="risk-value ${residualClass}">
-
 Residual:
 ${residualValue}
-
 <br><br>
-
 ${residualText}
-
 </div>
 
 </div>
 
 </div>
 
-<button class="edit-btn"
-onclick="showEdit('${key}')">
-
+<button class="edit-btn" onclick="showEdit('${key}')">
 Edit
-
 </button>
 
-<button class="delete-btn"
-onclick="deleteReport('${key}')">
-
+<button class="delete-btn" onclick="deleteReport('${key}')">
 🗑️
-
 </button>
 
 </div>
@@ -809,9 +725,11 @@ onclick="deleteReport('${key}')">
 
 <div class="info">
 
+<div class="info-grid">
+
 <div>
-<span class="label">What Happened:</span>
-${item.whatHappened || "N/A"}
+<span class="label">Name:</span>
+${item.reporterName || "N/A"}
 </div>
 
 <div>
@@ -820,42 +738,87 @@ ${item.date || "N/A"}
 </div>
 
 <div>
-<span class="label">Solution:</span>
-${item.solution || "N/A"}
+<span class="label">Flight Number:</span>
+${item.flightNumber || "N/A"}
+</div>
+
+<div>
+<span class="label">Aircraft Registration:</span>
+${item.aircraftRegistration || "N/A"}
+</div>
+
+<div>
+<span class="label">Airport:</span>
+${item.airport || "N/A"}
+</div>
+
+<div>
+<span class="label">Destination:</span>
+${item.destination || "N/A"}
+</div>
+
+<div>
+<span class="label">Type Report:</span>
+${item.reportType || "N/A"}
+</div>
+
+<div>
+<span class="label">Status:</span>
+${item.status || "OPEN"}
+</div>
+
+<div class="full-info">
+<span class="label">What Happened:</span>
+${item.whatHappened || "N/A"}
+</div>
+
+<div class="full-info">
+<span class="label">Recommendation:</span>
+${item.recommendation || "N/A"}
+</div>
+
 </div>
 
 </div>
 
 <div class="edit-area" id="edit-${key}">
 
-<label><b>Report ID / Name:</b></label>
+<label><b>Title:</b></label>
+<input id="edit-title-${key}" value="${item.title || ""}">
 
-<input
-id="edit-reportId-${key}"
-value="${item.reportId || ""}">
-
-<label><b>What Happened:</b></label>
-
-<textarea
-id="edit-whatHappened-${key}">${item.whatHappened || ""}</textarea>
+<label><b>Name:</b></label>
+<input id="edit-reporterName-${key}" value="${item.reporterName || ""}">
 
 <label><b>Date:</b></label>
+<input type="date" id="edit-date-${key}" value="${item.date || ""}">
 
-<input
-type="date"
-id="edit-date-${key}"
-value="${item.date || ""}">
+<label><b>Flight Number:</b></label>
+<input id="edit-flightNumber-${key}" value="${item.flightNumber || ""}">
 
-<label><b>Solution:</b></label>
+<label><b>Aircraft Registration:</b></label>
+<input id="edit-aircraftRegistration-${key}" value="${item.aircraftRegistration || ""}">
 
-<textarea
-id="edit-solution-${key}">${item.solution || ""}</textarea>
+<label><b>Airport:</b></label>
+<input id="edit-airport-${key}" value="${item.airport || ""}">
 
-<button class="save-btn"
-onclick="saveEdit('${key}')">
+<label><b>Destination:</b></label>
+<input id="edit-destination-${key}" value="${item.destination || ""}">
 
+<label><b>Type Report:</b></label>
+<select id="edit-reportType-${key}">
+<option value="">Select Type</option>
+<option value="MOR" ${item.reportType === "MOR" ? "selected" : ""}>MOR</option>
+<option value="VOR" ${item.reportType === "VOR" ? "selected" : ""}>VOR</option>
+</select>
+
+<label><b>What Happened:</b></label>
+<textarea id="edit-whatHappened-${key}">${item.whatHappened || ""}</textarea>
+
+<label><b>Recommendation:</b></label>
+<textarea id="edit-recommendation-${key}">${item.recommendation || ""}</textarea>
+
+<button class="save-btn" onclick="saveEdit('${key}')">
 Save Changes
-
 </button>
 
 </div>
@@ -890,8 +853,6 @@ container.appendChild(nav);
 
 }
 
-/* FILTERS */
-
 window.applyFilters = function(){
 
 const searchText =
@@ -900,8 +861,8 @@ document.getElementById("searchInput").value.toLowerCase();
 const dateValue =
 document.getElementById("dateFilter").value;
 
-const riskFilter =
-document.getElementById("riskFilter").value;
+const typeFilter =
+document.getElementById("typeFilter").value;
 
 const statusFilter =
 document.getElementById("statusFilter").value;
@@ -910,25 +871,20 @@ const filtered = allReports.filter(report=>{
 
 const item = report.item;
 
-const riskText =
-item.riskClosed === true
-? getRiskText(item.risk)
-: "NOT ASSESSED";
-
-const residualText =
-item.residualRiskClosed === true
-? getRiskText(item.residualRisk)
-: "NOT ASSESSED";
-
 const generalText = `
 ${item.reportId || ""}
-${item.whatHappened || ""}
+${item.title || ""}
+${item.reporterName || ""}
 ${item.date || ""}
-${item.solution || ""}
+${item.flightNumber || ""}
+${item.aircraftRegistration || ""}
+${item.airport || ""}
+${item.destination || ""}
+${item.reportType || ""}
+${item.whatHappened || ""}
+${item.recommendation || ""}
 ${item.risk || ""}
 ${item.residualRisk || ""}
-${riskText}
-${residualText}
 `.toLowerCase();
 
 const matchSearch =
@@ -937,10 +893,8 @@ generalText.includes(searchText);
 const matchDate =
 dateValue === "" || item.date === dateValue;
 
-const matchRisk =
-riskFilter === "" ||
-riskText.includes(riskFilter) ||
-residualText.includes(riskFilter);
+const matchType =
+typeFilter === "" || item.reportType === typeFilter;
 
 const isOpen =
 item.riskClosed !== true || item.residualRiskClosed !== true;
@@ -953,15 +907,13 @@ statusFilter === "" ||
 (statusFilter === "OPEN" && isOpen) ||
 (statusFilter === "CLOSED" && isClosed);
 
-return matchSearch && matchDate && matchRisk && matchStatus;
+return matchSearch && matchDate && matchType && matchStatus;
 
 });
 
 renderReports(filtered);
 
 };
-
-/* DOWNLOAD EXCEL */
 
 window.downloadExcel = function(){
 
@@ -974,14 +926,19 @@ let table = `
 <table border="1">
 <tr>
 <th>Report ID</th>
+<th>Title</th>
+<th>Name</th>
 <th>Date</th>
+<th>Flight Number</th>
+<th>Aircraft Registration</th>
+<th>Airport</th>
+<th>Destination</th>
+<th>Type Report</th>
 <th>What Happened</th>
-<th>Solution</th>
+<th>Recommendation</th>
 <th>Risk</th>
-<th>Risk Status</th>
 <th>Risk Level</th>
 <th>Residual Risk</th>
-<th>Residual Status</th>
 <th>Residual Level</th>
 </tr>
 `;
@@ -989,12 +946,6 @@ let table = `
 allReports.forEach(report=>{
 
 const item = report.item;
-
-const riskStatus =
-item.riskClosed === true ? "RISK ASSESSMENT CLOSED" : "RISK ASSESSMENT OPEN";
-
-const residualStatus =
-item.residualRiskClosed === true ? "RESIDUAL RISK CLOSED" : "RESIDUAL RISK OPEN";
 
 const riskLevel =
 item.riskClosed === true ? getRiskText(item.risk) : "NOT ASSESSED";
@@ -1005,14 +956,19 @@ item.residualRiskClosed === true ? getRiskText(item.residualRisk) : "NOT ASSESSE
 table += `
 <tr>
 <td>${item.reportId || "N/A"}</td>
+<td>${item.title || "N/A"}</td>
+<td>${item.reporterName || "N/A"}</td>
 <td>${item.date || "N/A"}</td>
+<td>${item.flightNumber || "N/A"}</td>
+<td>${item.aircraftRegistration || "N/A"}</td>
+<td>${item.airport || "N/A"}</td>
+<td>${item.destination || "N/A"}</td>
+<td>${item.reportType || "N/A"}</td>
 <td>${item.whatHappened || "N/A"}</td>
-<td>${item.solution || "N/A"}</td>
+<td>${item.recommendation || "N/A"}</td>
 <td>${item.risk || "N/A"}</td>
-<td>${riskStatus}</td>
 <td>${riskLevel}</td>
 <td>${item.residualRisk || "N/A"}</td>
-<td>${residualStatus}</td>
 <td>${residualLevel}</td>
 </tr>
 `;
@@ -1042,8 +998,6 @@ document.body.removeChild(a);
 URL.revokeObjectURL(url);
 
 };
-
-/* LOAD REPORTS */
 
 get(child(ref(db), "smsReports")).then((snapshot)=>{
 
