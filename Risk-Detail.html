@@ -5,163 +5,131 @@
 <title>Risk Detail</title>
 
 <style>
+*{
+  box-sizing:border-box;
+}
+
 body{
-  font-family: Arial;
-  background:#f4f6f8;
+  font-family:'Segoe UI', Arial, sans-serif;
   margin:0;
-  padding:20px;
+  padding:35px;
+  min-height:100vh;
+  background:
+  linear-gradient(rgba(5,20,55,0.86), rgba(5,20,55,0.92)),
+  url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
 }
 
 .container{
-  max-width:900px;
+  max-width:1150px;
   margin:auto;
-  background:white;
-  padding:25px;
-  border-radius:16px;
-  box-shadow:0 2px 14px rgba(0,0,0,0.12);
+  background:rgba(255,255,255,0.97);
+  padding:40px;
+  border-radius:32px;
+  box-shadow:0 25px 70px rgba(0,0,0,0.38);
 }
 
 h1{
   text-align:center;
   color:#071f47;
-  font-size:38px;
+  font-size:54px;
+  margin-bottom:8px;
 }
 
-.box{
-  margin-top:20px;
-  padding:20px;
-  border:1px solid #ddd;
-  border-radius:12px;
+.subtitle{
+  text-align:center;
+  color:#60708a;
+  font-size:18px;
+  margin-bottom:30px;
+}
+
+.box,
+.investigation-box,
+.cpa-box,
+.attachment-box{
+  margin-top:25px;
+  padding:28px;
+  border-radius:26px;
+  background:white;
+  box-shadow:0 12px 30px rgba(0,0,0,0.12);
+  border-left:8px solid #ff9800;
+}
+
+h3{
+  color:#071f47;
+  font-size:26px;
+  margin-top:0;
 }
 
 button{
-  padding:10px 12px;
-  margin:4px;
+  padding:13px 18px;
+  margin:6px;
   border:none;
-  background:#071f47;
+  background:linear-gradient(135deg,#071f47,#1450b8);
   color:white;
-  border-radius:6px;
+  border-radius:14px;
   cursor:pointer;
+  font-weight:bold;
+  font-size:15px;
+  box-shadow:0 8px 18px rgba(0,0,0,0.22);
+  transition:0.25s;
 }
 
 button:hover{
-  background:#0b2a66;
+  transform:translateY(-3px);
+  background:linear-gradient(135deg,#0b2a66,#1c63db);
 }
 
-button.closed{
-  background:green !important;
-}
-
+button.closed,
 .module-btn.completed{
-  background:green !important;
+  background:linear-gradient(135deg,#15803d,#22c55e) !important;
+}
+
+.back-btn{
+  background:linear-gradient(135deg,#dc2626,#ef4444) !important;
 }
 
 .print-file-btn{
-  background:#111827 !important;
+  background:linear-gradient(135deg,#111827,#374151) !important;
   width:100%;
-  margin-top:25px;
-  font-size:18px;
-  padding:15px;
+  margin-top:30px;
+  font-size:20px;
+  padding:18px;
+  border-radius:18px;
 }
 
 .result{
-  margin-top:20px;
-  padding:15px;
+  margin-top:18px;
+  padding:18px;
   background:#e9f5ff;
-  border-radius:8px;
+  border-radius:16px;
   font-weight:bold;
   color:#071f47;
+  border-left:6px solid #1450b8;
 }
 
 .definition-box{
-  margin-top:20px;
-  padding:18px;
+  margin-top:25px;
+  padding:22px;
   border-left:8px solid #071f47;
   background:#f8fbff;
-  border-radius:10px;
-  line-height:1.5;
-}
-
-.definition-box h3{
-  margin-top:0;
-  color:#071f47;
-}
-
-.investigation-box{
-  margin-top:25px;
-  padding:20px;
-  border:2px solid #071f47;
-  border-radius:10px;
-  background:#f8fbff;
-}
-
-.cpa-box{
-  margin-top:25px;
-  padding:20px;
-  border:2px solid #071f47;
-  border-radius:10px;
-}
-
-.cpa-item{
-  background:#f9f9f9;
-  padding:10px;
-  margin-top:10px;
-  border-radius:8px;
-  border:1px solid #ddd;
-  position:relative;
-}
-
-.delete-btn{
-  position:absolute;
-  right:10px;
-  top:10px;
-  background:red;
-  color:white;
-  border:none;
-  border-radius:5px;
-  padding:4px 8px;
-  cursor:pointer;
-  font-size:12px;
-}
-
-.send-btn{
-  background:#071f47;
-  color:white;
-  border:none;
-  border-radius:5px;
-  padding:4px 8px;
-  cursor:pointer;
-  font-size:12px;
-  margin-top:8px;
-}
-
-.attachment-box{
-  margin-top:25px;
-  padding:20px;
-  border:2px solid green;
-  border-radius:10px;
-  background:#f6fff6;
-}
-
-.attachment-item{
-  background:white;
-  padding:10px;
-  margin-top:10px;
-  border-radius:8px;
-  border:1px solid #ccc;
+  border-radius:18px;
+  line-height:1.6;
 }
 
 .matrix{
-  margin-top:20px;
+  margin-top:25px;
   display:flex;
   justify-content:center;
   overflow-x:auto;
+  padding-bottom:10px;
 }
 
 .matrix-grid{
   display:grid;
-  grid-template-columns: 45px repeat(5, 85px);
-  gap:7px;
+  grid-template-columns:55px repeat(5, 95px);
+  gap:9px;
 }
 
 .header-cell,
@@ -171,44 +139,116 @@ button.closed{
   align-items:center;
   font-weight:bold;
   color:#071f47;
-  font-size:18px;
+  font-size:20px;
 }
 
 .cell{
-  width:85px;
-  height:65px;
+  width:95px;
+  height:72px;
   display:flex;
   justify-content:center;
   align-items:center;
   font-weight:bold;
   color:white;
-  border-radius:10px;
+  border-radius:18px;
   cursor:pointer;
-  position:relative;
-  font-size:20px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.15);
-  transition:0.2s;
+  font-size:22px;
+  box-shadow:0 8px 18px rgba(0,0,0,0.22);
+  transition:0.25s;
 }
 
 .cell:hover{
-  transform:scale(1.07);
+  transform:scale(1.08);
 }
 
 .cell.selected{
-  outline:4px solid #071f47;
-  transform:scale(1.07);
+  outline:5px solid #071f47;
+  transform:scale(1.08);
 }
 
-.low{background:#2ecc71;}
-.medium{background:#f1c40f;color:black;}
-.high{background:#e67e22;}
-.extreme{background:#e74c3c;}
+.low{background:linear-gradient(135deg,#16a34a,#22c55e);}
+.medium{background:linear-gradient(135deg,#facc15,#f59e0b);color:#111827;}
+.high{background:linear-gradient(135deg,#f97316,#ea580c);}
+.extreme{background:linear-gradient(135deg,#dc2626,#ef4444);}
 
-input, select{
-  padding:9px;
-  margin:5px;
-  border:1px solid #ccc;
-  border-radius:6px;
+input,
+select{
+  padding:14px;
+  margin:7px;
+  border:1px solid #cbd5e1;
+  border-radius:14px;
+  font-size:15px;
+  outline:none;
+}
+
+input:focus,
+select:focus{
+  border-color:#1450b8;
+  box-shadow:0 0 0 3px rgba(20,80,184,0.15);
+}
+
+.cpa-item,
+.attachment-item{
+  background:#f8fafc;
+  padding:16px;
+  margin-top:12px;
+  border-radius:16px;
+  border:1px solid #dbe3ef;
+  position:relative;
+}
+
+.delete-btn{
+  position:absolute;
+  right:12px;
+  top:12px;
+  background:linear-gradient(135deg,#dc2626,#ef4444) !important;
+  border-radius:10px;
+  padding:7px 10px;
+  font-size:13px;
+}
+
+.send-btn{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+  padding:8px 12px;
+  font-size:13px;
+}
+
+.bottom{
+  margin-top:20px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+#reportBox{
+  line-height:1.8;
+  font-size:16px;
+  background:#f8fbff;
+  border-left:8px solid #1450b8;
+}
+
+@media(max-width:800px){
+  body{
+    padding:20px;
+  }
+
+  .container{
+    padding:24px;
+  }
+
+  h1{
+    font-size:40px;
+  }
+
+  .matrix-grid{
+    grid-template-columns:45px repeat(5, 78px);
+  }
+
+  .cell{
+    width:78px;
+    height:62px;
+    font-size:18px;
+  }
 }
 </style>
 </head>
@@ -218,18 +258,18 @@ input, select{
 <div class="container">
 
 <h1>Risk Detail</h1>
+<div class="subtitle">Professional Safety Risk Assessment File</div>
 
 <div class="box" id="reportBox">Loading report...</div>
 
 <div class="box">
 
 <h3>Initial Risk Assessment</h3>
-
 <p>Select the applicable cell directly in the risk matrix.</p>
 
-<div class="result" id="result"></div>
+<div class="result" id="result">No risk selected yet.</div>
 
-<p><b>Risk Save:</b> <span id="savedRisk">N/A</span></p>
+<p><b>Risk Saved:</b> <span id="savedRisk">N/A</span></p>
 
 <div class="matrix" id="matrix"></div>
 
@@ -240,7 +280,7 @@ Press any cell in the matrix to see the severity and probability definitions.
 
 <div class="bottom">
 <button id="saveRiskBtn" onclick="saveRisk()">Save Risk</button>
-<button onclick="goBack()" style="background:red;">Back</button>
+<button class="back-btn" onclick="goBack()">Back</button>
 </div>
 
 </div>
@@ -256,7 +296,7 @@ Press any cell in the matrix to see the severity and probability definitions.
 </div>
 
 <div class="cpa-box">
-<h3>CPA MODULE</h3>
+<h3>CPA Module</h3>
 
 <select id="controlType">
 <option>Elimination</option>
@@ -280,19 +320,18 @@ Press any cell in the matrix to see the severity and probability definitions.
 </div>
 
 <div class="attachment-box">
-<h3>CPA ATTACHMENTS</h3>
+<h3>CPA Attachments</h3>
 <div id="attachmentContainer"></div>
 </div>
 
 <div class="box">
 
 <h3>Residual Risk Assessment</h3>
-
 <p>After CPA implementation, select the applicable cell directly in the residual risk matrix.</p>
 
-<div class="result" id="residualResult"></div>
+<div class="result" id="residualResult">No residual risk selected yet.</div>
 
-<p><b>Risk Save:</b> <span id="savedResidualRisk">N/A</span></p>
+<p><b>Residual Risk Saved:</b> <span id="savedResidualRisk">N/A</span></p>
 
 <div class="matrix" id="residualMatrix"></div>
 
@@ -303,7 +342,7 @@ Press any cell in the residual matrix to see the severity and probability defini
 
 <div class="bottom">
 <button id="saveResidualRiskBtn" onclick="saveResidualRisk()">Save Risk</button>
-<button onclick="goBack()" style="background:red;">Back</button>
+<button class="back-btn" onclick="goBack()">Back</button>
 </div>
 
 </div>
@@ -323,7 +362,7 @@ import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObjec
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
-apiKey: "xxx",
+apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
 authDomain: "aviation-sms.firebaseapp.com",
 databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
 projectId: "aviation-sms",
@@ -417,13 +456,13 @@ savedResidualRisk.innerText=d.residualRisk||"N/A";
 
 if(d.riskClosed===true){
   const btn=document.getElementById("saveRiskBtn");
-  btn.innerText="Close";
+  btn.innerText="Closed";
   btn.classList.add("closed");
 }
 
 if(d.residualRiskClosed===true){
   const btn=document.getElementById("saveResidualRiskBtn");
-  btn.innerText="Close";
+  btn.innerText="Closed";
   btn.classList.add("closed");
 }
 
@@ -505,7 +544,7 @@ riskClosed:true
 savedRisk.innerText=risk;
 
 const btn=document.getElementById("saveRiskBtn");
-btn.innerText="Close";
+btn.innerText="Closed";
 btn.classList.add("closed");
 };
 
@@ -524,7 +563,7 @@ residualRiskClosed:true
 savedResidualRisk.innerText=residualRisk;
 
 const btn=document.getElementById("saveResidualRiskBtn");
-btn.innerText="Close";
+btn.innerText="Closed";
 btn.classList.add("closed");
 };
 
@@ -665,37 +704,6 @@ loadCPA(s.val());
 });
 };
 
-window.uploadCPAPdf=async function(id,cpaNumber){
-
-const fileInput=document.getElementById("pdf-"+id);
-const file=fileInput.files[0];
-
-if(!file){
-alert("Please select a PDF file first.");
-return;
-}
-
-const pdfPath="smsReports/"+key+"/CPA/"+id+"/"+file.name;
-const pdfStorageRef=storageRef(storage,pdfPath);
-
-await uploadBytes(pdfStorageRef,file);
-
-const pdfUrl=await getDownloadURL(pdfStorageRef);
-
-await update(ref(db,"smsReports/"+key+"/CPA/"+id),{
-pdfUrl:pdfUrl,
-pdfName:file.name,
-pdfPath:pdfPath
-});
-
-get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
-if(s.exists()){
-loadCPA(s.val());
-}
-});
-
-};
-
 window.addDriveLink=async function(id,cpaNumber){
 
 const driveLink = prompt("Paste Google Drive document link for CPA Attachment "+cpaNumber);
@@ -797,198 +805,8 @@ a.appendChild(att);
 });
 }
 
-window.printFullFile=async function(){
-
-const snap = await get(ref(db,"smsReports/"+key));
-
-if(!snap.exists()){
-alert("No report found.");
-return;
-}
-
-const d = snap.val();
-const five = d.investigation5Why || {};
-const fiveWhysSaved = five.status === "Saved";
-
-let printBody = "";
-
-if(fiveWhysSaved){
-
-const cpas = d.CPA || {};
-let cpaHtml = "";
-
-if(Object.keys(cpas).length > 0){
-Object.entries(cpas).forEach(([id,x],i)=>{
-cpaHtml += `
-<div class="print-card">
-<h3>CPA ${i+1}</h3>
-<p><b>Control Type:</b> ${x.controlType || ""}</p>
-<p><b>Action Plan:</b> ${x.actionPlan || ""}</p>
-<p><b>Action Date:</b> ${x.actionDate || ""}</p>
-<p><b>Email:</b> ${x.emailTo || ""}</p>
-<p><b>Attachment:</b> ${x.pdfUrl || "No document link added"}</p>
-</div>
-`;
-});
-}else{
-cpaHtml = `<p>No CPA records saved.</p>`;
-}
-
-printBody = `
-<h1>SMS Full File</h1>
-
-<h2>Risk Detail</h2>
-<div class="print-card">
-<p><b>ID:</b> ${d.reportId || ""}</p>
-<p><b>Title:</b> ${d.title || ""}</p>
-<p><b>Date:</b> ${d.date || ""}</p>
-<p><b>What Happened:</b></p>
-<div class="answer">${d.whatHappened || ""}</div>
-<p><b>Recommendation:</b></p>
-<div class="answer">${d.recommendation || ""}</div>
-<p><b>Risk:</b> ${d.risk || "N/A"}</p>
-</div>
-
-<h2>Initial Risk Assessment</h2>
-<div class="print-card">
-<p><b>Initial Risk Value:</b> ${d.risk || "N/A"}</p>
-<p><b>Initial Risk Closed:</b> ${d.riskClosed === true ? "Yes" : "No"}</p>
-</div>
-
-<h2>Investigation - 5 Why</h2>
-
-<div class="print-card">
-<h3>1. What happened?</h3>
-<div class="answer">${five.q1Answer || ""}</div>
-</div>
-
-<div class="print-card">
-<h3>2. ${five.q2Question || ""}</h3>
-<div class="answer">${five.q2Answer || ""}</div>
-</div>
-
-<div class="print-card">
-<h3>3. ${five.q3Question || ""}</h3>
-<div class="answer">${five.q3Answer || ""}</div>
-</div>
-
-<div class="print-card">
-<h3>4. ${five.q4Question || ""}</h3>
-<div class="answer">${five.q4Answer || ""}</div>
-</div>
-
-<div class="print-card">
-<h3>5. ${five.q5Question || ""}</h3>
-<div class="answer">${five.q5Answer || ""}</div>
-</div>
-
-<h2>CPA Module</h2>
-${cpaHtml}
-
-<h2>Residual Risk Assessment</h2>
-<div class="print-card">
-<p><b>Residual Risk Value:</b> ${d.residualRisk || "N/A"}</p>
-<p><b>Residual Risk Closed:</b> ${d.residualRiskClosed === true ? "Yes" : "No"}</p>
-</div>
-`;
-
-}else{
-
-printBody = `
-<h1>Risk Detail</h1>
-
-<h2>Risk Detail</h2>
-<div class="print-card">
-<p><b>ID:</b> ${d.reportId || ""}</p>
-<p><b>Title:</b> ${d.title || ""}</p>
-<p><b>Date:</b> ${d.date || ""}</p>
-<p><b>What Happened:</b></p>
-<div class="answer">${d.whatHappened || ""}</div>
-<p><b>Recommendation:</b></p>
-<div class="answer">${d.recommendation || ""}</div>
-<p><b>Risk:</b> ${d.risk || "N/A"}</p>
-</div>
-`;
-
-}
-
-const printWindow = window.open("", "_blank");
-
-printWindow.document.write(`
-<!DOCTYPE html>
-<html>
-<head>
-<title>${fiveWhysSaved ? "SMS Full File" : "Risk Detail"}</title>
-
-<style>
-body{
-  font-family:Arial, sans-serif;
-  padding:30px;
-  color:#111827;
-}
-
-h1{
-  text-align:center;
-  color:#071f47;
-  border-bottom:4px solid #071f47;
-  padding-bottom:12px;
-}
-
-h2{
-  color:#071f47;
-  background:#e9f5ff;
-  padding:10px;
-  border-left:8px solid #071f47;
-  margin-top:25px;
-}
-
-h3{
-  color:#0b2a66;
-}
-
-.print-card{
-  border:1px solid #ccc;
-  border-radius:10px;
-  padding:15px;
-  margin-top:12px;
-  background:#fafafa;
-}
-
-p{
-  font-size:15px;
-  line-height:1.5;
-}
-
-.answer{
-  white-space:pre-wrap;
-  background:white;
-  border:1px solid #ddd;
-  padding:12px;
-  border-radius:8px;
-  min-height:35px;
-}
-
-@media print{
-  body{
-    padding:15px;
-  }
-}
-</style>
-
-</head>
-<body>
-${printBody}
-</body>
-</html>
-`);
-
-printWindow.document.close();
-printWindow.focus();
-
-setTimeout(()=>{
-printWindow.print();
-},500);
-
+window.printFullFile=function(){
+window.print();
 };
 
 window.goBack=()=>location.href="SMS-Database.html";
