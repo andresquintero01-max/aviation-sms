@@ -61,7 +61,6 @@ body{
   grid-template-rows:auto auto;
   gap:25px;
   align-items:center;
-  position:relative;
 }
 
 .center-shell{
@@ -91,7 +90,6 @@ body{
 .shell-core h2{
   font-size:52px;
   margin:0;
-  letter-spacing:4px;
 }
 
 .shell-core p{
@@ -170,47 +168,6 @@ textarea:focus{
   background:linear-gradient(135deg,#faf5ff,#ffffff);
 }
 
-.arrow{
-  position:absolute;
-  height:4px;
-  background:#0f766e;
-  z-index:0;
-}
-
-.arrow.left-top{
-  left:31%;
-  top:25%;
-  width:13%;
-}
-
-.arrow.right-top{
-  right:31%;
-  top:25%;
-  width:13%;
-}
-
-.arrow.left-bottom{
-  left:31%;
-  top:75%;
-  width:13%;
-}
-
-.arrow.right-bottom{
-  right:31%;
-  top:75%;
-  width:13%;
-}
-
-.arrow::after{
-  content:"";
-  position:absolute;
-  right:-10px;
-  top:-6px;
-  border-left:12px solid #0f766e;
-  border-top:8px solid transparent;
-  border-bottom:8px solid transparent;
-}
-
 .actions{
   margin-top:30px;
   display:flex;
@@ -247,7 +204,7 @@ button:hover{
   body{background:white;}
   .header{color:#071f47;background:white;}
   .container{box-shadow:none;}
-  .actions,.arrow{display:none;}
+  .actions{display:none;}
   .card{box-shadow:none;break-inside:avoid;}
 }
 
@@ -265,10 +222,6 @@ button:hover{
     width:100%;
     height:auto;
     border-radius:24px;
-  }
-
-  .arrow{
-    display:none;
   }
 
   .header h1{
@@ -329,11 +282,6 @@ button:hover{
   <p>People, communication, supervision, training, fatigue, awareness, teamwork, or behavior.</p>
   <textarea id="liveware" placeholder="Describe any human factor, communication, training, or supervision issue..."></textarea>
 </div>
-
-<div class="arrow left-top"></div>
-<div class="arrow right-top"></div>
-<div class="arrow left-bottom"></div>
-<div class="arrow right-bottom"></div>
 
 </div>
 
