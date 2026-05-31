@@ -1,1 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investigation Bow-Tie</title>
 
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f9;
+    margin:0;
+    padding:20px;
+}
+
+h1{
+    text-align:center;
+    color:#333;
+}
+
+.bowtie{
+    display:grid;
+    grid-template-columns: 1fr 1fr 220px 1fr 1fr;
+    gap:15px;
+    align-items:center;
+    margin-top:40px;
+}
+
+.column{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.box{
+    background:white;
+    border:2px solid #ccc;
+    border-radius:8px;
+    padding:12px;
+    text-align:center;
+    box-shadow:0 2px 4px rgba(0,0,0,0.1);
+}
+
+.threat{
+    border-color:#e74c3c;
+}
+
+.preventive{
+    border-color:#f39c12;
+}
+
+.event{
+    background:#2c3e50;
+    color:white;
+    font-weight:bold;
+    padding:25px;
+    border-radius:10px;
+}
+
+.mitigative{
+    border-color:#3498db;
+}
+
+.consequence{
+    border-color:#27ae60;
+}
+
+.legend{
+    margin-top:40px;
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.legend span{
+    background:white;
+    padding:8px 12px;
+    border-radius:6px;
+    border:1px solid #ddd;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Investigation Bow-Tie Analysis</h1>
+
+<div class="bowtie">
+
+    <!-- Amenazas -->
+    <div class="column">
+        <div class="box threat">Falta de capacitación</div>
+        <div class="box threat">Procedimiento incorrecto</div>
+        <div class="box threat">Falla de equipo</div>
+    </div>
+
+    <!-- Barreras preventivas -->
+    <div class="column">
+        <div class="box preventive">Entrenamiento</div>
+        <div class="box preventive">Checklist</div>
+        <div class="box preventive">Mantenimiento</div>
+    </div>
+
+    <!-- Evento central -->
+    <div class="event">
+        EVENTO PRINCIPAL
+    </div>
+
+    <!-- Barreras mitigadoras -->
+    <div class="column">
+        <div class="box mitigative">Respuesta de emergencia</div>
+        <div class="box mitigative">Sistema de alarma</div>
+        <div class="box mitigative">Plan de contingencia</div>
+    </div>
+
+    <!-- Consecuencias -->
+    <div class="column">
+        <div class="box consequence">Lesión</div>
+        <div class="box consequence">Daño material</div>
+        <div class="box consequence">Pérdida operativa</div>
+    </div>
+
+</div>
+
+<div class="legend">
+    <span>🔴 Amenazas</span>
+    <span>🟠 Barreras Preventivas</span>
+    <span>⚫ Evento Principal</span>
+    <span>🔵 Barreras Mitigadoras</span>
+    <span>🟢 Consecuencias</span>
+</div>
+
+</body>
+</html>
