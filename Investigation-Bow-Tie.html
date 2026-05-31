@@ -6,145 +6,94 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
   margin:0;
-  font-family:'Segoe UI', Arial, sans-serif;
+  font-family:'Segoe UI',Arial,sans-serif;
   min-height:100vh;
-  background:
-  radial-gradient(circle at top left, rgba(37,99,235,0.35), transparent 30%),
-  radial-gradient(circle at bottom right, rgba(34,197,94,0.28), transparent 35%),
-  linear-gradient(135deg,#020617,#071f47,#0f766e);
-  padding:30px;
+  background:linear-gradient(135deg,#020617,#071f47,#0f766e);
 }
 
 .header{
-  max-width:1500px;
-  margin:auto;
   text-align:center;
   color:white;
-  padding:25px 20px 10px;
+  padding:28px 20px;
+  background:linear-gradient(135deg,#071f47,#0f766e);
 }
 
 .header h1{
-  font-size:54px;
+  font-size:52px;
   margin:0;
-  text-shadow:0 6px 18px rgba(0,0,0,0.35);
 }
 
 .header p{
   font-size:20px;
+  margin:8px 0 0;
   color:#dbeafe;
-  margin-top:8px;
 }
 
 .container{
-  max-width:1500px;
+  max-width:1450px;
   margin:25px auto;
-  background:rgba(255,255,255,0.97);
-  border-radius:34px;
-  padding:35px;
-  box-shadow:0 28px 75px rgba(0,0,0,0.45);
+  background:white;
+  border-radius:30px;
+  padding:30px;
+  box-shadow:0 25px 70px rgba(0,0,0,0.35);
 }
 
 .report-box{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:20px;
-  background:white;
-  border-radius:22px;
-  padding:20px 28px;
-  box-shadow:0 12px 30px rgba(15,23,42,0.12);
-  margin-bottom:32px;
-}
-
-.report-id{
-  font-size:18px;
+  background:#f8fafc;
+  border-radius:18px;
+  padding:18px 25px;
+  margin-bottom:25px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
   font-weight:bold;
   color:#071f47;
 }
 
-.saved-info{
-  color:#475569;
-  font-weight:bold;
-}
-
-.bowtie-area{
-  display:grid;
-  grid-template-columns:1.1fr 0.8fr 1.1fr;
-  gap:28px;
-  align-items:center;
+.bowtie{
   position:relative;
-}
-
-.side-title{
-  text-align:center;
-  color:white;
-  padding:14px;
-  border-radius:18px;
-  font-weight:bold;
-  font-size:18px;
-  margin-bottom:18px;
-  box-shadow:0 10px 24px rgba(0,0,0,0.18);
-}
-
-.left-title{
-  background:linear-gradient(135deg,#1d4ed8,#38bdf8);
-}
-
-.right-title{
-  background:linear-gradient(135deg,#15803d,#22c55e);
-}
-
-.left-column,
-.right-column{
   display:grid;
-  gap:18px;
-}
-
-.center-column{
-  display:flex;
-  flex-direction:column;
+  grid-template-columns:1fr 300px 1fr;
+  grid-template-rows:auto auto auto;
+  gap:22px;
   align-items:center;
-  gap:24px;
 }
 
 .card{
   background:white;
   border-radius:22px;
-  padding:18px;
-  box-shadow:0 12px 28px rgba(15,23,42,0.12);
+  padding:20px;
+  box-shadow:0 10px 26px rgba(0,0,0,0.12);
   border:1px solid #e2e8f0;
-  position:relative;
 }
 
 .card h3{
-  margin:0 0 10px;
+  margin:0 0 8px;
   color:#071f47;
-  font-size:19px;
+  font-size:22px;
 }
 
 .card p{
-  margin:0 0 10px;
+  margin:0 0 12px;
   color:#64748b;
   font-size:14px;
 }
 
 textarea{
   width:100%;
-  min-height:80px;
+  min-height:95px;
   border:1px solid #cbd5e1;
   border-radius:14px;
-  padding:12px;
+  padding:13px;
   font-size:15px;
   resize:vertical;
   outline:none;
   background:#f8fafc;
-  transition:0.25s;
 }
 
 textarea:focus{
@@ -153,38 +102,38 @@ textarea:focus{
   box-shadow:0 0 0 4px rgba(20,80,184,0.14);
 }
 
-.threat{
-  border-left:8px solid #2563eb;
-}
-
-.prevention{
-  border-left:8px solid #0ea5e9;
-  margin-left:55px;
-}
-
-.recovery{
-  border-left:8px solid #16a34a;
-  margin-right:55px;
-}
-
-.consequence{
-  border-left:8px solid #dc2626;
-}
-
-.escalation{
-  border-left:8px solid #f59e0b;
-  background:#fff7ed;
-}
-
-.hazard-card{
-  width:100%;
+.hazard{
+  grid-column:2;
   border:2px solid #f59e0b;
   background:linear-gradient(135deg,#fff7ed,#ffffff);
+  text-align:center;
+}
+
+.threats{
+  grid-column:1;
+  grid-row:2;
+  border-left:8px solid #dc2626;
+  background:linear-gradient(135deg,#fff1f2,#ffffff);
+}
+
+.preventive{
+  grid-column:1;
+  grid-row:3;
+  border-left:8px solid #16a34a;
+  background:linear-gradient(135deg,#f0fdf4,#ffffff);
+}
+
+.center{
+  grid-column:2;
+  grid-row:2;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
 .top-event{
-  width:260px;
-  height:260px;
+  width:280px;
+  height:280px;
   border-radius:50%;
   background:linear-gradient(135deg,#ef4444,#f97316);
   color:white;
@@ -192,43 +141,100 @@ textarea:focus{
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  padding:25px;
   text-align:center;
-  box-shadow:0 22px 50px rgba(239,68,68,0.35);
-  border:8px solid #fff;
+  padding:25px;
+  box-shadow:0 22px 45px rgba(239,68,68,0.35);
+  border:8px solid white;
 }
 
 .top-event h2{
-  margin:0 0 12px;
+  margin:0 0 10px;
   font-size:28px;
 }
 
+.top-event p{
+  margin:0 0 12px;
+  font-weight:bold;
+}
+
 .top-event textarea{
-  min-height:95px;
+  min-height:85px;
   background:white;
   color:#071f47;
 }
 
-.connector{
+.consequences{
+  grid-column:3;
+  grid-row:2;
+  border-left:8px solid #9333ea;
+  background:linear-gradient(135deg,#faf5ff,#ffffff);
+}
+
+.recovery{
+  grid-column:3;
+  grid-row:3;
+  border-left:8px solid #2563eb;
+  background:linear-gradient(135deg,#eff6ff,#ffffff);
+}
+
+.escalation{
+  grid-column:1 / 4;
+  grid-row:4;
+  max-width:760px;
+  margin:auto;
+  width:100%;
+  border-left:8px solid #f59e0b;
+  background:linear-gradient(135deg,#fffbeb,#ffffff);
+}
+
+.arrow{
   position:absolute;
-  pointer-events:none;
-  inset:0;
+  height:4px;
+  background:#dc2626;
+  top:49%;
   z-index:0;
 }
 
-.bowtie-area > div{
-  position:relative;
-  z-index:2;
+.arrow.left{
+  left:31%;
+  width:13%;
+}
+
+.arrow.right{
+  right:31%;
+  width:13%;
+}
+
+.arrow::after{
+  content:"";
+  position:absolute;
+  right:-10px;
+  top:-6px;
+  border-left:12px solid currentColor;
+  border-top:8px solid transparent;
+  border-bottom:8px solid transparent;
+}
+
+.arrow.left{color:#dc2626;}
+.arrow.right{color:#9333ea;background:#9333ea;}
+
+.down-line{
+  grid-column:2;
+  grid-row:3;
+  height:90px;
+  width:4px;
+  background:#f59e0b;
+  margin:auto;
 }
 
 .actions{
-  margin-top:35px;
+  margin-top:30px;
   display:flex;
   justify-content:center;
   gap:14px;
   flex-wrap:wrap;
   border-top:1px solid #e2e8f0;
-  padding-top:28px;
+  padding-top:25px;
 }
 
 button{
@@ -254,64 +260,35 @@ button:hover{
 .home{background:linear-gradient(135deg,#0f766e,#14b8a6);}
 
 @media print{
-  body{
-    background:white;
-    padding:10px;
+  body{background:white;}
+  .header{color:#071f47;background:white;}
+  .container{box-shadow:none;}
+  .actions,.arrow,.down-line{display:none;}
+  .card{box-shadow:none;break-inside:avoid;}
+}
+
+@media(max-width:950px){
+  .bowtie{
+    grid-template-columns:1fr;
+    display:block;
   }
 
-  .header{
-    color:#071f47;
+  .card,.top-event{
+    margin-bottom:18px;
   }
 
-  .container{
-    box-shadow:none;
-    padding:10px;
+  .top-event{
+    width:100%;
+    height:auto;
+    border-radius:24px;
   }
 
-  .actions,
-  .connector{
+  .arrow,.down-line{
     display:none;
   }
 
-  .bowtie-area{
-    grid-template-columns:1fr;
-  }
-
-  .prevention,
-  .recovery{
-    margin:0;
-  }
-
-  .top-event{
-    width:100%;
-    height:auto;
-    border-radius:22px;
-  }
-
-  .card{
-    break-inside:avoid;
-    box-shadow:none;
-  }
-}
-
-@media(max-width:1000px){
-  .bowtie-area{
-    grid-template-columns:1fr;
-  }
-
-  .prevention,
-  .recovery{
-    margin:0;
-  }
-
-  .top-event{
-    width:100%;
-    height:auto;
-    border-radius:28px;
-  }
-
   .header h1{
-    font-size:38px;
+    font-size:36px;
   }
 
   .report-box{
@@ -326,157 +303,66 @@ button:hover{
 
 <div class="header">
   <h1>Investigation - Bow-Tie</h1>
-  <p>Threats • Barriers • Top Event • Recovery • Consequences</p>
+  <p>Threats • Barriers • Top Event • Consequences</p>
 </div>
 
 <div class="container">
 
 <div class="report-box">
-  <div class="report-id">
-    Report ID: <span id="reportId">Loading...</span>
-  </div>
-  <div class="saved-info">
-    Saved at: <span id="savedAt">Not saved yet</span>
-  </div>
+  <div>Report ID: <span id="reportId">Loading...</span></div>
+  <div>Saved at: <span id="savedAt">Not saved yet</span></div>
 </div>
 
-<div class="bowtie-area">
+<div class="bowtie">
 
-<svg class="connector" viewBox="0 0 1500 850" preserveAspectRatio="none">
-  <path d="M420 180 C560 180 610 390 735 425" stroke="#2563eb" stroke-width="4" fill="none"/>
-  <path d="M420 340 C560 340 610 410 735 425" stroke="#2563eb" stroke-width="4" fill="none"/>
-  <path d="M420 500 C560 500 610 440 735 425" stroke="#2563eb" stroke-width="4" fill="none"/>
-  <path d="M765 425 C890 390 940 180 1080 180" stroke="#16a34a" stroke-width="4" fill="none"/>
-  <path d="M765 425 C890 410 940 340 1080 340" stroke="#16a34a" stroke-width="4" fill="none"/>
-  <path d="M765 425 C890 440 940 500 1080 500" stroke="#16a34a" stroke-width="4" fill="none"/>
-</svg>
-
-<div class="left-section">
-  <div class="side-title left-title">PREVENTION SIDE - BEFORE THE EVENT</div>
-
-  <div class="left-column">
-
-    <div class="card threat">
-      <h3>Threat 1</h3>
-      <p>What can cause the top event?</p>
-      <textarea id="threat1" placeholder="Describe threat 1..."></textarea>
-    </div>
-
-    <div class="card prevention">
-      <h3>Preventive Barrier 1</h3>
-      <p>Control that prevents threat 1.</p>
-      <textarea id="preventiveBarrier1" placeholder="Describe preventive barrier 1..."></textarea>
-    </div>
-
-    <div class="card threat">
-      <h3>Threat 2</h3>
-      <p>What can cause the top event?</p>
-      <textarea id="threat2" placeholder="Describe threat 2..."></textarea>
-    </div>
-
-    <div class="card prevention">
-      <h3>Preventive Barrier 2</h3>
-      <p>Control that prevents threat 2.</p>
-      <textarea id="preventiveBarrier2" placeholder="Describe preventive barrier 2..."></textarea>
-    </div>
-
-    <div class="card threat">
-      <h3>Threat 3</h3>
-      <p>What can cause the top event?</p>
-      <textarea id="threat3" placeholder="Describe threat 3..."></textarea>
-    </div>
-
-    <div class="card prevention">
-      <h3>Preventive Barrier 3</h3>
-      <p>Control that prevents threat 3.</p>
-      <textarea id="preventiveBarrier3" placeholder="Describe preventive barrier 3..."></textarea>
-    </div>
-
-    <div class="card escalation">
-      <h3>Escalation Factor</h3>
-      <p>Condition that can weaken or defeat barriers.</p>
-      <textarea id="escalationFactorLeft" placeholder="Describe escalation factor..."></textarea>
-    </div>
-
-    <div class="card prevention">
-      <h3>Escalation Factor Barrier</h3>
-      <p>Control for the escalation factor.</p>
-      <textarea id="escalationBarrierLeft" placeholder="Describe EF barrier..."></textarea>
-    </div>
-
-  </div>
+<div class="card hazard">
+  <h3>⚠️ Hazard</h3>
+  <p>Describe the hazardous condition or safety issue being analyzed.</p>
+  <textarea id="hazard" placeholder="Enter hazard description..."></textarea>
 </div>
 
-<div class="center-column">
+<div class="card threats">
+  <h3>🚨 Threats / Causes</h3>
+  <p>Describe what could cause the top event to occur.</p>
+  <textarea id="threats" placeholder="Enter threats or causes..."></textarea>
+</div>
 
-  <div class="card hazard-card">
-    <h3>Hazard</h3>
-    <p>Hazardous condition or unsafe situation.</p>
-    <textarea id="hazard" placeholder="Describe the hazard..."></textarea>
-  </div>
-
+<div class="center">
   <div class="top-event">
     <h2>Top Event</h2>
-    <textarea id="topEvent" placeholder="Describe the central unwanted event..."></textarea>
-  </div>
-
-</div>
-
-<div class="right-section">
-  <div class="side-title right-title">RECOVERY SIDE - AFTER THE EVENT</div>
-
-  <div class="right-column">
-
-    <div class="card recovery">
-      <h3>Recovery Barrier 1</h3>
-      <p>Control that reduces the impact.</p>
-      <textarea id="recoveryBarrier1" placeholder="Describe recovery barrier 1..."></textarea>
-    </div>
-
-    <div class="card consequence">
-      <h3>Consequence 1</h3>
-      <p>Possible outcome or impact.</p>
-      <textarea id="consequence1" placeholder="Describe consequence 1..."></textarea>
-    </div>
-
-    <div class="card recovery">
-      <h3>Recovery Barrier 2</h3>
-      <p>Control that reduces the impact.</p>
-      <textarea id="recoveryBarrier2" placeholder="Describe recovery barrier 2..."></textarea>
-    </div>
-
-    <div class="card consequence">
-      <h3>Consequence 2</h3>
-      <p>Possible outcome or impact.</p>
-      <textarea id="consequence2" placeholder="Describe consequence 2..."></textarea>
-    </div>
-
-    <div class="card recovery">
-      <h3>Recovery Barrier 3</h3>
-      <p>Control that reduces the impact.</p>
-      <textarea id="recoveryBarrier3" placeholder="Describe recovery barrier 3..."></textarea>
-    </div>
-
-    <div class="card consequence">
-      <h3>Consequence 3</h3>
-      <p>Possible outcome or impact.</p>
-      <textarea id="consequence3" placeholder="Describe consequence 3..."></textarea>
-    </div>
-
-    <div class="card recovery">
-      <h3>Escalation Factor Barrier</h3>
-      <p>Control for recovery-side escalation factor.</p>
-      <textarea id="escalationBarrierRight" placeholder="Describe EF barrier..."></textarea>
-    </div>
-
-    <div class="card escalation">
-      <h3>Escalation Factor</h3>
-      <p>Condition that can worsen the consequence.</p>
-      <textarea id="escalationFactorRight" placeholder="Describe escalation factor..."></textarea>
-    </div>
-
+    <p>Central unwanted event</p>
+    <textarea id="topEvent" placeholder="Enter top event..."></textarea>
   </div>
 </div>
+
+<div class="card consequences">
+  <h3>👥 Consequences</h3>
+  <p>Describe possible outcomes or safety impacts.</p>
+  <textarea id="consequences" placeholder="Enter consequences..."></textarea>
+</div>
+
+<div class="card preventive">
+  <h3>🛡 Preventive Barriers</h3>
+  <p>Describe controls that prevent the top event from occurring.</p>
+  <textarea id="preventiveBarriers" placeholder="Enter preventive barriers..."></textarea>
+</div>
+
+<div class="down-line"></div>
+
+<div class="card recovery">
+  <h3>🔵 Recovery / Mitigation Barriers</h3>
+  <p>Describe controls that reduce the impact after the event occurs.</p>
+  <textarea id="recoveryBarriers" placeholder="Enter recovery or mitigation barriers..."></textarea>
+</div>
+
+<div class="card escalation">
+  <h3>📈 Escalation Factors</h3>
+  <p>Describe conditions or factors that could weaken barriers or increase severity.</p>
+  <textarea id="escalationFactors" placeholder="Enter escalation factors..."></textarea>
+</div>
+
+<div class="arrow left"></div>
+<div class="arrow right"></div>
 
 </div>
 
@@ -530,28 +416,12 @@ get(ref(db,"smsReports/"+key)).then(snapshot=>{
       const x = d.investigationBowTie;
 
       setValue("hazard",x.hazard);
+      setValue("threats",x.threats || x.threat1);
+      setValue("preventiveBarriers",x.preventiveBarriers || x.preventiveBarrier1);
       setValue("topEvent",x.topEvent);
-
-      setValue("threat1",x.threat1);
-      setValue("threat2",x.threat2);
-      setValue("threat3",x.threat3);
-
-      setValue("preventiveBarrier1",x.preventiveBarrier1);
-      setValue("preventiveBarrier2",x.preventiveBarrier2);
-      setValue("preventiveBarrier3",x.preventiveBarrier3);
-
-      setValue("recoveryBarrier1",x.recoveryBarrier1);
-      setValue("recoveryBarrier2",x.recoveryBarrier2);
-      setValue("recoveryBarrier3",x.recoveryBarrier3);
-
-      setValue("consequence1",x.consequence1);
-      setValue("consequence2",x.consequence2);
-      setValue("consequence3",x.consequence3);
-
-      setValue("escalationFactorLeft",x.escalationFactorLeft);
-      setValue("escalationBarrierLeft",x.escalationBarrierLeft);
-      setValue("escalationFactorRight",x.escalationFactorRight);
-      setValue("escalationBarrierRight",x.escalationBarrierRight);
+      setValue("recoveryBarriers",x.recoveryBarriers || x.recoveryBarrier1);
+      setValue("consequences",x.consequences || x.consequence1);
+      setValue("escalationFactors",x.escalationFactors || x.escalationFactorLeft);
 
       savedAt.innerText = x.savedAt || "Saved";
     }
@@ -561,34 +431,15 @@ get(ref(db,"smsReports/"+key)).then(snapshot=>{
 window.saveInvestigation = function(){
 
   update(ref(db,"smsReports/"+key+"/investigationBowTie"),{
-
     hazard:hazard.value,
+    threats:threats.value,
+    preventiveBarriers:preventiveBarriers.value,
     topEvent:topEvent.value,
-
-    threat1:threat1.value,
-    threat2:threat2.value,
-    threat3:threat3.value,
-
-    preventiveBarrier1:preventiveBarrier1.value,
-    preventiveBarrier2:preventiveBarrier2.value,
-    preventiveBarrier3:preventiveBarrier3.value,
-
-    recoveryBarrier1:recoveryBarrier1.value,
-    recoveryBarrier2:recoveryBarrier2.value,
-    recoveryBarrier3:recoveryBarrier3.value,
-
-    consequence1:consequence1.value,
-    consequence2:consequence2.value,
-    consequence3:consequence3.value,
-
-    escalationFactorLeft:escalationFactorLeft.value,
-    escalationBarrierLeft:escalationBarrierLeft.value,
-    escalationFactorRight:escalationFactorRight.value,
-    escalationBarrierRight:escalationBarrierRight.value,
-
+    recoveryBarriers:recoveryBarriers.value,
+    consequences:consequences.value,
+    escalationFactors:escalationFactors.value,
     status:"Saved",
     savedAt:new Date().toISOString()
-
   }).then(()=>{
     savedAt.innerText = new Date().toISOString();
     alert("Bow-Tie Investigation saved successfully.");
@@ -602,13 +453,13 @@ window.deleteInvestigation = function(){
     remove(ref(db,"smsReports/"+key+"/investigationBowTie")).then(()=>{
 
       [
-        "hazard","topEvent",
-        "threat1","threat2","threat3",
-        "preventiveBarrier1","preventiveBarrier2","preventiveBarrier3",
-        "recoveryBarrier1","recoveryBarrier2","recoveryBarrier3",
-        "consequence1","consequence2","consequence3",
-        "escalationFactorLeft","escalationBarrierLeft",
-        "escalationFactorRight","escalationBarrierRight"
+        "hazard",
+        "threats",
+        "preventiveBarriers",
+        "topEvent",
+        "recoveryBarriers",
+        "consequences",
+        "escalationFactors"
       ].forEach(id=>{
         document.getElementById(id).value = "";
       });
