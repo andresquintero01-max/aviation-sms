@@ -1,135 +1,283 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Investigation Bow-Tie</title>
+<title>Investigation - Bow-Tie</title>
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    background:#f4f6f9;
-    margin:0;
-    padding:20px;
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#071f47,#0b2a66,#7c2d12);
+  padding:30px;
+}
+
+.container{
+  max-width:950px;
+  margin:auto;
+  background:white;
+  border-radius:22px;
+  padding:35px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.35);
 }
 
 h1{
-    text-align:center;
-    color:#333;
+  text-align:center;
+  color:#071f47;
+  font-size:42px;
+  margin-bottom:10px;
 }
 
-.bowtie{
-    display:grid;
-    grid-template-columns: 1fr 1fr 220px 1fr 1fr;
-    gap:15px;
-    align-items:center;
-    margin-top:40px;
+.subtitle{
+  text-align:center;
+  color:#666;
+  font-size:18px;
+  margin-bottom:30px;
 }
 
-.column{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
+.report-box{
+  background:#e9f5ff;
+  border-left:8px solid #071f47;
+  padding:18px;
+  border-radius:12px;
+  margin-bottom:25px;
+  font-size:18px;
 }
 
-.box{
-    background:white;
-    border:2px solid #ccc;
-    border-radius:8px;
-    padding:12px;
-    text-align:center;
-    box-shadow:0 2px 4px rgba(0,0,0,0.1);
+.question-card{
+  background:#f8fbff;
+  border:1px solid #d7e6ff;
+  border-radius:16px;
+  padding:20px;
+  margin-top:18px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 
-.threat{
-    border-color:#e74c3c;
+.hazard{border-left:8px solid #071f47;}
+.threats{border-left:8px solid #dc2626;}
+.prevention{border-left:8px solid #16a34a;}
+.event{border-left:8px solid #f97316;}
+.recovery{border-left:8px solid #2563eb;}
+.consequences{border-left:8px solid #9333ea;}
+
+.question-title{
+  color:#071f47;
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:10px;
 }
 
-.preventive{
-    border-color:#f39c12;
+.description{
+  color:#555;
+  margin-bottom:10px;
+  line-height:1.5;
 }
 
-.event{
-    background:#2c3e50;
-    color:white;
-    font-weight:bold;
-    padding:25px;
-    border-radius:10px;
+label{
+  font-weight:bold;
+  color:#333;
+  display:block;
+  margin:12px 0 6px;
 }
 
-.mitigative{
-    border-color:#3498db;
+textarea{
+  width:100%;
+  padding:13px;
+  border:1px solid #cfd8e3;
+  border-radius:10px;
+  font-size:16px;
+  box-sizing:border-box;
+  min-height:100px;
+  resize:vertical;
 }
 
-.consequence{
-    border-color:#27ae60;
+.actions{
+  text-align:center;
+  margin-top:30px;
 }
 
-.legend{
-    margin-top:40px;
-    display:flex;
-    justify-content:center;
-    gap:15px;
-    flex-wrap:wrap;
+button{
+  padding:12px 20px;
+  margin:8px;
+  border:none;
+  border-radius:10px;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  font-weight:bold;
 }
 
-.legend span{
-    background:white;
-    padding:8px 12px;
-    border-radius:6px;
-    border:1px solid #ddd;
+.save{background:#16803c;}
+.delete{background:#c62828;}
+.print{background:#0b2a66;}
+.back{background:#555;}
+.home{background:#0f766e;}
+
+button:hover{
+  opacity:0.88;
+  transform:scale(1.03);
+}
+
+@media print{
+  body{background:white;}
+  .container{box-shadow:none;}
+  button{display:none;}
 }
 </style>
 </head>
 
 <body>
 
-<h1>Investigation Bow-Tie Analysis</h1>
+<div class="container">
 
-<div class="bowtie">
+<h1>Investigation - Bow-Tie</h1>
+<div class="subtitle">Threats, Barriers, Top Event and Consequences Analysis</div>
 
-    <!-- Amenazas -->
-    <div class="column">
-        <div class="box threat">Falta de capacitación</div>
-        <div class="box threat">Procedimiento incorrecto</div>
-        <div class="box threat">Falla de equipo</div>
-    </div>
+<div class="report-box">
+<b>Report ID:</b> <span id="reportId">Loading...</span>
+</div>
 
-    <!-- Barreras preventivas -->
-    <div class="column">
-        <div class="box preventive">Entrenamiento</div>
-        <div class="box preventive">Checklist</div>
-        <div class="box preventive">Mantenimiento</div>
-    </div>
+<div class="question-card hazard">
+<div class="question-title">1. Hazard</div>
+<div class="description">Describe the hazardous condition or safety issue being analyzed.</div>
+<label>Analysis</label>
+<textarea id="hazard" placeholder="Describe the hazard..."></textarea>
+</div>
 
-    <!-- Evento central -->
-    <div class="event">
-        EVENTO PRINCIPAL
-    </div>
+<div class="question-card threats">
+<div class="question-title">2. Threats / Causes</div>
+<div class="description">Describe what could cause the top event to happen.</div>
+<label>Analysis</label>
+<textarea id="threats" placeholder="Describe threats or causes..."></textarea>
+</div>
 
-    <!-- Barreras mitigadoras -->
-    <div class="column">
-        <div class="box mitigative">Respuesta de emergencia</div>
-        <div class="box mitigative">Sistema de alarma</div>
-        <div class="box mitigative">Plan de contingencia</div>
-    </div>
+<div class="question-card prevention">
+<div class="question-title">3. Preventive Barriers</div>
+<div class="description">Describe controls that prevent the event from occurring.</div>
+<label>Analysis</label>
+<textarea id="preventiveBarriers" placeholder="Describe preventive barriers..."></textarea>
+</div>
 
-    <!-- Consecuencias -->
-    <div class="column">
-        <div class="box consequence">Lesión</div>
-        <div class="box consequence">Daño material</div>
-        <div class="box consequence">Pérdida operativa</div>
-    </div>
+<div class="question-card event">
+<div class="question-title">4. Top Event</div>
+<div class="description">Describe the central unwanted event.</div>
+<label>Analysis</label>
+<textarea id="topEvent" placeholder="Describe the top event..."></textarea>
+</div>
+
+<div class="question-card recovery">
+<div class="question-title">5. Recovery / Mitigation Barriers</div>
+<div class="description">Describe controls that reduce the impact after the event occurs.</div>
+<label>Analysis</label>
+<textarea id="recoveryBarriers" placeholder="Describe recovery or mitigation barriers..."></textarea>
+</div>
+
+<div class="question-card consequences">
+<div class="question-title">6. Consequences</div>
+<div class="description">Describe possible outcomes or safety impacts.</div>
+<label>Analysis</label>
+<textarea id="consequences" placeholder="Describe consequences..."></textarea>
+</div>
+
+<div class="actions">
+<button class="save" onclick="saveInvestigation()">Save</button>
+<button class="delete" onclick="deleteInvestigation()">Delete</button>
+<button class="print" onclick="window.print()">Print</button>
+<button class="back" onclick="goBack()">Back to SMS Report Detail</button>
+<button class="home" onclick="goHome()">Home</button>
+</div>
 
 </div>
 
-<div class="legend">
-    <span>🔴 Amenazas</span>
-    <span>🟠 Barreras Preventivas</span>
-    <span>⚫ Evento Principal</span>
-    <span>🔵 Barreras Mitigadoras</span>
-    <span>🟢 Consecuencias</span>
-</div>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import { getDatabase, ref, get, update, remove }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+apiKey: "xxx",
+authDomain: "aviation-sms.firebaseapp.com",
+databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+projectId: "aviation-sms",
+storageBucket: "aviation-sms.firebasestorage.app",
+messagingSenderId: "147000937860",
+appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const key = new URLSearchParams(window.location.search).get("key");
+
+if(!key){
+  alert("No report key found.");
+}
+
+get(ref(db,"smsReports/"+key)).then(snapshot=>{
+  if(snapshot.exists()){
+    const d = snapshot.val();
+
+    document.getElementById("reportId").innerText = d.reportId || "N/A";
+
+    if(d.investigationBowTie){
+      const x = d.investigationBowTie;
+
+      hazard.value = x.hazard || "";
+      threats.value = x.threats || "";
+      preventiveBarriers.value = x.preventiveBarriers || "";
+      topEvent.value = x.topEvent || "";
+      recoveryBarriers.value = x.recoveryBarriers || "";
+      consequences.value = x.consequences || "";
+    }
+  }
+});
+
+window.saveInvestigation = function(){
+
+  update(ref(db,"smsReports/"+key+"/investigationBowTie"),{
+    hazard:hazard.value,
+    threats:threats.value,
+    preventiveBarriers:preventiveBarriers.value,
+    topEvent:topEvent.value,
+    recoveryBarriers:recoveryBarriers.value,
+    consequences:consequences.value,
+    status:"Saved",
+    savedAt:new Date().toISOString()
+  }).then(()=>{
+    alert("Bow-Tie Investigation saved successfully.");
+  });
+
+};
+
+window.deleteInvestigation = function(){
+
+  if(confirm("Do you want to delete this Bow-Tie investigation?")){
+    remove(ref(db,"smsReports/"+key+"/investigationBowTie")).then(()=>{
+
+      hazard.value = "";
+      threats.value = "";
+      preventiveBarriers.value = "";
+      topEvent.value = "";
+      recoveryBarriers.value = "";
+      consequences.value = "";
+
+      alert("Bow-Tie Investigation deleted.");
+    });
+  }
+
+};
+
+window.goBack = function(){
+  location.href = "Risk-Detail.html?key=" + key;
+};
+
+window.goHome = function(){
+  location.href = "index.html";
+};
+
+</script>
 
 </body>
 </html>
