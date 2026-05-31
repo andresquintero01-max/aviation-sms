@@ -210,6 +210,15 @@ input,select{
   display:none;
 }
 
+.print-record{
+  margin-bottom:14px;
+  padding:14px;
+  border:1px solid #dbe3ef;
+  border-radius:14px;
+  background:#f8fafc;
+  line-height:1.6;
+}
+
 @media print{
   body{
     background:white!important;
@@ -271,11 +280,9 @@ Press any cell in the matrix to see the severity and probability definitions.
 
 <div class="investigation-box">
 <h3>Investigation Modules</h3>
-
 <button id="fiveWhysBtn" class="module-btn" onclick="openFiveWhys()">5 Whys</button>
 <button id="shellBtn" class="module-btn" onclick="openSHELL()">SHELL</button>
 <button id="bowTieBtn" class="module-btn" onclick="openBowTie()">Bow-Tie</button>
-
 </div>
 
 <div class="cpa-box">
@@ -362,7 +369,18 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const storage = getStorage(app);
 
-const key = new URLSearchParams(window.location.search).get("key");
+const params = new URLSearchParams(window.location.search);
+
+let key =
+params.get("key") ||
+params.get("id") ||
+params.get("reportId") ||
+localStorage.getItem("currentRiskKey") ||
+"";
+
+if(key && key !== "general"){
+localStorage.setItem("currentRiskKey",key);
+}
 
 let p="",s="",risk="",cpaCounter=0;
 let rp="",rs="",residualRisk="";
@@ -417,12 +435,22 @@ document.getElementById(boxId).innerHTML = `
 `;
 }
 
+function loadMainReport(){
+
+if(!key || key === "general"){
+document.getElementById("reportBox").innerHTML =
+"<b style='color:red;'>ERROR:</b> No valid report key. Open this report from SMS Database.";
+renderMatrix();
+renderResidualMatrix();
+return;
+}
+
 get(ref(db,"smsReports/"+key)).then(snap=>{
 if(snap.exists()){
 const d=snap.val();
 
 document.getElementById("reportBox").innerHTML=`
-<b>ID:</b> ${d.reportId || ""}<br>
+<b>ID:</b> ${d.reportId || key || ""}<br>
 <b>Title:</b> ${d.title || "N/A"}<br>
 <b>Name:</b> ${d.reporterName || "N/A"}<br>
 <b>Date:</b> ${d.date || "N/A"}<br>
@@ -453,11 +481,18 @@ if(d.residualRiskClosed===true){
 
 loadInvestigationModules(d.investigationModules);
 loadCPA(d.CPA);
+
+}else{
+document.getElementById("reportBox").innerHTML =
+"<b style='color:red;'>Report not found.</b><br>Key used: "+key;
+}
+
 renderMatrix();
 renderResidualMatrix();
 loadPrintInvestigationData();
-}
+
 });
+}
 
 function loadInvestigationModules(data){
 if(!data)return;
@@ -476,6 +511,11 @@ document.getElementById("bowTieBtn").classList.add("completed");
 }
 
 window.openFiveWhys=function(){
+if(!key || key === "general"){
+alert("No valid report key. Open Risk Detail from SMS Database.");
+return;
+}
+
 update(ref(db,"smsReports/"+key+"/investigationModules"),{
 fiveWhys:true
 }).then(()=>{
@@ -485,6 +525,11 @@ location.href="Investigation-5Why.html?key="+key;
 };
 
 window.openSHELL=function(){
+if(!key || key === "general"){
+alert("No valid report key. Open Risk Detail from SMS Database.");
+return;
+}
+
 update(ref(db,"smsReports/"+key+"/investigationModules"),{
 shell:true
 }).then(()=>{
@@ -494,6 +539,11 @@ location.href="Investigation-SHELL.html?key="+key;
 };
 
 window.openBowTie=function(){
+if(!key || key === "general"){
+alert("No valid report key. Open Risk Detail from SMS Database.");
+return;
+}
+
 update(ref(db,"smsReports/"+key+"/investigationModules"),{
 bowTie:true,
 contributingFactors:false
@@ -722,10 +772,10 @@ div.className="cpa-item";
 div.innerHTML=`
 <button class="delete-btn" onclick="deleteCPA('${id}','${x.pdfPath||""}')">🗑️</button>
 <b>CPA ${i+1}</b><br>
-Type: ${x.controlType}<br>
-Action: ${x.actionPlan}<br>
-Date: ${x.actionDate}<br>
-Email: ${x.emailTo}<br>
+Type: ${x.controlType || "N/A"}<br>
+Action: ${x.actionPlan || "N/A"}<br>
+Date: ${x.actionDate || "N/A"}<br>
+Email: ${x.emailTo || "N/A"}<br>
 <button class="send-btn" onclick="sendCPAEmail('${x.emailTo}','${x.controlType}','${x.actionPlan}','${x.actionDate}','${i+1}','${x.pdfUrl||""}')">Send Email</button>
 ${x.pdfUrl ? `<button class="send-btn" onclick="window.open('${x.pdfUrl}','_blank')">Open Document</button>` : ""}
 `;
@@ -745,54 +795,142 @@ a.appendChild(att);
 });
 }
 
-function formatObjectData(data){
+function cleanLabel(text){
+return String(text)
+.replace(/([A-Z])/g," $1")
+.replace(/_/g," ")
+.replace(/-/g," ")
+.replace(/^./,str=>str.toUpperCase());
+}
+
+function formatPrintData(data){
 let html = "";
 
-Object.entries(data).forEach(([id,x])=>{
-html += `<div style="margin-bottom:12px;padding:12px;border:1px solid #ddd;border-radius:12px;">`;
+if(!data) return "N/A";
 
-Object.entries(x).forEach(([k,v])=>{
-if(typeof v !== "object"){
-html += `<b>${k}:</b> ${v || "N/A"}<br>`;
+if(typeof data !== "object"){
+return data;
 }
+
+Object.entries(data).forEach(([k,v])=>{
+
+if(k === "password" || k === "apiKey") return;
+
+if(typeof v === "object" && v !== null){
+html += `<div class="print-record"><b>${cleanLabel(k)}</b><br>${formatPrintData(v)}</div>`;
+}else{
+html += `<b>${cleanLabel(k)}:</b> ${v || "N/A"}<br>`;
+}
+
 });
 
-html += `</div>`;
+return html || "N/A";
+}
+
+function objectHasWords(obj, words){
+const text = JSON.stringify(obj).toLowerCase();
+return words.some(w => text.includes(w));
+}
+
+async function universalSearchInvestigation(type){
+
+const snap = await get(ref(db));
+
+if(!snap.exists()) return null;
+
+const allData = snap.val();
+let results = [];
+
+function scan(obj,path){
+
+if(!obj || typeof obj !== "object") return;
+
+const pathLower = path.toLowerCase();
+const text = JSON.stringify(obj).toLowerCase();
+
+const belongsToReport =
+path.includes(key) ||
+text.includes(`"key":"${key}"`) ||
+text.includes(`"reportkey":"${key}"`) ||
+text.includes(`"reportid":"${key}"`) ||
+text.includes(`"reportId":"${key}"`) ||
+text.includes(`"id":"${key}"`);
+
+let isType = false;
+
+if(type === "five"){
+isType =
+pathLower.includes("5why") ||
+pathLower.includes("5whys") ||
+pathLower.includes("fivewhy") ||
+pathLower.includes("fivewhys") ||
+objectHasWords(obj,["why 1","why1","why2","why3","why4","why5","root cause","rootcause"]);
+}
+
+if(type === "shell"){
+isType =
+pathLower.includes("shell") ||
+objectHasWords(obj,["software","hardware","environment","liveware"]);
+}
+
+if(type === "bowtie"){
+isType =
+pathLower.includes("bowtie") ||
+pathLower.includes("bow-tie") ||
+objectHasWords(obj,["threat","consequence","barrier","bow tie","bow-tie"]);
+}
+
+if(belongsToReport && isType){
+results.push(obj);
+}
+
+Object.entries(obj).forEach(([childKey,value])=>{
+scan(value,path + "/" + childKey);
 });
-
-return html;
 }
 
-function loadPrintInvestigationData(){
+scan(allData,"");
 
-get(ref(db,"fiveWhysInvestigations/"+key)).then(snap=>{
-if(snap.exists()){
-fiveWhysPrint.innerHTML = "<b>5 Whys:</b><br>" + formatObjectData(snap.val());
-}
-});
-
-get(ref(db,"shellInvestigations/"+key)).then(snap=>{
-if(snap.exists()){
-shellPrint.innerHTML = "<b>SHELL:</b><br>" + formatObjectData(snap.val());
-}
-});
-
-get(ref(db,"bowTieInvestigations/"+key)).then(snap=>{
-if(snap.exists()){
-bowTiePrint.innerHTML = "<b>Bow-Tie:</b><br>" + formatObjectData(snap.val());
-}
-});
-
+return results.length ? results : null;
 }
 
-window.printFullFile=function(){
-loadPrintInvestigationData();
+async function loadPrintInvestigationData(){
+
+fiveWhysPrint.innerHTML = "<b>5 Whys:</b> N/A";
+shellPrint.innerHTML = "<b>SHELL:</b> N/A";
+bowTiePrint.innerHTML = "<b>Bow-Tie:</b> N/A";
+
+const fiveData = await universalSearchInvestigation("five");
+if(fiveData){
+fiveWhysPrint.innerHTML =
+"<b>5 Whys:</b><br>" + formatPrintData(fiveData);
+}
+
+const shellData = await universalSearchInvestigation("shell");
+if(shellData){
+shellPrint.innerHTML =
+"<b>SHELL:</b><br>" + formatPrintData(shellData);
+}
+
+const bowTieData = await universalSearchInvestigation("bowtie");
+if(bowTieData){
+bowTiePrint.innerHTML =
+"<b>Bow-Tie:</b><br>" + formatPrintData(bowTieData);
+}
+
+}
+
+window.printFullFile = async function(){
+await loadPrintInvestigationData();
+
 setTimeout(()=>{
 window.print();
-},700);
+},1500);
 };
 
 window.goBack=()=>location.href="SMS-Database.html";
+
+loadMainReport();
 
 </script>
 
