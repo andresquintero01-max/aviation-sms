@@ -225,7 +225,10 @@ input,select{
     padding:10px;
   }
 
-  button,.bottom,.investigation-box{
+  button,
+  .bottom,
+  .investigation-box,
+  .attachment-box{
     display:none!important;
   }
 
@@ -236,6 +239,11 @@ input,select{
 
   #printInvestigationData{
     display:block!important;
+  }
+
+  .box,.cpa-box{
+    box-shadow:none;
+    break-inside:avoid;
   }
 }
 
@@ -481,6 +489,7 @@ if(d.residualRiskClosed===true){
 
 loadInvestigationModules(d.investigationModules);
 loadCPA(d.CPA);
+loadPrintInvestigationData();
 
 }else{
 document.getElementById("reportBox").innerHTML =
@@ -489,7 +498,6 @@ document.getElementById("reportBox").innerHTML =
 
 renderMatrix();
 renderResidualMatrix();
-loadPrintInvestigationData();
 
 });
 }
@@ -808,13 +816,12 @@ let html = "";
 
 if(!data) return "N/A";
 
-if(typeof data !== "object"){
-return data;
-}
-
 Object.entries(data).forEach(([k,v])=>{
 
-if(k === "password" || k === "apiKey") return;
+if(k === "status" || k === "savedAt"){
+html += `<b>${cleanLabel(k)}:</b> ${v || "N/A"}<br>`;
+return;
+}
 
 if(typeof v === "object" && v !== null){
 html += `<div class="print-record"><b>${cleanLabel(k)}</b><br>${formatPrintData(v)}</div>`;
@@ -827,95 +834,33 @@ html += `<b>${cleanLabel(k)}:</b> ${v || "N/A"}<br>`;
 return html || "N/A";
 }
 
-function objectHasWords(obj, words){
-const text = JSON.stringify(obj).toLowerCase();
-return words.some(w => text.includes(w));
-}
-
-async function universalSearchInvestigation(type){
-
-const snap = await get(ref(db));
-
-if(!snap.exists()) return null;
-
-const allData = snap.val();
-let results = [];
-
-function scan(obj,path){
-
-if(!obj || typeof obj !== "object") return;
-
-const pathLower = path.toLowerCase();
-const text = JSON.stringify(obj).toLowerCase();
-
-const belongsToReport =
-path.includes(key) ||
-text.includes(`"key":"${key}"`) ||
-text.includes(`"reportkey":"${key}"`) ||
-text.includes(`"reportid":"${key}"`) ||
-text.includes(`"reportId":"${key}"`) ||
-text.includes(`"id":"${key}"`);
-
-let isType = false;
-
-if(type === "five"){
-isType =
-pathLower.includes("5why") ||
-pathLower.includes("5whys") ||
-pathLower.includes("fivewhy") ||
-pathLower.includes("fivewhys") ||
-objectHasWords(obj,["why 1","why1","why2","why3","why4","why5","root cause","rootcause"]);
-}
-
-if(type === "shell"){
-isType =
-pathLower.includes("shell") ||
-objectHasWords(obj,["software","hardware","environment","liveware"]);
-}
-
-if(type === "bowtie"){
-isType =
-pathLower.includes("bowtie") ||
-pathLower.includes("bow-tie") ||
-objectHasWords(obj,["threat","consequence","barrier","bow tie","bow-tie"]);
-}
-
-if(belongsToReport && isType){
-results.push(obj);
-}
-
-Object.entries(obj).forEach(([childKey,value])=>{
-scan(value,path + "/" + childKey);
-});
-}
-
-scan(allData,"");
-
-return results.length ? results : null;
-}
-
 async function loadPrintInvestigationData(){
 
 fiveWhysPrint.innerHTML = "<b>5 Whys:</b> N/A";
 shellPrint.innerHTML = "<b>SHELL:</b> N/A";
 bowTiePrint.innerHTML = "<b>Bow-Tie:</b> N/A";
 
-const fiveData = await universalSearchInvestigation("five");
-if(fiveData){
+if(!key || key === "general") return;
+
+const snap = await get(ref(db,"smsReports/"+key));
+
+if(!snap.exists()) return;
+
+const d = snap.val();
+
+if(d.investigation5Why){
 fiveWhysPrint.innerHTML =
-"<b>5 Whys:</b><br>" + formatPrintData(fiveData);
+"<b>5 Whys:</b><br>" + formatPrintData(d.investigation5Why);
 }
 
-const shellData = await universalSearchInvestigation("shell");
-if(shellData){
+if(d.investigationSHELL){
 shellPrint.innerHTML =
-"<b>SHELL:</b><br>" + formatPrintData(shellData);
+"<b>SHELL:</b><br>" + formatPrintData(d.investigationSHELL);
 }
 
-const bowTieData = await universalSearchInvestigation("bowtie");
-if(bowTieData){
+if(d.investigationBowTie){
 bowTiePrint.innerHTML =
-"<b>Bow-Tie:</b><br>" + formatPrintData(bowTieData);
+"<b>Bow-Tie:</b><br>" + formatPrintData(d.investigationBowTie);
 }
 
 }
@@ -925,7 +870,7 @@ await loadPrintInvestigationData();
 
 setTimeout(()=>{
 window.print();
-},1500);
+},500);
 };
 
 window.goBack=()=>location.href="SMS-Database.html";
