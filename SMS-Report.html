@@ -24,11 +24,11 @@ const db = getDatabase(app);
 
 window.sendReport = function () {
 
-  const what = document.getElementById("what").value;
-  const date = document.getElementById("date").value;
+  const title = document.getElementById("title").value.trim();
 
-  if (!what || !date) {
-    alert("Fill all fields");
+  if (!title) {
+    alert("The Title is required");
+    document.getElementById("title").focus();
     return;
   }
 
@@ -36,29 +36,39 @@ window.sendReport = function () {
 
   set(newRef, {
     reportId: Date.now(),
-    whatHappened: what,
-    date: date,
+    title: title,
+    reporterName: document.getElementById("name").value,
+    date: document.getElementById("date").value,
+    flightNumber: document.getElementById("flightNumber").value,
+    aircraftRegistration: document.getElementById("aircraftRegistration").value,
+    airport: document.getElementById("airport").value,
+    destination: document.getElementById("destination").value,
+    reportType: document.getElementById("reportType").value,
+    whatHappened: document.getElementById("what").value,
+    recommendation: document.getElementById("recommendation").value,
     status: "OPEN",
     risk: "NOT ASSESSED",
     timestamp: new Date().toISOString()
-  }).then(() => {
-     alert("SMS Report Saved Successfully!");
+  })
+  .then(() => {
 
-  document.getElementById("what").value = "";
-  document.getElementById("date").value = "";
+    alert("SMS Report Saved Successfully!");
 
-  document.getElementById("what").focus();
+    document.querySelectorAll("input, textarea, select").forEach(field => {
+      field.value = "";
+    });
 
-}).catch((error) => {
+    document.getElementById("title").focus();
 
-  alert("Error Saving Report: " + error.message);
+  })
+  .catch((error) => {
+    alert("Error Saving Report: " + error.message);
   });
 
 };
 </script>
 
 <style>
-
 *{
   margin:0;
   padding:0;
@@ -69,37 +79,21 @@ body{
   font-family:Arial, sans-serif;
   min-height:100vh;
   background:
-  linear-gradient(rgba(5,20,55,0.82), rgba(5,20,55,0.88)),
+  linear-gradient(rgba(5,20,55,0.84), rgba(5,20,55,0.90)),
   url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
   background-size:cover;
   background-position:center;
-  display:flex;
-  justify-content:center;
-  align-items:center;
   padding:35px;
 }
 
 .container{
   width:100%;
-  max-width:850px;
-  background:rgba(255,255,255,0.96);
-  backdrop-filter:blur(8px);
-  padding:55px;
+  max-width:1050px;
+  margin:auto;
+  background:rgba(255,255,255,0.97);
+  padding:50px;
   border-radius:35px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.35);
-  position:relative;
-  overflow:hidden;
-  animation:fadeIn 0.8s ease;
-}
-
-.container::before{
-  content:"";
-  position:absolute;
-  width:420px;
-  height:420px;
-  background:radial-gradient(circle,rgba(255,152,0,0.16),transparent 70%);
-  top:-180px;
-  right:-120px;
+  box-shadow:0 25px 70px rgba(0,0,0,0.38);
 }
 
 .logo{
@@ -107,139 +101,135 @@ body{
   height:100px;
   margin:auto;
   border-radius:50%;
-  background:linear-gradient(135deg,#0b2a66,#ff9800);
+  background:linear-gradient(135deg,#071f47,#ff9800);
   color:white;
   display:flex;
   justify-content:center;
   align-items:center;
   font-size:44px;
-  box-shadow:0 12px 25px rgba(0,0,0,0.25);
-  margin-bottom:22px;
+  margin-bottom:20px;
 }
 
 h1{
   text-align:center;
   color:#071f47;
-  font-size:62px;
-  margin-bottom:12px;
-  font-weight:800;
+  font-size:58px;
+  margin-bottom:10px;
 }
 
 .subtitle{
   text-align:center;
   color:#56657d;
-  font-size:21px;
-  margin-bottom:18px;
-}
-
-.title-line{
-  width:210px;
-  height:4px;
-  margin:0 auto 45px;
-  border-radius:10px;
-  background:linear-gradient(90deg,transparent,#ff9800,transparent);
+  font-size:20px;
+  margin-bottom:35px;
 }
 
 .form-card{
   background:white;
   border-radius:30px;
   padding:35px;
-  box-shadow:0 12px 28px rgba(0,0,0,0.10);
+  box-shadow:0 14px 32px rgba(0,0,0,0.12);
   border-left:8px solid #ff9800;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+
+.full{
+  grid-column:1 / 3;
 }
 
 label{
   font-weight:bold;
   display:block;
-  margin-bottom:10px;
+  margin-bottom:8px;
   color:#071f47;
-  font-size:20px;
+  font-size:17px;
 }
 
 input,
-textarea{
+textarea,
+select{
   width:100%;
-  padding:18px;
-  margin-bottom:25px;
+  padding:16px;
   border:1px solid #d4dbe8;
-  border-radius:18px;
-  font-size:18px;
+  border-radius:16px;
+  font-size:17px;
   font-family:Arial, sans-serif;
   outline:none;
-  transition:0.3s;
   background:#f8fbff;
 }
 
 textarea{
-  height:150px;
+  height:135px;
   resize:none;
 }
 
-input{
-  height:60px;
-}
-
 input:focus,
-textarea:focus{
-  border-color:#1c63db;
-  box-shadow:0 0 0 4px rgba(28,99,219,0.15);
+textarea:focus,
+select:focus{
+  border-color:#1450b8;
+  box-shadow:0 0 0 4px rgba(20,80,184,0.15);
   background:white;
 }
 
+.required{
+  color:red;
+}
+
+.buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin-top:30px;
+}
+
 button,
-.back,
-.database-btn{
-  width:100%;
+.database-btn,
+.back{
   min-height:62px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
   border:none;
   border-radius:18px;
   font-size:20px;
   font-weight:bold;
   cursor:pointer;
   text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   transition:0.3s;
 }
 
 button{
   background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
   color:white;
-  box-shadow:0 10px 22px rgba(0,0,0,0.20);
+  box-shadow:0 10px 24px rgba(0,0,0,0.25);
 }
 
-button:hover{
+button:hover,
+.database-btn:hover,
+.back:hover{
   transform:translateY(-4px);
-  background:linear-gradient(135deg,#0b2a66,#1c63db);
 }
 
 .database-btn{
-  margin-top:20px;
   background:linear-gradient(135deg,#00a2ff,#00d4ff);
   color:white;
-  box-shadow:0 10px 22px rgba(0,0,0,0.25);
-}
-
-.database-btn:hover{
-  transform:translateY(-4px);
-  background:linear-gradient(135deg,#00b7ff,#4de1ff);
+  box-shadow:0 10px 24px rgba(0,0,0,0.25);
 }
 
 .back{
-  margin-top:20px;
+  grid-column:1 / 3;
   background:linear-gradient(135deg,#d40000,#ff2b2b);
   color:white;
-  box-shadow:0 10px 22px rgba(0,0,0,0.25);
-}
-
-.back:hover{
-  transform:translateY(-4px);
-  background:linear-gradient(135deg,#ff2b2b,#ff4d4d);
+  box-shadow:0 10px 24px rgba(0,0,0,0.25);
 }
 
 .footer{
-  margin-top:35px;
+  margin-top:30px;
   text-align:center;
   color:#51617b;
   font-size:14px;
@@ -247,39 +237,26 @@ button:hover{
   font-weight:bold;
 }
 
-@keyframes fadeIn{
-  from{
-    opacity:0;
-    transform:translateY(20px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-@media(max-width:750px){
-
+@media(max-width:800px){
   .container{
-    padding:35px 22px;
+    padding:30px 22px;
   }
 
   h1{
-    font-size:44px;
+    font-size:42px;
   }
 
-  .subtitle{
-    font-size:18px;
+  .grid,
+  .buttons{
+    grid-template-columns:1fr;
   }
 
-  .form-card{
-    padding:25px;
+  .full,
+  .back{
+    grid-column:1;
   }
-
 }
-
 </style>
-
 </head>
 
 <body>
@@ -294,27 +271,81 @@ button:hover{
     Aviation Safety Management Reporting System
   </div>
 
-  <div class="title-line"></div>
-
   <div class="form-card">
 
-    <label>What happened?</label>
-    <textarea id="what" placeholder="Describe the event, hazard or safety concern"></textarea>
+    <div class="grid">
 
-    <label>Date</label>
-    <input type="date" id="date">
+      <div class="full">
+        <label>Title <span class="required">*</span></label>
+        <input id="title" type="text" placeholder="Enter report title">
+      </div>
 
-    <button type="button" onclick="sendReport()">
-    Send Report
-    </button>
+      <div>
+        <label>Name</label>
+        <input id="name" type="text" placeholder="Reporter name">
+      </div>
 
-    <a class="database-btn" href="SMS-Database.html">
-      📊 Open SMS Database
-    </a>
+      <div>
+        <label>Date</label>
+        <input id="date" type="date">
+      </div>
 
-    <a class="back" href="Hazard-Identification.html">
-      ← Back to Hazard Identification
-    </a>
+      <div>
+        <label>Flight Number</label>
+        <input id="flightNumber" type="text" placeholder="Example: AV1234">
+      </div>
+
+      <div>
+        <label>Aircraft Registration</label>
+        <input id="aircraftRegistration" type="text" placeholder="Example: N123XX">
+      </div>
+
+      <div>
+        <label>Airport</label>
+        <input id="airport" type="text" placeholder="Example: KOPF, KMIA, KBOS">
+      </div>
+
+      <div>
+        <label>Destination</label>
+        <input id="destination" type="text" placeholder="Destination airport">
+      </div>
+
+      <div class="full">
+        <label>Type Report</label>
+        <select id="reportType">
+          <option value="">Select report type</option>
+          <option value="MOR">MOR</option>
+          <option value="VOR">VOR</option>
+        </select>
+      </div>
+
+      <div class="full">
+        <label>What Happened?</label>
+        <textarea id="what" placeholder="Describe what happened"></textarea>
+      </div>
+
+      <div class="full">
+        <label>Recommendation to Prevent Recurrence</label>
+        <textarea id="recommendation" placeholder="Write a simple recommendation to avoid this event again"></textarea>
+      </div>
+
+    </div>
+
+    <div class="buttons">
+
+      <button type="button" onclick="sendReport()">
+        ✅ Send Report
+      </button>
+
+      <a class="database-btn" href="SMS-Database.html">
+        📊 Open SMS Database
+      </a>
+
+      <a class="back" href="Hazard-Identification.html">
+        ← Back to Hazard Identification
+      </a>
+
+    </div>
 
   </div>
 
