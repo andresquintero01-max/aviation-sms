@@ -42,7 +42,16 @@ window.sendReport = function () {
     risk: "NOT ASSESSED",
     timestamp: new Date().toISOString()
   }).then(() => {
-    window.location.href = "Hazard-Identification.html";
+     alert("SMS Report Saved Successfully!");
+
+  document.getElementById("what").value = "";
+  document.getElementById("date").value = "";
+
+  document.getElementById("what").focus();
+
+}).catch((error) => {
+
+  alert("Error Saving Report: " + error.message);
   });
 
 };
