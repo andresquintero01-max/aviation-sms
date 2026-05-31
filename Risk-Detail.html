@@ -48,10 +48,6 @@ button:hover{
   background:#0b2a66;
 }
 
-button.active{
-  background:purple !important;
-}
-
 button.closed{
   background:green !important;
 }
@@ -155,10 +151,11 @@ button.closed{
   border:1px solid #ccc;
 }
 
-.matrix {
+.matrix{
   margin-top:20px;
   display:flex;
   justify-content:center;
+  overflow-x:auto;
 }
 
 .matrix-grid{
@@ -226,15 +223,9 @@ input, select{
 
 <div class="box">
 
-<h3>ICAO Risk Assessment Matrix 5x5</h3>
+<h3>Initial Risk Assessment</h3>
 
-<p>Probability:</p>
-<div id="pBtns"></div>
-
-<p>Severity:</p>
-<div id="sBtns"></div>
-
-<button onclick="calculateRisk()">Calculate Risk</button>
+<p>Select the applicable cell directly in the risk matrix.</p>
 
 <div class="result" id="result"></div>
 
@@ -258,11 +249,8 @@ Press any cell in the matrix to see the severity and probability definitions.
 <h3>Investigation Modules</h3>
 
 <button id="investigationBtn" class="module-btn" onclick="toggleInvestigationModule('investigation','investigationBtn')">Investigation</button>
-
 <button id="fiveWhysBtn" class="module-btn" onclick="openFiveWhys()">5 Whys</button>
-
 <button id="shellBtn" class="module-btn" onclick="toggleInvestigationModule('shell','shellBtn')">SHELL</button>
-
 <button id="contributingFactorsBtn" class="module-btn" onclick="toggleInvestigationModule('contributingFactors','contributingFactorsBtn')">Contributing Factors</button>
 
 </div>
@@ -300,15 +288,7 @@ Press any cell in the matrix to see the severity and probability definitions.
 
 <h3>Residual Risk Assessment</h3>
 
-<p>After the initial risk assessment and CPA implementation, a second risk assessment must be performed considering the controls applied.</p>
-
-<p>Probability:</p>
-<div id="rpBtns"></div>
-
-<p>Severity:</p>
-<div id="rsBtns"></div>
-
-<button onclick="calculateResidualRisk()">Calculate Risk</button>
+<p>After CPA implementation, select the applicable cell directly in the residual risk matrix.</p>
 
 <div class="result" id="residualResult"></div>
 
@@ -413,15 +393,23 @@ document.getElementById(boxId).innerHTML = `
 `;
 }
 
-get(ref(db,"smsReports/"+key)).then(s=>{
-if(s.exists()){
-const d=s.val();
+get(ref(db,"smsReports/"+key)).then(snap=>{
+if(snap.exists()){
+const d=snap.val();
 
 document.getElementById("reportBox").innerHTML=`
-<b>ID:</b> ${d.reportId}<br>
-<b>What Happened:</b> ${d.whatHappened}<br>
-<b>Date:</b> ${d.date}<br>
-<b>Risk:</b> ${d.risk}
+<b>ID:</b> ${d.reportId || ""}<br>
+<b>Title:</b> ${d.title || "N/A"}<br>
+<b>Name:</b> ${d.reporterName || "N/A"}<br>
+<b>Date:</b> ${d.date || "N/A"}<br>
+<b>Flight Number:</b> ${d.flightNumber || "N/A"}<br>
+<b>Aircraft Registration:</b> ${d.aircraftRegistration || "N/A"}<br>
+<b>Airport:</b> ${d.airport || "N/A"}<br>
+<b>Destination:</b> ${d.destination || "N/A"}<br>
+<b>Type Report:</b> ${d.reportType || "N/A"}<br>
+<b>What Happened:</b> ${d.whatHappened || "N/A"}<br>
+<b>Recommendation:</b> ${d.recommendation || "N/A"}<br>
+<b>Risk:</b> ${d.risk || "N/A"}
 `;
 
 savedRisk.innerText=d.risk||"N/A";
@@ -502,75 +490,12 @@ update(ref(db,"smsReports/"+key+"/investigationModules"),{
 
 };
 
-function createProbabilityButtons(id,type){
-const c=document.getElementById(id);
+window.saveRisk=function(){
 
-[5,4,3,2,1].forEach(i=>{
-let b=document.createElement("button");
-b.innerText=i;
-
-b.onclick=()=>{
-for(let x of c.children)x.classList.remove("active");
-b.classList.add("active");
-
-if(type==="p")p=i;
-if(type==="rp")rp=i;
-};
-
-c.appendChild(b);
-});
-}
-
-function createSeverityButtons(id,type){
-const c=document.getElementById(id);
-
-["A","B","C","D","E"].forEach(i=>{
-let b=document.createElement("button");
-b.innerText=i;
-
-b.onclick=()=>{
-for(let x of c.children)x.classList.remove("active");
-b.classList.add("active");
-
-if(type==="s")s=i;
-if(type==="rs")rs=i;
-};
-
-c.appendChild(b);
-});
-}
-
-createProbabilityButtons("pBtns","p");
-createSeverityButtons("sBtns","s");
-
-createProbabilityButtons("rpBtns","rp");
-createSeverityButtons("rsBtns","rs");
-
-function setButtonActive(containerId,value){
-const c=document.getElementById(containerId);
-for(let btn of c.children){
-btn.classList.remove("active");
-if(btn.innerText == value){
-btn.classList.add("active");
-}
-}
-}
-
-window.calculateRisk=function(){
-
-if(!p || !s){
-alert("Please select Probability and Severity.");
+if(!risk){
+alert("Please select a risk cell first.");
 return;
 }
-
-risk=s+p;
-
-result.innerText="Risk: "+risk+" → "+getRiskLevel(s,p);
-showDefinition("definitionBox",s,p,risk);
-renderMatrix();
-};
-
-window.saveRisk=function(){
 
 update(ref(db,"smsReports/"+key),{
 risk:risk,
@@ -584,21 +509,12 @@ btn.innerText="Close";
 btn.classList.add("closed");
 };
 
-window.calculateResidualRisk=function(){
+window.saveResidualRisk=function(){
 
-if(!rp || !rs){
-alert("Please select Probability and Severity.");
+if(!residualRisk){
+alert("Please select a residual risk cell first.");
 return;
 }
-
-residualRisk=rs+rp;
-
-residualResult.innerText="Risk: "+residualRisk+" → "+getRiskLevel(rs,rp);
-showDefinition("residualDefinitionBox",rs,rp,residualRisk);
-renderResidualMatrix();
-};
-
-window.saveResidualRisk=function(){
 
 update(ref(db,"smsReports/"+key),{
 residualRisk:residualRisk,
@@ -652,9 +568,6 @@ cell.onclick=()=>{
 p=pValue;
 s=sValue;
 risk=code;
-
-setButtonActive("pBtns",p);
-setButtonActive("sBtns",s);
 
 result.innerText="Risk: "+risk+" → "+getRiskLevel(s,p);
 showDefinition("definitionBox",s,p,risk);
@@ -713,9 +626,6 @@ cell.onclick=()=>{
 rp=pValue;
 rs=sValue;
 residualRisk=code;
-
-setButtonActive("rpBtns",rp);
-setButtonActive("rsBtns",rs);
 
 residualResult.innerText="Risk: "+residualRisk+" → "+getRiskLevel(rs,rp);
 showDefinition("residualDefinitionBox",rs,rp,residualRisk);
@@ -930,9 +840,12 @@ printBody = `
 <h2>Risk Detail</h2>
 <div class="print-card">
 <p><b>ID:</b> ${d.reportId || ""}</p>
+<p><b>Title:</b> ${d.title || ""}</p>
 <p><b>Date:</b> ${d.date || ""}</p>
 <p><b>What Happened:</b></p>
 <div class="answer">${d.whatHappened || ""}</div>
+<p><b>Recommendation:</b></p>
+<div class="answer">${d.recommendation || ""}</div>
 <p><b>Risk:</b> ${d.risk || "N/A"}</p>
 </div>
 
@@ -987,9 +900,12 @@ printBody = `
 <h2>Risk Detail</h2>
 <div class="print-card">
 <p><b>ID:</b> ${d.reportId || ""}</p>
+<p><b>Title:</b> ${d.title || ""}</p>
 <p><b>Date:</b> ${d.date || ""}</p>
 <p><b>What Happened:</b></p>
 <div class="answer">${d.whatHappened || ""}</div>
+<p><b>Recommendation:</b></p>
+<div class="answer">${d.recommendation || ""}</div>
 <p><b>Risk:</b> ${d.risk || "N/A"}</p>
 </div>
 `;
