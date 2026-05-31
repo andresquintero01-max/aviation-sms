@@ -15,205 +15,243 @@ body{
   font-family:'Segoe UI', Arial, sans-serif;
   min-height:100vh;
   background:
-  radial-gradient(circle at top left, rgba(249,115,22,0.35), transparent 32%),
-  radial-gradient(circle at bottom right, rgba(147,51,234,0.30), transparent 35%),
-  linear-gradient(135deg,#020617,#071f47,#7c2d12);
-  padding:35px;
-}
-
-.container{
-  max-width:1100px;
-  margin:auto;
-  background:rgba(255,255,255,0.97);
-  border-radius:34px;
-  padding:45px;
-  box-shadow:0 28px 75px rgba(0,0,0,0.45);
-  border:1px solid rgba(255,255,255,0.45);
+  radial-gradient(circle at top left, rgba(37,99,235,0.35), transparent 30%),
+  radial-gradient(circle at bottom right, rgba(34,197,94,0.28), transparent 35%),
+  linear-gradient(135deg,#020617,#071f47,#0f766e);
+  padding:30px;
 }
 
 .header{
+  max-width:1500px;
+  margin:auto;
   text-align:center;
-  margin-bottom:30px;
-}
-
-.badge{
-  display:inline-block;
-  background:linear-gradient(135deg,#7c2d12,#f97316);
   color:white;
-  padding:9px 20px;
-  border-radius:999px;
-  font-weight:bold;
-  font-size:14px;
-  letter-spacing:0.5px;
-  margin-bottom:14px;
-  box-shadow:0 8px 20px rgba(249,115,22,0.35);
+  padding:25px 20px 10px;
 }
 
-h1{
-  color:#071f47;
-  font-size:52px;
+.header h1{
+  font-size:54px;
   margin:0;
-  letter-spacing:0.5px;
+  text-shadow:0 6px 18px rgba(0,0,0,0.35);
 }
 
-.subtitle{
-  color:#64748b;
-  font-size:19px;
-  margin-top:10px;
+.header p{
+  font-size:20px;
+  color:#dbeafe;
+  margin-top:8px;
+}
+
+.container{
+  max-width:1500px;
+  margin:25px auto;
+  background:rgba(255,255,255,0.97);
+  border-radius:34px;
+  padding:35px;
+  box-shadow:0 28px 75px rgba(0,0,0,0.45);
 }
 
 .report-box{
-  background:linear-gradient(135deg,#fff7ed,#f8fbff);
-  border-left:9px solid #f97316;
-  padding:22px;
-  border-radius:20px;
-  margin-bottom:28px;
-  font-size:19px;
-  box-shadow:0 10px 24px rgba(249,115,22,0.14);
-}
-
-.bowtie-strip{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:14px;
-  margin-bottom:28px;
-}
-
-.strip-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
   background:white;
-  border-radius:20px;
-  padding:18px;
-  text-align:center;
-  box-shadow:0 10px 24px rgba(15,23,42,0.12);
-  border:1px solid #e2e8f0;
-}
-
-.strip-card strong{
-  display:block;
-  color:#071f47;
-  font-size:18px;
-  margin-bottom:5px;
-}
-
-.strip-card span{
-  color:#64748b;
-  font-size:14px;
-}
-
-.question-card{
-  background:white;
-  border-radius:24px;
-  padding:25px;
-  margin-top:22px;
+  border-radius:22px;
+  padding:20px 28px;
   box-shadow:0 12px 30px rgba(15,23,42,0.12);
+  margin-bottom:32px;
+}
+
+.report-id{
+  font-size:18px;
+  font-weight:bold;
+  color:#071f47;
+}
+
+.saved-info{
+  color:#475569;
+  font-weight:bold;
+}
+
+.bowtie-area{
+  display:grid;
+  grid-template-columns:1.1fr 0.8fr 1.1fr;
+  gap:28px;
+  align-items:center;
+  position:relative;
+}
+
+.side-title{
+  text-align:center;
+  color:white;
+  padding:14px;
+  border-radius:18px;
+  font-weight:bold;
+  font-size:18px;
+  margin-bottom:18px;
+  box-shadow:0 10px 24px rgba(0,0,0,0.18);
+}
+
+.left-title{
+  background:linear-gradient(135deg,#1d4ed8,#38bdf8);
+}
+
+.right-title{
+  background:linear-gradient(135deg,#15803d,#22c55e);
+}
+
+.left-column,
+.right-column{
+  display:grid;
+  gap:18px;
+}
+
+.center-column{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:24px;
+}
+
+.card{
+  background:white;
+  border-radius:22px;
+  padding:18px;
+  box-shadow:0 12px 28px rgba(15,23,42,0.12);
   border:1px solid #e2e8f0;
   position:relative;
-  overflow:hidden;
 }
 
-.question-card::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:9px;
-  height:100%;
-}
-
-.hazard::before{background:linear-gradient(180deg,#071f47,#1450b8);}
-.threats::before{background:linear-gradient(180deg,#b91c1c,#ef4444);}
-.prevention::before{background:linear-gradient(180deg,#15803d,#22c55e);}
-.event::before{background:linear-gradient(180deg,#f97316,#facc15);}
-.recovery::before{background:linear-gradient(180deg,#2563eb,#38bdf8);}
-.consequences::before{background:linear-gradient(180deg,#7e22ce,#c084fc);}
-
-.question-title{
+.card h3{
+  margin:0 0 10px;
   color:#071f47;
-  font-size:24px;
-  font-weight:800;
-  margin-bottom:8px;
-  padding-left:8px;
+  font-size:19px;
 }
 
-.description{
+.card p{
+  margin:0 0 10px;
   color:#64748b;
-  font-size:15px;
-  margin-bottom:15px;
-  padding-left:8px;
-  line-height:1.5;
-}
-
-label{
-  font-weight:800;
-  color:#334155;
-  display:block;
-  margin:14px 0 7px;
+  font-size:14px;
 }
 
 textarea{
   width:100%;
-  padding:15px;
+  min-height:80px;
   border:1px solid #cbd5e1;
-  border-radius:16px;
-  font-size:16px;
-  box-sizing:border-box;
-  min-height:110px;
+  border-radius:14px;
+  padding:12px;
+  font-size:15px;
   resize:vertical;
-  background:#f8fafc;
   outline:none;
+  background:#f8fafc;
   transition:0.25s;
 }
 
 textarea:focus{
   background:white;
-  border-color:#f97316;
-  box-shadow:0 0 0 4px rgba(249,115,22,0.16);
+  border-color:#1450b8;
+  box-shadow:0 0 0 4px rgba(20,80,184,0.14);
+}
+
+.threat{
+  border-left:8px solid #2563eb;
+}
+
+.prevention{
+  border-left:8px solid #0ea5e9;
+  margin-left:55px;
+}
+
+.recovery{
+  border-left:8px solid #16a34a;
+  margin-right:55px;
+}
+
+.consequence{
+  border-left:8px solid #dc2626;
+}
+
+.escalation{
+  border-left:8px solid #f59e0b;
+  background:#fff7ed;
+}
+
+.hazard-card{
+  width:100%;
+  border:2px solid #f59e0b;
+  background:linear-gradient(135deg,#fff7ed,#ffffff);
+}
+
+.top-event{
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#ef4444,#f97316);
+  color:white;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 22px 50px rgba(239,68,68,0.35);
+  border:8px solid #fff;
+}
+
+.top-event h2{
+  margin:0 0 12px;
+  font-size:28px;
+}
+
+.top-event textarea{
+  min-height:95px;
+  background:white;
+  color:#071f47;
+}
+
+.connector{
+  position:absolute;
+  pointer-events:none;
+  inset:0;
+  z-index:0;
+}
+
+.bowtie-area > div{
+  position:relative;
+  z-index:2;
 }
 
 .actions{
-  text-align:center;
   margin-top:35px;
-  padding-top:20px;
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
   border-top:1px solid #e2e8f0;
+  padding-top:28px;
 }
 
 button{
-  padding:14px 24px;
-  margin:8px;
   border:none;
-  border-radius:16px;
   color:white;
+  padding:15px 26px;
+  border-radius:16px;
   font-size:16px;
-  cursor:pointer;
   font-weight:bold;
-  box-shadow:0 10px 24px rgba(0,0,0,0.22);
+  cursor:pointer;
+  box-shadow:0 12px 28px rgba(0,0,0,0.22);
   transition:0.25s;
-}
-
-.save{
-  background:linear-gradient(135deg,#15803d,#22c55e);
-}
-
-.delete{
-  background:linear-gradient(135deg,#b91c1c,#ef4444);
-}
-
-.print{
-  background:linear-gradient(135deg,#071f47,#1450b8);
-}
-
-.back{
-  background:linear-gradient(135deg,#374151,#6b7280);
-}
-
-.home{
-  background:linear-gradient(135deg,#0f766e,#14b8a6);
 }
 
 button:hover{
   transform:translateY(-3px) scale(1.03);
-  filter:brightness(1.05);
 }
+
+.save{background:linear-gradient(135deg,#15803d,#22c55e);}
+.delete{background:linear-gradient(135deg,#b91c1c,#ef4444);}
+.print{background:linear-gradient(135deg,#071f47,#1450b8);}
+.back{background:linear-gradient(135deg,#374151,#6b7280);}
+.home{background:linear-gradient(135deg,#0f766e,#14b8a6);}
 
 @media print{
   body{
@@ -221,40 +259,64 @@ button:hover{
     padding:10px;
   }
 
-  .container{
-    box-shadow:none;
-    padding:15px;
+  .header{
+    color:#071f47;
   }
 
-  button,
+  .container{
+    box-shadow:none;
+    padding:10px;
+  }
+
   .actions,
-  .badge,
-  .bowtie-strip{
+  .connector{
     display:none;
   }
 
-  .question-card{
-    box-shadow:none;
+  .bowtie-area{
+    grid-template-columns:1fr;
+  }
+
+  .prevention,
+  .recovery{
+    margin:0;
+  }
+
+  .top-event{
+    width:100%;
+    height:auto;
+    border-radius:22px;
+  }
+
+  .card{
     break-inside:avoid;
+    box-shadow:none;
   }
 }
 
-@media(max-width:800px){
-  body{
-    padding:20px;
+@media(max-width:1000px){
+  .bowtie-area{
+    grid-template-columns:1fr;
   }
 
-  .container{
-    padding:25px;
-    border-radius:24px;
+  .prevention,
+  .recovery{
+    margin:0;
   }
 
-  h1{
+  .top-event{
+    width:100%;
+    height:auto;
+    border-radius:28px;
+  }
+
+  .header h1{
     font-size:38px;
   }
 
-  .bowtie-strip{
-    grid-template-columns:1fr;
+  .report-box{
+    flex-direction:column;
+    align-items:flex-start;
   }
 }
 </style>
@@ -262,81 +324,168 @@ button:hover{
 
 <body>
 
+<div class="header">
+  <h1>Investigation - Bow-Tie</h1>
+  <p>Threats • Barriers • Top Event • Recovery • Consequences</p>
+</div>
+
 <div class="container">
 
-<div class="header">
-  <div class="badge">BOW-TIE ANALYSIS</div>
-  <h1>Investigation - Bow-Tie</h1>
-  <div class="subtitle">Threats, Barriers, Top Event and Consequences Analysis</div>
-</div>
-
 <div class="report-box">
-<b>Report ID:</b> <span id="reportId">Loading...</span>
-</div>
-
-<div class="bowtie-strip">
-  <div class="strip-card">
-    <strong>Threats</strong>
-    <span>What can cause the event?</span>
+  <div class="report-id">
+    Report ID: <span id="reportId">Loading...</span>
   </div>
-  <div class="strip-card">
-    <strong>Top Event</strong>
-    <span>Main unwanted event</span>
-  </div>
-  <div class="strip-card">
-    <strong>Consequences</strong>
-    <span>What can happen after?</span>
+  <div class="saved-info">
+    Saved at: <span id="savedAt">Not saved yet</span>
   </div>
 </div>
 
-<div class="question-card hazard">
-<div class="question-title">1. Hazard</div>
-<div class="description">Describe the hazardous condition or safety issue being analyzed.</div>
-<label>Analysis</label>
-<textarea id="hazard" placeholder="Describe the hazard..."></textarea>
+<div class="bowtie-area">
+
+<svg class="connector" viewBox="0 0 1500 850" preserveAspectRatio="none">
+  <path d="M420 180 C560 180 610 390 735 425" stroke="#2563eb" stroke-width="4" fill="none"/>
+  <path d="M420 340 C560 340 610 410 735 425" stroke="#2563eb" stroke-width="4" fill="none"/>
+  <path d="M420 500 C560 500 610 440 735 425" stroke="#2563eb" stroke-width="4" fill="none"/>
+  <path d="M765 425 C890 390 940 180 1080 180" stroke="#16a34a" stroke-width="4" fill="none"/>
+  <path d="M765 425 C890 410 940 340 1080 340" stroke="#16a34a" stroke-width="4" fill="none"/>
+  <path d="M765 425 C890 440 940 500 1080 500" stroke="#16a34a" stroke-width="4" fill="none"/>
+</svg>
+
+<div class="left-section">
+  <div class="side-title left-title">PREVENTION SIDE - BEFORE THE EVENT</div>
+
+  <div class="left-column">
+
+    <div class="card threat">
+      <h3>Threat 1</h3>
+      <p>What can cause the top event?</p>
+      <textarea id="threat1" placeholder="Describe threat 1..."></textarea>
+    </div>
+
+    <div class="card prevention">
+      <h3>Preventive Barrier 1</h3>
+      <p>Control that prevents threat 1.</p>
+      <textarea id="preventiveBarrier1" placeholder="Describe preventive barrier 1..."></textarea>
+    </div>
+
+    <div class="card threat">
+      <h3>Threat 2</h3>
+      <p>What can cause the top event?</p>
+      <textarea id="threat2" placeholder="Describe threat 2..."></textarea>
+    </div>
+
+    <div class="card prevention">
+      <h3>Preventive Barrier 2</h3>
+      <p>Control that prevents threat 2.</p>
+      <textarea id="preventiveBarrier2" placeholder="Describe preventive barrier 2..."></textarea>
+    </div>
+
+    <div class="card threat">
+      <h3>Threat 3</h3>
+      <p>What can cause the top event?</p>
+      <textarea id="threat3" placeholder="Describe threat 3..."></textarea>
+    </div>
+
+    <div class="card prevention">
+      <h3>Preventive Barrier 3</h3>
+      <p>Control that prevents threat 3.</p>
+      <textarea id="preventiveBarrier3" placeholder="Describe preventive barrier 3..."></textarea>
+    </div>
+
+    <div class="card escalation">
+      <h3>Escalation Factor</h3>
+      <p>Condition that can weaken or defeat barriers.</p>
+      <textarea id="escalationFactorLeft" placeholder="Describe escalation factor..."></textarea>
+    </div>
+
+    <div class="card prevention">
+      <h3>Escalation Factor Barrier</h3>
+      <p>Control for the escalation factor.</p>
+      <textarea id="escalationBarrierLeft" placeholder="Describe EF barrier..."></textarea>
+    </div>
+
+  </div>
 </div>
 
-<div class="question-card threats">
-<div class="question-title">2. Threats / Causes</div>
-<div class="description">Describe what could cause the top event to happen.</div>
-<label>Analysis</label>
-<textarea id="threats" placeholder="Describe threats or causes..."></textarea>
+<div class="center-column">
+
+  <div class="card hazard-card">
+    <h3>Hazard</h3>
+    <p>Hazardous condition or unsafe situation.</p>
+    <textarea id="hazard" placeholder="Describe the hazard..."></textarea>
+  </div>
+
+  <div class="top-event">
+    <h2>Top Event</h2>
+    <textarea id="topEvent" placeholder="Describe the central unwanted event..."></textarea>
+  </div>
+
 </div>
 
-<div class="question-card prevention">
-<div class="question-title">3. Preventive Barriers</div>
-<div class="description">Describe controls that prevent the event from occurring.</div>
-<label>Analysis</label>
-<textarea id="preventiveBarriers" placeholder="Describe preventive barriers..."></textarea>
+<div class="right-section">
+  <div class="side-title right-title">RECOVERY SIDE - AFTER THE EVENT</div>
+
+  <div class="right-column">
+
+    <div class="card recovery">
+      <h3>Recovery Barrier 1</h3>
+      <p>Control that reduces the impact.</p>
+      <textarea id="recoveryBarrier1" placeholder="Describe recovery barrier 1..."></textarea>
+    </div>
+
+    <div class="card consequence">
+      <h3>Consequence 1</h3>
+      <p>Possible outcome or impact.</p>
+      <textarea id="consequence1" placeholder="Describe consequence 1..."></textarea>
+    </div>
+
+    <div class="card recovery">
+      <h3>Recovery Barrier 2</h3>
+      <p>Control that reduces the impact.</p>
+      <textarea id="recoveryBarrier2" placeholder="Describe recovery barrier 2..."></textarea>
+    </div>
+
+    <div class="card consequence">
+      <h3>Consequence 2</h3>
+      <p>Possible outcome or impact.</p>
+      <textarea id="consequence2" placeholder="Describe consequence 2..."></textarea>
+    </div>
+
+    <div class="card recovery">
+      <h3>Recovery Barrier 3</h3>
+      <p>Control that reduces the impact.</p>
+      <textarea id="recoveryBarrier3" placeholder="Describe recovery barrier 3..."></textarea>
+    </div>
+
+    <div class="card consequence">
+      <h3>Consequence 3</h3>
+      <p>Possible outcome or impact.</p>
+      <textarea id="consequence3" placeholder="Describe consequence 3..."></textarea>
+    </div>
+
+    <div class="card recovery">
+      <h3>Escalation Factor Barrier</h3>
+      <p>Control for recovery-side escalation factor.</p>
+      <textarea id="escalationBarrierRight" placeholder="Describe EF barrier..."></textarea>
+    </div>
+
+    <div class="card escalation">
+      <h3>Escalation Factor</h3>
+      <p>Condition that can worsen the consequence.</p>
+      <textarea id="escalationFactorRight" placeholder="Describe escalation factor..."></textarea>
+    </div>
+
+  </div>
 </div>
 
-<div class="question-card event">
-<div class="question-title">4. Top Event</div>
-<div class="description">Describe the central unwanted event.</div>
-<label>Analysis</label>
-<textarea id="topEvent" placeholder="Describe the top event..."></textarea>
-</div>
-
-<div class="question-card recovery">
-<div class="question-title">5. Recovery / Mitigation Barriers</div>
-<div class="description">Describe controls that reduce the impact after the event occurs.</div>
-<label>Analysis</label>
-<textarea id="recoveryBarriers" placeholder="Describe recovery or mitigation barriers..."></textarea>
-</div>
-
-<div class="question-card consequences">
-<div class="question-title">6. Consequences</div>
-<div class="description">Describe possible outcomes or safety impacts.</div>
-<label>Analysis</label>
-<textarea id="consequences" placeholder="Describe consequences..."></textarea>
 </div>
 
 <div class="actions">
-<button class="save" onclick="saveInvestigation()">💾 Save</button>
-<button class="delete" onclick="deleteInvestigation()">🗑 Delete</button>
-<button class="print" onclick="window.print()">🖨 Print</button>
-<button class="back" onclick="goBack()">⬅ Back to SMS Report Detail</button>
-<button class="home" onclick="goHome()">🏠 Home</button>
+  <button class="save" onclick="saveInvestigation()">💾 Save</button>
+  <button class="delete" onclick="deleteInvestigation()">🗑 Delete</button>
+  <button class="print" onclick="window.print()">🖨 Print</button>
+  <button class="back" onclick="goBack()">⬅ Back to SMS Report Detail</button>
+  <button class="home" onclick="goHome()">🏠 Home</button>
 </div>
 
 </div>
@@ -367,6 +516,10 @@ if(!key){
   alert("No report key found.");
 }
 
+function setValue(id,value){
+  document.getElementById(id).value = value || "";
+}
+
 get(ref(db,"smsReports/"+key)).then(snapshot=>{
   if(snapshot.exists()){
     const d = snapshot.val();
@@ -376,12 +529,31 @@ get(ref(db,"smsReports/"+key)).then(snapshot=>{
     if(d.investigationBowTie){
       const x = d.investigationBowTie;
 
-      hazard.value = x.hazard || "";
-      threats.value = x.threats || "";
-      preventiveBarriers.value = x.preventiveBarriers || "";
-      topEvent.value = x.topEvent || "";
-      recoveryBarriers.value = x.recoveryBarriers || "";
-      consequences.value = x.consequences || "";
+      setValue("hazard",x.hazard);
+      setValue("topEvent",x.topEvent);
+
+      setValue("threat1",x.threat1);
+      setValue("threat2",x.threat2);
+      setValue("threat3",x.threat3);
+
+      setValue("preventiveBarrier1",x.preventiveBarrier1);
+      setValue("preventiveBarrier2",x.preventiveBarrier2);
+      setValue("preventiveBarrier3",x.preventiveBarrier3);
+
+      setValue("recoveryBarrier1",x.recoveryBarrier1);
+      setValue("recoveryBarrier2",x.recoveryBarrier2);
+      setValue("recoveryBarrier3",x.recoveryBarrier3);
+
+      setValue("consequence1",x.consequence1);
+      setValue("consequence2",x.consequence2);
+      setValue("consequence3",x.consequence3);
+
+      setValue("escalationFactorLeft",x.escalationFactorLeft);
+      setValue("escalationBarrierLeft",x.escalationBarrierLeft);
+      setValue("escalationFactorRight",x.escalationFactorRight);
+      setValue("escalationBarrierRight",x.escalationBarrierRight);
+
+      savedAt.innerText = x.savedAt || "Saved";
     }
   }
 });
@@ -389,15 +561,36 @@ get(ref(db,"smsReports/"+key)).then(snapshot=>{
 window.saveInvestigation = function(){
 
   update(ref(db,"smsReports/"+key+"/investigationBowTie"),{
+
     hazard:hazard.value,
-    threats:threats.value,
-    preventiveBarriers:preventiveBarriers.value,
     topEvent:topEvent.value,
-    recoveryBarriers:recoveryBarriers.value,
-    consequences:consequences.value,
+
+    threat1:threat1.value,
+    threat2:threat2.value,
+    threat3:threat3.value,
+
+    preventiveBarrier1:preventiveBarrier1.value,
+    preventiveBarrier2:preventiveBarrier2.value,
+    preventiveBarrier3:preventiveBarrier3.value,
+
+    recoveryBarrier1:recoveryBarrier1.value,
+    recoveryBarrier2:recoveryBarrier2.value,
+    recoveryBarrier3:recoveryBarrier3.value,
+
+    consequence1:consequence1.value,
+    consequence2:consequence2.value,
+    consequence3:consequence3.value,
+
+    escalationFactorLeft:escalationFactorLeft.value,
+    escalationBarrierLeft:escalationBarrierLeft.value,
+    escalationFactorRight:escalationFactorRight.value,
+    escalationBarrierRight:escalationBarrierRight.value,
+
     status:"Saved",
     savedAt:new Date().toISOString()
+
   }).then(()=>{
+    savedAt.innerText = new Date().toISOString();
     alert("Bow-Tie Investigation saved successfully.");
   });
 
@@ -408,12 +601,19 @@ window.deleteInvestigation = function(){
   if(confirm("Do you want to delete this Bow-Tie investigation?")){
     remove(ref(db,"smsReports/"+key+"/investigationBowTie")).then(()=>{
 
-      hazard.value = "";
-      threats.value = "";
-      preventiveBarriers.value = "";
-      topEvent.value = "";
-      recoveryBarriers.value = "";
-      consequences.value = "";
+      [
+        "hazard","topEvent",
+        "threat1","threat2","threat3",
+        "preventiveBarrier1","preventiveBarrier2","preventiveBarrier3",
+        "recoveryBarrier1","recoveryBarrier2","recoveryBarrier3",
+        "consequence1","consequence2","consequence3",
+        "escalationFactorLeft","escalationBarrierLeft",
+        "escalationFactorRight","escalationBarrierRight"
+      ].forEach(id=>{
+        document.getElementById(id).value = "";
+      });
+
+      savedAt.innerText = "Not saved yet";
 
       alert("Bow-Tie Investigation deleted.");
     });
