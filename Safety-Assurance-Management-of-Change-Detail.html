@@ -2,287 +2,258 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MOC Database</title>
+<title>MOC Details</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-  font-family:'Segoe UI', Arial, sans-serif;
-  min-height:100vh;
-  background:
-  radial-gradient(circle at top left, rgba(255,255,255,0.18), transparent 28%),
-  linear-gradient(135deg,#061b3d,#082b66,#1450b8);
-  padding:35px;
+  font-family:Arial,sans-serif;
+  background:#f4f7fb;
+  color:#111;
+  padding:25px;
 }
 
 .container{
-  max-width:1250px;
+  max-width:1350px;
   margin:auto;
-  background:rgba(255,255,255,0.97);
-  padding:45px;
-  border-radius:32px;
-  box-shadow:0 25px 65px rgba(0,0,0,0.35);
+  background:white;
+  border-radius:24px;
+  padding:30px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
 }
 
-h1{
+.header{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+  color:white;
+  padding:35px;
+  border-radius:22px;
   text-align:center;
+  margin-bottom:25px;
+}
+
+.header h1{font-size:42px;margin-bottom:8px;}
+.header p{font-size:17px;color:#dbeafe;}
+
+.section{
+  margin-top:25px;
+  border:1px solid #d8e1ef;
+  border-radius:18px;
+  overflow:hidden;
+  background:white;
+}
+
+.section-title{
+  background:#004080;
+  color:white;
+  padding:14px 18px;
+  font-size:21px;
+  font-weight:bold;
+}
+
+.section-body{padding:22px;}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:18px;
+}
+
+.field label{
+  display:block;
+  color:#004080;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:11px;
+  border:1px solid #b8c7da;
+  border-radius:10px;
+  font-size:15px;
+  background:white;
+}
+
+textarea{min-height:95px;resize:vertical;}
+
+input:disabled,
+select:disabled,
+textarea:disabled{
+  background:#f8fbff;
+  color:#111;
+  font-weight:600;
+}
+
+.risk-area{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+}
+
+.matrix-box{
+  background:#f8fbff;
+  border:1px solid #d8e1ef;
+  border-radius:18px;
+  padding:18px;
+}
+
+.matrix-box h3{
   color:#071f47;
-  font-size:54px;
-  margin-bottom:8px;
+  margin-bottom:12px;
+  font-size:22px;
 }
 
-.description{
+.matrix{
+  width:100%;
+  border-collapse:collapse;
   text-align:center;
-  color:#555;
-  font-size:18px;
-  margin-bottom:28px;
 }
 
-.top-actions{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
+.matrix th,
+.matrix td{
+  border:1px solid #d8e1ef;
+  padding:12px;
+  font-weight:bold;
+}
+
+.matrix th{
+  background:#071f47;
+  color:white;
+}
+
+.matrix td{
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.matrix td:hover{
+  transform:scale(1.05);
+  outline:3px solid #071f47;
+}
+
+.low{background:#2f9144;color:white;}
+.medium{background:#ffd966;color:#111;}
+.high{background:#ff9800;color:#111;}
+.extreme{background:#ff1a0a;color:white;}
+
+.selected-risk{
+  outline:4px solid #071f47 !important;
+  transform:scale(1.06);
+}
+
+.risk-result{
+  margin-top:15px;
+  padding:15px;
+  border-radius:14px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  background:#eef4ff;
+  color:#071f47;
+  border:1px solid #c8d8f0;
+}
+
+.action-row{
+  display:grid;
+  grid-template-columns:70px 2fr 1fr 1fr 1fr;
   gap:14px;
-  margin-bottom:22px;
+  align-items:start;
+  background:#f8fbff;
+  border:1px solid #d8e1ef;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:16px;
+}
+
+.action-number{
+  background:#004080;
+  color:white;
+  font-weight:bold;
+  border-radius:12px;
+  padding:14px;
+  text-align:center;
+}
+
+.status-box{
+  margin-top:25px;
+  padding:20px;
+  border-radius:18px;
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+  border:2px solid #d8e1ef;
+}
+
+.status-open{
+  background:#fff7ed;
+  color:#c2410c;
+  border-color:#fb923c;
+}
+
+.status-closed{
+  background:#e8f5e9;
+  color:#14532d;
+  border-color:#2f9144;
+}
+
+.btn-area{
+  text-align:center;
+  margin-top:30px;
 }
 
 .btn{
   border:none;
+  padding:15px 28px;
+  border-radius:12px;
   color:white;
-  padding:13px 25px;
-  border-radius:14px;
-  font-size:15px;
+  font-size:16px;
   font-weight:bold;
   cursor:pointer;
   margin:6px;
-  transition:0.25s;
 }
 
-.btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 18px rgba(0,0,0,0.25);
-}
+.edit-btn{background:#9333ea;}
+.save-btn{background:#2f9144;display:none;}
+.print-btn{background:#004aad;}
+.back-btn{background:#c40000;}
+.moc-btn{background:#004080;}
+.home-btn{background:#0b2a66;}
 
-.filter-btn{
-  background:linear-gradient(135deg,#7c3aed,#a855f7);
-}
-
-.excel-btn{
-  background:linear-gradient(135deg,#0b8a3a,#22c55e);
-}
-
-.back-btn{
-  background:linear-gradient(135deg,#c40000,#ff2b2b);
-}
-
-.home-btn{
-  background:linear-gradient(135deg,#071f47,#0b2a66);
-}
-
-.filter-panel{
-  background:#f8fbff;
-  border:1px solid #c8d8f0;
-  padding:20px;
-  border-radius:18px;
-  margin-bottom:28px;
-  display:grid;
-  grid-template-columns:1.2fr 0.8fr 1fr 1fr;
-  gap:14px;
-}
-
-.filter-panel input,
-.filter-panel select{
-  width:100%;
-  padding:14px;
-  border:1px solid #b8c7da;
-  border-radius:12px;
-  font-size:15px;
-  background:white;
-}
-
-.counter{
+.saved-box{
+  margin-top:25px;
+  background:#e8f5e9;
+  color:#14532d;
+  border:1px solid #2f9144;
+  padding:16px;
+  border-radius:14px;
+  display:none;
+  font-weight:bold;
   text-align:center;
-  color:#071f47;
-  font-weight:bold;
-  margin-bottom:18px;
 }
 
-.report-card{
-  background:white;
-  border-radius:24px;
-  padding:24px;
-  margin-bottom:22px;
-  box-shadow:0 10px 28px rgba(0,0,0,0.12);
-  border-left:9px solid #071f47;
-  transition:0.25s;
-}
-
-.report-card:hover{
-  transform:scale(1.01);
-}
-
-.card-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:20px;
-  flex-wrap:wrap;
-  margin-bottom:18px;
-}
-
-.event-title{
-  font-size:25px;
-  font-weight:800;
-  color:#071f47;
-  margin-bottom:6px;
-}
-
-.meta{
-  color:#555;
-  font-size:15px;
-  line-height:1.7;
-}
-
-.status{
-  display:inline-block;
-  padding:7px 16px;
-  border-radius:999px;
-  color:white;
-  font-size:13px;
-  font-weight:bold;
-}
-
-.status.open{
-  background:#0b8a3a;
-}
-
-.status.closed{
-  background:#555;
-}
-
-.status.in-progress{
-  background:#1450b8;
-}
-
-.status.pending-corrective-action{
-  background:#ff9800;
-}
-
-.details-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:14px;
-  margin-top:18px;
-}
-
-.detail-box{
-  background:#f4f7fb;
-  padding:14px;
-  border-radius:16px;
-  border:1px solid #dce3ef;
-}
-
-.detail-label{
-  font-size:12px;
-  color:#777;
-  font-weight:bold;
-  text-transform:uppercase;
-  margin-bottom:6px;
-}
-
-.detail-value{
-  font-size:15px;
-  color:#071f47;
-  font-weight:700;
-  word-break:break-word;
-}
-
-.moc-id-input{
-  width:100%;
-  padding:11px;
-  border:1px solid #cbd5e1;
-  border-radius:12px;
-  font-size:15px;
-  font-weight:bold;
-  color:#071f47;
-}
-
-.small-note{
-  font-size:12px;
-  color:#777;
-  margin-top:6px;
-}
-
-.actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:22px;
-  align-items:center;
-}
-
-.open-btn{
-  background:linear-gradient(135deg,#004aad,#1473e6);
-}
-
-.save-btn{
-  background:linear-gradient(135deg,#006b3c,#00a65a);
-}
-
-.status-btn{
-  background:linear-gradient(135deg,#6b21a8,#9333ea);
-}
-
-.delete-btn{
-  background:linear-gradient(135deg,#d00000,#ff1f1f);
-  width:48px;
-  height:48px;
-  border-radius:50%;
-  padding:0;
-  font-size:20px;
-}
-
-.separator-buttons{
+.loading{
   text-align:center;
-  margin:28px 0;
-  padding:18px;
-  background:#eef4ff;
-  border-radius:22px;
-  border:1px dashed #9bb7e0;
+  padding:30px;
+  color:#666;
+  font-size:18px;
+  font-weight:bold;
 }
 
-.no-data{
-  text-align:center;
-  color:#777;
-  font-size:19px;
-  margin-top:35px;
-  background:#f4f6f8;
-  padding:35px;
-  border-radius:22px;
-}
-
-@media(max-width:900px){
-  h1{
-    font-size:40px;
-  }
-
-  .container{
-    padding:25px;
-  }
-
-  .filter-panel{
+@media(max-width:1000px){
+  .risk-area,
+  .action-row{
     grid-template-columns:1fr;
   }
 
-  .event-title{
-    font-size:21px;
-  }
+  .header h1{font-size:32px;}
+}
+
+@media print{
+  body{background:white;padding:0;}
+  .container{box-shadow:none;border-radius:0;}
+  .btn-area,.saved-box{display:none!important;}
 }
 </style>
 </head>
@@ -291,56 +262,319 @@ h1{
 
 <div class="container">
 
-  <h1>MOC Database</h1>
+<div class="header">
+  <h1>Safety Assurance - Management of Change</h1>
+  <p>Full Management of Change report details loaded from Firebase.</p>
+</div>
 
-  <div class="description">
-    Stored Management of Change Safety Assurance Reports
+<div id="loadingBox" class="loading">Loading MOC Report...</div>
+
+<div id="reportForm" style="display:none;">
+
+<div class="section">
+  <div class="section-title">1. Change Information</div>
+  <div class="section-body">
+
+    <div class="grid">
+      <div class="field">
+        <label>MOC Report ID</label>
+        <input id="mocId">
+      </div>
+
+      <div class="field">
+        <label>Firebase ID</label>
+        <input id="firebaseId" disabled>
+      </div>
+
+      <div class="field">
+        <label>Change Title *</label>
+        <input id="changeTitle">
+      </div>
+
+      <div class="field">
+        <label>Requested By</label>
+        <input id="requestedBy">
+      </div>
+
+      <div class="field">
+        <label>Department / Area</label>
+        <input id="department">
+      </div>
+
+      <div class="field">
+        <label>Change Owner</label>
+        <input id="changeOwner">
+      </div>
+
+      <div class="field">
+        <label>Change Date</label>
+        <input type="date" id="changeDate">
+      </div>
+
+      <div class="field">
+        <label>Target Implementation Date</label>
+        <input type="date" id="targetDate">
+      </div>
+
+      <div class="field">
+        <label>Change Type</label>
+        <select id="changeType">
+          <option>Process Change</option>
+          <option>Procedure Change</option>
+          <option>Equipment / Tooling Change</option>
+          <option>Facility Change</option>
+          <option>Organizational Change</option>
+          <option>Personnel / Staffing Change</option>
+          <option>Operational Change</option>
+          <option>Regulatory / Customer Requirement Change</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Change Description</label>
+      <textarea id="changeDescription"></textarea>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Reason for Change</label>
+      <textarea id="reasonForChange"></textarea>
+    </div>
+
   </div>
+</div>
 
-  <div class="top-actions">
-    <button class="btn filter-btn" onclick="toggleFilters()">🔎 Filters</button>
-    <button class="btn excel-btn" onclick="downloadExcel()">📥 Download Excel</button>
-    <button class="btn back-btn" onclick="window.location.href='Safety-Assurance-Management-of-Change.html'">← Back to MOC</button>
-    <button class="btn home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+<div class="section">
+  <div class="section-title">2. Areas Affected</div>
+  <div class="section-body">
+    <div class="grid">
+      <div class="field">
+        <label>Aircraft / Fleet / Customer Affected</label>
+        <input id="aircraftCustomer">
+      </div>
+
+      <div class="field">
+        <label>Location Affected</label>
+        <input id="location">
+      </div>
+
+      <div class="field">
+        <label>Personnel Affected</label>
+        <input id="personnelAffected">
+      </div>
+
+      <div class="field">
+        <label>Documentation Affected</label>
+        <input id="documentationAffected">
+      </div>
+    </div>
   </div>
+</div>
 
-  <div id="filterPanel" class="filter-panel">
-    <input 
-      id="searchInput" 
-      placeholder="Search ID, title, department, owner, risk, status..."
-      oninput="applyFilter()"
-    >
+<div class="section">
+  <div class="section-title">3. Initial Risk Assessment</div>
+  <div class="section-body">
 
-    <input 
-      type="date" 
-      id="dateFilter"
-      onchange="applyFilter()"
-    >
+    <div class="risk-area">
+      <div class="matrix-box">
+        <h3>Initial Risk Matrix</h3>
+        <table class="matrix" id="initialMatrix"></table>
+        <div id="initialRiskResult" class="risk-result">Initial Risk: Not selected</div>
+      </div>
 
-    <select id="statusFilter" onchange="applyFilter()">
-      <option value="">All Status</option>
-      <option value="Open">Open</option>
-      <option value="In Progress">In Progress</option>
-      <option value="Pending Corrective Action">Pending Corrective Action</option>
-      <option value="Closed">Closed</option>
-    </select>
+      <div>
+        <div class="field">
+          <label>Initial Risk Description</label>
+          <textarea id="initialRiskDescription"></textarea>
+        </div>
 
-    <select id="riskFilter" onchange="applyFilter()">
-      <option value="">All Risk Levels</option>
-      <option value="Low">Low</option>
-      <option value="Medium">Medium</option>
-      <option value="High">High</option>
-      <option value="Extreme">Extreme</option>
-    </select>
+        <br>
+
+        <div class="field">
+          <label>Existing Controls</label>
+          <textarea id="existingControls"></textarea>
+        </div>
+      </div>
+    </div>
+
   </div>
+</div>
 
-  <div id="counter" class="counter"></div>
+<div class="section">
+  <div class="section-title">4. Action Plan / Required Controls</div>
+  <div class="section-body">
 
-  <div id="mocList"></div>
+    <div class="action-row">
+      <div class="action-number">1</div>
+      <div class="field">
+        <label>Action / Control</label>
+        <textarea id="action1"></textarea>
+      </div>
+      <div class="field">
+        <label>Responsible Person</label>
+        <input id="responsible1">
+      </div>
+      <div class="field">
+        <label>Due Date</label>
+        <input type="date" id="dueDate1">
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="actionStatus1">
+          <option>Open</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+          <option>Verified</option>
+        </select>
+      </div>
+    </div>
 
-  <div id="noData" class="no-data" style="display:none;">
-    No MOC reports found.
+    <div class="action-row">
+      <div class="action-number">2</div>
+      <div class="field">
+        <label>Action / Control</label>
+        <textarea id="action2"></textarea>
+      </div>
+      <div class="field">
+        <label>Responsible Person</label>
+        <input id="responsible2">
+      </div>
+      <div class="field">
+        <label>Due Date</label>
+        <input type="date" id="dueDate2">
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="actionStatus2">
+          <option>Open</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+          <option>Verified</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <div class="action-number">3</div>
+      <div class="field">
+        <label>Action / Control</label>
+        <textarea id="action3"></textarea>
+      </div>
+      <div class="field">
+        <label>Responsible Person</label>
+        <input id="responsible3">
+      </div>
+      <div class="field">
+        <label>Due Date</label>
+        <input type="date" id="dueDate3">
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="actionStatus3">
+          <option>Open</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+          <option>Verified</option>
+        </select>
+      </div>
+    </div>
+
   </div>
+</div>
+
+<div class="section">
+  <div class="section-title">5. Residual Risk Assessment</div>
+  <div class="section-body">
+
+    <div class="risk-area">
+      <div class="matrix-box">
+        <h3>Residual Risk Matrix</h3>
+        <table class="matrix" id="residualMatrix"></table>
+        <div id="residualRiskResult" class="risk-result">Residual Risk: Not selected</div>
+      </div>
+
+      <div>
+        <div class="field">
+          <label>Residual Risk Justification</label>
+          <textarea id="residualRiskJustification"></textarea>
+        </div>
+
+        <br>
+
+        <div class="field">
+          <label>Implementation Verification Method</label>
+          <textarea id="verificationMethod"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">6. Approval</div>
+  <div class="section-body">
+
+    <div class="grid">
+      <div class="field">
+        <label>Reviewed By</label>
+        <input id="reviewedBy">
+      </div>
+
+      <div class="field">
+        <label>Approved By</label>
+        <input id="approvedBy">
+      </div>
+
+      <div class="field">
+        <label>Approval Date</label>
+        <input type="date" id="approvalDate">
+      </div>
+
+      <div class="field">
+        <label>Final Decision</label>
+        <select id="finalDecision">
+          <option>Pending Review</option>
+          <option>Approved</option>
+          <option>Approved with Controls</option>
+          <option>Rejected</option>
+        </select>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Approval Comments</label>
+      <textarea id="approvalComments"></textarea>
+    </div>
+
+  </div>
+</div>
+
+<div id="reportStatusBox" class="status-box">
+  Report Status: Loading...
+</div>
+
+<div class="btn-area">
+  <button id="editBtn" class="btn edit-btn" onclick="enableEdit()">Edit Report</button>
+  <button id="saveBtn" class="btn save-btn" onclick="saveChanges()">Save Changes</button>
+  <button class="btn print-btn" onclick="window.print()">Print</button>
+  <button class="btn back-btn" onclick="window.location.href='Safety-Assurance-Management-of-Change-Database.html'">Back to MOC Database</button>
+  <button class="btn moc-btn" onclick="window.location.href='Safety-Assurance-Management-of-Change.html'">Back to MOC</button>
+  <button class="btn home-btn" onclick="window.location.href='index.html'">Home</button>
+</div>
+
+<div id="savedBox" class="saved-box">
+  MOC Report updated successfully.
+</div>
+
+</div>
 
 </div>
 
@@ -351,8 +585,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import {
   getDatabase,
   ref,
-  onValue,
-  remove,
+  get,
   update
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
@@ -369,388 +602,303 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-const mocList = document.getElementById("mocList");
-const noData = document.getElementById("noData");
-const counter = document.getElementById("counter");
+const params = new URLSearchParams(window.location.search);
+const reportId = params.get("id");
 
-let allReports = [];
-let filteredReports = [];
+let currentData = {};
+let initialRisk = null;
+let residualRisk = null;
 
-function clean(value){
-  return String(value || "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+function riskLevel(score){
+  if(score <= 4) return "Low";
+  if(score <= 9) return "Medium";
+  if(score <= 16) return "High";
+  return "Extreme";
 }
 
-function statusClass(status){
-  return String(status || "Open")
-    .toLowerCase()
-    .replaceAll(" ","-");
-}
+function buildMatrix(type){
+  const matrix = document.getElementById(type + "Matrix");
 
-function normalizeDate(value){
-  if(!value) return "";
-  const d = new Date(value);
-  if(isNaN(d)) return "";
-  return d.toISOString().split("T")[0];
-}
+  matrix.innerHTML = `
+    <tr>
+      <th>Severity ↓ / Probability →</th>
+      <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+    </tr>
+  `;
 
-function renderReports(reports){
+  for(let severity = 5; severity >= 1; severity--){
+    let row = `<tr><th>${severity}</th>`;
 
-  mocList.innerHTML = "";
+    for(let probability = 1; probability <= 5; probability++){
+      const score = severity * probability;
+      const level = riskLevel(score).toLowerCase();
 
-  if(reports.length === 0){
-    noData.style.display = "block";
-    counter.innerHTML = "0 reports found";
-    return;
-  }
-
-  noData.style.display = "none";
-  counter.innerHTML = reports.length + " report(s) found";
-
-  reports.forEach((report, index) => {
-
-    const firebaseId = report.firebaseId;
-
-    const mocVisibleId =
-      report.mocId ||
-      report.customId ||
-      firebaseId;
-
-    const title =
-      report.changeTitle ||
-      "Untitled MOC Report";
-
-    const department =
-      report.department ||
-      "N/A";
-
-    const owner =
-      report.changeOwner ||
-      "N/A";
-
-    const changeType =
-      report.changeType ||
-      "N/A";
-
-    const status =
-      report.status ||
-      "Open";
-
-    const date =
-      report.changeDate ||
-      report.createdAt ||
-      "N/A";
-
-    const initialRisk =
-      report.initialRisk?.level ||
-      "N/A";
-
-    const initialScore =
-      report.initialRisk?.score ??
-      "N/A";
-
-    const residualRisk =
-      report.residualRisk?.level ||
-      "N/A";
-
-    const residualScore =
-      report.residualRisk?.score ??
-      "N/A";
-
-    const card = document.createElement("div");
-    card.className = "report-card";
-
-    card.innerHTML = `
-      <div class="card-header">
-        <div>
-          <div class="event-title">
-            ${clean(mocVisibleId)} | ${clean(title)}
-          </div>
-
-          <div class="meta">
-            <strong>Date:</strong> ${clean(date)}<br>
-            <strong>Department:</strong> ${clean(department)} | 
-            <strong>Owner:</strong> ${clean(owner)}<br>
-            <strong>Initial Risk:</strong> ${clean(initialRisk)} (${clean(initialScore)}) | 
-            <strong>Residual Risk:</strong> ${clean(residualRisk)} (${clean(residualScore)})
-          </div>
-        </div>
-
-        <span class="status ${statusClass(status)}">
-          ${clean(status)}
-        </span>
-      </div>
-
-      <div class="details-grid">
-
-        <div class="detail-box">
-          <div class="detail-label">Editable MOC ID</div>
-          <input 
-            class="moc-id-input" 
-            id="mocId_${clean(firebaseId)}" 
-            value="${clean(mocVisibleId)}"
-          >
-          <div class="small-note">
-            You can write your own MOC ID here.
-          </div>
-        </div>
-
-        <div class="detail-box">
-          <div class="detail-label">Change Title</div>
-          <div class="detail-value">${clean(title)}</div>
-        </div>
-
-        <div class="detail-box">
-          <div class="detail-label">Change Type</div>
-          <div class="detail-value">${clean(changeType)}</div>
-        </div>
-
-        <div class="detail-box">
-          <div class="detail-label">Final Decision</div>
-          <div class="detail-value">${clean(report.finalDecision || "N/A")}</div>
-        </div>
-
-      </div>
-
-      <div class="actions">
-
-        <button class="btn open-btn" onclick="openReport('${clean(firebaseId)}')">
-          Open Report
-        </button>
-
-        <button class="btn save-btn" onclick="saveMOCId('${clean(firebaseId)}')">
-          Save MOC ID
-        </button>
-
-        <button class="btn status-btn" onclick="toggleStatus('${clean(firebaseId)}', '${clean(status)}')">
-          ${status === "Open" ? "Close Report" : "Open Report"}
-        </button>
-
-        <button class="btn delete-btn" onclick="deleteReport('${clean(firebaseId)}')">
-          🗑
-        </button>
-
-      </div>
-    `;
-
-    mocList.appendChild(card);
-
-    if((index + 1) % 3 === 0){
-      const separator = document.createElement("div");
-      separator.className = "separator-buttons";
-
-      separator.innerHTML = `
-        <button class="btn back-btn" onclick="window.location.href='Safety-Assurance-Management-of-Change.html'">
-          Back to MOC
-        </button>
-
-        <button class="btn home-btn" onclick="window.location.href='index.html'">
-          Home
-        </button>
+      row += `
+        <td class="${level}" data-type="${type}" data-severity="${severity}" data-probability="${probability}" onclick="selectRisk('${type}',${severity},${probability},this)">
+          ${score}
+        </td>
       `;
-
-      mocList.appendChild(separator);
     }
 
+    row += `</tr>`;
+    matrix.innerHTML += row;
+  }
+}
+
+window.selectRisk = function(type,severity,probability,element){
+  const score = severity * probability;
+  const level = riskLevel(score);
+
+  if(type === "initial"){
+    initialRisk = {severity, probability, score, level};
+
+    document.getElementById("initialRiskResult").innerHTML =
+      `Initial Risk: ${level} | Severity ${severity} x Probability ${probability} = ${score}`;
+
+    document.querySelectorAll("#initialMatrix td").forEach(td => td.classList.remove("selected-risk"));
+    element.classList.add("selected-risk");
+  }
+
+  if(type === "residual"){
+    residualRisk = {severity, probability, score, level};
+
+    document.getElementById("residualRiskResult").innerHTML =
+      `Residual Risk: ${level} | Severity ${severity} x Probability ${probability} = ${score}`;
+
+    document.querySelectorAll("#residualMatrix td").forEach(td => td.classList.remove("selected-risk"));
+    element.classList.add("selected-risk");
+  }
+};
+
+function selectSavedRisk(type,risk){
+  if(!risk) return;
+
+  const selector =
+    type === "initial"
+    ? "#initialMatrix td"
+    : "#residualMatrix td";
+
+  document.querySelectorAll(selector).forEach(td => {
+    if(
+      Number(td.dataset.severity) === Number(risk.severity) &&
+      Number(td.dataset.probability) === Number(risk.probability)
+    ){
+      window.selectRisk(type, risk.severity, risk.probability, td);
+    }
   });
 }
 
-window.applyFilter = function(){
+function setValue(id,value){
+  const el = document.getElementById(id);
+  if(el){
+    el.value = value || "";
+  }
+}
 
-  const searchText = document.getElementById("searchInput").value.toLowerCase().trim();
-  const dateFilter = document.getElementById("dateFilter").value;
-  const statusFilter = document.getElementById("statusFilter").value;
-  const riskFilter = document.getElementById("riskFilter").value;
+function collectActions(){
+  return [
+    {
+      action:document.getElementById("action1").value.trim(),
+      responsible:document.getElementById("responsible1").value.trim(),
+      dueDate:document.getElementById("dueDate1").value,
+      status:document.getElementById("actionStatus1").value
+    },
+    {
+      action:document.getElementById("action2").value.trim(),
+      responsible:document.getElementById("responsible2").value.trim(),
+      dueDate:document.getElementById("dueDate2").value,
+      status:document.getElementById("actionStatus2").value
+    },
+    {
+      action:document.getElementById("action3").value.trim(),
+      responsible:document.getElementById("responsible3").value.trim(),
+      dueDate:document.getElementById("dueDate3").value,
+      status:document.getElementById("actionStatus3").value
+    }
+  ];
+}
 
-  filteredReports = allReports.filter(report => {
+function updateStatusBox(){
+  const box = document.getElementById("reportStatusBox");
+  const status = currentData.status || "Open";
 
-    const searchArea = `
-      ${report.firebaseId || ""}
-      ${report.mocId || ""}
-      ${report.customId || ""}
-      ${report.changeTitle || ""}
-      ${report.requestedBy || ""}
-      ${report.department || ""}
-      ${report.changeOwner || ""}
-      ${report.changeDate || ""}
-      ${report.targetDate || ""}
-      ${report.changeType || ""}
-      ${report.status || ""}
-      ${report.aircraftCustomer || ""}
-      ${report.location || ""}
-      ${report.personnelAffected || ""}
-      ${report.documentationAffected || ""}
-      ${report.initialRisk?.level || ""}
-      ${report.initialRisk?.score || ""}
-      ${report.residualRisk?.level || ""}
-      ${report.residualRisk?.score || ""}
-      ${report.finalDecision || ""}
-      ${report.createdAt || ""}
-      ${report.updatedAt || ""}
-    `.toLowerCase();
+  box.classList.remove("status-open","status-closed");
 
-    const matchesSearch =
-      searchText === "" || searchArea.includes(searchText);
+  if(status === "Closed"){
+    box.classList.add("status-closed");
+    box.innerHTML = "Report Status: CLOSED";
+  }else{
+    box.classList.add("status-open");
+    box.innerHTML = "Report Status: OPEN";
+  }
+}
 
-    const reportDate =
-      normalizeDate(report.changeDate || report.createdAt || "");
+function populateForm(){
+  setValue("firebaseId", reportId);
+  setValue("mocId", currentData.mocId || reportId);
 
-    const matchesDate =
-      dateFilter === "" || reportDate === dateFilter;
+  setValue("changeTitle", currentData.changeTitle);
+  setValue("requestedBy", currentData.requestedBy);
+  setValue("department", currentData.department);
+  setValue("changeOwner", currentData.changeOwner);
+  setValue("changeDate", currentData.changeDate);
+  setValue("targetDate", currentData.targetDate);
+  setValue("changeType", currentData.changeType);
 
-    const matchesStatus =
-      statusFilter === "" || (report.status || "Open") === statusFilter;
+  setValue("changeDescription", currentData.changeDescription);
+  setValue("reasonForChange", currentData.reasonForChange);
 
-    const matchesRisk =
-      riskFilter === "" ||
-      (report.initialRisk?.level || "") === riskFilter ||
-      (report.residualRisk?.level || "") === riskFilter;
+  setValue("aircraftCustomer", currentData.aircraftCustomer);
+  setValue("location", currentData.location);
+  setValue("personnelAffected", currentData.personnelAffected);
+  setValue("documentationAffected", currentData.documentationAffected);
 
-    return matchesSearch && matchesDate && matchesStatus && matchesRisk;
+  setValue("initialRiskDescription", currentData.initialRiskDescription);
+  setValue("existingControls", currentData.existingControls);
 
+  const actions = currentData.actionPlan || [];
+
+  for(let i = 1; i <= 3; i++){
+    const action = actions[i - 1] || {};
+    setValue("action" + i, action.action);
+    setValue("responsible" + i, action.responsible);
+    setValue("dueDate" + i, action.dueDate);
+    setValue("actionStatus" + i, action.status);
+  }
+
+  setValue("residualRiskJustification", currentData.residualRiskJustification);
+  setValue("verificationMethod", currentData.verificationMethod);
+
+  setValue("reviewedBy", currentData.reviewedBy);
+  setValue("approvedBy", currentData.approvedBy);
+  setValue("approvalDate", currentData.approvalDate);
+  setValue("finalDecision", currentData.finalDecision);
+  setValue("approvalComments", currentData.approvalComments);
+
+  selectSavedRisk("initial", currentData.initialRisk);
+  selectSavedRisk("residual", currentData.residualRisk);
+
+  updateStatusBox();
+}
+
+function lockForm(){
+  document.querySelectorAll("input, select, textarea").forEach(el => {
+    el.disabled = true;
   });
 
-  filteredReports.sort((a,b) => {
-    return String(b.firebaseId).localeCompare(String(a.firebaseId));
+  document.querySelectorAll(".matrix td").forEach(td => {
+    td.style.pointerEvents = "none";
   });
 
-  renderReports(filteredReports);
+  document.getElementById("firebaseId").disabled = true;
+  document.getElementById("editBtn").style.display = "inline-block";
+  document.getElementById("saveBtn").style.display = "none";
+}
+
+window.enableEdit = function(){
+  document.querySelectorAll("input, select, textarea").forEach(el => {
+    el.disabled = false;
+  });
+
+  document.querySelectorAll(".matrix td").forEach(td => {
+    td.style.pointerEvents = "auto";
+  });
+
+  document.getElementById("firebaseId").disabled = true;
+  document.getElementById("editBtn").style.display = "none";
+  document.getElementById("saveBtn").style.display = "inline-block";
 };
 
-window.toggleFilters = function(){
-  const panel = document.getElementById("filterPanel");
-  panel.style.display = panel.style.display === "none" ? "grid" : "none";
-};
+window.saveChanges = function(){
+  const title = document.getElementById("changeTitle").value.trim();
 
-const reportsRef = ref(database, "mocReports");
-
-onValue(reportsRef, (snapshot) => {
-
-  allReports = [];
-
-  if(!snapshot.exists()){
-    renderReports([]);
+  if(title === ""){
+    alert("Change Title is required.");
     return;
   }
 
-  snapshot.forEach((childSnapshot) => {
-    allReports.push({
-      firebaseId: childSnapshot.key,
-      ...childSnapshot.val()
-    });
+  const updatedData = {
+    mocId:document.getElementById("mocId").value.trim(),
+
+    changeTitle:title,
+    requestedBy:document.getElementById("requestedBy").value.trim(),
+    department:document.getElementById("department").value.trim(),
+    changeOwner:document.getElementById("changeOwner").value.trim(),
+    changeDate:document.getElementById("changeDate").value,
+    targetDate:document.getElementById("targetDate").value,
+    changeType:document.getElementById("changeType").value,
+
+    changeDescription:document.getElementById("changeDescription").value.trim(),
+    reasonForChange:document.getElementById("reasonForChange").value.trim(),
+
+    aircraftCustomer:document.getElementById("aircraftCustomer").value.trim(),
+    location:document.getElementById("location").value.trim(),
+    personnelAffected:document.getElementById("personnelAffected").value.trim(),
+    documentationAffected:document.getElementById("documentationAffected").value.trim(),
+
+    initialRisk:initialRisk,
+    initialRiskDescription:document.getElementById("initialRiskDescription").value.trim(),
+    existingControls:document.getElementById("existingControls").value.trim(),
+
+    actionPlan:collectActions(),
+
+    residualRisk:residualRisk,
+    residualRiskJustification:document.getElementById("residualRiskJustification").value.trim(),
+    verificationMethod:document.getElementById("verificationMethod").value.trim(),
+
+    reviewedBy:document.getElementById("reviewedBy").value.trim(),
+    approvedBy:document.getElementById("approvedBy").value.trim(),
+    approvalDate:document.getElementById("approvalDate").value,
+    finalDecision:document.getElementById("finalDecision").value,
+    approvalComments:document.getElementById("approvalComments").value.trim(),
+
+    status: currentData.status || "Open",
+    createdAt: currentData.createdAt || "",
+    updatedAt:new Date().toLocaleString()
+  };
+
+  update(ref(database,"mocReports/" + reportId), updatedData)
+  .then(() => {
+    document.getElementById("savedBox").style.display = "block";
+    alert("MOC Report updated successfully.");
+    currentData = {...currentData, ...updatedData};
+    populateForm();
+    lockForm();
+  })
+  .catch(error => {
+    alert("Error updating MOC Report: " + error.message);
   });
-
-  allReports.sort((a,b) => {
-    return String(b.firebaseId).localeCompare(String(a.firebaseId));
-  });
-
-  applyFilter();
-
-});
-
-window.openReport = function(reportId){
-  window.location.href = "Safety-Assurance-Management-of-Change-Details.html?id=" + reportId;
 };
 
-window.saveMOCId = function(reportId){
-
-  const input = document.getElementById("mocId_" + reportId);
-  const newMOCId = input.value.trim();
-
-  if(newMOCId === ""){
-    alert("MOC ID cannot be empty.");
+function loadReport(){
+  if(!reportId){
+    document.getElementById("loadingBox").innerHTML = "No MOC Report ID was found in the URL.";
     return;
   }
 
-  update(ref(database, "mocReports/" + reportId), {
-    mocId: newMOCId,
-    updatedAt: new Date().toLocaleString()
+  get(ref(database,"mocReports/" + reportId))
+  .then(snapshot => {
+    if(!snapshot.exists()){
+      document.getElementById("loadingBox").innerHTML = "MOC Report not found in Firebase.";
+      return;
+    }
+
+    currentData = snapshot.val();
+
+    document.getElementById("loadingBox").style.display = "none";
+    document.getElementById("reportForm").style.display = "block";
+
+    populateForm();
+    lockForm();
   })
-  .then(() => {
-    alert("MOC ID updated successfully.");
-  })
-  .catch((error) => {
-    alert("Error updating MOC ID: " + error.message);
+  .catch(error => {
+    document.getElementById("loadingBox").innerHTML = "Error loading MOC Report: " + error.message;
   });
+}
 
-};
-
-window.toggleStatus = function(reportId, currentStatus){
-
-  const newStatus = currentStatus === "Open" ? "Closed" : "Open";
-
-  update(ref(database, "mocReports/" + reportId), {
-    status: newStatus,
-    updatedAt: new Date().toLocaleString()
-  })
-  .then(() => {
-    alert("Report status changed to " + newStatus + ".");
-  })
-  .catch((error) => {
-    alert("Error updating status: " + error.message);
-  });
-
-};
-
-window.deleteReport = function(reportId){
-
-  const confirmDelete = confirm(
-    "Are you sure you want to permanently delete this MOC report?"
-  );
-
-  if(!confirmDelete) return;
-
-  remove(ref(database, "mocReports/" + reportId))
-  .then(() => {
-    alert("MOC Report deleted successfully.");
-  })
-  .catch((error) => {
-    alert("Error deleting report: " + error.message);
-  });
-
-};
-
-window.downloadExcel = function(){
-
-  let csv = "MOC ID,Change Title,Department,Owner,Change Type,Status,Initial Risk,Initial Score,Residual Risk,Residual Score,Final Decision,Created At,Updated At\n";
-
-  filteredReports.forEach(report => {
-
-    const row = [
-      report.mocId || report.firebaseId || "",
-      report.changeTitle || "",
-      report.department || "",
-      report.changeOwner || "",
-      report.changeType || "",
-      report.status || "Open",
-      report.initialRisk?.level || "",
-      report.initialRisk?.score || "",
-      report.residualRisk?.level || "",
-      report.residualRisk?.score || "",
-      report.finalDecision || "",
-      report.createdAt || "",
-      report.updatedAt || ""
-    ];
-
-    csv += row.map(value => `"${String(value).replaceAll('"','""')}"`).join(",") + "\n";
-
-  });
-
-  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "MOC_Database.csv";
-  link.click();
-
-  URL.revokeObjectURL(url);
-
-};
+buildMatrix("initial");
+buildMatrix("residual");
+loadReport();
 
 </script>
 
