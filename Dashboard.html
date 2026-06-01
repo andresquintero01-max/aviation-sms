@@ -3,8 +3,283 @@
 <head>
 <meta charset="UTF-8">
 <title>SMS Executive Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:'Segoe UI', Arial, sans-serif;
+  min-height:100vh;
+  background:
+  radial-gradient(circle at top left, rgba(255,255,255,0.18), transparent 28%),
+  linear-gradient(135deg,#061b3d,#082b66,#1450b8);
+  padding:35px;
+}
+
+.container{
+  max-width:1500px;
+  margin:auto;
+  background:white;
+  border-radius:35px;
+  padding:40px;
+  box-shadow:0 25px 65px rgba(0,0,0,0.35);
+}
+
+.header{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+  color:white;
+  text-align:center;
+  padding:40px;
+  border-radius:28px;
+  margin-bottom:35px;
+}
+
+.header h1{
+  font-size:58px;
+  margin-bottom:10px;
+}
+
+.header p{
+  font-size:19px;
+  color:#dbeafe;
+}
+
+.section-title{
+  color:#071f47;
+  font-size:30px;
+  margin:38px 0 20px;
+  border-left:8px solid #1450b8;
+  padding-left:14px;
+  font-weight:bold;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:22px;
+}
+
+.card{
+  color:white;
+  border-radius:28px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 12px 28px rgba(0,0,0,0.20);
+  background:linear-gradient(135deg,#071f47,#1450b8);
+}
+
+.card.green{background:linear-gradient(135deg,#0b8a3a,#22c55e);}
+.card.yellow{background:linear-gradient(135deg,#cfa000,#ffd400);color:#071f47;}
+.card.red{background:linear-gradient(135deg,#d00000,#ff3b3b);}
+.card.purple{background:linear-gradient(135deg,#6b21a8,#9333ea);}
+.card.gray{background:linear-gradient(135deg,#475569,#64748b);}
+
+.card h2{
+  font-size:54px;
+  margin-bottom:10px;
+}
+
+.card p{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.chart-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
+  gap:28px;
+}
+
+.chart-box{
+  background:#f4f7fb;
+  border:1px solid #d8e1ef;
+  border-radius:28px;
+  padding:28px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.10);
+}
+
+canvas{
+  width:100% !important;
+  max-height:380px;
+}
+
+.latest-box{
+  background:#f8fbff;
+  border:1px solid #d8e1ef;
+  border-radius:28px;
+  padding:25px;
+  margin-top:25px;
+}
+
+.latest-item{
+  background:white;
+  border-left:7px solid #1450b8;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:0 6px 15px rgba(0,0,0,0.08);
+}
+
+.latest-title{
+  font-weight:bold;
+  color:#071f47;
+  font-size:17px;
+}
+
+.latest-meta{
+  color:#555;
+  font-size:14px;
+  margin-top:5px;
+  line-height:1.5;
+}
+
+.back-btn{
+  margin-top:35px;
+  width:100%;
+  padding:20px;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(135deg,#c40000,#ff3131);
+  color:white;
+  font-size:22px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.back-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(0,0,0,0.25);
+}
+
+@media(max-width:800px){
+  body{padding:20px;}
+  .container{padding:25px;}
+  .header h1{font-size:38px;}
+  .chart-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>SMS Executive Dashboard</h1>
+    <p>Integrated Safety Management System Overview: SMS Reports, FRAT, MEDA, and Management of Change</p>
+  </div>
+
+  <div class="section-title">Executive Summary</div>
+
+  <div class="cards">
+    <div class="card">
+      <h2 id="totalAll">0</h2>
+      <p>Total Records</p>
+    </div>
+
+    <div class="card yellow">
+      <h2 id="openAll">0</h2>
+      <p>Open Records</p>
+    </div>
+
+    <div class="card green">
+      <h2 id="closedAll">0</h2>
+      <p>Closed Records</p>
+    </div>
+
+    <div class="card red">
+      <h2 id="highRiskAll">0</h2>
+      <p>High / Extreme Risk</p>
+    </div>
+
+    <div class="card purple">
+      <h2 id="safetyScore">100%</h2>
+      <p>Executive Safety Score</p>
+    </div>
+  </div>
+
+  <div class="section-title">Module Summary</div>
+
+  <div class="cards">
+    <div class="card">
+      <h2 id="smsTotal">0</h2>
+      <p>SMS Reports</p>
+    </div>
+
+    <div class="card">
+      <h2 id="fratTotal">0</h2>
+      <p>FRAT Reports</p>
+    </div>
+
+    <div class="card">
+      <h2 id="medaTotal">0</h2>
+      <p>MEDA Reports</p>
+    </div>
+
+    <div class="card">
+      <h2 id="mocTotal">0</h2>
+      <p>MOC Reports</p>
+    </div>
+  </div>
+
+  <div class="section-title">Risk Monitoring</div>
+
+  <div class="cards">
+    <div class="card yellow">
+      <h2 id="fratModerate">0</h2>
+      <p>Moderate FRAT</p>
+    </div>
+
+    <div class="card red">
+      <h2 id="fratHigh">0</h2>
+      <p>High / No-Go FRAT</p>
+    </div>
+
+    <div class="card red">
+      <h2 id="mocHigh">0</h2>
+      <p>High / Extreme MOC</p>
+    </div>
+
+    <div class="card yellow">
+      <h2 id="medaOpen">0</h2>
+      <p>Open MEDA</p>
+    </div>
+  </div>
+
+  <div class="section-title">Charts</div>
+
+  <div class="chart-grid">
+    <div class="chart-box">
+      <canvas id="moduleChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <canvas id="statusChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <canvas id="riskChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <canvas id="monthChart"></canvas>
+    </div>
+  </div>
+
+  <div class="section-title">Latest Records</div>
+
+  <div id="latestRecords" class="latest-box">
+    Loading latest records...
+  </div>
+
+  <button class="back-btn" onclick="window.location.href='index.html'">
+    Back to Home
+  </button>
+
+</div>
 
 <script type="module">
 
@@ -27,916 +302,330 @@ const db = getDatabase(app);
 let charts = {};
 let smsReports = [];
 let fratReports = [];
+let medaReports = [];
+let mocReports = [];
 
 function setText(id,value){
   document.getElementById(id).innerText = value;
 }
 
 function destroyChart(id){
-  if(charts[id]) charts[id].destroy();
+  if(charts[id]){
+    charts[id].destroy();
+  }
 }
 
 function createBar(id, labels, values, title){
-
   destroyChart(id);
 
   charts[id] = new Chart(document.getElementById(id), {
-
     type:"bar",
-
     data:{
-      labels,
+      labels:labels,
       datasets:[{
         label:title,
         data:values,
-        backgroundColor:"#0b2a66",
+        backgroundColor:["#1450b8","#2f9144","#9333ea","#ff9800","#d00000"],
         borderRadius:12
       }]
     },
-
     options:{
       responsive:true,
-
       plugins:{
         legend:{display:false},
         title:{
           display:true,
           text:title,
-          color:"#555",
-          font:{
-            size:22,
-            weight:"bold"
-          }
+          color:"#071f47",
+          font:{size:22,weight:"bold"}
         }
       },
-
       scales:{
-        y:{
-          beginAtZero:true,
-          ticks:{precision:0}
-        }
+        y:{beginAtZero:true,ticks:{precision:0}}
       }
     }
-
   });
-
 }
 
-function createPie(id, labels, values, title){
-
+function createDoughnut(id, labels, values, title){
   destroyChart(id);
 
   charts[id] = new Chart(document.getElementById(id), {
-
     type:"doughnut",
-
     data:{
-      labels,
+      labels:labels,
       datasets:[{
         data:values,
-        backgroundColor:[
-          "#2ecc71",
-          "#f1c40f",
-          "#e74c3c",
-          "#95a5a6"
-        ]
+        backgroundColor:["#2f9144","#ffd966","#ff9800","#ff1a0a","#64748b"]
       }]
     },
-
     options:{
       responsive:true,
-
       plugins:{
-
         title:{
           display:true,
           text:title,
-          color:"#555",
-          font:{
-            size:22,
-            weight:"bold"
-          }
+          color:"#071f47",
+          font:{size:22,weight:"bold"}
         },
-
-        legend:{
-          position:"top"
-        }
-
+        legend:{position:"top"}
       }
-
     }
-
   });
-
 }
 
-function isReportClosed(r){
-
-  const status = (
-    r.residualRiskStatus ||
-    r.residualStatus ||
-    r.residualRiskClosed ||
-    r.status ||
-    r.reportStatus ||
-    ""
-  ).toString().toLowerCase();
-
-  return (
-    status.includes("closed") ||
-    status === "true" ||
-    status === "yes"
-  );
-
+function isClosed(r){
+  const status = String(r.status || r.reportStatus || "").toLowerCase();
+  return status.includes("closed");
 }
 
 function getDate(r){
-  return r.date || r.reportDate || r.eventDate || r.createdAt || "";
+  return r.date || r.reportDate || r.eventDate || r.changeDate || r.createdAt || "";
 }
 
-function getResidualData(r){
+function getMonth(value){
+  if(!value) return "No Date";
 
-  let text = "";
-  let value = 0;
+  const d = new Date(value);
 
-  Object.keys(r).forEach(key => {
+  if(!isNaN(d)){
+    return d.toISOString().substring(0,7);
+  }
 
-    const lowerKey = key.toLowerCase();
+  return String(value).substring(0,7) || "No Date";
+}
 
-    if(lowerKey.includes("residual")){
+function getMocRiskLevel(r){
+  return (
+    r.residualRisk?.level ||
+    r.initialRisk?.level ||
+    ""
+  );
+}
 
-      const fieldValue = r[key];
+function isHighRiskText(text){
+  const t = String(text || "").toLowerCase();
+  return (
+    t.includes("high") ||
+    t.includes("extreme") ||
+    t.includes("not acceptable") ||
+    t.includes("no-go") ||
+    t.includes("no go")
+  );
+}
 
-      text += " " + String(fieldValue).toLowerCase();
+function renderLatestRecords(){
+  const box = document.getElementById("latestRecords");
 
-      if(!isNaN(Number(fieldValue))){
-        value = Number(fieldValue);
-      }
+  let all = [];
 
-    }
-
+  smsReports.forEach(r => {
+    all.push({
+      module:"SMS",
+      title:r.title || r.reportTitle || r.eventTitle || r.eventType || "SMS Report",
+      status:r.status || r.reportStatus || "Open",
+      date:getDate(r)
+    });
   });
 
-  return { text, value };
+  fratReports.forEach(r => {
+    all.push({
+      module:"FRAT",
+      title:(r.fratId || "FRAT") + " | " + (r.pilotName || "No Pilot Name"),
+      status:r.status || "Open",
+      date:getDate(r),
+      risk:r.riskLevel || ""
+    });
+  });
 
+  medaReports.forEach(r => {
+    all.push({
+      module:"MEDA",
+      title:r.title || r.medaId || "MEDA Report",
+      status:r.status || "Open",
+      date:getDate(r)
+    });
+  });
+
+  mocReports.forEach(r => {
+    all.push({
+      module:"MOC",
+      title:r.changeTitle || r.mocId || "MOC Report",
+      status:r.status || "Open",
+      date:getDate(r),
+      risk:getMocRiskLevel(r)
+    });
+  });
+
+  all.sort((a,b) => String(b.date).localeCompare(String(a.date)));
+
+  const latest = all.slice(0,8);
+
+  if(latest.length === 0){
+    box.innerHTML = "No records found.";
+    return;
+  }
+
+  box.innerHTML = "";
+
+  latest.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "latest-item";
+
+    div.innerHTML = `
+      <div class="latest-title">${item.module} | ${item.title}</div>
+      <div class="latest-meta">
+        Date: ${item.date || "N/A"}<br>
+        Status: ${item.status || "Open"}
+        ${item.risk ? "<br>Risk: " + item.risk : ""}
+      </div>
+    `;
+
+    box.appendChild(div);
+  });
 }
 
 function renderDashboard(){
 
-  let total = smsReports.length;
+  const totalSMS = smsReports.length;
+  const totalFRAT = fratReports.length;
+  const totalMEDA = medaReports.length;
+  const totalMOC = mocReports.length;
 
-  let open = 0;
-  let closed = 0;
+  const totalAll = totalSMS + totalFRAT + totalMEDA + totalMOC;
 
-  let acceptable = 0;
-  let tolerable = 0;
-  let notAcceptable = 0;
-  let notAssessed = 0;
+  const allRecords = [
+    ...smsReports,
+    ...fratReports,
+    ...medaReports,
+    ...mocReports
+  ];
 
-  let residualAcceptable = 0;
-  let residualTolerable = 0;
-  let residualNotAcceptable = 0;
-  let residualNotAssessed = 0;
+  const closedAll = allRecords.filter(isClosed).length;
+  const openAll = totalAll - closedAll;
 
-  let months = {};
-  let categories = {};
-
+  let highRiskAll = 0;
+  let fratModerate = 0;
   let fratHigh = 0;
-  let fratNoGo = 0;
+  let mocHigh = 0;
+  let medaOpen = medaReports.filter(r => !isClosed(r)).length;
 
-  smsReports.forEach(r => {
+  fratReports.forEach(r => {
+    const level = String(r.riskLevel || "").toUpperCase();
+    const total = Number(r.totalRiskValue || 0);
 
-    if(isReportClosed(r)) closed++;
-    else open++;
-
-    const riskText = (
-      r.riskLevel ||
-      r.riskAssessment ||
-      r.initialRiskLevel ||
-      r.riskCategory ||
-      ""
-    ).toString().toLowerCase();
-
-    const riskValue = Number(
-      r.riskValue ||
-      r.riskScore ||
-      r.risk ||
-      r.initialRiskValue ||
-      r.initialRiskScore ||
-      r.initialRisk ||
-      0
-    );
-
-    if(riskText.includes("not") || riskValue >= 15){
-
-      notAcceptable++;
-
-    }else if(
-      riskText.includes("tolerable") ||
-      (riskValue >= 5 && riskValue <= 14)
-    ){
-
-      tolerable++;
-
-    }else if(
-      riskText.includes("acceptable") ||
-      (riskValue >= 1 && riskValue <= 4)
-    ){
-
-      acceptable++;
-
-    }else{
-
-      notAssessed++;
-
+    if(level.includes("MODERATE")){
+      fratModerate++;
     }
 
-    const residualData = getResidualData(r);
-
-    const residualText = residualData.text;
-    const residualValue = residualData.value;
-
-    if(
-      residualText.includes("not acceptable") ||
-      residualText.includes("red") ||
-      residualValue >= 15
-    ){
-
-      residualNotAcceptable++;
-
-    }else if(
-      residualText.includes("tolerable") ||
-      residualText.includes("yellow") ||
-      (residualValue >= 5 && residualValue <= 14)
-    ){
-
-      residualTolerable++;
-
-    }else if(
-      residualText.includes("acceptable") ||
-      residualText.includes("green") ||
-      (residualValue >= 1 && residualValue <= 4)
-    ){
-
-      residualAcceptable++;
-
-    }else{
-
-      residualNotAssessed++;
-
+    if(level.includes("HIGH") || total > 20){
+      fratHigh++;
+      highRiskAll++;
     }
-
-    const dateValue = getDate(r);
-
-    if(dateValue){
-
-      const month = dateValue.toString().substring(0,7);
-
-      months[month] = (months[month] || 0) + 1;
-
-    }
-
-    const category =
-      r.category ||
-      r.eventType ||
-      r.reportType ||
-      "Other";
-
-    categories[category] =
-      (categories[category] || 0) + 1;
-
   });
 
-  fratReports.forEach(f => {
+  mocReports.forEach(r => {
+    const level = getMocRiskLevel(r);
 
-    const value = Number(
-      f.score ||
-      f.total ||
-      f.fratScore ||
-      f.fratValue ||
-      f.value ||
-      0
-    );
+    if(isHighRiskText(level)){
+      mocHigh++;
+      highRiskAll++;
+    }
+  });
 
-    const fratText = JSON.stringify(f).toLowerCase();
+  smsReports.forEach(r => {
+    const riskText = JSON.stringify(r).toLowerCase();
 
     if(
-      value >= 16 ||
-      fratText.includes("no go") ||
-      fratText.includes("nogo") ||
-      fratText.includes("red") ||
-      fratText.includes("rojo")
+      riskText.includes("not acceptable") ||
+      riskText.includes("high") ||
+      riskText.includes("extreme")
     ){
-
-      fratNoGo++;
-
-    }else if(
-      value >= 10 ||
-      fratText.includes("high") ||
-      fratText.includes("yellow") ||
-      fratText.includes("amarillo")
-    ){
-
-      fratHigh++;
-
+      highRiskAll++;
     }
-
   });
 
   const safetyScore =
-    total === 0
+    totalAll === 0
     ? 100
-    : Math.max(
-        0,
-        Math.round(
-          100 - (
-            (notAcceptable * 10) +
-            (open * 2)
-          )
-        )
-      );
+    : Math.max(0, Math.round(100 - (openAll * 1.5) - (highRiskAll * 5)));
 
-  setText("totalReports", total);
-  setText("openReports", open);
-  setText("closedReports", closed);
-  setText("notAcceptable", notAcceptable);
+  setText("totalAll", totalAll);
+  setText("openAll", openAll);
+  setText("closedAll", closedAll);
+  setText("highRiskAll", highRiskAll);
   setText("safetyScore", safetyScore + "%");
 
-  setText("fratTotal", fratReports.length);
-  setText("fratHigh", fratHigh);
-  setText("fratNoGo", fratNoGo);
+  setText("smsTotal", totalSMS);
+  setText("fratTotal", totalFRAT);
+  setText("medaTotal", totalMEDA);
+  setText("mocTotal", totalMOC);
 
-  createPie(
-    "riskChart",
-    ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
-    [acceptable,tolerable,notAcceptable,notAssessed],
-    "Risk Distribution"
+  setText("fratModerate", fratModerate);
+  setText("fratHigh", fratHigh);
+  setText("mocHigh", mocHigh);
+  setText("medaOpen", medaOpen);
+
+  createBar(
+    "moduleChart",
+    ["SMS","FRAT","MEDA","MOC"],
+    [totalSMS,totalFRAT,totalMEDA,totalMOC],
+    "Reports by Module"
   );
 
-  createPie(
-    "residualRiskChart",
-    ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
-    [
-      residualAcceptable,
-      residualTolerable,
-      residualNotAcceptable,
-      residualNotAssessed
-    ],
-    "Residual Risk Distribution"
+  createDoughnut(
+    "statusChart",
+    ["Open","Closed"],
+    [openAll,closedAll],
+    "Open vs Closed Records"
   );
 
   createBar(
-    "statusChart",
-    ["Open","Closed"],
-    [open,closed],
-    "Open vs Closed Reports"
+    "riskChart",
+    ["FRAT Moderate","FRAT High","MOC High/Extreme","Total High Risk"],
+    [fratModerate,fratHigh,mocHigh,highRiskAll],
+    "Risk Monitoring"
   );
+
+  let months = {};
+
+  allRecords.forEach(r => {
+    const month = getMonth(getDate(r));
+    months[month] = (months[month] || 0) + 1;
+  });
 
   createBar(
     "monthChart",
     Object.keys(months),
     Object.values(months),
-    "Reports by Month"
+    "Records by Month"
   );
 
-  createBar(
-    "categoryChart",
-    Object.keys(categories),
-    Object.values(categories),
-    "Reports by Category"
-  );
-
-  /* =========================
-     FRAT CHART
-  ========================== */
-
-  destroyChart("fratChart");
-
-  charts["fratChart"] = new Chart(
-    document.getElementById("fratChart"),
-    {
-
-      type:"bar",
-
-      data:{
-        labels:[
-          "Total FRAT",
-          "High Risk",
-          "No Go"
-        ],
-
-        datasets:[{
-
-          label:"FRAT",
-
-          data:[
-            fratReports.length,
-            fratHigh,
-            fratNoGo
-          ],
-
-          backgroundColor:[
-            "#082567",
-            "#f1c40f",
-            "#e74c3c"
-          ],
-
-          borderRadius:12
-
-        }]
-      },
-
-      options:{
-
-        responsive:true,
-
-        plugins:{
-
-          legend:{display:false},
-
-          title:{
-            display:true,
-            text:"FRAT Monitoring",
-            color:"#555",
-            font:{
-              size:24,
-              weight:"bold"
-            }
-          }
-
-        },
-
-        scales:{
-          y:{
-            beginAtZero:true,
-            ticks:{precision:0}
-          }
-        }
-
-      }
-
-    }
-  );
-
+  renderLatestRecords();
 }
 
-function loadSMSReports(){
-
-  const reportsRef = ref(db, "smsReports");
-
-  onValue(reportsRef, snapshot => {
-
+function loadPath(path, callback){
+  onValue(ref(db,path), snapshot => {
     const data = snapshot.val() || {};
 
-    smsReports = Object.values(data);
-
-    renderDashboard();
-
-  });
-
-}
-
-function loadFRATReports(){
-
-  const paths = [
-    "fratReports",
-    "FRATReports",
-    "frat",
-    "FRAT",
-    "fratData"
-  ];
-
-  let all = [];
-
-  paths.forEach(path => {
-
-    const fratRef = ref(db, path);
-
-    onValue(fratRef, snapshot => {
-
-      const data = snapshot.val();
-
-      if(data){
-
-        Object.values(data).forEach(v => {
-
-          if(v && typeof v === "object"){
-            all.push(v);
-          }
-
-        });
-
-      }
-
-      fratReports = all;
-
-      renderDashboard();
-
+    const arr = Object.keys(data).map(key => {
+      return {
+        firebaseId:key,
+        ...data[key]
+      };
     });
 
+    callback(arr);
+    renderDashboard();
   });
-
 }
 
-window.goBack = function(){
-  location.href = "index.html";
-}
-
-window.onload = function(){
-
-  loadSMSReports();
-  loadFRATReports();
-
-}
+loadPath("smsReports", arr => smsReports = arr);
+loadPath("fratReports", arr => fratReports = arr);
+loadPath("medaReports", arr => medaReports = arr);
+loadPath("mocReports", arr => mocReports = arr);
 
 </script>
 
-<style>
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-body{
-  font-family:Arial,sans-serif;
-  min-height:100vh;
-  background:linear-gradient(
-    135deg,
-    #071f47,
-    #0b2a66,
-    #1450b8
-  );
-  padding:30px;
-}
-
-.container{
-  max-width:1450px;
-  margin:auto;
-  background:white;
-  border-radius:35px;
-  padding:35px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.35);
-}
-
-h1{
-  text-align:center;
-  color:#071f47;
-  font-size:60px;
-  margin-bottom:8px;
-}
-
-.subtitle{
-  text-align:center;
-  color:#666;
-  font-size:20px;
-  margin-bottom:35px;
-}
-
-.section-title{
-  color:#071f47;
-  font-size:30px;
-  margin:40px 0 20px;
-  border-left:8px solid #071f47;
-  padding-left:14px;
-  font-weight:bold;
-}
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:22px;
-}
-
-.card{
-  background:linear-gradient(
-    135deg,
-    #071f47,
-    #0b2a66
-  );
-
-  color:white;
-
-  border-radius:28px;
-
-  padding:35px;
-
-  text-align:center;
-
-  box-shadow:0 10px 25px rgba(0,0,0,0.25);
-}
-
-.card.red{
-  background:linear-gradient(
-    135deg,
-    #d63031,
-    #ff3b30
-  );
-}
-
-.card.yellow{
-  background:linear-gradient(
-    135deg,
-    #cfa000,
-    #ffd400
-  );
-
-  color:#071f47;
-}
-
-.card.green{
-  background:linear-gradient(
-    135deg,
-    #138d75,
-    #2ecc71
-  );
-}
-
-.card h2{
-  font-size:64px;
-  margin-bottom:12px;
-}
-
-.card p{
-  font-size:22px;
-}
-
-.charts-columns{
-  display:flex;
-  gap:30px;
-  margin-top:30px;
-  align-items:flex-start;
-}
-
-.charts-column{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  gap:30px;
-}
-
-.chart-box{
-  background:#f4f6f8;
-  border-radius:28px;
-  padding:30px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.12);
-}
-
-canvas{
-  width:100% !important;
-  max-height:380px;
-}
-
-/* =========================
-   FRAT SECTION
-========================= */
-
-.frat-title-wrapper{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:30px;
-  margin-top:50px;
-  margin-bottom:25px;
-}
-
-.frat-line{
-  flex:1;
-  height:3px;
-  background:#d9d9d9;
-}
-
-.frat-main-title{
-  font-size:72px;
-  font-weight:900;
-  color:#071f47;
-  position:relative;
-}
-
-.frat-main-title::after{
-  content:"";
-  width:130px;
-  height:6px;
-  background:#0b2a66;
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  bottom:-12px;
-  border-radius:10px;
-}
-
-.frat-container{
-  margin-top:50px;
-}
-
-.frat-card-container{
-  background:#f7f7f7;
-  border-radius:30px;
-  padding:28px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.10);
-}
-
-.frat-monitor-title{
-  font-size:28px;
-  color:#071f47;
-  font-weight:bold;
-  margin-bottom:25px;
-  border-left:8px solid #071f47;
-  padding-left:12px;
-}
-
-.frat-chart-box{
-  margin-top:35px;
-  background:#f7f7f7;
-  border-radius:30px;
-  padding:30px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.10);
-}
-
-.back-btn{
-  margin-top:40px;
-  width:100%;
-  padding:20px;
-  border:none;
-  border-radius:18px;
-  background:#c0392b;
-  color:white;
-  font-size:22px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.back-btn:hover{
-  background:#922b21;
-}
-
-@media(max-width:900px){
-
-  .charts-columns{
-    flex-direction:column;
-  }
-
-  .frat-main-title{
-    font-size:50px;
-  }
-
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-  <h1>SMS Executive Dashboard</h1>
-
-  <div class="subtitle">
-    Safety Management System Performance Overview
-  </div>
-
-  <!-- EXECUTIVE SUMMARY -->
-
-  <div class="section-title">
-    Executive Summary
-  </div>
-
-  <div class="cards">
-
-    <div class="card">
-      <h2 id="totalReports">0</h2>
-      <p>Total SMS Reports</p>
-    </div>
-
-    <div class="card yellow">
-      <h2 id="openReports">0</h2>
-      <p>Open Reports</p>
-    </div>
-
-    <div class="card green">
-      <h2 id="closedReports">0</h2>
-      <p>Closed Reports</p>
-    </div>
-
-    <div class="card red">
-      <h2 id="notAcceptable">0</h2>
-      <p>Not Acceptable Risk</p>
-    </div>
-
-    <div class="card">
-      <h2 id="safetyScore">100%</h2>
-      <p>Executive Safety Score</p>
-    </div>
-
-  </div>
-
-  <!-- CHARTS -->
-
-  <div class="section-title">
-    Charts
-  </div>
-
-  <div class="charts-columns">
-
-    <!-- LEFT -->
-
-    <div class="charts-column">
-
-      <div class="chart-box">
-        <canvas id="riskChart"></canvas>
-      </div>
-
-      <div class="chart-box">
-        <canvas id="statusChart"></canvas>
-      </div>
-
-      <div class="chart-box">
-        <canvas id="monthChart"></canvas>
-      </div>
-
-    </div>
-
-    <!-- RIGHT -->
-
-    <div class="charts-column">
-
-      <div class="chart-box">
-        <canvas id="residualRiskChart"></canvas>
-      </div>
-
-      <div class="chart-box">
-        <canvas id="categoryChart"></canvas>
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- =========================
-       FRAT SECTION
-  ========================== -->
-
-  <div class="frat-container">
-
-    <div class="frat-title-wrapper">
-
-      <div class="frat-line"></div>
-
-      <div class="frat-main-title">
-        FRAT
-      </div>
-
-      <div class="frat-line"></div>
-
-    </div>
-
-    <!-- FRAT CARDS -->
-
-    <div class="frat-card-container">
-
-      <div class="frat-monitor-title">
-        FRAT Monitoring
-      </div>
-
-      <div class="cards">
-
-        <div class="card">
-          <h2 id="fratTotal">0</h2>
-          <p>Total FRAT</p>
-        </div>
-
-        <div class="card yellow">
-          <h2 id="fratHigh">0</h2>
-          <p>High Risk FRAT</p>
-        </div>
-
-        <div class="card red">
-          <h2 id="fratNoGo">0</h2>
-          <p>No Go FRAT</p>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- FRAT GRAPH -->
-
-    <div class="frat-chart-box">
-
-      <canvas id="fratChart"></canvas>
-
-    </div>
-
-  </div>
-
-  <!-- BUTTON -->
-
-  <button class="back-btn" onclick="goBack()">
-    Back to Home
-  </button>
-
-</div>
-
 </body>
 </html>
-
