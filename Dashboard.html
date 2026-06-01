@@ -48,7 +48,7 @@ function createBar(id, labels, values, title, colors){
       datasets:[{
         label:title,
         data:values,
-        backgroundColor:colors || ["#082567","#e60000","#2ecc71","#f39c12"],
+        backgroundColor:colors || ["#082567","#9333ea","#2ecc71","#f39c12"],
         borderRadius:12
       }]
     },
@@ -385,7 +385,7 @@ function renderDashboard(){
     ["Open","Closed"],
     [open,closed],
     "Open vs Closed Reports",
-    ["#e60000","#2ecc71"]
+    ["#9333ea","#2ecc71"]
   );
 
   createBar(
@@ -415,7 +415,7 @@ function renderDashboard(){
     ["Total MEDA","Open","Closed"],
     [medaReports.length,medaOpen,medaClosed],
     "MEDA Monitoring",
-    ["#082567","#e60000","#2ecc71"]
+    ["#082567","#9333ea","#2ecc71"]
   );
 
   createPie(
@@ -449,7 +449,7 @@ function renderDashboard(){
     ["Total MOC","Open","Closed"],
     [mocReports.length,mocOpen,mocClosed],
     "MOC Status Monitoring",
-    ["#082567","#e60000","#2ecc71"]
+    ["#082567","#9333ea","#2ecc71"]
   );
 }
 
@@ -570,6 +570,10 @@ h1{
 
 .card.green{
   background:linear-gradient(135deg,#138d75,#2ecc71);
+}
+
+.card.purple{
+  background:linear-gradient(135deg,#6d28d9,#9333ea);
 }
 
 .card h2{
@@ -751,7 +755,7 @@ canvas{
       <p>Total SMS Reports</p>
     </div>
 
-    <div class="card red">
+    <div class="card purple">
       <h2 id="openReports">0</h2>
       <p>Open Reports</p>
     </div>
@@ -871,7 +875,7 @@ canvas{
           <p>Total MEDA</p>
         </div>
 
-        <div class="card red">
+        <div class="card purple">
           <h2 id="medaOpen">0</h2>
           <p>Open MEDA</p>
         </div>
@@ -912,7 +916,7 @@ canvas{
           <p>Total MOC</p>
         </div>
 
-        <div class="card red">
+        <div class="card purple">
           <h2 id="mocOpen">0</h2>
           <p>Open MOC</p>
         </div>
