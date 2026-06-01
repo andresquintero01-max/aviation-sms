@@ -489,6 +489,10 @@ window.goBack = function(){
   location.href = "index.html";
 };
 
+window.openDatabase = function(page){
+  location.href = page;
+};
+
 window.onload = function(){
   loadSMSReports();
   loadFRATReports();
@@ -583,6 +587,30 @@ h1{
 
 .card p{
   font-size:22px;
+}
+
+.database-btn-wrapper{
+  display:flex;
+  justify-content:center;
+  margin-top:28px;
+}
+
+.database-btn{
+  padding:17px 34px;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(135deg,#111827,#2563eb);
+  color:white;
+  font-size:21px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 12px 26px rgba(0,0,0,0.25);
+  transition:0.25s;
+}
+
+.database-btn:hover{
+  transform:translateY(-3px);
+  background:linear-gradient(135deg,#071f47,#1d4ed8);
 }
 
 .charts-columns{
@@ -730,6 +758,11 @@ canvas{
   .home-btn{
     width:100%;
   }
+
+  .database-btn{
+    width:100%;
+    font-size:18px;
+  }
 }
 </style>
 </head>
@@ -775,6 +808,12 @@ canvas{
       <p>Executive Safety Score</p>
     </div>
 
+  </div>
+
+  <div class="database-btn-wrapper">
+    <button class="database-btn" onclick="openDatabase('SMS-Database.html')">
+      📝 Open SMS Report Database
+    </button>
   </div>
 
   <div class="section-title">
@@ -846,6 +885,12 @@ canvas{
 
       </div>
 
+      <div class="database-btn-wrapper">
+        <button class="database-btn" onclick="openDatabase('FRAT-Database.html')">
+          📊 Open FRAT Database
+        </button>
+      </div>
+
     </div>
 
     <div class="module-chart-box">
@@ -885,6 +930,12 @@ canvas{
           <p>Closed MEDA</p>
         </div>
 
+      </div>
+
+      <div class="database-btn-wrapper">
+        <button class="database-btn" onclick="openDatabase('MEDA-Database.html')">
+          🔎 Open MEDA Database
+        </button>
       </div>
 
     </div>
@@ -936,6 +987,12 @@ canvas{
           <p>Residual High / Extreme</p>
         </div>
 
+      </div>
+
+      <div class="database-btn-wrapper">
+        <button class="database-btn" onclick="openDatabase('MOC-Database.html')">
+          🔄 Open MOC Database
+        </button>
       </div>
 
     </div>
