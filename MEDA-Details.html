@@ -3,30 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <title>MEDA Details</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-  font-family:Arial, sans-serif;
+  font-family:'Segoe UI', Arial, sans-serif;
   min-height:100vh;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  background:linear-gradient(135deg,#061b3d,#082b66,#1450b8);
   padding:30px;
 }
 
 .container{
-  max-width:1200px;
+  max-width:1250px;
   margin:auto;
   background:white;
-  padding:40px;
-  border-radius:25px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.3);
+  padding:45px;
+  border-radius:30px;
+  box-shadow:0 22px 60px rgba(0,0,0,0.35);
 }
 
 h1{
   text-align:center;
   color:#071f47;
-  font-size:44px;
+  font-size:48px;
   margin-bottom:10px;
 }
 
@@ -34,42 +35,34 @@ h1{
   text-align:center;
   color:#666;
   font-size:18px;
-  margin-bottom:35px;
+  margin-bottom:30px;
 }
 
-.status-small{
-  display:inline-block;
-  padding:9px 18px;
-  border-radius:20px;
-  font-size:14px;
-  font-weight:bold;
-  color:white;
-  margin-bottom:15px;
+h2{
+  color:#071f47;
+  margin:30px 0 15px;
+  border-left:7px solid #1450b8;
+  padding-left:12px;
 }
-
-.open{background:#f59e0b;}
-.progress{background:#1450b8;}
-.pending{background:#ff9800;}
-.closed{background:#2f9144;}
 
 .info-box{
-  background:#f4f6f8;
-  border-radius:18px;
+  background:#f4f7fb;
+  border-radius:20px;
   padding:25px;
   margin-bottom:25px;
-  border:1px solid #ddd;
+  border:1px solid #d8e1ef;
 }
 
 .info-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
   gap:15px;
 }
 
 .info-card{
   background:white;
   border:1px solid #d8e1ef;
-  border-radius:14px;
+  border-radius:16px;
   padding:15px;
 }
 
@@ -77,7 +70,8 @@ h1{
   font-weight:bold;
   color:#004080;
   font-size:13px;
-  margin-bottom:6px;
+  margin-bottom:7px;
+  text-transform:uppercase;
 }
 
 .value{
@@ -87,21 +81,49 @@ h1{
   word-break:break-word;
 }
 
-h2{
-  color:#071f47;
-  margin:28px 0 15px;
+.edit-input,
+.edit-textarea,
+.edit-select{
+  width:100%;
+  padding:12px;
+  border:1px solid #cbd5e1;
+  border-radius:12px;
+  font-size:15px;
+  font-family:Arial, sans-serif;
+  display:none;
+}
+
+.edit-textarea{
+  min-height:130px;
+  resize:vertical;
 }
 
 .text-box{
   background:#f8fbff;
   border:1px solid #d8e1ef;
   border-left:7px solid #1450b8;
-  border-radius:14px;
+  border-radius:16px;
   padding:18px;
   margin-bottom:18px;
   line-height:1.6;
   color:#333;
+  white-space:pre-wrap;
 }
+
+.status-small{
+  display:inline-block;
+  padding:10px 22px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:bold;
+  color:white;
+  margin-bottom:20px;
+}
+
+.open{background:#f59e0b;}
+.progress{background:#1450b8;}
+.pending{background:#ff9800;}
+.closed{background:#2f9144;}
 
 table{
   width:100%;
@@ -128,41 +150,99 @@ tr:nth-child(even){
   background:#f4f6f8;
 }
 
+.table-input,
+.table-textarea,
+.table-select{
+  width:100%;
+  padding:9px;
+  border:1px solid #cbd5e1;
+  border-radius:8px;
+  display:none;
+}
+
+.table-textarea{
+  min-height:80px;
+  resize:vertical;
+}
+
 .yes{color:#2f9144;font-weight:bold;}
 .no{color:#777;font-weight:bold;}
 .unknown{color:#ff9800;font-weight:bold;}
 
-.no-data{
-  text-align:center;
-  color:#777;
-  font-size:18px;
-  margin-top:25px;
-}
-
 .buttons{
   text-align:center;
-  margin-top:30px;
+  margin-top:35px;
 }
 
 .btn{
   border:none;
   color:white;
   padding:14px 28px;
-  border-radius:12px;
+  border-radius:14px;
   font-size:16px;
   font-weight:bold;
   cursor:pointer;
   margin:6px;
+  transition:0.25s;
 }
 
-.report-btn{background:#2f9144;}
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(0,0,0,0.22);
+}
+
+.edit-btn{background:#9333ea;}
+.save-btn{background:#2f9144;display:none;}
+.print-btn{background:#004aad;}
 .back-btn{background:#c40000;}
 .meda-btn{background:#004080;}
 .home-btn{background:#0b2a66;}
 
+.no-data{
+  text-align:center;
+  color:#777;
+  font-size:18px;
+  margin-top:25px;
+  background:#f4f6f8;
+  padding:35px;
+  border-radius:20px;
+}
+
+@media print{
+  body{
+    background:white;
+    padding:0;
+  }
+
+  .container{
+    box-shadow:none;
+    border-radius:0;
+    max-width:100%;
+  }
+
+  .buttons{
+    display:none;
+  }
+
+  .edit-input,
+  .edit-textarea,
+  .edit-select,
+  .table-input,
+  .table-textarea,
+  .table-select{
+    display:none !important;
+  }
+
+  .value,
+  .text-box,
+  .display-value{
+    display:block !important;
+  }
+}
+
 @media(max-width:800px){
   .container{padding:25px;}
-  h1{font-size:34px;}
+  h1{font-size:36px;}
 }
 </style>
 </head>
@@ -174,7 +254,7 @@ tr:nth-child(even){
   <h1>MEDA Report Details</h1>
 
   <div class="description">
-    Full Maintenance Error Decision Aid investigation information
+    Full Maintenance Error Decision Aid Investigation Information
   </div>
 
   <div id="content">
@@ -182,8 +262,16 @@ tr:nth-child(even){
   </div>
 
   <div class="buttons">
-    <button id="viewFullReportBtn" class="btn report-btn" style="display:none;">
-      View MEDA Report
+    <button id="editBtn" class="btn edit-btn" style="display:none;" onclick="enableEdit()">
+      Edit Report
+    </button>
+
+    <button id="saveBtn" class="btn save-btn" onclick="saveChanges()">
+      Save Changes
+    </button>
+
+    <button class="btn print-btn" onclick="window.print()">
+      Print
     </button>
 
     <button class="btn back-btn" onclick="window.location.href='MEDA-Database.html'">
@@ -204,7 +292,13 @@ tr:nth-child(even){
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+import {
+  getDatabase,
+  ref,
+  get,
+  update
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
@@ -222,7 +316,15 @@ const database = getDatabase(app);
 const params = new URLSearchParams(window.location.search);
 const reportId = params.get("id");
 const content = document.getElementById("content");
-const viewFullReportBtn = document.getElementById("viewFullReportBtn");
+const editBtn = document.getElementById("editBtn");
+const saveBtn = document.getElementById("saveBtn");
+
+let currentData = {};
+let editMode = false;
+
+function safe(value){
+  return value || "N/A";
+}
 
 function statusClass(status){
   if(status === "Closed") return "closed";
@@ -238,242 +340,330 @@ function presentClass(value){
   return "";
 }
 
-if(!reportId){
+function field(label, key){
+  return `
+    <div class="info-card">
+      <div class="label">${label}</div>
+      <div class="value display-value" id="display_${key}">${safe(currentData[key])}</div>
+      <input class="edit-input" id="edit_${key}" value="${currentData[key] || ""}">
+    </div>
+  `;
+}
 
-  content.innerHTML = `<div class="no-data">No MEDA Report ID was found in the URL.</div>`;
+function textSection(title, key, emptyText){
+  return `
+    <h2>${title}</h2>
+    <div class="text-box display-value" id="display_${key}">
+      ${currentData[key] || emptyText}
+    </div>
+    <textarea class="edit-textarea" id="edit_${key}">${currentData[key] || ""}</textarea>
+  `;
+}
 
-}else{
+function loadReport(){
 
-  viewFullReportBtn.style.display = "inline-block";
-
-  viewFullReportBtn.onclick = function(){
-    window.location.href = "MEDA-Full-Report.html?id=" + reportId;
-  };
+  if(!reportId){
+    content.innerHTML = `<div class="no-data">No MEDA Report ID was found in the URL.</div>`;
+    return;
+  }
 
   const reportRef = ref(database, "medaReports/" + reportId);
 
   get(reportRef).then((snapshot) => {
 
-    if(snapshot.exists()){
-
-      const data = snapshot.val();
-
-      let factorsHTML = "";
-
-      if(data.contributingFactors && data.contributingFactors.length > 0){
-
-        data.contributingFactors.forEach(factor => {
-
-          factorsHTML += `
-            <tr>
-              <td>${factor.name || ""}</td>
-              <td>${factor.subfactor || ""}</td>
-              <td class="${presentClass(factor.present)}">${factor.present || ""}</td>
-              <td>${factor.evidence || ""}</td>
-              <td>${factor.recommendedAction || ""}</td>
-            </tr>
-          `;
-
-        });
-
-      }else{
-
-        factorsHTML = `<tr><td colspan="5">No MEDA contributing factors found.</td></tr>`;
-
-      }
-
-      let actionsHTML = "";
-
-      if(data.correctiveActions && data.correctiveActions.length > 0){
-
-        data.correctiveActions.forEach(action => {
-
-          if(action.action || action.responsible || action.dueDate || action.status){
-
-            actionsHTML += `
-              <tr>
-                <td>${action.action || ""}</td>
-                <td>${action.responsible || ""}</td>
-                <td>${action.dueDate || ""}</td>
-                <td>${action.status || ""}</td>
-              </tr>
-            `;
-
-          }
-
-        });
-
-      }
-
-      if(actionsHTML === ""){
-        actionsHTML = `<tr><td colspan="4">No corrective actions found.</td></tr>`;
-      }
-
-      content.innerHTML = `
-
-        <div style="text-align:center;">
-          <span class="status-small ${statusClass(data.status)}">
-            Status: ${data.status || "Open"}
-          </span>
-        </div>
-
-        <h2>1. Event Information</h2>
-
-        <div class="info-box">
-          <div class="info-grid">
-
-            <div class="info-card">
-              <div class="label">MEDA Report ID</div>
-              <div class="value">${reportId}</div>
-            </div>
-
-            <div class="info-card">
-              <div class="label">Created At</div>
-              <div class="value">${data.createdAt || "N/A"}</div>
-            </div>
-
-            <div class="info-card">
-              <div class="label">Report Title</div>
-              <div class="value">${data.title || "N/A"}</div>
-            </div>
-
-            <div class="info-card">
-              <div class="label">Affected Person / Employee Name</div>
-              <div class="value">${data.affectedPerson || "N/A"}</div>
-            </div>
-
-            <div class="info-card">
-              <div class="label">Employee ID</div>
-              <div class="value">${data.employeeId || "N/A"}</div>
-            </div>
-
-            <div class="info-card">
-              <div class="label">Department / Role</div>
-              <div class="value">${data.departmentRole || "N/A"}</div>
-            </div>
-
-            <div class="info-card">
-              <div class="label">Aircraft Registration</div>
-              <div class="value">${data.aircraft || "N/A"}</div>
-            </div>
-
-            <div class="info-card">
-              <div class="label">Customer</div>
-              <div class="value">${data.customer || "N/A"}</div>
-            </div>
-
-            <div class="info-card">
-              <div class="label">Location</div>
-              <div class="value">${data.location || "N/A"}</div>
-            </div>
-
-            <div class="info-card">
-              <div class="label">Date</div>
-              <div class="value">${data.date || "N/A"}</div>
-            </div>
-
-            <div class="info-card">
-              <div class="label">Work Order / Task Card / NRC</div>
-              <div class="value">${data.workOrder || "N/A"}</div>
-            </div>
-
-          </div>
-        </div>
-
-        <h2>2. Maintenance Error / Event Type</h2>
-
-        <div class="info-box">
-          <div class="info-grid">
-
-            <div class="info-card">
-              <div class="label">Event Type</div>
-              <div class="value">${data.eventType || "N/A"}</div>
-            </div>
-
-            <div class="info-card">
-              <div class="label">Detection Method</div>
-              <div class="value">${data.detectionMethod || "N/A"}</div>
-            </div>
-
-            <div class="info-card">
-              <div class="label">Main Contributing Factor</div>
-              <div class="value">${data.mainFactor || "N/A"}</div>
-            </div>
-
-          </div>
-        </div>
-
-        <h2>Event Description</h2>
-        <div class="text-box">
-          ${data.eventDescription || "No event description entered."}
-        </div>
-
-        <h2>Immediate Action Taken</h2>
-        <div class="text-box">
-          ${data.immediateAction || "No immediate action entered."}
-        </div>
-
-        <h2>3. MEDA Contributing Factors and Subfactors</h2>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Factor</th>
-              <th>Subfactor</th>
-              <th>Present?</th>
-              <th>Evidence / Description</th>
-              <th>Recommended Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            ${factorsHTML}
-          </tbody>
-        </table>
-
-        <h2>4. Root Cause / System Weakness</h2>
-
-        <h2>Root Cause Statement</h2>
-        <div class="text-box">
-          ${data.rootCause || "No root cause statement entered."}
-        </div>
-
-        <h2>System Weakness Identified</h2>
-        <div class="text-box">
-          ${data.systemWeakness || "No system weakness entered."}
-        </div>
-
-        <h2>5. Corrective / Preventive Actions</h2>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Action</th>
-              <th>Responsible Person</th>
-              <th>Due Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            ${actionsHTML}
-          </tbody>
-        </table>
-      `;
-
-    }else{
-
+    if(!snapshot.exists()){
       content.innerHTML = `<div class="no-data">MEDA Report not found in Firebase.</div>`;
-
+      return;
     }
 
+    currentData = snapshot.val();
+
+    editBtn.style.display = "inline-block";
+
+    renderReport();
+
   }).catch((error) => {
-
     content.innerHTML = `<div class="no-data">Error loading MEDA Report: ${error.message}</div>`;
+  });
+}
 
+function renderReport(){
+
+  const factors = currentData.contributingFactors || [];
+  const actions = currentData.correctiveActions || [];
+
+  let factorsHTML = "";
+
+  if(factors.length > 0){
+
+    factors.forEach((factor, index) => {
+
+      factorsHTML += `
+        <tr>
+          <td>
+            <span class="display-value">${factor.name || ""}</span>
+            <input class="table-input factor-name" data-index="${index}" value="${factor.name || ""}">
+          </td>
+
+          <td>
+            <span class="display-value">${factor.subfactor || ""}</span>
+            <input class="table-input factor-subfactor" data-index="${index}" value="${factor.subfactor || ""}">
+          </td>
+
+          <td>
+            <span class="display-value ${presentClass(factor.present)}">${factor.present || ""}</span>
+            <select class="table-select factor-present" data-index="${index}">
+              <option value="Yes" ${factor.present === "Yes" ? "selected" : ""}>Yes</option>
+              <option value="No" ${factor.present === "No" ? "selected" : ""}>No</option>
+              <option value="Unknown" ${factor.present === "Unknown" ? "selected" : ""}>Unknown</option>
+            </select>
+          </td>
+
+          <td>
+            <span class="display-value">${factor.evidence || ""}</span>
+            <textarea class="table-textarea factor-evidence" data-index="${index}">${factor.evidence || ""}</textarea>
+          </td>
+
+          <td>
+            <span class="display-value">${factor.recommendedAction || ""}</span>
+            <textarea class="table-textarea factor-action" data-index="${index}">${factor.recommendedAction || ""}</textarea>
+          </td>
+        </tr>
+      `;
+
+    });
+
+  }else{
+    factorsHTML = `<tr><td colspan="5">No MEDA contributing factors found.</td></tr>`;
+  }
+
+  let actionsHTML = "";
+
+  if(actions.length > 0){
+
+    actions.forEach((action, index) => {
+
+      actionsHTML += `
+        <tr>
+          <td>
+            <span class="display-value">${action.action || ""}</span>
+            <textarea class="table-textarea action-action" data-index="${index}">${action.action || ""}</textarea>
+          </td>
+
+          <td>
+            <span class="display-value">${action.responsible || ""}</span>
+            <input class="table-input action-responsible" data-index="${index}" value="${action.responsible || ""}">
+          </td>
+
+          <td>
+            <span class="display-value">${action.dueDate || ""}</span>
+            <input type="date" class="table-input action-date" data-index="${index}" value="${action.dueDate || ""}">
+          </td>
+
+          <td>
+            <span class="display-value">${action.status || ""}</span>
+            <input class="table-input action-status" data-index="${index}" value="${action.status || ""}">
+          </td>
+        </tr>
+      `;
+
+    });
+
+  }else{
+    actionsHTML = `<tr><td colspan="4">No corrective actions found.</td></tr>`;
+  }
+
+  content.innerHTML = `
+
+    <div style="text-align:center;">
+      <span class="status-small ${statusClass(currentData.status)}">
+        Status: ${currentData.status || "Open"}
+      </span>
+
+      <br>
+
+      <select class="edit-select" id="edit_status" style="max-width:260px;margin:auto;">
+        <option value="Open" ${currentData.status === "Open" ? "selected" : ""}>Open</option>
+        <option value="In Progress" ${currentData.status === "In Progress" ? "selected" : ""}>In Progress</option>
+        <option value="Pending Corrective Action" ${currentData.status === "Pending Corrective Action" ? "selected" : ""}>Pending Corrective Action</option>
+        <option value="Closed" ${currentData.status === "Closed" ? "selected" : ""}>Closed</option>
+      </select>
+    </div>
+
+    <h2>1. Event Information</h2>
+
+    <div class="info-box">
+      <div class="info-grid">
+
+        <div class="info-card">
+          <div class="label">Firebase Report ID</div>
+          <div class="value">${reportId}</div>
+        </div>
+
+        ${field("Editable MEDA ID", "medaId")}
+        ${field("Created At", "createdAt")}
+        ${field("Report Title", "title")}
+        ${field("Affected Person / Employee Name", "affectedPerson")}
+        ${field("Employee ID", "employeeId")}
+        ${field("Department / Role", "departmentRole")}
+        ${field("Aircraft Registration", "aircraft")}
+        ${field("Customer", "customer")}
+        ${field("Location", "location")}
+        ${field("Date", "date")}
+        ${field("Work Order / Task Card / NRC", "workOrder")}
+
+      </div>
+    </div>
+
+    <h2>2. Maintenance Error / Event Type</h2>
+
+    <div class="info-box">
+      <div class="info-grid">
+
+        ${field("Event Type", "eventType")}
+        ${field("Detection Method", "detectionMethod")}
+        ${field("Main Contributing Factor", "mainFactor")}
+
+      </div>
+    </div>
+
+    ${textSection("Event Description", "eventDescription", "No event description entered.")}
+
+    ${textSection("Immediate Action Taken", "immediateAction", "No immediate action entered.")}
+
+    <h2>3. MEDA Contributing Factors and Subfactors</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Factor</th>
+          <th>Subfactor</th>
+          <th>Present?</th>
+          <th>Evidence / Description</th>
+          <th>Recommended Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        ${factorsHTML}
+      </tbody>
+    </table>
+
+    <h2>4. Root Cause / System Weakness</h2>
+
+    ${textSection("Root Cause Statement", "rootCause", "No root cause statement entered.")}
+
+    ${textSection("System Weakness Identified", "systemWeakness", "No system weakness entered.")}
+
+    <h2>5. Corrective / Preventive Actions</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Action</th>
+          <th>Responsible Person</th>
+          <th>Due Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        ${actionsHTML}
+      </tbody>
+    </table>
+
+  `;
+
+  if(editMode){
+    enableEdit();
+  }
+}
+
+window.enableEdit = function(){
+
+  editMode = true;
+
+  document.querySelectorAll(".display-value").forEach(el => {
+    el.style.display = "none";
   });
 
-}
+  document.querySelectorAll(".edit-input, .edit-textarea, .edit-select, .table-input, .table-textarea, .table-select").forEach(el => {
+    el.style.display = "block";
+  });
+
+  editBtn.style.display = "none";
+  saveBtn.style.display = "inline-block";
+};
+
+window.saveChanges = function(){
+
+  const updatedData = {
+    medaId: document.getElementById("edit_medaId")?.value || "",
+    createdAt: document.getElementById("edit_createdAt")?.value || "",
+    title: document.getElementById("edit_title")?.value || "",
+    affectedPerson: document.getElementById("edit_affectedPerson")?.value || "",
+    employeeId: document.getElementById("edit_employeeId")?.value || "",
+    departmentRole: document.getElementById("edit_departmentRole")?.value || "",
+    aircraft: document.getElementById("edit_aircraft")?.value || "",
+    customer: document.getElementById("edit_customer")?.value || "",
+    location: document.getElementById("edit_location")?.value || "",
+    date: document.getElementById("edit_date")?.value || "",
+    workOrder: document.getElementById("edit_workOrder")?.value || "",
+    eventType: document.getElementById("edit_eventType")?.value || "",
+    detectionMethod: document.getElementById("edit_detectionMethod")?.value || "",
+    mainFactor: document.getElementById("edit_mainFactor")?.value || "",
+    eventDescription: document.getElementById("edit_eventDescription")?.value || "",
+    immediateAction: document.getElementById("edit_immediateAction")?.value || "",
+    rootCause: document.getElementById("edit_rootCause")?.value || "",
+    systemWeakness: document.getElementById("edit_systemWeakness")?.value || "",
+    status: document.getElementById("edit_status")?.value || "Open"
+  };
+
+  const updatedFactors = [];
+
+  document.querySelectorAll(".factor-name").forEach((input) => {
+    const index = input.dataset.index;
+
+    updatedFactors[index] = {
+      name: document.querySelector(`.factor-name[data-index="${index}"]`)?.value || "",
+      subfactor: document.querySelector(`.factor-subfactor[data-index="${index}"]`)?.value || "",
+      present: document.querySelector(`.factor-present[data-index="${index}"]`)?.value || "",
+      evidence: document.querySelector(`.factor-evidence[data-index="${index}"]`)?.value || "",
+      recommendedAction: document.querySelector(`.factor-action[data-index="${index}"]`)?.value || ""
+    };
+  });
+
+  const updatedActions = [];
+
+  document.querySelectorAll(".action-action").forEach((input) => {
+    const index = input.dataset.index;
+
+    updatedActions[index] = {
+      action: document.querySelector(`.action-action[data-index="${index}"]`)?.value || "",
+      responsible: document.querySelector(`.action-responsible[data-index="${index}"]`)?.value || "",
+      dueDate: document.querySelector(`.action-date[data-index="${index}"]`)?.value || "",
+      status: document.querySelector(`.action-status[data-index="${index}"]`)?.value || ""
+    };
+  });
+
+  updatedData.contributingFactors = updatedFactors;
+  updatedData.correctiveActions = updatedActions;
+
+  update(ref(database, "medaReports/" + reportId), updatedData)
+  .then(() => {
+    alert("MEDA Report updated successfully.");
+    editMode = false;
+    saveBtn.style.display = "none";
+    editBtn.style.display = "inline-block";
+    loadReport();
+  })
+  .catch((error) => {
+    alert("Error updating MEDA Report: " + error.message);
+  });
+
+};
+
+loadReport();
 
 </script>
 
