@@ -9,200 +9,203 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-  font-family:Arial,sans-serif;
-  background:#f4f7fb;
-  color:#111;
-  padding:25px;
+  font-family:'Segoe UI', Arial, sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#061b3d,#082b66,#1450b8);
+  padding:30px;
 }
 
 .container{
-  max-width:1350px;
+  max-width:1250px;
   margin:auto;
   background:white;
-  border-radius:24px;
-  padding:30px;
-  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+  padding:45px;
+  border-radius:30px;
+  box-shadow:0 22px 60px rgba(0,0,0,0.35);
 }
 
-.header{
-  background:linear-gradient(135deg,#071f47,#1450b8);
-  color:white;
-  padding:30px;
-  border-radius:22px;
+h1{
   text-align:center;
+  color:#071f47;
+  font-size:48px;
+  margin-bottom:10px;
+}
+
+.description{
+  text-align:center;
+  color:#666;
+  font-size:18px;
+  margin-bottom:30px;
+}
+
+h2{
+  color:#071f47;
+  margin:30px 0 15px;
+  border-left:7px solid #1450b8;
+  padding-left:12px;
+}
+
+.info-box{
+  background:#f4f7fb;
+  border-radius:20px;
+  padding:25px;
   margin-bottom:25px;
-}
-
-.header h1{
-  font-size:42px;
-  margin-bottom:8px;
-}
-
-.header p{
-  font-size:17px;
-  color:#dbeafe;
-}
-
-.section{
-  margin-top:25px;
   border:1px solid #d8e1ef;
-  border-radius:18px;
-  overflow:hidden;
-  background:white;
 }
 
-.section-title{
-  background:#004080;
-  color:white;
-  padding:14px 18px;
-  font-size:21px;
-  font-weight:bold;
-}
-
-.section-body{
-  padding:22px;
-}
-
-.grid{
+.info-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:18px;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:15px;
 }
 
-.field label{
-  display:block;
-  color:#004080;
-  font-weight:bold;
-  margin-bottom:6px;
-}
-
-input,select,textarea{
-  width:100%;
-  padding:11px;
-  border:1px solid #b8c7da;
-  border-radius:10px;
-  font-size:15px;
+.info-card{
   background:white;
+  border:1px solid #d8e1ef;
+  border-radius:16px;
+  padding:15px;
 }
 
-textarea{
-  min-height:95px;
+.label{
+  font-weight:bold;
+  color:#004080;
+  font-size:13px;
+  margin-bottom:7px;
+  text-transform:uppercase;
+}
+
+.value{
+  color:#222;
+  font-size:15px;
+  font-weight:bold;
+  word-break:break-word;
+}
+
+.edit-input,
+.edit-textarea,
+.edit-select{
+  width:100%;
+  padding:12px;
+  border:1px solid #cbd5e1;
+  border-radius:12px;
+  font-size:15px;
+  font-family:Arial, sans-serif;
+  display:none;
+}
+
+.edit-textarea{
+  min-height:130px;
   resize:vertical;
 }
 
-input:disabled,
-select:disabled,
-textarea:disabled{
+.text-box{
   background:#f8fbff;
-  color:#111;
-  font-weight:600;
-}
-
-.factor-card{
   border:1px solid #d8e1ef;
-  border-left:8px solid #1450b8;
+  border-left:7px solid #1450b8;
   border-radius:16px;
   padding:18px;
   margin-bottom:18px;
-  background:#f8fbff;
+  line-height:1.6;
+  color:#333;
+  white-space:pre-wrap;
 }
 
-.factor-card h3{
-  color:#071f47;
-  margin-bottom:8px;
-  font-size:22px;
-}
-
-.factor-card p{
-  color:#56657d;
-  margin-bottom:14px;
-  line-height:1.4;
-}
-
-.factor-row{
-  display:grid;
-  grid-template-columns:170px 1fr 1fr 1fr;
-  gap:14px;
-  align-items:start;
-}
-
-.action-table{
-  display:grid;
-  gap:16px;
-}
-
-.action-row{
-  display:grid;
-  grid-template-columns:70px 2fr 1fr 1fr 1fr;
-  gap:14px;
-  align-items:start;
-  background:#f8fbff;
-  border:1px solid #d8e1ef;
-  border-radius:16px;
-  padding:16px;
-}
-
-.action-number{
-  background:#004080;
-  color:white;
+.status-small{
+  display:inline-block;
+  padding:10px 22px;
+  border-radius:999px;
+  font-size:14px;
   font-weight:bold;
-  border-radius:12px;
-  padding:14px;
-  text-align:center;
+  color:white;
+  margin-bottom:20px;
 }
 
-.btn-area{
+.open{background:#f59e0b;}
+.progress{background:#1450b8;}
+.pending{background:#ff9800;}
+.closed{background:#2f9144;}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+}
+
+th{
+  background:#071f47;
+  color:white;
+  padding:14px;
+  font-size:15px;
+}
+
+td{
+  border:1px solid #ddd;
+  padding:12px;
   text-align:center;
-  margin-top:30px;
+  font-size:14px;
+  vertical-align:top;
+}
+
+tr:nth-child(even){
+  background:#f4f6f8;
+}
+
+.table-input,
+.table-textarea,
+.table-select{
+  width:100%;
+  padding:9px;
+  border:1px solid #cbd5e1;
+  border-radius:8px;
+  display:none;
+}
+
+.table-textarea{
+  min-height:80px;
+  resize:vertical;
+}
+
+.yes{color:#2f9144;font-weight:bold;}
+.no{color:#777;font-weight:bold;}
+.unknown{color:#ff9800;font-weight:bold;}
+
+.buttons{
+  text-align:center;
+  margin-top:35px;
 }
 
 .btn{
   border:none;
-  padding:15px 28px;
-  border-radius:12px;
   color:white;
+  padding:14px 28px;
+  border-radius:14px;
   font-size:16px;
   font-weight:bold;
   cursor:pointer;
   margin:6px;
+  transition:0.25s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(0,0,0,0.22);
 }
 
 .edit-btn{background:#9333ea;}
 .save-btn{background:#2f9144;display:none;}
 .print-btn{background:#004aad;}
 .back-btn{background:#c40000;}
-.home-btn{background:#0b2a66;}
 .meda-btn{background:#004080;}
+.home-btn{background:#0b2a66;}
 
-.saved-box{
-  margin-top:25px;
-  background:#e8f5e9;
-  color:#14532d;
-  border:1px solid #2f9144;
-  padding:16px;
-  border-radius:14px;
-  display:none;
-  font-weight:bold;
+.no-data{
   text-align:center;
-}
-
-.loading{
-  text-align:center;
-  padding:30px;
-  color:#666;
+  color:#777;
   font-size:18px;
-  font-weight:bold;
-}
-
-@media(max-width:1000px){
-  .factor-row,
-  .action-row{
-    grid-template-columns:1fr;
-  }
-
-  .header h1{
-    font-size:32px;
-  }
+  margin-top:25px;
+  background:#f4f6f8;
+  padding:35px;
+  border-radius:20px;
 }
 
 @media print{
@@ -214,18 +217,32 @@ textarea:disabled{
   .container{
     box-shadow:none;
     border-radius:0;
+    max-width:100%;
   }
 
-  .btn-area,
-  .saved-box{
+  .buttons{
+    display:none;
+  }
+
+  .edit-input,
+  .edit-textarea,
+  .edit-select,
+  .table-input,
+  .table-textarea,
+  .table-select{
     display:none !important;
   }
 
-  input,select,textarea{
-    border:1px solid #ccc;
-    background:white !important;
-    color:#000 !important;
+  .value,
+  .text-box,
+  .display-value{
+    display:block !important;
   }
+}
+
+@media(max-width:800px){
+  .container{padding:25px;}
+  h1{font-size:36px;}
 }
 </style>
 </head>
@@ -234,293 +251,46 @@ textarea:disabled{
 
 <div class="container">
 
-<div class="header">
-  <h1>Maintenance Error Decision Aid - MEDA</h1>
-  <p>Full MEDA investigation details loaded from Firebase.</p>
-</div>
+  <h1>MEDA Report Details</h1>
 
-<div id="loadingBox" class="loading">Loading MEDA Report...</div>
-
-<div id="reportForm" style="display:none;">
-
-<div class="section">
-  <div class="section-title">1. Event Information</div>
-  <div class="section-body">
-
-    <div class="grid">
-
-      <div class="field">
-        <label>Firebase Report ID</label>
-        <input id="firebaseId" disabled>
-      </div>
-
-      <div class="field">
-        <label>Editable MEDA ID</label>
-        <input id="medaId">
-      </div>
-
-      <div class="field">
-        <label>Created At</label>
-        <input id="createdAt">
-      </div>
-
-      <div class="field">
-        <label>Report Title *</label>
-        <input id="title">
-      </div>
-
-      <div class="field">
-        <label>Affected Person / Employee Name</label>
-        <input id="affectedPerson">
-      </div>
-
-      <div class="field">
-        <label>Employee ID</label>
-        <input id="employeeId">
-      </div>
-
-      <div class="field">
-        <label>Department / Role</label>
-        <input id="departmentRole">
-      </div>
-
-      <div class="field">
-        <label>Aircraft Registration</label>
-        <input id="aircraft">
-      </div>
-
-      <div class="field">
-        <label>Customer</label>
-        <input id="customer">
-      </div>
-
-      <div class="field">
-        <label>Location</label>
-        <input id="location">
-      </div>
-
-      <div class="field">
-        <label>Date</label>
-        <input type="date" id="date">
-      </div>
-
-      <div class="field">
-        <label>Work Order / Task Card / NRC</label>
-        <input id="workOrder">
-      </div>
-
-    </div>
-
-    <br>
-
-    <div class="field">
-      <label>Event Description</label>
-      <textarea id="eventDescription"></textarea>
-    </div>
-
+  <div class="description">
+    Full Maintenance Error Decision Aid Investigation Information
   </div>
-</div>
 
-<div class="section">
-  <div class="section-title">2. Maintenance Error / Event Type</div>
-  <div class="section-body">
-
-    <div class="grid">
-      <div class="field">
-        <label>Event Type</label>
-        <select id="eventType">
-          <option>Incorrect Installation</option>
-          <option>Missed Inspection</option>
-          <option>Omission</option>
-          <option>Undocumented Maintenance</option>
-          <option>Wrong Part / Material</option>
-          <option>Incomplete Task</option>
-          <option>Damage During Maintenance</option>
-          <option>Tool / Equipment Issue</option>
-          <option>Procedure Not Followed</option>
-          <option>Other</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Detection Method</label>
-        <select id="detectionMethod">
-          <option>Customer Finding</option>
-          <option>QA Inspection</option>
-          <option>Mechanic Self-Report</option>
-          <option>Audit</option>
-          <option>Operational Event</option>
-          <option>Pre-Release Inspection</option>
-          <option>Other</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Immediate Action Taken</label>
-        <input id="immediateAction">
-      </div>
-    </div>
-
+  <div id="content">
+    Loading MEDA Report...
   </div>
-</div>
 
-<div class="section">
-  <div class="section-title">3. MEDA Contributing Factors and Subfactors</div>
-  <div class="section-body" id="factorArea"></div>
-</div>
+  <div class="buttons">
+    <button id="editBtn" class="btn edit-btn" style="display:none;" onclick="enableEdit()">
+      Edit Report
+    </button>
 
-<div class="section">
-  <div class="section-title">4. Root Cause / System Weakness</div>
-  <div class="section-body">
+    <button id="saveBtn" class="btn save-btn" onclick="saveChanges()">
+      Save Changes
+    </button>
 
-    <div class="grid">
-      <div class="field">
-        <label>Main Contributing Factor</label>
-        <select id="mainFactor">
-          <option>Information / Documentation</option>
-          <option>Communication</option>
-          <option>Knowledge / Skills</option>
-          <option>Tools / Equipment</option>
-          <option>Work Environment</option>
-          <option>Human Factors</option>
-          <option>Supervision / Leadership</option>
-          <option>Organizational Factors</option>
-          <option>Aircraft / Component Design</option>
-        </select>
-      </div>
+    <button class="btn print-btn" onclick="window.print()">
+      Print
+    </button>
 
-      <div class="field">
-        <label>Investigation Status</label>
-        <select id="status">
-          <option>Open</option>
-          <option>In Progress</option>
-          <option>Pending Corrective Action</option>
-          <option>Closed</option>
-        </select>
-      </div>
-    </div>
+    <button class="btn back-btn" onclick="window.location.href='MEDA-Database.html'">
+      Back to MEDA Database
+    </button>
 
-    <br>
+    <button class="btn meda-btn" onclick="window.location.href='MEDA.html'">
+      Back to MEDA
+    </button>
 
-    <div class="field">
-      <label>Root Cause Statement</label>
-      <textarea id="rootCause"></textarea>
-    </div>
-
-    <br>
-
-    <div class="field">
-      <label>System Weakness Identified</label>
-      <textarea id="systemWeakness"></textarea>
-    </div>
-
+    <button class="btn home-btn" onclick="window.location.href='index.html'">
+      Home
+    </button>
   </div>
-</div>
-
-<div class="section">
-  <div class="section-title">5. Corrective / Preventive Actions</div>
-  <div class="section-body">
-
-    <div class="action-table">
-
-      <div class="action-row">
-        <div class="action-number">CPA 1</div>
-        <div class="field">
-          <label>Corrective / Preventive Action</label>
-          <textarea id="action1"></textarea>
-        </div>
-        <div class="field">
-          <label>Responsible Person</label>
-          <input id="responsible1">
-        </div>
-        <div class="field">
-          <label>Due Date</label>
-          <input type="date" id="dueDate1">
-        </div>
-        <div class="field">
-          <label>Status</label>
-          <select id="actionStatus1">
-            <option>Open</option>
-            <option>In Progress</option>
-            <option>Completed</option>
-            <option>Verified</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="action-row">
-        <div class="action-number">CPA 2</div>
-        <div class="field">
-          <label>Corrective / Preventive Action</label>
-          <textarea id="action2"></textarea>
-        </div>
-        <div class="field">
-          <label>Responsible Person</label>
-          <input id="responsible2">
-        </div>
-        <div class="field">
-          <label>Due Date</label>
-          <input type="date" id="dueDate2">
-        </div>
-        <div class="field">
-          <label>Status</label>
-          <select id="actionStatus2">
-            <option>Open</option>
-            <option>In Progress</option>
-            <option>Completed</option>
-            <option>Verified</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="action-row">
-        <div class="action-number">CPA 3</div>
-        <div class="field">
-          <label>Corrective / Preventive Action</label>
-          <textarea id="action3"></textarea>
-        </div>
-        <div class="field">
-          <label>Responsible Person</label>
-          <input id="responsible3">
-        </div>
-        <div class="field">
-          <label>Due Date</label>
-          <input type="date" id="dueDate3">
-        </div>
-        <div class="field">
-          <label>Status</label>
-          <select id="actionStatus3">
-            <option>Open</option>
-            <option>In Progress</option>
-            <option>Completed</option>
-            <option>Verified</option>
-          </select>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-</div>
-
-<div class="btn-area">
-  <button id="editBtn" class="btn edit-btn" onclick="enableEdit()">Edit Report</button>
-  <button id="saveBtn" class="btn save-btn" onclick="saveChanges()">Save Changes</button>
-  <button class="btn print-btn" onclick="window.print()">Print</button>
-  <button class="btn back-btn" onclick="window.location.href='MEDA-Database.html'">Back to MEDA Database</button>
-  <button class="btn meda-btn" onclick="window.location.href='MEDA.html'">Back to MEDA</button>
-  <button class="btn home-btn" onclick="window.location.href='index.html'">Home</button>
-</div>
-
-<div id="savedBox" class="saved-box">
-  MEDA Report updated successfully.
-</div>
-
-</div>
 
 </div>
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
 import {
@@ -543,349 +313,358 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-window.database = database;
-window.dbRef = ref;
-window.dbGet = get;
-window.dbUpdate = update;
-</script>
-
-<script>
 const params = new URLSearchParams(window.location.search);
 const reportId = params.get("id");
+const content = document.getElementById("content");
+const editBtn = document.getElementById("editBtn");
+const saveBtn = document.getElementById("saveBtn");
 
 let currentData = {};
+let editMode = false;
 
-const medaFactors = [
-  {
-    name:"Information / Documentation",
-    examples:"AMM unclear, task card missing, outdated revision, incomplete NRC, missing references.",
-    subfactors:[
-      "Procedure unavailable","Procedure incorrect","Procedure incomplete","Procedure difficult to understand",
-      "Outdated document revision","Work card issue","Maintenance record issue","Technical publication issue","Other"
-    ]
-  },
-  {
-    name:"Communication",
-    examples:"Poor shift turnover, unclear PM instruction, incomplete handover, customer communication gap.",
-    subfactors:[
-      "Shift turnover issue","Incomplete handover","Poor verbal communication","Poor written communication",
-      "Communication between departments","Communication with customer","Assumption not verified",
-      "Instruction not clearly understood","Other"
-    ]
-  },
-  {
-    name:"Knowledge / Skills",
-    examples:"Technician did not know corrective action, lack of experience, training gap, unfamiliar task.",
-    subfactors:[
-      "Inadequate training","Lack of experience","Inadequate OJT","Knowledge gap","Skill deficiency",
-      "Unfamiliar task","Incorrect interpretation of requirements","Other"
-    ]
-  },
-  {
-    name:"Tools / Equipment",
-    examples:"Wrong tool, unavailable equipment, inadequate protection, defective tool, poor access equipment.",
-    subfactors:[
-      "Tool unavailable","Wrong tool used","Tool defective","Equipment malfunction","Test equipment issue",
-      "Calibration issue","Inadequate protective equipment","Access equipment issue","Other"
-    ]
-  },
-  {
-    name:"Work Environment",
-    examples:"Poor lighting, noise, heat, limited space, difficult access, housekeeping concerns.",
-    subfactors:[
-      "Poor lighting","Noise","Temperature / heat","Weather","Limited space","Difficult access",
-      "Congested work area","Housekeeping issue","FOD risk","Other"
-    ]
-  },
-  {
-    name:"Human Factors",
-    examples:"Fatigue, distraction, complacency, time pressure, overconfidence, interruption.",
-    subfactors:[
-      "Fatigue","Stress","Distraction","Interruption","Complacency","Overconfidence",
-      "Time pressure","High workload","Lack of situational awareness","Other"
-    ]
-  },
-  {
-    name:"Supervision / Leadership",
-    examples:"Weak oversight, incomplete follow-up, lack of inspection control, planning weakness.",
-    subfactors:[
-      "Inadequate supervision","Weak oversight","Incomplete follow-up","Lack of inspection control",
-      "Planning weakness","Unclear responsibility","Production pressure not managed","Other"
-    ]
-  },
-  {
-    name:"Organizational Factors",
-    examples:"Procedure gap, staffing issue, production pressure, unclear responsibility, training assignment gap.",
-    subfactors:[
-      "Staffing issue","Scheduling issue","Resource allocation issue","Procedure gap","Policy not clear",
-      "Training assignment gap","Production pressure","Process not standardized","Other"
-    ]
-  },
-  {
-    name:"Aircraft / Component Design",
-    examples:"Poor visibility, hard-to-access component, confusing installation, design-induced error.",
-    subfactors:[
-      "Poor accessibility","Poor visibility","Component similarity","Inadequate labeling","Design complexity",
-      "Human factors not considered","Difficult installation position","Other"
-    ]
-  }
-];
-
-function safeId(text){
-  return text.replaceAll(" ","_").replaceAll("/","_").replaceAll("-","_");
+function safe(value){
+  return value || "N/A";
 }
 
-function buildFactors(){
-  const area = document.getElementById("factorArea");
-  area.innerHTML = "";
-
-  medaFactors.forEach(factor => {
-    const id = safeId(factor.name);
-    let options = factor.subfactors.map(sub => `<option>${sub}</option>`).join("");
-
-    area.innerHTML += `
-      <div class="factor-card">
-        <h3>${factor.name}</h3>
-        <p><b>Examples:</b> ${factor.examples}</p>
-
-        <div class="factor-row">
-          <div class="field">
-            <label>Factor Present?</label>
-            <select id="${id}_present">
-              <option>No</option>
-              <option>Yes</option>
-              <option>Unknown</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>MEDA Subfactor</label>
-            <select id="${id}_subfactor">
-              ${options}
-            </select>
-          </div>
-
-          <div class="field">
-            <label>Evidence / Description</label>
-            <textarea id="${id}_evidence"></textarea>
-          </div>
-
-          <div class="field">
-            <label>Recommended Action</label>
-            <textarea id="${id}_action"></textarea>
-          </div>
-        </div>
-      </div>
-    `;
-  });
+function statusClass(status){
+  if(status === "Closed") return "closed";
+  if(status === "In Progress") return "progress";
+  if(status === "Pending Corrective Action") return "pending";
+  return "open";
 }
 
-function setValue(id,value){
-  const el = document.getElementById(id);
-  if(el){
-    el.value = value || "";
-  }
+function presentClass(value){
+  if(value === "Yes") return "yes";
+  if(value === "No") return "no";
+  if(value === "Unknown") return "unknown";
+  return "";
+}
+
+function field(label, key){
+  return `
+    <div class="info-card">
+      <div class="label">${label}</div>
+      <div class="value display-value" id="display_${key}">${safe(currentData[key])}</div>
+      <input class="edit-input" id="edit_${key}" value="${currentData[key] || ""}">
+    </div>
+  `;
+}
+
+function textSection(title, key, emptyText){
+  return `
+    <h2>${title}</h2>
+    <div class="text-box display-value" id="display_${key}">
+      ${currentData[key] || emptyText}
+    </div>
+    <textarea class="edit-textarea" id="edit_${key}">${currentData[key] || ""}</textarea>
+  `;
 }
 
 function loadReport(){
 
   if(!reportId){
-    document.getElementById("loadingBox").innerHTML = "No MEDA Report ID was found in the URL.";
+    content.innerHTML = `<div class="no-data">No MEDA Report ID was found in the URL.</div>`;
     return;
   }
 
-  window.dbGet(window.dbRef(window.database,"medaReports/" + reportId))
-  .then(snapshot => {
+  const reportRef = ref(database, "medaReports/" + reportId);
+
+  get(reportRef).then((snapshot) => {
 
     if(!snapshot.exists()){
-      document.getElementById("loadingBox").innerHTML = "MEDA Report not found in Firebase.";
+      content.innerHTML = `<div class="no-data">MEDA Report not found in Firebase.</div>`;
       return;
     }
 
     currentData = snapshot.val();
 
-    document.getElementById("loadingBox").style.display = "none";
-    document.getElementById("reportForm").style.display = "block";
+    editBtn.style.display = "inline-block";
 
-    populateForm();
-    lockForm();
+    renderReport();
 
-  })
-  .catch(error => {
-    document.getElementById("loadingBox").innerHTML = "Error loading MEDA Report: " + error.message;
+  }).catch((error) => {
+    content.innerHTML = `<div class="no-data">Error loading MEDA Report: ${error.message}</div>`;
   });
 }
 
-function populateForm(){
+function renderReport(){
 
-  setValue("firebaseId", reportId);
-  setValue("medaId", currentData.medaId || reportId);
-  setValue("createdAt", currentData.createdAt);
-
-  setValue("title", currentData.title);
-  setValue("affectedPerson", currentData.affectedPerson);
-  setValue("employeeId", currentData.employeeId);
-  setValue("departmentRole", currentData.departmentRole);
-  setValue("aircraft", currentData.aircraft);
-  setValue("customer", currentData.customer);
-  setValue("location", currentData.location);
-  setValue("date", currentData.date);
-  setValue("workOrder", currentData.workOrder);
-  setValue("eventDescription", currentData.eventDescription);
-
-  setValue("eventType", currentData.eventType);
-  setValue("detectionMethod", currentData.detectionMethod);
-  setValue("immediateAction", currentData.immediateAction);
-
-  setValue("mainFactor", currentData.mainFactor);
-  setValue("status", currentData.status);
-  setValue("rootCause", currentData.rootCause);
-  setValue("systemWeakness", currentData.systemWeakness);
-
-  if(currentData.contributingFactors){
-    currentData.contributingFactors.forEach(factor => {
-      const id = safeId(factor.name);
-
-      setValue(id + "_present", factor.present);
-      setValue(id + "_subfactor", factor.subfactor);
-      setValue(id + "_evidence", factor.evidence);
-      setValue(id + "_action", factor.recommendedAction);
-    });
-  }
-
+  const factors = currentData.contributingFactors || [];
   const actions = currentData.correctiveActions || [];
 
-  for(let i = 1; i <= 3; i++){
-    const action = actions[i - 1] || {};
+  let factorsHTML = "";
 
-    setValue("action" + i, action.action);
-    setValue("responsible" + i, action.responsible);
-    setValue("dueDate" + i, action.dueDate);
-    setValue("actionStatus" + i, action.status);
-  }
-}
+  if(factors.length > 0){
 
-function lockForm(){
-  document.querySelectorAll("input, select, textarea").forEach(el => {
-    el.disabled = true;
-  });
+    factors.forEach((factor, index) => {
 
-  document.getElementById("firebaseId").disabled = true;
-  document.getElementById("editBtn").style.display = "inline-block";
-  document.getElementById("saveBtn").style.display = "none";
-}
+      factorsHTML += `
+        <tr>
+          <td>
+            <span class="display-value">${factor.name || ""}</span>
+            <input class="table-input factor-name" data-index="${index}" value="${factor.name || ""}">
+          </td>
 
-function enableEdit(){
-  document.querySelectorAll("input, select, textarea").forEach(el => {
-    el.disabled = false;
-  });
+          <td>
+            <span class="display-value">${factor.subfactor || ""}</span>
+            <input class="table-input factor-subfactor" data-index="${index}" value="${factor.subfactor || ""}">
+          </td>
 
-  document.getElementById("firebaseId").disabled = true;
-  document.getElementById("createdAt").disabled = true;
+          <td>
+            <span class="display-value ${presentClass(factor.present)}">${factor.present || ""}</span>
+            <select class="table-select factor-present" data-index="${index}">
+              <option value="Yes" ${factor.present === "Yes" ? "selected" : ""}>Yes</option>
+              <option value="No" ${factor.present === "No" ? "selected" : ""}>No</option>
+              <option value="Unknown" ${factor.present === "Unknown" ? "selected" : ""}>Unknown</option>
+            </select>
+          </td>
 
-  document.getElementById("editBtn").style.display = "none";
-  document.getElementById("saveBtn").style.display = "inline-block";
-}
+          <td>
+            <span class="display-value">${factor.evidence || ""}</span>
+            <textarea class="table-textarea factor-evidence" data-index="${index}">${factor.evidence || ""}</textarea>
+          </td>
 
-function collectFactors(){
-  const factors = [];
+          <td>
+            <span class="display-value">${factor.recommendedAction || ""}</span>
+            <textarea class="table-textarea factor-action" data-index="${index}">${factor.recommendedAction || ""}</textarea>
+          </td>
+        </tr>
+      `;
 
-  medaFactors.forEach(factor => {
-    const id = safeId(factor.name);
-
-    factors.push({
-      name: factor.name,
-      present: document.getElementById(id + "_present").value,
-      subfactor: document.getElementById(id + "_subfactor").value,
-      evidence: document.getElementById(id + "_evidence").value.trim(),
-      recommendedAction: document.getElementById(id + "_action").value.trim()
     });
+
+  }else{
+    factorsHTML = `<tr><td colspan="5">No MEDA contributing factors found.</td></tr>`;
+  }
+
+  let actionsHTML = "";
+
+  if(actions.length > 0){
+
+    actions.forEach((action, index) => {
+
+      actionsHTML += `
+        <tr>
+          <td>
+            <span class="display-value">${action.action || ""}</span>
+            <textarea class="table-textarea action-action" data-index="${index}">${action.action || ""}</textarea>
+          </td>
+
+          <td>
+            <span class="display-value">${action.responsible || ""}</span>
+            <input class="table-input action-responsible" data-index="${index}" value="${action.responsible || ""}">
+          </td>
+
+          <td>
+            <span class="display-value">${action.dueDate || ""}</span>
+            <input type="date" class="table-input action-date" data-index="${index}" value="${action.dueDate || ""}">
+          </td>
+
+          <td>
+            <span class="display-value">${action.status || ""}</span>
+            <input class="table-input action-status" data-index="${index}" value="${action.status || ""}">
+          </td>
+        </tr>
+      `;
+
+    });
+
+  }else{
+    actionsHTML = `<tr><td colspan="4">No corrective actions found.</td></tr>`;
+  }
+
+  content.innerHTML = `
+
+    <div style="text-align:center;">
+      <span class="status-small ${statusClass(currentData.status)}">
+        Status: ${currentData.status || "Open"}
+      </span>
+
+      <br>
+
+      <select class="edit-select" id="edit_status" style="max-width:260px;margin:auto;">
+        <option value="Open" ${currentData.status === "Open" ? "selected" : ""}>Open</option>
+        <option value="In Progress" ${currentData.status === "In Progress" ? "selected" : ""}>In Progress</option>
+        <option value="Pending Corrective Action" ${currentData.status === "Pending Corrective Action" ? "selected" : ""}>Pending Corrective Action</option>
+        <option value="Closed" ${currentData.status === "Closed" ? "selected" : ""}>Closed</option>
+      </select>
+    </div>
+
+    <h2>1. Event Information</h2>
+
+    <div class="info-box">
+      <div class="info-grid">
+
+        <div class="info-card">
+          <div class="label">Firebase Report ID</div>
+          <div class="value">${reportId}</div>
+        </div>
+
+        ${field("Editable MEDA ID", "medaId")}
+        ${field("Created At", "createdAt")}
+        ${field("Report Title", "title")}
+        ${field("Affected Person / Employee Name", "affectedPerson")}
+        ${field("Employee ID", "employeeId")}
+        ${field("Department / Role", "departmentRole")}
+        ${field("Aircraft Registration", "aircraft")}
+        ${field("Customer", "customer")}
+        ${field("Location", "location")}
+        ${field("Date", "date")}
+        ${field("Work Order / Task Card / NRC", "workOrder")}
+
+      </div>
+    </div>
+
+    <h2>2. Maintenance Error / Event Type</h2>
+
+    <div class="info-box">
+      <div class="info-grid">
+
+        ${field("Event Type", "eventType")}
+        ${field("Detection Method", "detectionMethod")}
+        ${field("Main Contributing Factor", "mainFactor")}
+
+      </div>
+    </div>
+
+    ${textSection("Event Description", "eventDescription", "No event description entered.")}
+
+    ${textSection("Immediate Action Taken", "immediateAction", "No immediate action entered.")}
+
+    <h2>3. MEDA Contributing Factors and Subfactors</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Factor</th>
+          <th>Subfactor</th>
+          <th>Present?</th>
+          <th>Evidence / Description</th>
+          <th>Recommended Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        ${factorsHTML}
+      </tbody>
+    </table>
+
+    <h2>4. Root Cause / System Weakness</h2>
+
+    ${textSection("Root Cause Statement", "rootCause", "No root cause statement entered.")}
+
+    ${textSection("System Weakness Identified", "systemWeakness", "No system weakness entered.")}
+
+    <h2>5. Corrective / Preventive Actions</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Action</th>
+          <th>Responsible Person</th>
+          <th>Due Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        ${actionsHTML}
+      </tbody>
+    </table>
+
+  `;
+
+  if(editMode){
+    enableEdit();
+  }
+}
+
+window.enableEdit = function(){
+
+  editMode = true;
+
+  document.querySelectorAll(".display-value").forEach(el => {
+    el.style.display = "none";
   });
 
-  return factors;
-}
+  document.querySelectorAll(".edit-input, .edit-textarea, .edit-select, .table-input, .table-textarea, .table-select").forEach(el => {
+    el.style.display = "block";
+  });
 
-function collectActions(){
-  return [
-    {
-      action: document.getElementById("action1").value.trim(),
-      responsible: document.getElementById("responsible1").value.trim(),
-      dueDate: document.getElementById("dueDate1").value,
-      status: document.getElementById("actionStatus1").value
-    },
-    {
-      action: document.getElementById("action2").value.trim(),
-      responsible: document.getElementById("responsible2").value.trim(),
-      dueDate: document.getElementById("dueDate2").value,
-      status: document.getElementById("actionStatus2").value
-    },
-    {
-      action: document.getElementById("action3").value.trim(),
-      responsible: document.getElementById("responsible3").value.trim(),
-      dueDate: document.getElementById("dueDate3").value,
-      status: document.getElementById("actionStatus3").value
-    }
-  ];
-}
+  editBtn.style.display = "none";
+  saveBtn.style.display = "inline-block";
+};
 
-function saveChanges(){
-
-  const title = document.getElementById("title").value.trim();
-
-  if(title === ""){
-    alert("Report Title is required.");
-    return;
-  }
+window.saveChanges = function(){
 
   const updatedData = {
-    medaId:document.getElementById("medaId").value.trim(),
-    createdAt:currentData.createdAt || document.getElementById("createdAt").value,
-
-    title:title,
-    affectedPerson:document.getElementById("affectedPerson").value.trim(),
-    employeeId:document.getElementById("employeeId").value.trim(),
-    departmentRole:document.getElementById("departmentRole").value.trim(),
-
-    aircraft:document.getElementById("aircraft").value.trim(),
-    customer:document.getElementById("customer").value.trim(),
-    location:document.getElementById("location").value.trim(),
-    date:document.getElementById("date").value,
-    workOrder:document.getElementById("workOrder").value.trim(),
-    eventDescription:document.getElementById("eventDescription").value.trim(),
-
-    eventType:document.getElementById("eventType").value,
-    detectionMethod:document.getElementById("detectionMethod").value,
-    immediateAction:document.getElementById("immediateAction").value.trim(),
-
-    contributingFactors:collectFactors(),
-
-    mainFactor:document.getElementById("mainFactor").value,
-    status:document.getElementById("status").value,
-    rootCause:document.getElementById("rootCause").value.trim(),
-    systemWeakness:document.getElementById("systemWeakness").value.trim(),
-
-    correctiveActions:collectActions(),
-
-    updatedAt:new Date().toLocaleString()
+    medaId: document.getElementById("edit_medaId")?.value || "",
+    createdAt: document.getElementById("edit_createdAt")?.value || "",
+    title: document.getElementById("edit_title")?.value || "",
+    affectedPerson: document.getElementById("edit_affectedPerson")?.value || "",
+    employeeId: document.getElementById("edit_employeeId")?.value || "",
+    departmentRole: document.getElementById("edit_departmentRole")?.value || "",
+    aircraft: document.getElementById("edit_aircraft")?.value || "",
+    customer: document.getElementById("edit_customer")?.value || "",
+    location: document.getElementById("edit_location")?.value || "",
+    date: document.getElementById("edit_date")?.value || "",
+    workOrder: document.getElementById("edit_workOrder")?.value || "",
+    eventType: document.getElementById("edit_eventType")?.value || "",
+    detectionMethod: document.getElementById("edit_detectionMethod")?.value || "",
+    mainFactor: document.getElementById("edit_mainFactor")?.value || "",
+    eventDescription: document.getElementById("edit_eventDescription")?.value || "",
+    immediateAction: document.getElementById("edit_immediateAction")?.value || "",
+    rootCause: document.getElementById("edit_rootCause")?.value || "",
+    systemWeakness: document.getElementById("edit_systemWeakness")?.value || "",
+    status: document.getElementById("edit_status")?.value || "Open"
   };
 
-  window.dbUpdate(
-    window.dbRef(window.database,"medaReports/" + reportId),
-    updatedData
-  )
+  const updatedFactors = [];
+
+  document.querySelectorAll(".factor-name").forEach((input) => {
+    const index = input.dataset.index;
+
+    updatedFactors[index] = {
+      name: document.querySelector(`.factor-name[data-index="${index}"]`)?.value || "",
+      subfactor: document.querySelector(`.factor-subfactor[data-index="${index}"]`)?.value || "",
+      present: document.querySelector(`.factor-present[data-index="${index}"]`)?.value || "",
+      evidence: document.querySelector(`.factor-evidence[data-index="${index}"]`)?.value || "",
+      recommendedAction: document.querySelector(`.factor-action[data-index="${index}"]`)?.value || ""
+    };
+  });
+
+  const updatedActions = [];
+
+  document.querySelectorAll(".action-action").forEach((input) => {
+    const index = input.dataset.index;
+
+    updatedActions[index] = {
+      action: document.querySelector(`.action-action[data-index="${index}"]`)?.value || "",
+      responsible: document.querySelector(`.action-responsible[data-index="${index}"]`)?.value || "",
+      dueDate: document.querySelector(`.action-date[data-index="${index}"]`)?.value || "",
+      status: document.querySelector(`.action-status[data-index="${index}"]`)?.value || ""
+    };
+  });
+
+  updatedData.contributingFactors = updatedFactors;
+  updatedData.correctiveActions = updatedActions;
+
+  update(ref(database, "medaReports/" + reportId), updatedData)
   .then(() => {
-    document.getElementById("savedBox").style.display = "block";
     alert("MEDA Report updated successfully.");
-    currentData = {...currentData, ...updatedData};
-    lockForm();
+    editMode = false;
+    saveBtn.style.display = "none";
+    editBtn.style.display = "inline-block";
+    loadReport();
   })
-  .catch(error => {
+  .catch((error) => {
     alert("Error updating MEDA Report: " + error.message);
   });
-}
 
-buildFactors();
+};
+
 loadReport();
+
 </script>
 
 </body>
