@@ -22,9 +22,9 @@ body{
 }
 
 .container{
-  max-width:1250px;
+  max-width:1300px;
   margin:auto;
-  background:rgba(255,255,255,0.97);
+  background:white;
   padding:45px;
   border-radius:32px;
   box-shadow:0 25px 65px rgba(0,0,0,0.35);
@@ -41,62 +41,25 @@ h1{
   text-align:center;
   color:#555;
   font-size:18px;
-  margin-bottom:30px;
-}
-
-.filter-box{
-  background:#eef4ff;
-  border:1px solid #c8d8f0;
-  padding:22px;
-  border-radius:22px;
   margin-bottom:28px;
 }
 
-.filter-title{
-  font-weight:bold;
-  color:#071f47;
-  margin-bottom:15px;
-  font-size:20px;
-}
-
-.filter-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+.top-actions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
   gap:14px;
-}
-
-.filter-field label{
-  display:block;
-  color:#071f47;
-  font-size:13px;
-  font-weight:bold;
-  margin-bottom:6px;
-}
-
-.filter-field input,
-.filter-field select{
-  width:100%;
-  padding:13px;
-  border:1px solid #b8c7da;
-  border-radius:14px;
-  font-size:15px;
-  background:white;
-}
-
-.top-buttons{
-  text-align:center;
-  margin-bottom:30px;
+  margin-bottom:22px;
 }
 
 .btn{
   border:none;
   color:white;
-  padding:13px 25px;
+  padding:14px 26px;
   border-radius:14px;
   font-size:15px;
   font-weight:bold;
   cursor:pointer;
-  margin:6px;
   transition:0.25s;
 }
 
@@ -105,16 +68,48 @@ h1{
   box-shadow:0 8px 18px rgba(0,0,0,0.25);
 }
 
+.filter-btn{
+  background:linear-gradient(135deg,#7c3aed,#a855f7);
+}
+
+.excel-btn{
+  background:linear-gradient(135deg,#0b8a3a,#22c55e);
+}
+
 .back-btn{
-  background:linear-gradient(135deg,#c40000,#ff2b2b);
+  background:linear-gradient(135deg,#d00000,#ff3b3b);
 }
 
 .home-btn{
-  background:linear-gradient(135deg,#071f47,#0b2a66);
+  background:linear-gradient(135deg,#071f47,#1450b8);
 }
 
-.clear-btn{
-  background:linear-gradient(135deg,#555,#777);
+.filter-panel{
+  background:#f8fbff;
+  border:1px solid #c8d8f0;
+  padding:20px;
+  border-radius:18px;
+  margin-bottom:28px;
+  display:grid;
+  grid-template-columns:1.2fr 0.8fr 1fr 1fr;
+  gap:14px;
+}
+
+.filter-panel input,
+.filter-panel select{
+  width:100%;
+  padding:14px;
+  border:1px solid #b8c7da;
+  border-radius:12px;
+  font-size:15px;
+  background:white;
+}
+
+.counter{
+  text-align:center;
+  color:#071f47;
+  font-weight:bold;
+  margin-bottom:18px;
 }
 
 .report-card{
@@ -209,6 +204,12 @@ h1{
   color:#071f47;
 }
 
+.small-note{
+  font-size:12px;
+  color:#777;
+  margin-top:6px;
+}
+
 .actions{
   display:flex;
   flex-wrap:wrap;
@@ -257,23 +258,18 @@ h1{
   border-radius:22px;
 }
 
-.counter{
-  text-align:center;
-  color:#071f47;
-  font-weight:bold;
-  margin-bottom:18px;
-}
+@media(max-width:900px){
+  h1{
+    font-size:40px;
+  }
 
-.small-note{
-  font-size:12px;
-  color:#777;
-  margin-top:6px;
-}
+  .container{
+    padding:25px;
+  }
 
-@media(max-width:700px){
-  h1{font-size:40px;}
-  .container{padding:25px;}
-  .event-title{font-size:21px;}
+  .filter-panel{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -288,74 +284,38 @@ h1{
     Stored Flight Risk Assessment Tool Reports
   </div>
 
-  <div class="filter-box">
-    <div class="filter-title">Excel Style Filters</div>
-
-    <div class="filter-grid">
-
-      <div class="filter-field">
-        <label>Search Anything</label>
-        <input 
-          id="searchInput" 
-          placeholder="Search by ID, name, license, risk, date..."
-          oninput="applyFilter()"
-        >
-      </div>
-
-      <div class="filter-field">
-        <label>Status</label>
-        <select id="statusFilter" onchange="applyFilter()">
-          <option value="">All Status</option>
-          <option value="Open">Open</option>
-          <option value="Closed">Closed</option>
-        </select>
-      </div>
-
-      <div class="filter-field">
-        <label>Risk Level</label>
-        <select id="riskFilter" onchange="applyFilter()">
-          <option value="">All Risk Levels</option>
-          <option value="LOW RISK">Low Risk</option>
-          <option value="MODERATE RISK">Moderate Risk</option>
-          <option value="HIGH RISK">High Risk</option>
-        </select>
-      </div>
-
-      <div class="filter-field">
-        <label>Pilot Type</label>
-        <select id="pilotFilter" onchange="applyFilter()">
-          <option value="">All Pilot Types</option>
-          <option value="VFR">VFR</option>
-          <option value="IFR">IFR</option>
-        </select>
-      </div>
-
-      <div class="filter-field">
-        <label>Sort By</label>
-        <select id="sortFilter" onchange="applyFilter()">
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-          <option value="riskHigh">Highest Risk First</option>
-          <option value="riskLow">Lowest Risk First</option>
-          <option value="nameAZ">Pilot Name A-Z</option>
-        </select>
-      </div>
-
-    </div>
-
-    <div style="text-align:center;margin-top:18px;">
-      <button class="btn clear-btn" onclick="clearFilters()">Clear Filters</button>
-    </div>
+  <div class="top-actions">
+    <button class="btn filter-btn" onclick="toggleFilters()">🔎 Filters</button>
+    <button class="btn excel-btn" onclick="downloadExcel()">📥 Download Excel</button>
+    <button class="btn back-btn" onclick="window.location.href='FRAT.html'">← Back to FRAT</button>
+    <button class="btn home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
   </div>
 
-  <div class="top-buttons">
-    <button class="btn back-btn" onclick="window.location.href='FRAT.html'">
-      Back to FRAT
-    </button>
+  <div id="filterPanel" class="filter-panel">
+    <input 
+      id="searchInput" 
+      placeholder="Search ID, pilot name, license, risk..."
+      oninput="applyFilter()"
+    >
 
-    <button class="btn home-btn" onclick="window.location.href='index.html'">
-      Home
-    </button>
+    <input 
+      type="date" 
+      id="dateFilter"
+      onchange="applyFilter()"
+    >
+
+    <select id="riskFilter" onchange="applyFilter()">
+      <option value="">All Risk Levels</option>
+      <option value="LOW RISK">Low Risk</option>
+      <option value="MODERATE RISK">Moderate Risk</option>
+      <option value="HIGH RISK">High Risk</option>
+    </select>
+
+    <select id="statusFilter" onchange="applyFilter()">
+      <option value="">All Status</option>
+      <option value="Open">Open</option>
+      <option value="Closed">Closed</option>
+    </select>
   </div>
 
   <div id="counter" class="counter"></div>
@@ -398,6 +358,7 @@ const noData = document.getElementById("noData");
 const counter = document.getElementById("counter");
 
 let allReports = [];
+let filteredReports = [];
 
 function clean(value){
   return String(value || "")
@@ -412,9 +373,11 @@ function statusClass(status){
   return String(status || "Open").toLowerCase().replaceAll(" ","-");
 }
 
-function riskNumber(report){
-  const value = Number(report.totalRiskValue);
-  return isNaN(value) ? 0 : value;
+function normalizeDate(value){
+  if(!value) return "";
+  const d = new Date(value);
+  if(isNaN(d)) return "";
+  return d.toISOString().split("T")[0];
 }
 
 function renderReports(reports){
@@ -569,12 +532,11 @@ function renderReports(reports){
 window.applyFilter = function(){
 
   const searchText = document.getElementById("searchInput").value.toLowerCase().trim();
-  const statusFilter = document.getElementById("statusFilter").value;
+  const dateFilter = document.getElementById("dateFilter").value;
   const riskFilter = document.getElementById("riskFilter").value;
-  const pilotFilter = document.getElementById("pilotFilter").value;
-  const sortFilter = document.getElementById("sortFilter").value;
+  const statusFilter = document.getElementById("statusFilter").value;
 
-  let filtered = allReports.filter(report => {
+  filteredReports = allReports.filter(report => {
 
     const searchArea = `
       ${report.firebaseId || ""}
@@ -594,54 +556,32 @@ window.applyFilter = function(){
     const matchesSearch =
       searchText === "" || searchArea.includes(searchText);
 
-    const matchesStatus =
-      statusFilter === "" || (report.status || "Open") === statusFilter;
+    const reportDate =
+      normalizeDate(report.createdAt || report.date || "");
+
+    const matchesDate =
+      dateFilter === "" || reportDate === dateFilter;
 
     const matchesRisk =
       riskFilter === "" || (report.riskLevel || "") === riskFilter;
 
-    const matchesPilot =
-      pilotFilter === "" || (report.pilotType || "") === pilotFilter;
+    const matchesStatus =
+      statusFilter === "" || (report.status || "Open") === statusFilter;
 
-    return matchesSearch && matchesStatus && matchesRisk && matchesPilot;
+    return matchesSearch && matchesDate && matchesRisk && matchesStatus;
 
   });
 
-  filtered.sort((a,b) => {
-
-    if(sortFilter === "oldest"){
-      return String(a.firebaseId).localeCompare(String(b.firebaseId));
-    }
-
-    if(sortFilter === "riskHigh"){
-      return riskNumber(b) - riskNumber(a);
-    }
-
-    if(sortFilter === "riskLow"){
-      return riskNumber(a) - riskNumber(b);
-    }
-
-    if(sortFilter === "nameAZ"){
-      return String(a.pilotName || "").localeCompare(String(b.pilotName || ""));
-    }
-
+  filteredReports.sort((a,b) => {
     return String(b.firebaseId).localeCompare(String(a.firebaseId));
-
   });
 
-  renderReports(filtered);
+  renderReports(filteredReports);
 };
 
-window.clearFilters = function(){
-
-  document.getElementById("searchInput").value = "";
-  document.getElementById("statusFilter").value = "";
-  document.getElementById("riskFilter").value = "";
-  document.getElementById("pilotFilter").value = "";
-  document.getElementById("sortFilter").value = "newest";
-
-  applyFilter();
-
+window.toggleFilters = function(){
+  const panel = document.getElementById("filterPanel");
+  panel.style.display = panel.style.display === "none" ? "grid" : "none";
 };
 
 const reportsRef = ref(database, "fratReports");
@@ -729,6 +669,41 @@ window.deleteReport = function(reportId){
   .catch((error) => {
     alert("Error deleting report: " + error.message);
   });
+
+};
+
+window.downloadExcel = function(){
+
+  let csv = "FRAT ID,Pilot Name,License,Pilot Type,Experience,Risk Level,Total Risk,Status,Created At,Updated At\n";
+
+  filteredReports.forEach(report => {
+
+    const row = [
+      report.fratId || report.firebaseId || "",
+      report.pilotName || "",
+      report.licenseNumber || "",
+      report.pilotType || "",
+      report.experienceLevel || "",
+      report.riskLevel || "",
+      report.totalRiskValue || "",
+      report.status || "Open",
+      report.createdAt || "",
+      report.updatedAt || ""
+    ];
+
+    csv += row.map(value => `"${String(value).replaceAll('"','""')}"`).join(",") + "\n";
+
+  });
+
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "FRAT_Database.csv";
+  link.click();
+
+  URL.revokeObjectURL(url);
 
 };
 
