@@ -55,16 +55,32 @@ h1{
 .filter-title{
   font-weight:bold;
   color:#071f47;
-  margin-bottom:10px;
-  font-size:18px;
+  margin-bottom:15px;
+  font-size:20px;
 }
 
-.search-input{
+.filter-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+}
+
+.filter-field label{
+  display:block;
+  color:#071f47;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+.filter-field input,
+.filter-field select{
   width:100%;
-  padding:15px;
+  padding:13px;
   border:1px solid #b8c7da;
   border-radius:14px;
-  font-size:16px;
+  font-size:15px;
+  background:white;
 }
 
 .top-buttons{
@@ -95,6 +111,10 @@ h1{
 
 .home-btn{
   background:linear-gradient(135deg,#071f47,#0b2a66);
+}
+
+.clear-btn{
+  background:linear-gradient(135deg,#555,#777);
 }
 
 .report-card{
@@ -269,13 +289,63 @@ h1{
   </div>
 
   <div class="filter-box">
-    <div class="filter-title">Search FRAT Reports</div>
-    <input 
-      id="searchInput" 
-      class="search-input" 
-      placeholder="Search by FRAT ID, pilot name, license, from, to, risk level, date, status..."
-      oninput="applyFilter()"
-    >
+    <div class="filter-title">Excel Style Filters</div>
+
+    <div class="filter-grid">
+
+      <div class="filter-field">
+        <label>Search Anything</label>
+        <input 
+          id="searchInput" 
+          placeholder="Search by ID, name, license, risk, date..."
+          oninput="applyFilter()"
+        >
+      </div>
+
+      <div class="filter-field">
+        <label>Status</label>
+        <select id="statusFilter" onchange="applyFilter()">
+          <option value="">All Status</option>
+          <option value="Open">Open</option>
+          <option value="Closed">Closed</option>
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label>Risk Level</label>
+        <select id="riskFilter" onchange="applyFilter()">
+          <option value="">All Risk Levels</option>
+          <option value="LOW RISK">Low Risk</option>
+          <option value="MODERATE RISK">Moderate Risk</option>
+          <option value="HIGH RISK">High Risk</option>
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label>Pilot Type</label>
+        <select id="pilotFilter" onchange="applyFilter()">
+          <option value="">All Pilot Types</option>
+          <option value="VFR">VFR</option>
+          <option value="IFR">IFR</option>
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label>Sort By</label>
+        <select id="sortFilter" onchange="applyFilter()">
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="riskHigh">Highest Risk First</option>
+          <option value="riskLow">Lowest Risk First</option>
+          <option value="nameAZ">Pilot Name A-Z</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div style="text-align:center;margin-top:18px;">
+      <button class="btn clear-btn" onclick="clearFilters()">Clear Filters</button>
+    </div>
   </div>
 
   <div class="top-buttons">
@@ -342,6 +412,11 @@ function statusClass(status){
   return String(status || "Open").toLowerCase().replaceAll(" ","-");
 }
 
+function riskNumber(report){
+  const value = Number(report.totalRiskValue);
+  return isNaN(value) ? 0 : value;
+}
+
 function renderReports(reports){
 
   fratList.innerHTML = "";
@@ -372,14 +447,6 @@ function renderReports(reports){
       report.licenseNumber ||
       "N/A";
 
-    const from =
-      report.flightFrom ||
-      "N/A";
-
-    const to =
-      report.flightTo ||
-      "N/A";
-
     const riskLevel =
       report.riskLevel ||
       "N/A";
@@ -395,6 +462,12 @@ function renderReports(reports){
     const status =
       report.status || "Open";
 
+    const pilotType =
+      report.pilotType || "N/A";
+
+    const experience =
+      report.experienceLevel || "N/A";
+
     const card = document.createElement("div");
     card.className = "report-card";
 
@@ -407,9 +480,10 @@ function renderReports(reports){
 
           <div class="meta">
             <strong>Date:</strong> ${clean(date)}<br>
-            <strong>Route:</strong> ${clean(from)} → ${clean(to)}<br>
             <strong>Risk:</strong> ${clean(riskLevel)} | 
-            <strong>Total:</strong> ${clean(totalRisk)}
+            <strong>Total:</strong> ${clean(totalRisk)}<br>
+            <strong>Pilot Type:</strong> ${clean(pilotType)} | 
+            <strong>Experience:</strong> ${clean(experience)}
           </div>
         </div>
 
@@ -495,13 +569,12 @@ function renderReports(reports){
 window.applyFilter = function(){
 
   const searchText = document.getElementById("searchInput").value.toLowerCase().trim();
+  const statusFilter = document.getElementById("statusFilter").value;
+  const riskFilter = document.getElementById("riskFilter").value;
+  const pilotFilter = document.getElementById("pilotFilter").value;
+  const sortFilter = document.getElementById("sortFilter").value;
 
-  if(searchText === ""){
-    renderReports(allReports);
-    return;
-  }
-
-  const filtered = allReports.filter(report => {
+  let filtered = allReports.filter(report => {
 
     const searchArea = `
       ${report.firebaseId || ""}
@@ -509,8 +582,6 @@ window.applyFilter = function(){
       ${report.customId || ""}
       ${report.pilotName || ""}
       ${report.licenseNumber || ""}
-      ${report.flightFrom || ""}
-      ${report.flightTo || ""}
       ${report.pilotType || ""}
       ${report.experienceLevel || ""}
       ${report.totalRiskValue || ""}
@@ -520,11 +591,57 @@ window.applyFilter = function(){
       ${report.status || ""}
     `.toLowerCase();
 
-    return searchArea.includes(searchText);
+    const matchesSearch =
+      searchText === "" || searchArea.includes(searchText);
+
+    const matchesStatus =
+      statusFilter === "" || (report.status || "Open") === statusFilter;
+
+    const matchesRisk =
+      riskFilter === "" || (report.riskLevel || "") === riskFilter;
+
+    const matchesPilot =
+      pilotFilter === "" || (report.pilotType || "") === pilotFilter;
+
+    return matchesSearch && matchesStatus && matchesRisk && matchesPilot;
+
+  });
+
+  filtered.sort((a,b) => {
+
+    if(sortFilter === "oldest"){
+      return String(a.firebaseId).localeCompare(String(b.firebaseId));
+    }
+
+    if(sortFilter === "riskHigh"){
+      return riskNumber(b) - riskNumber(a);
+    }
+
+    if(sortFilter === "riskLow"){
+      return riskNumber(a) - riskNumber(b);
+    }
+
+    if(sortFilter === "nameAZ"){
+      return String(a.pilotName || "").localeCompare(String(b.pilotName || ""));
+    }
+
+    return String(b.firebaseId).localeCompare(String(a.firebaseId));
 
   });
 
   renderReports(filtered);
+};
+
+window.clearFilters = function(){
+
+  document.getElementById("searchInput").value = "";
+  document.getElementById("statusFilter").value = "";
+  document.getElementById("riskFilter").value = "";
+  document.getElementById("pilotFilter").value = "";
+  document.getElementById("sortFilter").value = "newest";
+
+  applyFilter();
+
 };
 
 const reportsRef = ref(database, "fratReports");
