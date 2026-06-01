@@ -1,15 +1,11 @@
-vamos a organizar esta Base de Datos, quieor que sea mas atrativa, que tenga como ves el boton de caneca y los demas, pero que teng ainformacion como el titulo del evento y la fecha, que desde ahi pueda darle uno open o close, uno mismo ahga eso <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MEDA Database</title>
+<title>MEDA Details</title>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
   font-family:Arial, sans-serif;
@@ -19,7 +15,7 @@ body{
 }
 
 .container{
-  max-width:1100px;
+  max-width:1200px;
   margin:auto;
   background:white;
   padding:40px;
@@ -30,7 +26,7 @@ body{
 h1{
   text-align:center;
   color:#071f47;
-  font-size:46px;
+  font-size:44px;
   margin-bottom:10px;
 }
 
@@ -41,46 +37,106 @@ h1{
   margin-bottom:35px;
 }
 
+.status-small{
+  display:inline-block;
+  padding:9px 18px;
+  border-radius:20px;
+  font-size:14px;
+  font-weight:bold;
+  color:white;
+  margin-bottom:15px;
+}
+
+.open{background:#f59e0b;}
+.progress{background:#1450b8;}
+.pending{background:#ff9800;}
+.closed{background:#2f9144;}
+
+.info-box{
+  background:#f4f6f8;
+  border-radius:18px;
+  padding:25px;
+  margin-bottom:25px;
+  border:1px solid #ddd;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:15px;
+}
+
+.info-card{
+  background:white;
+  border:1px solid #d8e1ef;
+  border-radius:14px;
+  padding:15px;
+}
+
+.label{
+  font-weight:bold;
+  color:#004080;
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+.value{
+  color:#222;
+  font-size:15px;
+  font-weight:bold;
+  word-break:break-word;
+}
+
+h2{
+  color:#071f47;
+  margin:28px 0 15px;
+}
+
+.text-box{
+  background:#f8fbff;
+  border:1px solid #d8e1ef;
+  border-left:7px solid #1450b8;
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:18px;
+  line-height:1.6;
+  color:#333;
+}
+
 table{
   width:100%;
   border-collapse:collapse;
-  margin-top:20px;
+  margin-top:15px;
 }
 
 th{
   background:#071f47;
   color:white;
   padding:14px;
-  font-size:16px;
+  font-size:15px;
 }
 
 td{
   border:1px solid #ddd;
   padding:12px;
   text-align:center;
-  font-size:15px;
+  font-size:14px;
+  vertical-align:top;
 }
 
 tr:nth-child(even){
   background:#f4f6f8;
 }
 
-.report-link{
-  color:#071f47;
-  font-weight:bold;
-  text-decoration:none;
-}
-
-.report-link:hover{
-  color:#1450b8;
-  text-decoration:underline;
-}
+.yes{color:#2f9144;font-weight:bold;}
+.no{color:#777;font-weight:bold;}
+.unknown{color:#ff9800;font-weight:bold;}
 
 .no-data{
   text-align:center;
   color:#777;
   font-size:18px;
-  margin-top:30px;
+  margin-top:25px;
 }
 
 .buttons{
@@ -99,39 +155,15 @@ tr:nth-child(even){
   margin:6px;
 }
 
-.back-btn{
-  background:#c40000;
-}
+.report-btn{background:#2f9144;}
+.back-btn{background:#c40000;}
+.meda-btn{background:#004080;}
+.home-btn{background:#0b2a66;}
 
-.home-btn{
-  background:#071f47;
+@media(max-width:800px){
+  .container{padding:25px;}
+  h1{font-size:34px;}
 }
-
-.delete-btn{
-  background:red;
-  color:white;
-  border:none;
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  cursor:pointer;
-  font-size:18px;
-  font-weight:bold;
-  transition:0.3s;
-}
-
-.delete-btn:hover{
-  background:#b30000;
-  transform:scale(1.08);
-}
-
-.action-cell{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:15px;
-}
-
 </style>
 </head>
 
@@ -139,29 +171,26 @@ tr:nth-child(even){
 
 <div class="container">
 
-  <h1>MEDA Database</h1>
+  <h1>MEDA Report Details</h1>
 
   <div class="description">
-    Stored Maintenance Error Decision Aid investigation reports
+    Full Maintenance Error Decision Aid investigation information
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>MEDA Report ID</th>
-      </tr>
-    </thead>
-
-    <tbody id="medaTableBody">
-    </tbody>
-  </table>
-
-  <div id="noData" class="no-data" style="display:none;">
-    No MEDA reports found.
+  <div id="content">
+    Loading MEDA Report...
   </div>
 
   <div class="buttons">
-    <button class="btn back-btn" onclick="window.location.href='MEDA.html'">
+    <button id="viewFullReportBtn" class="btn report-btn" style="display:none;">
+      View MEDA Report
+    </button>
+
+    <button class="btn back-btn" onclick="window.location.href='MEDA-Database.html'">
+      Back to MEDA Database
+    </button>
+
+    <button class="btn meda-btn" onclick="window.location.href='MEDA.html'">
       Back to MEDA
     </button>
 
@@ -175,13 +204,7 @@ tr:nth-child(even){
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-
-import {
-  getDatabase,
-  ref,
-  onValue,
-  remove
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
@@ -196,83 +219,261 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-const tableBody = document.getElementById("medaTableBody");
-const noData = document.getElementById("noData");
+const params = new URLSearchParams(window.location.search);
+const reportId = params.get("id");
+const content = document.getElementById("content");
+const viewFullReportBtn = document.getElementById("viewFullReportBtn");
 
-const reportsRef = ref(database, "medaReports");
+function statusClass(status){
+  if(status === "Closed") return "closed";
+  if(status === "In Progress") return "progress";
+  if(status === "Pending Corrective Action") return "pending";
+  return "open";
+}
 
-onValue(reportsRef, (snapshot) => {
+function presentClass(value){
+  if(value === "Yes") return "yes";
+  if(value === "No") return "no";
+  if(value === "Unknown") return "unknown";
+  return "";
+}
 
-  tableBody.innerHTML = "";
+if(!reportId){
 
-  if(snapshot.exists()){
+  content.innerHTML = `<div class="no-data">No MEDA Report ID was found in the URL.</div>`;
 
-    noData.style.display = "none";
+}else{
 
-    snapshot.forEach((childSnapshot) => {
+  viewFullReportBtn.style.display = "inline-block";
 
-      const reportId = childSnapshot.key;
-      const report = childSnapshot.val();
+  viewFullReportBtn.onclick = function(){
+    window.location.href = "MEDA-Full-Report.html?id=" + reportId;
+  };
 
-      const title = report.title || "Untitled MEDA Report";
-      const aircraft = report.aircraft || "N/A";
-      const customer = report.customer || "N/A";
-      const status = report.status || "Open";
+  const reportRef = ref(database, "medaReports/" + reportId);
 
-      const row = document.createElement("tr");
+  get(reportRef).then((snapshot) => {
 
-      row.innerHTML = `
-        <td>
+    if(snapshot.exists()){
 
-          <div class="action-cell">
+      const data = snapshot.val();
 
-            <a class="report-link" href="MEDA-Details.html?id=${reportId}">
-              ID: ${reportId} | ${title} | Aircraft: ${aircraft} | Customer: ${customer} | Status: ${status}
-            </a>
+      let factorsHTML = "";
 
-            <button
-              class="delete-btn"
-              onclick="deleteReport('${reportId}')"
-            >
-              🗑
-            </button>
+      if(data.contributingFactors && data.contributingFactors.length > 0){
+
+        data.contributingFactors.forEach(factor => {
+
+          factorsHTML += `
+            <tr>
+              <td>${factor.name || ""}</td>
+              <td>${factor.subfactor || ""}</td>
+              <td class="${presentClass(factor.present)}">${factor.present || ""}</td>
+              <td>${factor.evidence || ""}</td>
+              <td>${factor.recommendedAction || ""}</td>
+            </tr>
+          `;
+
+        });
+
+      }else{
+
+        factorsHTML = `<tr><td colspan="5">No MEDA contributing factors found.</td></tr>`;
+
+      }
+
+      let actionsHTML = "";
+
+      if(data.correctiveActions && data.correctiveActions.length > 0){
+
+        data.correctiveActions.forEach(action => {
+
+          if(action.action || action.responsible || action.dueDate || action.status){
+
+            actionsHTML += `
+              <tr>
+                <td>${action.action || ""}</td>
+                <td>${action.responsible || ""}</td>
+                <td>${action.dueDate || ""}</td>
+                <td>${action.status || ""}</td>
+              </tr>
+            `;
+
+          }
+
+        });
+
+      }
+
+      if(actionsHTML === ""){
+        actionsHTML = `<tr><td colspan="4">No corrective actions found.</td></tr>`;
+      }
+
+      content.innerHTML = `
+
+        <div style="text-align:center;">
+          <span class="status-small ${statusClass(data.status)}">
+            Status: ${data.status || "Open"}
+          </span>
+        </div>
+
+        <h2>1. Event Information</h2>
+
+        <div class="info-box">
+          <div class="info-grid">
+
+            <div class="info-card">
+              <div class="label">MEDA Report ID</div>
+              <div class="value">${reportId}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Created At</div>
+              <div class="value">${data.createdAt || "N/A"}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Report Title</div>
+              <div class="value">${data.title || "N/A"}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Affected Person / Employee Name</div>
+              <div class="value">${data.affectedPerson || "N/A"}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Employee ID</div>
+              <div class="value">${data.employeeId || "N/A"}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Department / Role</div>
+              <div class="value">${data.departmentRole || "N/A"}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Aircraft Registration</div>
+              <div class="value">${data.aircraft || "N/A"}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Customer</div>
+              <div class="value">${data.customer || "N/A"}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Location</div>
+              <div class="value">${data.location || "N/A"}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Date</div>
+              <div class="value">${data.date || "N/A"}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Work Order / Task Card / NRC</div>
+              <div class="value">${data.workOrder || "N/A"}</div>
+            </div>
 
           </div>
+        </div>
 
-        </td>
+        <h2>2. Maintenance Error / Event Type</h2>
+
+        <div class="info-box">
+          <div class="info-grid">
+
+            <div class="info-card">
+              <div class="label">Event Type</div>
+              <div class="value">${data.eventType || "N/A"}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Detection Method</div>
+              <div class="value">${data.detectionMethod || "N/A"}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Main Contributing Factor</div>
+              <div class="value">${data.mainFactor || "N/A"}</div>
+            </div>
+
+          </div>
+        </div>
+
+        <h2>Event Description</h2>
+        <div class="text-box">
+          ${data.eventDescription || "No event description entered."}
+        </div>
+
+        <h2>Immediate Action Taken</h2>
+        <div class="text-box">
+          ${data.immediateAction || "No immediate action entered."}
+        </div>
+
+        <h2>3. MEDA Contributing Factors and Subfactors</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Factor</th>
+              <th>Subfactor</th>
+              <th>Present?</th>
+              <th>Evidence / Description</th>
+              <th>Recommended Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${factorsHTML}
+          </tbody>
+        </table>
+
+        <h2>4. Root Cause / System Weakness</h2>
+
+        <h2>Root Cause Statement</h2>
+        <div class="text-box">
+          ${data.rootCause || "No root cause statement entered."}
+        </div>
+
+        <h2>System Weakness Identified</h2>
+        <div class="text-box">
+          ${data.systemWeakness || "No system weakness entered."}
+        </div>
+
+        <h2>5. Corrective / Preventive Actions</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>Responsible Person</th>
+              <th>Due Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${actionsHTML}
+          </tbody>
+        </table>
       `;
 
-      tableBody.appendChild(row);
+    }else{
 
-    });
+      content.innerHTML = `<div class="no-data">MEDA Report not found in Firebase.</div>`;
 
-  } else {
+    }
 
-    noData.style.display = "block";
+  }).catch((error) => {
 
-  }
+    content.innerHTML = `<div class="no-data">Error loading MEDA Report: ${error.message}</div>`;
 
-});
-
-window.deleteReport = function(reportId){
-
-  const confirmDelete = confirm(
-    "Are you sure you want to permanently delete this MEDA report?"
-  );
-
-  if(!confirmDelete) return;
-
-  remove(
-    ref(database, "medaReports/" + reportId)
-  )
-  .then(() => {
-    alert("MEDA Report deleted successfully.");
-  })
-  .catch((error) => {
-    alert("Error deleting report: " + error.message);
   });
 
-};
+}
 
 </script>
 
