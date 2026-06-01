@@ -145,14 +145,22 @@ textarea:disabled{
 
 .risk-result{
   margin-top:15px;
-  padding:15px;
+  padding:18px;
   border-radius:14px;
-  text-align:center;
-  font-size:18px;
+  text-align:left;
+  font-size:15px;
   font-weight:bold;
   background:#eef4ff;
   color:#071f47;
   border:1px solid #c8d8f0;
+  line-height:1.6;
+}
+
+.risk-result-title{
+  text-align:center;
+  font-size:19px;
+  margin-bottom:10px;
+  color:#071f47;
 }
 
 .action-row{
@@ -264,7 +272,7 @@ textarea:disabled{
 
 <div class="header">
   <h1>Safety Assurance - Management of Change</h1>
-  <p>Full Management of Change report details loaded from Firebase.</p>
+  <p>Full Management of Change report details with ICAO severity and probability definitions.</p>
 </div>
 
 <div id="loadingBox" class="loading">Loading MOC Report...</div>
@@ -384,7 +392,10 @@ textarea:disabled{
       <div class="matrix-box">
         <h3>Initial Risk Matrix</h3>
         <table class="matrix" id="initialMatrix"></table>
-        <div id="initialRiskResult" class="risk-result">Initial Risk: Not selected</div>
+
+        <div id="initialRiskResult" class="risk-result">
+          <div class="risk-result-title">Initial Risk: Not selected</div>
+        </div>
       </div>
 
       <div>
@@ -495,7 +506,10 @@ textarea:disabled{
       <div class="matrix-box">
         <h3>Residual Risk Matrix</h3>
         <table class="matrix" id="residualMatrix"></table>
-        <div id="residualRiskResult" class="risk-result">Residual Risk: Not selected</div>
+
+        <div id="residualRiskResult" class="risk-result">
+          <div class="risk-result-title">Residual Risk: Not selected</div>
+        </div>
       </div>
 
       <div>
@@ -609,6 +623,52 @@ let currentData = {};
 let initialRisk = null;
 let residualRisk = null;
 
+const severityDefinitions = {
+  5:{
+    name:"Catastrophic",
+    definition:"According to ICAO SMS guidance, this may involve equipment destroyed and/or multiple fatalities."
+  },
+  4:{
+    name:"Hazardous",
+    definition:"According to ICAO SMS guidance, this may involve a large reduction in safety margins, serious injury, major equipment damage, or major operational disruption."
+  },
+  3:{
+    name:"Major",
+    definition:"According to ICAO SMS guidance, this may involve a significant reduction in safety margins, injury, increased workload, or serious incident potential."
+  },
+  2:{
+    name:"Minor",
+    definition:"According to ICAO SMS guidance, this may involve nuisance, operating limitations, minor incident, or use of emergency procedures."
+  },
+  1:{
+    name:"Negligible",
+    definition:"According to ICAO SMS guidance, this means consequences are less than minor, with little or no safety impact."
+  }
+};
+
+const probabilityDefinitions = {
+  5:{
+    name:"Frequent",
+    definition:"According to ICAO SMS guidance, this is likely to occur many times or has occurred frequently."
+  },
+  4:{
+    name:"Likely",
+    definition:"According to ICAO SMS guidance, this is likely to occur sometimes or has occurred several times."
+  },
+  3:{
+    name:"Occasional",
+    definition:"According to ICAO SMS guidance, this is likely to occur at some time or has occurred infrequently."
+  },
+  2:{
+    name:"Remote",
+    definition:"According to ICAO SMS guidance, this is unlikely to occur, but possible."
+  },
+  1:{
+    name:"Extremely Remote",
+    definition:"According to ICAO SMS guidance, this is very unlikely to occur."
+  }
+};
+
 function riskLevel(score){
   if(score <= 4) return "Low";
   if(score <= 9) return "Medium";
@@ -616,62 +676,167 @@ function riskLevel(score){
   return "Extreme";
 }
 
-function buildMatrix(type){
-  const matrix = document.getElementById(type + "Matrix");
+function riskAssessmentText(level){
+  if(level === "Low"){
+    return "Acceptable risk level. Risk may be managed through normal operational controls.";
+  }
 
-  matrix.innerHTML = `
+  if(level === "Medium"){
+    return "Tolerable risk level with controls. Additional mitigation or monitoring should be applied before implementation.";
+  }
+
+  if(level === "High"){
+    return "Significant risk level. Management review and mitigation actions are required before implementation.";
+  }
+
+  return "Unacceptable risk level. Immediate mitigation actions are required before implementation.";
+}
+
+function riskColorClass(score){
+  const level = riskLevel(score);
+
+  if(level === "Low") return "low";
+  if(level === "Medium") return "medium";
+  if(level === "High") return "high";
+  return "extreme";
+}
+
+function buildMatrix(matrixId,type){
+  const matrix = document.getElementById(matrixId);
+
+  let html = `
     <tr>
       <th>Severity ↓ / Probability →</th>
-      <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
     </tr>
   `;
 
   for(let severity = 5; severity >= 1; severity--){
-    let row = `<tr><th>${severity}</th>`;
+
+    html += `<tr><th>${severity}</th>`;
 
     for(let probability = 1; probability <= 5; probability++){
       const score = severity * probability;
-      const level = riskLevel(score).toLowerCase();
+      const color = riskColorClass(score);
 
-      row += `
-        <td class="${level}" data-type="${type}" data-severity="${severity}" data-probability="${probability}" onclick="selectRisk('${type}',${severity},${probability},this)">
+      html += `
+        <td 
+          class="${color}" 
+          data-type="${type}" 
+          data-severity="${severity}" 
+          data-probability="${probability}" 
+          onclick="selectRisk('${type}',${severity},${probability},this)"
+        >
           ${score}
         </td>
       `;
     }
 
-    row += `</tr>`;
-    matrix.innerHTML += row;
+    html += `</tr>`;
   }
+
+  matrix.innerHTML = html;
 }
 
-window.selectRisk = function(type,severity,probability,element){
+function renderRiskResult(type,risk){
+  if(!risk) return;
+
+  const resultBox =
+    type === "initial"
+    ? document.getElementById("initialRiskResult")
+    : document.getElementById("residualRiskResult");
+
+  const label =
+    type === "initial"
+    ? "INITIAL RISK"
+    : "RESIDUAL RISK";
+
+  resultBox.innerHTML = `
+    <div class="risk-result-title">
+      ${label}: ${risk.level.toUpperCase()}
+    </div>
+
+    <strong>Severity:</strong> ${risk.severity} - ${risk.severityName}<br>
+    ${risk.severityDefinition}<br><br>
+
+    <strong>Probability:</strong> ${risk.probability} - ${risk.probabilityName}<br>
+    ${risk.probabilityDefinition}<br><br>
+
+    <strong>Risk Score:</strong> ${risk.score}<br>
+    <strong>Calculation:</strong> Severity ${risk.severity} x Probability ${risk.probability} = ${risk.score}<br><br>
+
+    <strong>Risk Assessment:</strong><br>
+    ${risk.riskAssessment}
+  `;
+}
+
+window.selectRisk = function(type,severity,probability,cell){
   const score = severity * probability;
   const level = riskLevel(score);
 
+  const severityInfo = severityDefinitions[severity];
+  const probabilityInfo = probabilityDefinitions[probability];
+  const assessment = riskAssessmentText(level);
+
+  const riskData = {
+    severity:severity,
+    severityName:severityInfo.name,
+    severityDefinition:severityInfo.definition,
+    probability:probability,
+    probabilityName:probabilityInfo.name,
+    probabilityDefinition:probabilityInfo.definition,
+    score:score,
+    level:level,
+    riskAssessment:assessment
+  };
+
   if(type === "initial"){
-    initialRisk = {severity, probability, score, level};
+    initialRisk = riskData;
+    renderRiskResult("initial", riskData);
 
-    document.getElementById("initialRiskResult").innerHTML =
-      `Initial Risk: ${level} | Severity ${severity} x Probability ${probability} = ${score}`;
+    document.querySelectorAll("#initialMatrix td").forEach(td => {
+      td.classList.remove("selected-risk");
+    });
 
-    document.querySelectorAll("#initialMatrix td").forEach(td => td.classList.remove("selected-risk"));
-    element.classList.add("selected-risk");
+    cell.classList.add("selected-risk");
   }
 
   if(type === "residual"){
-    residualRisk = {severity, probability, score, level};
+    residualRisk = riskData;
+    renderRiskResult("residual", riskData);
 
-    document.getElementById("residualRiskResult").innerHTML =
-      `Residual Risk: ${level} | Severity ${severity} x Probability ${probability} = ${score}`;
+    document.querySelectorAll("#residualMatrix td").forEach(td => {
+      td.classList.remove("selected-risk");
+    });
 
-    document.querySelectorAll("#residualMatrix td").forEach(td => td.classList.remove("selected-risk"));
-    element.classList.add("selected-risk");
+    cell.classList.add("selected-risk");
   }
 };
 
 function selectSavedRisk(type,risk){
   if(!risk) return;
+
+  if(!risk.severityName || !risk.probabilityName || !risk.riskAssessment){
+    const severityInfo = severityDefinitions[risk.severity];
+    const probabilityInfo = probabilityDefinitions[risk.probability];
+    const level = risk.level || riskLevel(risk.score);
+
+    risk = {
+      severity:risk.severity,
+      severityName:severityInfo.name,
+      severityDefinition:severityInfo.definition,
+      probability:risk.probability,
+      probabilityName:probabilityInfo.name,
+      probabilityDefinition:probabilityInfo.definition,
+      score:risk.score,
+      level:level,
+      riskAssessment:riskAssessmentText(level)
+    };
+  }
 
   const selector =
     type === "initial"
@@ -896,8 +1061,8 @@ function loadReport(){
   });
 }
 
-buildMatrix("initial");
-buildMatrix("residual");
+buildMatrix("initialMatrix","initial");
+buildMatrix("residualMatrix","residual");
 loadReport();
 
 </script>
