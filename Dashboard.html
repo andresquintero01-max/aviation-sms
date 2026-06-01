@@ -30,6 +30,17 @@ let fratReports = [];
 let medaReports = [];
 let mocReports = [];
 
+const COLORS = {
+  blue:"#082567",
+  purple:"#9333ea",
+  green:"#2ecc71",
+  orange:"#ff8c00",
+  yellow:"#f1c40f",
+  red:"#e74c3c",
+  gray:"#95a5a6",
+  darkGray:"#6b7280"
+};
+
 function setText(id,value){
   const el = document.getElementById(id);
   if(el) el.innerText = value;
@@ -49,7 +60,7 @@ function createBar(id, labels, values, title, colors){
       datasets:[{
         label:title,
         data:values,
-        backgroundColor:colors || ["#082567","#9333ea","#2ecc71","#f39c12"],
+        backgroundColor:colors || [COLORS.blue,COLORS.orange,COLORS.green,COLORS.red,COLORS.gray],
         borderRadius:12
       }]
     },
@@ -60,7 +71,7 @@ function createBar(id, labels, values, title, colors){
         title:{
           display:true,
           text:title,
-          color:"#555",
+          color:"#333",
           font:{size:24,weight:"bold"}
         }
       },
@@ -71,7 +82,7 @@ function createBar(id, labels, values, title, colors){
   });
 }
 
-function createPie(id, labels, values, title){
+function createPie(id, labels, values, title, colors){
   destroyChart(id);
 
   charts[id] = new Chart(document.getElementById(id), {
@@ -80,13 +91,14 @@ function createPie(id, labels, values, title){
       labels,
       datasets:[{
         data:values,
-        backgroundColor:[
-          "#2ecc71",
-          "#f1c40f",
-          "#ff9800",
-          "#e74c3c",
-          "#95a5a6"
-        ]
+        backgroundColor:colors || [
+          COLORS.green,
+          COLORS.orange,
+          COLORS.red,
+          COLORS.gray
+        ],
+        borderWidth:3,
+        borderColor:"#ffffff"
       }]
     },
     options:{
@@ -95,7 +107,7 @@ function createPie(id, labels, values, title){
         title:{
           display:true,
           text:title,
-          color:"#555",
+          color:"#333",
           font:{size:24,weight:"bold"}
         },
         legend:{position:"top"}
@@ -222,6 +234,7 @@ function renderDashboard(){
       notAcceptable++;
     }else if(
       riskText.includes("tolerable") ||
+      riskText.includes("mor") ||
       (riskValue >= 5 && riskValue <= 14)
     ){
       tolerable++;
@@ -246,7 +259,9 @@ function renderDashboard(){
       residualNotAcceptable++;
     }else if(
       residualText.includes("tolerable") ||
+      residualText.includes("mor") ||
       residualText.includes("yellow") ||
+      residualText.includes("orange") ||
       (residualValue >= 5 && residualValue <= 14)
     ){
       residualTolerable++;
@@ -303,7 +318,9 @@ function renderDashboard(){
       value >= 10 ||
       fratText.includes("high") ||
       fratText.includes("moderate") ||
+      fratText.includes("mor") ||
       fratText.includes("yellow") ||
+      fratText.includes("orange") ||
       fratText.includes("amarillo")
     ){
       fratHigh++;
@@ -362,21 +379,23 @@ function renderDashboard(){
 
   createPie(
     "riskChart",
-    ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
+    ["Acceptable","MOR / Tolerable","Not Acceptable","Not Assessed"],
     [acceptable,tolerable,notAcceptable,notAssessed],
-    "Risk Distribution"
+    "Risk Distribution",
+    [COLORS.green,COLORS.orange,COLORS.red,COLORS.gray]
   );
 
   createPie(
     "residualRiskChart",
-    ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
+    ["Acceptable","MOR / Tolerable","Not Acceptable","Not Assessed"],
     [
       residualAcceptable,
       residualTolerable,
       residualNotAcceptable,
       residualNotAssessed
     ],
-    "Residual Risk Distribution"
+    "Residual Risk Distribution",
+    [COLORS.green,COLORS.orange,COLORS.red,COLORS.gray]
   );
 
   createBar(
@@ -384,7 +403,7 @@ function renderDashboard(){
     ["Open","Closed"],
     [open,closed],
     "Open vs Closed Reports",
-    ["#9333ea","#2ecc71"]
+    [COLORS.purple,COLORS.green]
   );
 
   createBar(
@@ -403,10 +422,10 @@ function renderDashboard(){
 
   createBar(
     "fratChart",
-    ["Total FRAT","High Risk","No Go"],
+    ["Total FRAT","High / MOR","No Go"],
     [fratReports.length,fratHigh,fratNoGo],
     "FRAT Monitoring",
-    ["#082567","#f1c40f","#e74c3c"]
+    [COLORS.blue,COLORS.orange,COLORS.red]
   );
 
   createBar(
@@ -414,12 +433,12 @@ function renderDashboard(){
     ["Total MEDA","Open","Closed"],
     [medaReports.length,medaOpen,medaClosed],
     "MEDA Monitoring",
-    ["#082567","#9333ea","#2ecc71"]
+    [COLORS.blue,COLORS.purple,COLORS.green]
   );
 
   createPie(
     "mocInitialRiskChart",
-    ["Low","Medium","High","Extreme","Not Assessed"],
+    ["Low","Medium / MOR","High","Extreme","Not Assessed"],
     [
       initialMoc.low,
       initialMoc.medium,
@@ -427,12 +446,13 @@ function renderDashboard(){
       initialMoc.extreme,
       initialMoc.notAssessed
     ],
-    "MOC Initial Risk Distribution"
+    "MOC Initial Risk Distribution",
+    [COLORS.green,COLORS.orange,COLORS.yellow,COLORS.red,COLORS.gray]
   );
 
   createPie(
     "mocResidualRiskChart",
-    ["Low","Medium","High","Extreme","Not Assessed"],
+    ["Low","Medium / MOR","High","Extreme","Not Assessed"],
     [
       residualMoc.low,
       residualMoc.medium,
@@ -440,7 +460,8 @@ function renderDashboard(){
       residualMoc.extreme,
       residualMoc.notAssessed
     ],
-    "MOC Residual Risk Distribution"
+    "MOC Residual Risk Distribution",
+    [COLORS.green,COLORS.orange,COLORS.yellow,COLORS.red,COLORS.gray]
   );
 
   createBar(
@@ -448,7 +469,7 @@ function renderDashboard(){
     ["Total MOC","Open","Closed"],
     [mocReports.length,mocOpen,mocClosed],
     "MOC Status Monitoring",
-    ["#082567","#9333ea","#2ecc71"]
+    [COLORS.blue,COLORS.purple,COLORS.green]
   );
 }
 
@@ -509,40 +530,124 @@ window.onload = function(){
 }
 
 body{
-  font-family:Arial,sans-serif;
+  font-family:'Segoe UI', Arial, sans-serif;
   min-height:100vh;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  background:
+    radial-gradient(circle at top left, rgba(255,140,0,0.22), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(147,51,234,0.24), transparent 30%),
+    linear-gradient(135deg,#020617,#071f47,#1450b8);
   padding:30px;
 }
 
 .container{
   max-width:1450px;
   margin:auto;
-  background:white;
+  background:rgba(255,255,255,0.97);
   border-radius:35px;
   padding:35px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.35);
+  box-shadow:0 25px 65px rgba(0,0,0,0.42);
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  border-radius:32px;
+  padding:55px 35px;
+  margin-bottom:38px;
+  text-align:center;
+  background:
+    linear-gradient(135deg,rgba(7,31,71,0.95),rgba(20,80,184,0.92)),
+    url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
+  box-shadow:0 18px 45px rgba(7,31,71,0.45);
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  width:320px;
+  height:320px;
+  border-radius:50%;
+  background:rgba(255,140,0,0.20);
+  top:-120px;
+  right:-90px;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  width:230px;
+  height:230px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.12);
+  bottom:-90px;
+  left:-70px;
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+}
+
+.hero-badge{
+  display:inline-block;
+  padding:10px 22px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.16);
+  color:#ffffff;
+  border:1px solid rgba(255,255,255,0.30);
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:1.5px;
+  margin-bottom:18px;
+  text-transform:uppercase;
 }
 
 h1{
-  text-align:center;
-  color:#071f47;
-  font-size:60px;
-  margin-bottom:8px;
+  color:white;
+  font-size:64px;
+  margin-bottom:10px;
+  line-height:1.05;
+  letter-spacing:1px;
+  text-shadow:0 6px 20px rgba(0,0,0,0.35);
+}
+
+.hero-highlight{
+  color:#ffb347;
 }
 
 .subtitle{
   text-align:center;
-  color:#666;
-  font-size:20px;
-  margin-bottom:35px;
+  color:#eaf2ff;
+  font-size:22px;
+  margin-bottom:25px;
+  font-weight:500;
+}
+
+.hero-metrics{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-top:26px;
+}
+
+.hero-pill{
+  padding:12px 18px;
+  border-radius:16px;
+  background:rgba(255,255,255,0.14);
+  color:white;
+  font-size:15px;
+  font-weight:700;
+  border:1px solid rgba(255,255,255,0.22);
 }
 
 .section-title{
   color:#071f47;
   font-size:30px;
   margin:40px 0 20px;
-  border-left:8px solid #071f47;
+  border-left:8px solid #ff8c00;
   padding-left:14px;
   font-weight:bold;
 }
@@ -560,14 +665,19 @@ h1{
   padding:35px;
   text-align:center;
   box-shadow:0 10px 25px rgba(0,0,0,0.25);
+  border:1px solid rgba(255,255,255,0.08);
 }
 
 .card.red{
-  background:linear-gradient(135deg,#d00000,#ff1f1f);
+  background:linear-gradient(135deg,#b91c1c,#e74c3c);
+}
+
+.card.orange{
+  background:linear-gradient(135deg,#c05600,#ff8c00);
 }
 
 .card.yellow{
-  background:linear-gradient(135deg,#cfa000,#ffd400);
+  background:linear-gradient(135deg,#ff8c00,#f1c40f);
   color:#071f47;
 }
 
@@ -577,6 +687,10 @@ h1{
 
 .card.purple{
   background:linear-gradient(135deg,#6d28d9,#9333ea);
+}
+
+.card.gray{
+  background:linear-gradient(135deg,#6b7280,#95a5a6);
 }
 
 .card h2{
@@ -653,7 +767,7 @@ canvas{
 .module-line{
   flex:1;
   height:3px;
-  background:#d9d9d9;
+  background:linear-gradient(90deg,transparent,#ff8c00,transparent);
 }
 
 .module-main-title{
@@ -667,7 +781,7 @@ canvas{
   content:"";
   width:130px;
   height:6px;
-  background:#0b2a66;
+  background:#ff8c00;
   position:absolute;
   left:50%;
   transform:translateX(-50%);
@@ -691,7 +805,7 @@ canvas{
   color:#071f47;
   font-weight:bold;
   margin-bottom:25px;
-  border-left:8px solid #071f47;
+  border-left:8px solid #ff8c00;
   padding-left:12px;
 }
 
@@ -753,6 +867,10 @@ canvas{
     margin-bottom:30px;
   }
 
+  h1{
+    font-size:42px;
+  }
+
   .module-main-title{
     font-size:50px;
   }
@@ -762,6 +880,10 @@ canvas{
     width:100%;
     min-width:100%;
   }
+
+  .hero{
+    padding:40px 22px;
+  }
 }
 </style>
 </head>
@@ -770,10 +892,29 @@ canvas{
 
 <div class="container">
 
-  <h1>SMS Executive Dashboard</h1>
+  <div class="hero">
+    <div class="hero-content">
 
-  <div class="subtitle">
-    Safety Management System Performance Overview
+      <div class="hero-badge">
+        371Q Professional Safety Software
+      </div>
+
+      <h1>
+        SMS Executive <span class="hero-highlight">Dashboard</span>
+      </h1>
+
+      <div class="subtitle">
+        Real-Time Safety Intelligence • Risk Visibility • Executive Decision Support
+      </div>
+
+      <div class="hero-metrics">
+        <div class="hero-pill">SMS Reports</div>
+        <div class="hero-pill">FRAT Monitoring</div>
+        <div class="hero-pill">MEDA Analysis</div>
+        <div class="hero-pill">MOC Control</div>
+      </div>
+
+    </div>
   </div>
 
   <div class="section-title">
@@ -872,9 +1013,9 @@ canvas{
           <p>Total FRAT</p>
         </div>
 
-        <div class="card yellow">
+        <div class="card orange">
           <h2 id="fratHigh">0</h2>
-          <p>High Risk FRAT</p>
+          <p>High / MOR FRAT</p>
         </div>
 
         <div class="card red">
