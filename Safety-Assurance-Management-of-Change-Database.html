@@ -1,1 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MOC Database</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Segoe UI', Arial, sans-serif;
+  min-height:100vh;
+  background:
+  radial-gradient(circle at top left, rgba(255,255,255,0.18), transparent 28%),
+  linear-gradient(135deg,#061b3d,#082b66,#1450b8);
+  padding:35px;
+}
+
+.container{
+  max-width:1250px;
+  margin:auto;
+  background:rgba(255,255,255,0.97);
+  padding:45px;
+  border-radius:32px;
+  box-shadow:0 25px 65px rgba(0,0,0,0.35);
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  font-size:54px;
+  margin-bottom:8px;
+}
+
+.description{
+  text-align:center;
+  color:#555;
+  font-size:18px;
+  margin-bottom:28px;
+}
+
+.top-actions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-bottom:22px;
+}
+
+.btn{
+  border:none;
+  color:white;
+  padding:13px 25px;
+  border-radius:14px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:6px;
+  transition:0.25s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(0,0,0,0.25);
+}
+
+.filter-btn{
+  background:linear-gradient(135deg,#7c3aed,#a855f7);
+}
+
+.excel-btn{
+  background:linear-gradient(135deg,#0b8a3a,#22c55e);
+}
+
+.back-btn{
+  background:linear-gradient(135deg,#c40000,#ff2b2b);
+}
+
+.home-btn{
+  background:linear-gradient(135deg,#071f47,#0b2a66);
+}
+
+.filter-panel{
+  background:#f8fbff;
+  border:1px solid #c8d8f0;
+  padding:20px;
+  border-radius:18px;
+  margin-bottom:28px;
+  display:grid;
+  grid-template-columns:1.2fr 0.8fr 1fr 1fr;
+  gap:14px;
+}
+
+.filter-panel input,
+.filter-panel select{
+  width:100%;
+  padding:14px;
+  border:1px solid #b8c7da;
+  border-radius:12px;
+  font-size:15px;
+  background:white;
+}
+
+.counter{
+  text-align:center;
+  color:#071f47;
+  font-weight:bold;
+  margin-bottom:18px;
+}
+
+.report-card{
+  background:white;
+  border-radius:24px;
+  padding:24px;
+  margin-bottom:22px;
+  box-shadow:0 10px 28px rgba(0,0,0,0.12);
+  border-left:9px solid #071f47;
+  transition:0.25s;
+}
+
+.report-card:hover{
+  transform:scale(1.01);
+}
+
+.card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
+.event-title{
+  font-size:25px;
+  font-weight:800;
+  color:#071f47;
+  margin-bottom:6px;
+}
+
+.meta{
+  color:#555;
+  font-size:15px;
+  line-height:1.7;
+}
+
+.status{
+  display:inline-block;
+  padding:7px 16px;
+  border-radius:999px;
+  color:white;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.status.open{
+  background:#0b8a3a;
+}
+
+.status.closed{
+  background:#555;
+}
+
+.status.in-progress{
+  background:#1450b8;
+}
+
+.status.pending-corrective-action{
+  background:#ff9800;
+}
+
+.details-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+  margin-top:18px;
+}
+
+.detail-box{
+  background:#f4f7fb;
+  padding:14px;
+  border-radius:16px;
+  border:1px solid #dce3ef;
+}
+
+.detail-label{
+  font-size:12px;
+  color:#777;
+  font-weight:bold;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+.detail-value{
+  font-size:15px;
+  color:#071f47;
+  font-weight:700;
+  word-break:break-word;
+}
+
+.moc-id-input{
+  width:100%;
+  padding:11px;
+  border:1px solid #cbd5e1;
+  border-radius:12px;
+  font-size:15px;
+  font-weight:bold;
+  color:#071f47;
+}
+
+.small-note{
+  font-size:12px;
+  color:#777;
+  margin-top:6px;
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:22px;
+  align-items:center;
+}
+
+.open-btn{
+  background:linear-gradient(135deg,#004aad,#1473e6);
+}
+
+.save-btn{
+  background:linear-gradient(135deg,#006b3c,#00a65a);
+}
+
+.status-btn{
+  background:linear-gradient(135deg,#6b21a8,#9333ea);
+}
+
+.delete-btn{
+  background:linear-gradient(135deg,#d00000,#ff1f1f);
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  padding:0;
+  font-size:20px;
+}
+
+.separator-buttons{
+  text-align:center;
+  margin:28px 0;
+  padding:18px;
+  background:#eef4ff;
+  border-radius:22px;
+  border:1px dashed #9bb7e0;
+}
+
+.no-data{
+  text-align:center;
+  color:#777;
+  font-size:19px;
+  margin-top:35px;
+  background:#f4f6f8;
+  padding:35px;
+  border-radius:22px;
+}
+
+@media(max-width:900px){
+  h1{
+    font-size:40px;
+  }
+
+  .container{
+    padding:25px;
+  }
+
+  .filter-panel{
+    grid-template-columns:1fr;
+  }
+
+  .event-title{
+    font-size:21px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>MOC Database</h1>
+
+  <div class="description">
+    Stored Management of Change Safety Assurance Reports
+  </div>
+
+  <div class="top-actions">
+    <button class="btn filter-btn" onclick="toggleFilters()">🔎 Filters</button>
+    <button class="btn excel-btn" onclick="downloadExcel()">📥 Download Excel</button>
+    <button class="btn back-btn" onclick="window.location.href='Safety-Assurance-Management-of-Change.html'">← Back to MOC</button>
+    <button class="btn home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+  </div>
+
+  <div id="filterPanel" class="filter-panel">
+    <input 
+      id="searchInput" 
+      placeholder="Search ID, title, department, owner, risk, status..."
+      oninput="applyFilter()"
+    >
+
+    <input 
+      type="date" 
+      id="dateFilter"
+      onchange="applyFilter()"
+    >
+
+    <select id="statusFilter" onchange="applyFilter()">
+      <option value="">All Status</option>
+      <option value="Open">Open</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Pending Corrective Action">Pending Corrective Action</option>
+      <option value="Closed">Closed</option>
+    </select>
+
+    <select id="riskFilter" onchange="applyFilter()">
+      <option value="">All Risk Levels</option>
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+      <option value="Extreme">Extreme</option>
+    </select>
+  </div>
+
+  <div id="counter" class="counter"></div>
+
+  <div id="mocList"></div>
+
+  <div id="noData" class="no-data" style="display:none;">
+    No MOC reports found.
+  </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  onValue,
+  remove,
+  update
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+const mocList = document.getElementById("mocList");
+const noData = document.getElementById("noData");
+const counter = document.getElementById("counter");
+
+let allReports = [];
+let filteredReports = [];
+
+function clean(value){
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function statusClass(status){
+  return String(status || "Open")
+    .toLowerCase()
+    .replaceAll(" ","-");
+}
+
+function normalizeDate(value){
+  if(!value) return "";
+  const d = new Date(value);
+  if(isNaN(d)) return "";
+  return d.toISOString().split("T")[0];
+}
+
+function renderReports(reports){
+
+  mocList.innerHTML = "";
+
+  if(reports.length === 0){
+    noData.style.display = "block";
+    counter.innerHTML = "0 reports found";
+    return;
+  }
+
+  noData.style.display = "none";
+  counter.innerHTML = reports.length + " report(s) found";
+
+  reports.forEach((report, index) => {
+
+    const firebaseId = report.firebaseId;
+
+    const mocVisibleId =
+      report.mocId ||
+      report.customId ||
+      firebaseId;
+
+    const title =
+      report.changeTitle ||
+      "Untitled MOC Report";
+
+    const department =
+      report.department ||
+      "N/A";
+
+    const owner =
+      report.changeOwner ||
+      "N/A";
+
+    const changeType =
+      report.changeType ||
+      "N/A";
+
+    const status =
+      report.status ||
+      "Open";
+
+    const date =
+      report.changeDate ||
+      report.createdAt ||
+      "N/A";
+
+    const initialRisk =
+      report.initialRisk?.level ||
+      "N/A";
+
+    const initialScore =
+      report.initialRisk?.score ??
+      "N/A";
+
+    const residualRisk =
+      report.residualRisk?.level ||
+      "N/A";
+
+    const residualScore =
+      report.residualRisk?.score ??
+      "N/A";
+
+    const card = document.createElement("div");
+    card.className = "report-card";
+
+    card.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="event-title">
+            ${clean(mocVisibleId)} | ${clean(title)}
+          </div>
+
+          <div class="meta">
+            <strong>Date:</strong> ${clean(date)}<br>
+            <strong>Department:</strong> ${clean(department)} | 
+            <strong>Owner:</strong> ${clean(owner)}<br>
+            <strong>Initial Risk:</strong> ${clean(initialRisk)} (${clean(initialScore)}) | 
+            <strong>Residual Risk:</strong> ${clean(residualRisk)} (${clean(residualScore)})
+          </div>
+        </div>
+
+        <span class="status ${statusClass(status)}">
+          ${clean(status)}
+        </span>
+      </div>
+
+      <div class="details-grid">
+
+        <div class="detail-box">
+          <div class="detail-label">Editable MOC ID</div>
+          <input 
+            class="moc-id-input" 
+            id="mocId_${clean(firebaseId)}" 
+            value="${clean(mocVisibleId)}"
+          >
+          <div class="small-note">
+            You can write your own MOC ID here.
+          </div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Change Title</div>
+          <div class="detail-value">${clean(title)}</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Change Type</div>
+          <div class="detail-value">${clean(changeType)}</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Final Decision</div>
+          <div class="detail-value">${clean(report.finalDecision || "N/A")}</div>
+        </div>
+
+      </div>
+
+      <div class="actions">
+
+        <button class="btn open-btn" onclick="openReport('${clean(firebaseId)}')">
+          Open Report
+        </button>
+
+        <button class="btn save-btn" onclick="saveMOCId('${clean(firebaseId)}')">
+          Save MOC ID
+        </button>
+
+        <button class="btn status-btn" onclick="toggleStatus('${clean(firebaseId)}', '${clean(status)}')">
+          ${status === "Open" ? "Close Report" : "Open Report"}
+        </button>
+
+        <button class="btn delete-btn" onclick="deleteReport('${clean(firebaseId)}')">
+          🗑
+        </button>
+
+      </div>
+    `;
+
+    mocList.appendChild(card);
+
+    if((index + 1) % 3 === 0){
+      const separator = document.createElement("div");
+      separator.className = "separator-buttons";
+
+      separator.innerHTML = `
+        <button class="btn back-btn" onclick="window.location.href='Safety-Assurance-Management-of-Change.html'">
+          Back to MOC
+        </button>
+
+        <button class="btn home-btn" onclick="window.location.href='index.html'">
+          Home
+        </button>
+      `;
+
+      mocList.appendChild(separator);
+    }
+
+  });
+}
+
+window.applyFilter = function(){
+
+  const searchText = document.getElementById("searchInput").value.toLowerCase().trim();
+  const dateFilter = document.getElementById("dateFilter").value;
+  const statusFilter = document.getElementById("statusFilter").value;
+  const riskFilter = document.getElementById("riskFilter").value;
+
+  filteredReports = allReports.filter(report => {
+
+    const searchArea = `
+      ${report.firebaseId || ""}
+      ${report.mocId || ""}
+      ${report.customId || ""}
+      ${report.changeTitle || ""}
+      ${report.requestedBy || ""}
+      ${report.department || ""}
+      ${report.changeOwner || ""}
+      ${report.changeDate || ""}
+      ${report.targetDate || ""}
+      ${report.changeType || ""}
+      ${report.status || ""}
+      ${report.aircraftCustomer || ""}
+      ${report.location || ""}
+      ${report.personnelAffected || ""}
+      ${report.documentationAffected || ""}
+      ${report.initialRisk?.level || ""}
+      ${report.initialRisk?.score || ""}
+      ${report.residualRisk?.level || ""}
+      ${report.residualRisk?.score || ""}
+      ${report.finalDecision || ""}
+      ${report.createdAt || ""}
+      ${report.updatedAt || ""}
+    `.toLowerCase();
+
+    const matchesSearch =
+      searchText === "" || searchArea.includes(searchText);
+
+    const reportDate =
+      normalizeDate(report.changeDate || report.createdAt || "");
+
+    const matchesDate =
+      dateFilter === "" || reportDate === dateFilter;
+
+    const matchesStatus =
+      statusFilter === "" || (report.status || "Open") === statusFilter;
+
+    const matchesRisk =
+      riskFilter === "" ||
+      (report.initialRisk?.level || "") === riskFilter ||
+      (report.residualRisk?.level || "") === riskFilter;
+
+    return matchesSearch && matchesDate && matchesStatus && matchesRisk;
+
+  });
+
+  filteredReports.sort((a,b) => {
+    return String(b.firebaseId).localeCompare(String(a.firebaseId));
+  });
+
+  renderReports(filteredReports);
+};
+
+window.toggleFilters = function(){
+  const panel = document.getElementById("filterPanel");
+  panel.style.display = panel.style.display === "none" ? "grid" : "none";
+};
+
+const reportsRef = ref(database, "mocReports");
+
+onValue(reportsRef, (snapshot) => {
+
+  allReports = [];
+
+  if(!snapshot.exists()){
+    renderReports([]);
+    return;
+  }
+
+  snapshot.forEach((childSnapshot) => {
+    allReports.push({
+      firebaseId: childSnapshot.key,
+      ...childSnapshot.val()
+    });
+  });
+
+  allReports.sort((a,b) => {
+    return String(b.firebaseId).localeCompare(String(a.firebaseId));
+  });
+
+  applyFilter();
+
+});
+
+window.openReport = function(reportId){
+  window.location.href = "Safety-Assurance-Management-of-Change-Details.html?id=" + reportId;
+};
+
+window.saveMOCId = function(reportId){
+
+  const input = document.getElementById("mocId_" + reportId);
+  const newMOCId = input.value.trim();
+
+  if(newMOCId === ""){
+    alert("MOC ID cannot be empty.");
+    return;
+  }
+
+  update(ref(database, "mocReports/" + reportId), {
+    mocId: newMOCId,
+    updatedAt: new Date().toLocaleString()
+  })
+  .then(() => {
+    alert("MOC ID updated successfully.");
+  })
+  .catch((error) => {
+    alert("Error updating MOC ID: " + error.message);
+  });
+
+};
+
+window.toggleStatus = function(reportId, currentStatus){
+
+  const newStatus = currentStatus === "Open" ? "Closed" : "Open";
+
+  update(ref(database, "mocReports/" + reportId), {
+    status: newStatus,
+    updatedAt: new Date().toLocaleString()
+  })
+  .then(() => {
+    alert("Report status changed to " + newStatus + ".");
+  })
+  .catch((error) => {
+    alert("Error updating status: " + error.message);
+  });
+
+};
+
+window.deleteReport = function(reportId){
+
+  const confirmDelete = confirm(
+    "Are you sure you want to permanently delete this MOC report?"
+  );
+
+  if(!confirmDelete) return;
+
+  remove(ref(database, "mocReports/" + reportId))
+  .then(() => {
+    alert("MOC Report deleted successfully.");
+  })
+  .catch((error) => {
+    alert("Error deleting report: " + error.message);
+  });
+
+};
+
+window.downloadExcel = function(){
+
+  let csv = "MOC ID,Change Title,Department,Owner,Change Type,Status,Initial Risk,Initial Score,Residual Risk,Residual Score,Final Decision,Created At,Updated At\n";
+
+  filteredReports.forEach(report => {
+
+    const row = [
+      report.mocId || report.firebaseId || "",
+      report.changeTitle || "",
+      report.department || "",
+      report.changeOwner || "",
+      report.changeType || "",
+      report.status || "Open",
+      report.initialRisk?.level || "",
+      report.initialRisk?.score || "",
+      report.residualRisk?.level || "",
+      report.residualRisk?.score || "",
+      report.finalDecision || "",
+      report.createdAt || "",
+      report.updatedAt || ""
+    ];
+
+    csv += row.map(value => `"${String(value).replaceAll('"','""')}"`).join(",") + "\n";
+
+  });
+
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "MOC_Database.csv";
+  link.click();
+
+  URL.revokeObjectURL(url);
+
+};
+
+</script>
+
+</body>
+</html>
 
