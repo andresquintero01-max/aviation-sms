@@ -492,6 +492,31 @@ window.openDatabase = function(page){
   location.href = page;
 };
 
+window.openMocDatabase = async function(){
+
+  const possiblePages = [
+    "Safety-Assurance-Management-of-Change-Database.html",
+    "Management-of-Change-Database.html",
+    "MOC-Database.html",
+    "MOCDatabase.html",
+    "MOC_Database.html",
+    "Safety-Assurance-Management-of-Change.html"
+  ];
+
+  for(const page of possiblePages){
+    try{
+      const response = await fetch(page, { method:"HEAD" });
+
+      if(response.ok){
+        location.href = page;
+        return;
+      }
+    }catch(error){}
+  }
+
+  alert("No MOC Database file was found. Please verify the exact file name in GitHub.");
+};
+
 window.onload = function(){
   loadSMSReports();
   loadFRATReports();
@@ -979,8 +1004,8 @@ canvas{
       </div>
 
       <div class="database-btn-wrapper">
-        <button class="database-btn" onclick="openDatabase('MOC-Database.html')">
-        🔄 Open Management of Change Database
+        <button class="database-btn" onclick="openMocDatabase()">
+          🔄 Open Management of Change Database
         </button>
       </div>
 
