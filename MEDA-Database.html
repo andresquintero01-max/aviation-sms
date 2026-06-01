@@ -41,7 +41,30 @@ h1{
   text-align:center;
   color:#555;
   font-size:18px;
-  margin-bottom:35px;
+  margin-bottom:30px;
+}
+
+.filter-box{
+  background:#eef4ff;
+  border:1px solid #c8d8f0;
+  padding:22px;
+  border-radius:22px;
+  margin-bottom:28px;
+}
+
+.filter-title{
+  font-weight:bold;
+  color:#071f47;
+  margin-bottom:10px;
+  font-size:18px;
+}
+
+.search-input{
+  width:100%;
+  padding:15px;
+  border:1px solid #b8c7da;
+  border-radius:14px;
+  font-size:16px;
 }
 
 .top-buttons{
@@ -127,6 +150,14 @@ h1{
   background:#555;
 }
 
+.status.in-progress{
+  background:#1450b8;
+}
+
+.status.pending-corrective-action{
+  background:#ff9800;
+}
+
 .details-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -153,6 +184,7 @@ h1{
   font-size:15px;
   color:#071f47;
   font-weight:700;
+  word-break:break-word;
 }
 
 .meda-id-input{
@@ -219,6 +251,13 @@ h1{
   margin-top:6px;
 }
 
+.counter{
+  text-align:center;
+  color:#071f47;
+  font-weight:bold;
+  margin-bottom:18px;
+}
+
 @media(max-width:700px){
   h1{
     font-size:40px;
@@ -245,6 +284,16 @@ h1{
     Stored Maintenance Error Decision Aid Investigation Reports
   </div>
 
+  <div class="filter-box">
+    <div class="filter-title">Search MEDA Reports</div>
+    <input 
+      id="searchInput" 
+      class="search-input" 
+      placeholder="Search by MEDA ID, title, affected person, aircraft, customer, date, status..."
+      oninput="applyFilter()"
+    >
+  </div>
+
   <div class="top-buttons">
     <button class="btn back-btn" onclick="window.location.href='MEDA.html'">
       Back to MEDA
@@ -254,6 +303,8 @@ h1{
       Home
     </button>
   </div>
+
+  <div id="counter" class="counter"></div>
 
   <div id="medaList"></div>
 
@@ -290,34 +341,37 @@ const database = getDatabase(app);
 
 const medaList = document.getElementById("medaList");
 const noData = document.getElementById("noData");
+const counter = document.getElementById("counter");
 
-const reportsRef = ref(database, "medaReports");
+let allReports = [];
 
-onValue(reportsRef, (snapshot) => {
+function clean(value){
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function statusClass(status){
+  return String(status || "Open")
+    .toLowerCase()
+    .replaceAll(" ","-");
+}
+
+function renderReports(reports){
 
   medaList.innerHTML = "";
 
-  if(!snapshot.exists()){
+  if(reports.length === 0){
     noData.style.display = "block";
+    counter.innerHTML = "0 reports found";
     return;
   }
 
   noData.style.display = "none";
-
-  let reports = [];
-
-  snapshot.forEach((childSnapshot) => {
-    reports.push({
-      firebaseId: childSnapshot.key,
-      ...childSnapshot.val()
-    });
-  });
-
-  reports.sort((a,b) => {
-    const dateA = a.createdAt || a.date || "";
-    const dateB = b.createdAt || b.date || "";
-    return String(dateB).localeCompare(String(dateA));
-  });
+  counter.innerHTML = reports.length + " report(s) found";
 
   reports.forEach((report, index) => {
 
@@ -342,6 +396,12 @@ onValue(reportsRef, (snapshot) => {
       report.createdAt ||
       "N/A";
 
+    const aircraft =
+      report.aircraft || "N/A";
+
+    const customer =
+      report.customer || "N/A";
+
     const status =
       report.status || "Open";
 
@@ -356,16 +416,18 @@ onValue(reportsRef, (snapshot) => {
     card.innerHTML = `
       <div class="card-header">
         <div>
-          <div class="event-title">${title}</div>
+          <div class="event-title">${clean(title)}</div>
 
           <div class="meta">
-            <strong>Date:</strong> ${date}<br>
-            <strong>Affected Person:</strong> ${affectedPerson}
+            <strong>Date:</strong> ${clean(date)}<br>
+            <strong>Affected Person:</strong> ${clean(affectedPerson)}<br>
+            <strong>Aircraft:</strong> ${clean(aircraft)} | 
+            <strong>Customer:</strong> ${clean(customer)}
           </div>
         </div>
 
-        <span class="status ${status.toLowerCase()}">
-          ${status}
+        <span class="status ${statusClass(status)}">
+          ${clean(status)}
         </span>
       </div>
 
@@ -375,8 +437,8 @@ onValue(reportsRef, (snapshot) => {
           <div class="detail-label">Editable MEDA ID</div>
           <input 
             class="meda-id-input" 
-            id="medaId_${firebaseId}" 
-            value="${medaVisibleId}"
+            id="medaId_${clean(firebaseId)}" 
+            value="${clean(medaVisibleId)}"
           >
           <div class="small-note">
             You can write your own MEDA ID here.
@@ -385,36 +447,36 @@ onValue(reportsRef, (snapshot) => {
 
         <div class="detail-box">
           <div class="detail-label">Event Title</div>
-          <div class="detail-value">${title}</div>
+          <div class="detail-value">${clean(title)}</div>
         </div>
 
         <div class="detail-box">
           <div class="detail-label">Report Date</div>
-          <div class="detail-value">${date}</div>
+          <div class="detail-value">${clean(date)}</div>
         </div>
 
         <div class="detail-box">
           <div class="detail-label">Affected Person</div>
-          <div class="detail-value">${affectedPerson}</div>
+          <div class="detail-value">${clean(affectedPerson)}</div>
         </div>
 
       </div>
 
       <div class="actions">
 
-        <button class="btn open-btn" onclick="openReport('${firebaseId}')">
+        <button class="btn open-btn" onclick="openReport('${clean(firebaseId)}')">
           Open Report
         </button>
 
-        <button class="btn save-btn" onclick="saveMEDAId('${firebaseId}')">
+        <button class="btn save-btn" onclick="saveMEDAId('${clean(firebaseId)}')">
           Save MEDA ID
         </button>
 
-        <button class="btn status-btn" onclick="toggleStatus('${firebaseId}', '${status}')">
+        <button class="btn status-btn" onclick="toggleStatus('${clean(firebaseId)}', '${clean(status)}')">
           ${status === "Open" ? "Close Report" : "Open Report"}
         </button>
 
-        <button class="btn delete-btn" onclick="deleteReport('${firebaseId}')">
+        <button class="btn delete-btn" onclick="deleteReport('${clean(firebaseId)}')">
           🗑
         </button>
 
@@ -441,6 +503,73 @@ onValue(reportsRef, (snapshot) => {
     }
 
   });
+}
+
+window.applyFilter = function(){
+
+  const searchText = document.getElementById("searchInput").value.toLowerCase().trim();
+
+  if(searchText === ""){
+    renderReports(allReports);
+    return;
+  }
+
+  const filtered = allReports.filter(report => {
+
+    const searchArea = `
+      ${report.firebaseId || ""}
+      ${report.medaId || ""}
+      ${report.customId || ""}
+      ${report.title || ""}
+      ${report.eventTitle || ""}
+      ${report.event || ""}
+      ${report.affectedPerson || ""}
+      ${report.personAffected || ""}
+      ${report.employeeName || ""}
+      ${report.person || ""}
+      ${report.aircraft || ""}
+      ${report.customer || ""}
+      ${report.location || ""}
+      ${report.date || ""}
+      ${report.eventDate || ""}
+      ${report.createdAt || ""}
+      ${report.status || ""}
+      ${report.eventType || ""}
+      ${report.detectionMethod || ""}
+      ${report.mainFactor || ""}
+      ${report.workOrder || ""}
+    `.toLowerCase();
+
+    return searchArea.includes(searchText);
+
+  });
+
+  renderReports(filtered);
+};
+
+const reportsRef = ref(database, "medaReports");
+
+onValue(reportsRef, (snapshot) => {
+
+  allReports = [];
+
+  if(!snapshot.exists()){
+    renderReports([]);
+    return;
+  }
+
+  snapshot.forEach((childSnapshot) => {
+    allReports.push({
+      firebaseId: childSnapshot.key,
+      ...childSnapshot.val()
+    });
+  });
+
+  allReports.sort((a,b) => {
+    return String(b.firebaseId).localeCompare(String(a.firebaseId));
+  });
+
+  applyFilter();
 
 });
 
@@ -459,7 +588,8 @@ window.saveMEDAId = function(reportId){
   }
 
   update(ref(database, "medaReports/" + reportId), {
-    medaId: newMEDAId
+    medaId: newMEDAId,
+    updatedAt: new Date().toLocaleString()
   })
   .then(() => {
     alert("MEDA ID updated successfully.");
@@ -475,7 +605,8 @@ window.toggleStatus = function(reportId, currentStatus){
   const newStatus = currentStatus === "Open" ? "Closed" : "Open";
 
   update(ref(database, "medaReports/" + reportId), {
-    status: newStatus
+    status: newStatus,
+    updatedAt: new Date().toLocaleString()
   })
   .then(() => {
     alert("Report status changed to " + newStatus + ".");
