@@ -13,134 +13,207 @@
 }
 
 body{
-  font-family:Arial, sans-serif;
+  font-family:'Segoe UI', Arial, sans-serif;
   min-height:100vh;
-  background:#f4f7fb;
-  padding:30px;
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,0.20), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(20,80,184,0.45), transparent 35%),
+    linear-gradient(135deg,#020617,#071f47,#1450b8);
+  padding:35px;
 }
 
 .container{
-  max-width:1150px;
+  max-width:1200px;
   margin:auto;
-  background:white;
-  border-radius:24px;
-  padding:35px;
-  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+  background:rgba(255,255,255,0.97);
+  border-radius:34px;
+  padding:45px;
+  box-shadow:0 25px 65px rgba(0,0,0,0.35);
 }
 
 .header{
   background:linear-gradient(135deg,#071f47,#1450b8);
   color:white;
-  padding:35px;
-  border-radius:22px;
+  padding:45px;
+  border-radius:28px;
   text-align:center;
   margin-bottom:35px;
 }
 
 .header h1{
-  font-size:44px;
-  margin-bottom:10px;
+  font-size:50px;
+  margin-bottom:12px;
 }
 
 .header p{
-  font-size:17px;
+  font-size:18px;
   color:#dbeafe;
+}
+
+.flow{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-bottom:35px;
+}
+
+.flow-step{
+  background:#eef4ff;
+  color:#071f47;
+  border:1px solid #c8d8f0;
+  padding:13px 20px;
+  border-radius:999px;
+  font-weight:bold;
+  box-shadow:0 6px 16px rgba(0,0,0,0.08);
 }
 
 .cards{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:25px;
-  margin-top:20px;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:28px;
 }
 
 .card{
-  background:#f8fbff;
+  background:white;
   border:1px solid #d8e1ef;
-  border-left:8px solid #1450b8;
-  border-radius:20px;
-  padding:28px;
-  text-align:center;
-  transition:0.25s;
+  border-radius:28px;
+  padding:34px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 14px 32px rgba(0,0,0,0.12);
+  transition:0.3s;
 }
 
 .card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 12px 28px rgba(0,0,0,0.15);
+  transform:translateY(-7px);
+  box-shadow:0 20px 42px rgba(0,0,0,0.18);
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:9px;
+  background:linear-gradient(90deg,#071f47,#1450b8,#60a5fa);
+}
+
+.icon{
+  width:72px;
+  height:72px;
+  border-radius:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:34px;
+  margin-bottom:22px;
+  color:white;
+}
+
+.icon.report{
+  background:linear-gradient(135deg,#004080,#1473e6);
+}
+
+.icon.database{
+  background:linear-gradient(135deg,#006b3c,#22c55e);
 }
 
 .card h2{
   color:#071f47;
-  font-size:24px;
-  margin-bottom:12px;
+  font-size:28px;
+  margin-bottom:14px;
 }
 
 .card p{
   color:#56657d;
+  font-size:16px;
+  line-height:1.6;
+  margin-bottom:26px;
+}
+
+.card ul{
+  margin-left:18px;
+  margin-bottom:28px;
+  color:#334155;
+  line-height:1.7;
   font-size:15px;
-  line-height:1.5;
-  margin-bottom:22px;
 }
 
 .btn{
   border:none;
   color:white;
-  padding:14px 26px;
-  border-radius:12px;
+  padding:15px 30px;
+  border-radius:14px;
   font-size:16px;
   font-weight:bold;
   cursor:pointer;
   transition:0.25s;
+  box-shadow:0 10px 20px rgba(0,0,0,0.18);
 }
 
 .btn:hover{
   transform:translateY(-2px);
-  box-shadow:0 8px 18px rgba(0,0,0,0.25);
+  box-shadow:0 14px 25px rgba(0,0,0,0.25);
 }
 
 .report-btn{
-  background:#004080;
+  background:linear-gradient(135deg,#004080,#1473e6);
 }
 
 .database-btn{
-  background:#2f9144;
-}
-
-.back-btn{
-  background:#c40000;
-}
-
-.home-btn{
-  background:#0b2a66;
+  background:linear-gradient(135deg,#006b3c,#22c55e);
 }
 
 .bottom-buttons{
   text-align:center;
-  margin-top:35px;
+  margin-top:38px;
 }
 
 .bottom-buttons .btn{
-  margin:6px;
+  margin:7px;
+}
+
+.back-btn{
+  background:linear-gradient(135deg,#c40000,#ff3131);
+}
+
+.home-btn{
+  background:linear-gradient(135deg,#071f47,#0b2a66);
 }
 
 .footer-note{
-  margin-top:30px;
+  margin-top:32px;
   background:#eef4ff;
   border:1px solid #c8d8f0;
-  border-radius:18px;
-  padding:20px;
+  border-radius:22px;
+  padding:22px;
   text-align:center;
   color:#071f47;
   font-weight:bold;
+  font-size:17px;
 }
 
 @media(max-width:700px){
+  body{
+    padding:20px;
+  }
+
+  .container{
+    padding:25px;
+  }
+
+  .header{
+    padding:30px 20px;
+  }
+
   .header h1{
     font-size:34px;
   }
 
-  .container{
-    padding:22px;
+  .cards{
+    grid-template-columns:1fr;
   }
 }
 </style>
@@ -152,17 +225,34 @@ body{
 
   <div class="header">
     <h1>Safety Assurance - Management of Change</h1>
-    <p>Create, review, track, and manage MOC safety reports.</p>
+    <p>Control operational, procedural, organizational, and equipment changes through a structured safety process.</p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">1. Create Report</div>
+    <div class="flow-step">2. Risk Assessment</div>
+    <div class="flow-step">3. Controls</div>
+    <div class="flow-step">4. Database</div>
+    <div class="flow-step">5. Details</div>
   </div>
 
   <div class="cards">
 
     <div class="card">
+      <div class="icon report">📝</div>
+
       <h2>Create MOC Report</h2>
+
       <p>
-        Start a new Management of Change evaluation, document the change,
-        assess risk, define controls, and save the report.
+        Start a new Management of Change evaluation and document the proposed change,
+        affected areas, hazards, controls, action plan, residual risk, and approvals.
       </p>
+
+      <ul>
+        <li>Initial and residual risk assessment</li>
+        <li>Required controls and action plan</li>
+        <li>Approval and verification tracking</li>
+      </ul>
 
       <button 
         class="btn report-btn" 
@@ -173,15 +263,24 @@ body{
     </div>
 
     <div class="card">
+      <div class="icon database">📊</div>
+
       <h2>MOC Database</h2>
+
       <p>
-        View all saved Management of Change reports, open details,
-        edit report IDs, filter records, close reports, or delete records.
+        Review all saved Management of Change records, search reports,
+        open full details, edit IDs, close records, delete reports, and export information.
       </p>
+
+      <ul>
+        <li>Open saved MOC reports</li>
+        <li>Track status and risk level</li>
+        <li>Access full report details</li>
+      </ul>
 
       <button 
         class="btn database-btn" 
-        onclick="window.location.href='Safety-Assurance-Management-of-Database.html'"
+        onclick="window.location.href='Safety-Assurance-Management-of-Change-Database.html'"
       >
         Open MOC Database
       </button>
@@ -194,14 +293,14 @@ body{
       class="btn back-btn" 
       onclick="window.location.href='Safety-Assurance.html'"
     >
-      Back to Safety Assurance
+      ← Back to Safety Assurance
     </button>
 
     <button 
       class="btn home-btn" 
       onclick="window.location.href='index.html'"
     >
-      Home
+      🏠 Home
     </button>
   </div>
 
