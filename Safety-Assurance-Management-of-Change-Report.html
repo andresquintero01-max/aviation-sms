@@ -1,1 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Management of Change Report</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f4f7fb;
+  color:#111;
+  padding:25px;
+}
+
+.container{
+  max-width:1350px;
+  margin:auto;
+  background:white;
+  border-radius:24px;
+  padding:30px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
+
+.header{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+  color:white;
+  padding:35px;
+  border-radius:22px;
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.header h1{
+  font-size:42px;
+  margin-bottom:8px;
+}
+
+.header p{
+  font-size:17px;
+  color:#dbeafe;
+}
+
+.section{
+  margin-top:25px;
+  border:1px solid #d8e1ef;
+  border-radius:18px;
+  overflow:hidden;
+  background:white;
+}
+
+.section-title{
+  background:#004080;
+  color:white;
+  padding:14px 18px;
+  font-size:21px;
+  font-weight:bold;
+}
+
+.section-body{
+  padding:22px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:18px;
+}
+
+.field label{
+  display:block;
+  color:#004080;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:11px;
+  border:1px solid #b8c7da;
+  border-radius:10px;
+  font-size:15px;
+  background:white;
+}
+
+textarea{
+  min-height:95px;
+  resize:vertical;
+}
+
+.risk-area{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+}
+
+.matrix-box{
+  background:#f8fbff;
+  border:1px solid #d8e1ef;
+  border-radius:18px;
+  padding:18px;
+}
+
+.matrix-box h3{
+  color:#071f47;
+  margin-bottom:12px;
+  font-size:22px;
+}
+
+.matrix{
+  width:100%;
+  border-collapse:collapse;
+  text-align:center;
+}
+
+.matrix th,
+.matrix td{
+  border:1px solid #d8e1ef;
+  padding:12px;
+  font-weight:bold;
+}
+
+.matrix th{
+  background:#071f47;
+  color:white;
+}
+
+.matrix td{
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.matrix td:hover{
+  transform:scale(1.05);
+  outline:3px solid #071f47;
+}
+
+.low{background:#2f9144;color:white;}
+.medium{background:#ffd966;color:#111;}
+.high{background:#ff9800;color:#111;}
+.extreme{background:#ff1a0a;color:white;}
+
+.selected-risk{
+  outline:4px solid #071f47 !important;
+  transform:scale(1.06);
+}
+
+.risk-result{
+  margin-top:15px;
+  padding:15px;
+  border-radius:14px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  background:#eef4ff;
+  color:#071f47;
+  border:1px solid #c8d8f0;
+}
+
+.action-row{
+  display:grid;
+  grid-template-columns:70px 2fr 1fr 1fr 1fr;
+  gap:14px;
+  align-items:start;
+  background:#f8fbff;
+  border:1px solid #d8e1ef;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:16px;
+}
+
+.action-number{
+  background:#004080;
+  color:white;
+  font-weight:bold;
+  border-radius:12px;
+  padding:14px;
+  text-align:center;
+}
+
+.btn-area{
+  text-align:center;
+  margin-top:30px;
+}
+
+.btn{
+  border:none;
+  padding:15px 28px;
+  border-radius:12px;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:6px;
+}
+
+.save-btn{background:#004080;}
+.reset-btn{background:#666;}
+.database-btn{background:#2f9144;}
+.back-btn{background:#c40000;}
+.home-btn{background:#0b2a66;}
+
+.saved-box{
+  margin-top:25px;
+  background:#e8f5e9;
+  color:#14532d;
+  border:1px solid #2f9144;
+  padding:16px;
+  border-radius:14px;
+  display:none;
+  font-weight:bold;
+  text-align:center;
+}
+
+@media(max-width:1000px){
+  .risk-area,
+  .action-row{
+    grid-template-columns:1fr;
+  }
+
+  .header h1{
+    font-size:32px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+  <h1>Safety Assurance - Management of Change</h1>
+  <p>Management of Change report with risk assessment, controls, action plan, and approval tracking.</p>
+</div>
+
+<div class="section">
+  <div class="section-title">1. Change Information</div>
+  <div class="section-body">
+
+    <div class="grid">
+      <div class="field">
+        <label>Change Title *</label>
+        <input id="changeTitle" placeholder="Example: New maintenance process, tooling change, procedure update">
+      </div>
+
+      <div class="field">
+        <label>Requested By</label>
+        <input id="requestedBy" placeholder="Name of requester">
+      </div>
+
+      <div class="field">
+        <label>Department / Area</label>
+        <input id="department" placeholder="Maintenance, QA, Safety, Operations">
+      </div>
+
+      <div class="field">
+        <label>Change Owner</label>
+        <input id="changeOwner" placeholder="Responsible person">
+      </div>
+
+      <div class="field">
+        <label>Change Date</label>
+        <input type="date" id="changeDate">
+      </div>
+
+      <div class="field">
+        <label>Target Implementation Date</label>
+        <input type="date" id="targetDate">
+      </div>
+
+      <div class="field">
+        <label>Change Type</label>
+        <select id="changeType">
+          <option>Process Change</option>
+          <option>Procedure Change</option>
+          <option>Equipment / Tooling Change</option>
+          <option>Facility Change</option>
+          <option>Organizational Change</option>
+          <option>Personnel / Staffing Change</option>
+          <option>Operational Change</option>
+          <option>Regulatory / Customer Requirement Change</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Change Status</label>
+        <select id="status">
+          <option>Open</option>
+          <option>In Progress</option>
+          <option>Pending Corrective Action</option>
+          <option>Closed</option>
+        </select>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Change Description</label>
+      <textarea id="changeDescription" placeholder="Describe what is changing, why it is changing, and what process, personnel, equipment, aircraft, customer, or operation may be affected."></textarea>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Reason for Change</label>
+      <textarea id="reasonForChange" placeholder="Explain the reason for the change: safety improvement, customer requirement, process gap, audit finding, regulatory requirement, operational need, etc."></textarea>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">2. Areas Affected</div>
+  <div class="section-body">
+
+    <div class="grid">
+      <div class="field">
+        <label>Aircraft / Fleet / Customer Affected</label>
+        <input id="aircraftCustomer" placeholder="Example: ESTAFETA XA-EMX, ATI, LATAM, B737, A321">
+      </div>
+
+      <div class="field">
+        <label>Location Affected</label>
+        <input id="location" placeholder="Example: KOPF Hangar 48">
+      </div>
+
+      <div class="field">
+        <label>Personnel Affected</label>
+        <input id="personnelAffected" placeholder="Mechanics, Inspectors, QA, Leads, PMs">
+      </div>
+
+      <div class="field">
+        <label>Documentation Affected</label>
+        <input id="documentationAffected" placeholder="Manual, procedure, checklist, form, task card">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">3. Initial Risk Assessment</div>
+  <div class="section-body">
+
+    <div class="risk-area">
+
+      <div class="matrix-box">
+        <h3>Initial Risk Matrix</h3>
+
+        <table class="matrix">
+          <tr>
+            <th>Severity ↓ / Probability →</th>
+            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+          </tr>
+          <tr>
+            <th>5</th>
+            <td class="medium" onclick="selectRisk('initial',5,1)">5</td>
+            <td class="high" onclick="selectRisk('initial',5,2)">10</td>
+            <td class="high" onclick="selectRisk('initial',5,3)">15</td>
+            <td class="extreme" onclick="selectRisk('initial',5,4)">20</td>
+            <td class="extreme" onclick="selectRisk('initial',5,5)">25</td>
+          </tr>
+          <tr>
+            <th>4</th>
+            <td class="medium" onclick="selectRisk('initial',4,1)">4</td>
+            <td class="medium" onclick="selectRisk('initial',4,2)">8</td>
+            <td class="high" onclick="selectRisk('initial',4,3)">12</td>
+            <td class="high" onclick="selectRisk('initial',4,4)">16</td>
+            <td class="extreme" onclick="selectRisk('initial',4,5)">20</td>
+          </tr>
+          <tr>
+            <th>3</th>
+            <td class="low" onclick="selectRisk('initial',3,1)">3</td>
+            <td class="medium" onclick="selectRisk('initial',3,2)">6</td>
+            <td class="medium" onclick="selectRisk('initial',3,3)">9</td>
+            <td class="high" onclick="selectRisk('initial',3,4)">12</td>
+            <td class="high" onclick="selectRisk('initial',3,5)">15</td>
+          </tr>
+          <tr>
+            <th>2</th>
+            <td class="low" onclick="selectRisk('initial',2,1)">2</td>
+            <td class="low" onclick="selectRisk('initial',2,2)">4</td>
+            <td class="medium" onclick="selectRisk('initial',2,3)">6</td>
+            <td class="medium" onclick="selectRisk('initial',2,4)">8</td>
+            <td class="high" onclick="selectRisk('initial',2,5)">10</td>
+          </tr>
+          <tr>
+            <th>1</th>
+            <td class="low" onclick="selectRisk('initial',1,1)">1</td>
+            <td class="low" onclick="selectRisk('initial',1,2)">2</td>
+            <td class="low" onclick="selectRisk('initial',1,3)">3</td>
+            <td class="low" onclick="selectRisk('initial',1,4)">4</td>
+            <td class="medium" onclick="selectRisk('initial',1,5)">5</td>
+          </tr>
+        </table>
+
+        <div id="initialRiskResult" class="risk-result">
+          Initial Risk: Not selected
+        </div>
+      </div>
+
+      <div>
+        <div class="field">
+          <label>Initial Risk Description</label>
+          <textarea id="initialRiskDescription" placeholder="Describe the hazards or risk created by the proposed change before additional controls."></textarea>
+        </div>
+
+        <br>
+
+        <div class="field">
+          <label>Existing Controls</label>
+          <textarea id="existingControls" placeholder="Describe current controls already in place."></textarea>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">4. Action Plan / Required Controls</div>
+  <div class="section-body">
+
+    <div class="action-row">
+      <div class="action-number">1</div>
+      <div class="field">
+        <label>Action / Control</label>
+        <textarea id="action1"></textarea>
+      </div>
+      <div class="field">
+        <label>Responsible Person</label>
+        <input id="responsible1">
+      </div>
+      <div class="field">
+        <label>Due Date</label>
+        <input type="date" id="dueDate1">
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="actionStatus1">
+          <option>Open</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+          <option>Verified</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <div class="action-number">2</div>
+      <div class="field">
+        <label>Action / Control</label>
+        <textarea id="action2"></textarea>
+      </div>
+      <div class="field">
+        <label>Responsible Person</label>
+        <input id="responsible2">
+      </div>
+      <div class="field">
+        <label>Due Date</label>
+        <input type="date" id="dueDate2">
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="actionStatus2">
+          <option>Open</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+          <option>Verified</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <div class="action-number">3</div>
+      <div class="field">
+        <label>Action / Control</label>
+        <textarea id="action3"></textarea>
+      </div>
+      <div class="field">
+        <label>Responsible Person</label>
+        <input id="responsible3">
+      </div>
+      <div class="field">
+        <label>Due Date</label>
+        <input type="date" id="dueDate3">
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="actionStatus3">
+          <option>Open</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+          <option>Verified</option>
+        </select>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">5. Residual Risk Assessment</div>
+  <div class="section-body">
+
+    <div class="risk-area">
+
+      <div class="matrix-box">
+        <h3>Residual Risk Matrix</h3>
+
+        <table class="matrix">
+          <tr>
+            <th>Severity ↓ / Probability →</th>
+            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+          </tr>
+          <tr>
+            <th>5</th>
+            <td class="medium" onclick="selectRisk('residual',5,1)">5</td>
+            <td class="high" onclick="selectRisk('residual',5,2)">10</td>
+            <td class="high" onclick="selectRisk('residual',5,3)">15</td>
+            <td class="extreme" onclick="selectRisk('residual',5,4)">20</td>
+            <td class="extreme" onclick="selectRisk('residual',5,5)">25</td>
+          </tr>
+          <tr>
+            <th>4</th>
+            <td class="medium" onclick="selectRisk('residual',4,1)">4</td>
+            <td class="medium" onclick="selectRisk('residual',4,2)">8</td>
+            <td class="high" onclick="selectRisk('residual',4,3)">12</td>
+            <td class="high" onclick="selectRisk('residual',4,4)">16</td>
+            <td class="extreme" onclick="selectRisk('residual',4,5)">20</td>
+          </tr>
+          <tr>
+            <th>3</th>
+            <td class="low" onclick="selectRisk('residual',3,1)">3</td>
+            <td class="medium" onclick="selectRisk('residual',3,2)">6</td>
+            <td class="medium" onclick="selectRisk('residual',3,3)">9</td>
+            <td class="high" onclick="selectRisk('residual',3,4)">12</td>
+            <td class="high" onclick="selectRisk('residual',3,5)">15</td>
+          </tr>
+          <tr>
+            <th>2</th>
+            <td class="low" onclick="selectRisk('residual',2,1)">2</td>
+            <td class="low" onclick="selectRisk('residual',2,2)">4</td>
+            <td class="medium" onclick="selectRisk('residual',2,3)">6</td>
+            <td class="medium" onclick="selectRisk('residual',2,4)">8</td>
+            <td class="high" onclick="selectRisk('residual',2,5)">10</td>
+          </tr>
+          <tr>
+            <th>1</th>
+            <td class="low" onclick="selectRisk('residual',1,1)">1</td>
+            <td class="low" onclick="selectRisk('residual',1,2)">2</td>
+            <td class="low" onclick="selectRisk('residual',1,3)">3</td>
+            <td class="low" onclick="selectRisk('residual',1,4)">4</td>
+            <td class="medium" onclick="selectRisk('residual',1,5)">5</td>
+          </tr>
+        </table>
+
+        <div id="residualRiskResult" class="risk-result">
+          Residual Risk: Not selected
+        </div>
+      </div>
+
+      <div>
+        <div class="field">
+          <label>Residual Risk Justification</label>
+          <textarea id="residualRiskJustification" placeholder="Explain why the residual risk is acceptable after implementing controls."></textarea>
+        </div>
+
+        <br>
+
+        <div class="field">
+          <label>Implementation Verification Method</label>
+          <textarea id="verificationMethod" placeholder="Describe how implementation will be verified: audit, inspection, read & sign, training record, QA validation, etc."></textarea>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">6. Approval</div>
+  <div class="section-body">
+
+    <div class="grid">
+      <div class="field">
+        <label>Reviewed By</label>
+        <input id="reviewedBy">
+      </div>
+
+      <div class="field">
+        <label>Approved By</label>
+        <input id="approvedBy">
+      </div>
+
+      <div class="field">
+        <label>Approval Date</label>
+        <input type="date" id="approvalDate">
+      </div>
+
+      <div class="field">
+        <label>Final Decision</label>
+        <select id="finalDecision">
+          <option>Pending Review</option>
+          <option>Approved</option>
+          <option>Approved with Controls</option>
+          <option>Rejected</option>
+        </select>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Approval Comments</label>
+      <textarea id="approvalComments"></textarea>
+    </div>
+
+  </div>
+</div>
+
+<div class="btn-area">
+  <button class="btn save-btn" onclick="saveMOC()">Save MOC Report</button>
+  <button class="btn reset-btn" onclick="resetForm()">Reset Form</button>
+  <button class="btn database-btn" onclick="window.location.href='Safety-Assurance-Management-of-Change-Database.html'">MOC Database</button>
+  <button class="btn back-btn" onclick="window.location.href='Safety-Assurance-Management-of-Change.html'">Back to MOC</button>
+  <button class="btn home-btn" onclick="window.location.href='index.html'">Home</button>
+</div>
+
+<div id="savedBox" class="saved-box">
+  MOC Report saved successfully.
+</div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+window.database = database;
+window.dbRef = ref;
+window.dbPush = push;
+window.dbSet = set;
+</script>
+
+<script>
+let initialRisk = null;
+let residualRisk = null;
+
+function riskLevel(score){
+  if(score <= 4) return "Low";
+  if(score <= 9) return "Medium";
+  if(score <= 16) return "High";
+  return "Extreme";
+}
+
+function selectRisk(type,severity,probability){
+  const score = severity * probability;
+  const level = riskLevel(score);
+
+  if(type === "initial"){
+    initialRisk = {severity, probability, score, level};
+    document.getElementById("initialRiskResult").innerHTML =
+      `Initial Risk: ${level} | Severity ${severity} x Probability ${probability} = ${score}`;
+
+    document.querySelectorAll(".matrix-box")[0].querySelectorAll("td").forEach(td => {
+      td.classList.remove("selected-risk");
+    });
+
+    event.target.classList.add("selected-risk");
+  }
+
+  if(type === "residual"){
+    residualRisk = {severity, probability, score, level};
+    document.getElementById("residualRiskResult").innerHTML =
+      `Residual Risk: ${level} | Severity ${severity} x Probability ${probability} = ${score}`;
+
+    document.querySelectorAll(".matrix-box")[1].querySelectorAll("td").forEach(td => {
+      td.classList.remove("selected-risk");
+    });
+
+    event.target.classList.add("selected-risk");
+  }
+}
+
+function collectActions(){
+  return [
+    {
+      action:document.getElementById("action1").value.trim(),
+      responsible:document.getElementById("responsible1").value.trim(),
+      dueDate:document.getElementById("dueDate1").value,
+      status:document.getElementById("actionStatus1").value
+    },
+    {
+      action:document.getElementById("action2").value.trim(),
+      responsible:document.getElementById("responsible2").value.trim(),
+      dueDate:document.getElementById("dueDate2").value,
+      status:document.getElementById("actionStatus2").value
+    },
+    {
+      action:document.getElementById("action3").value.trim(),
+      responsible:document.getElementById("responsible3").value.trim(),
+      dueDate:document.getElementById("dueDate3").value,
+      status:document.getElementById("actionStatus3").value
+    }
+  ];
+}
+
+function saveMOC(){
+  const title = document.getElementById("changeTitle").value.trim();
+
+  if(title === ""){
+    alert("Change Title is required.");
+    return;
+  }
+
+  const data = {
+    changeTitle:title,
+    requestedBy:document.getElementById("requestedBy").value.trim(),
+    department:document.getElementById("department").value.trim(),
+    changeOwner:document.getElementById("changeOwner").value.trim(),
+    changeDate:document.getElementById("changeDate").value,
+    targetDate:document.getElementById("targetDate").value,
+    changeType:document.getElementById("changeType").value,
+    status:document.getElementById("status").value,
+
+    changeDescription:document.getElementById("changeDescription").value.trim(),
+    reasonForChange:document.getElementById("reasonForChange").value.trim(),
+
+    aircraftCustomer:document.getElementById("aircraftCustomer").value.trim(),
+    location:document.getElementById("location").value.trim(),
+    personnelAffected:document.getElementById("personnelAffected").value.trim(),
+    documentationAffected:document.getElementById("documentationAffected").value.trim(),
+
+    initialRisk:initialRisk,
+    initialRiskDescription:document.getElementById("initialRiskDescription").value.trim(),
+    existingControls:document.getElementById("existingControls").value.trim(),
+
+    actionPlan:collectActions(),
+
+    residualRisk:residualRisk,
+    residualRiskJustification:document.getElementById("residualRiskJustification").value.trim(),
+    verificationMethod:document.getElementById("verificationMethod").value.trim(),
+
+    reviewedBy:document.getElementById("reviewedBy").value.trim(),
+    approvedBy:document.getElementById("approvedBy").value.trim(),
+    approvalDate:document.getElementById("approvalDate").value,
+    finalDecision:document.getElementById("finalDecision").value,
+    approvalComments:document.getElementById("approvalComments").value.trim(),
+
+    createdAt:new Date().toLocaleString()
+  };
+
+  const newRef = window.dbPush(window.dbRef(window.database,"mocReports"));
+
+  window.dbSet(newRef,data)
+  .then(() => {
+    document.getElementById("savedBox").style.display = "block";
+    alert("MOC Report saved successfully.");
+  })
+  .catch(error => {
+    alert("Error saving MOC Report: " + error.message);
+  });
+}
+
+function resetForm(){
+  if(confirm("Do you want to clear the MOC form?")){
+    document.querySelectorAll("input, textarea").forEach(el => el.value = "");
+    document.querySelectorAll("select").forEach(el => el.selectedIndex = 0);
+
+    initialRisk = null;
+    residualRisk = null;
+
+    document.getElementById("initialRiskResult").innerHTML = "Initial Risk: Not selected";
+    document.getElementById("residualRiskResult").innerHTML = "Residual Risk: Not selected";
+    document.getElementById("savedBox").style.display = "none";
+
+    document.querySelectorAll(".selected-risk").forEach(el => {
+      el.classList.remove("selected-risk");
+    });
+  }
+}
+</script>
+
+</body>
+</html>
