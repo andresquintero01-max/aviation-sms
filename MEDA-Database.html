@@ -1,9 +1,8 @@
-<!DOCTYPE html>
+vamos a organizar esta Base de Datos, quieor que sea mas atrativa, que tenga como ves el boton de caneca y los demas, pero que teng ainformacion como el titulo del evento y la fecha, que desde ahi pueda darle uno open o close, uno mismo ahga eso <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>MEDA Database</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 *{
@@ -20,185 +19,105 @@ body{
 }
 
 .container{
-  max-width:1250px;
+  max-width:1100px;
   margin:auto;
   background:white;
-  padding:42px;
-  border-radius:28px;
-  box-shadow:0 22px 55px rgba(0,0,0,0.35);
+  padding:40px;
+  border-radius:25px;
+  box-shadow:0 18px 45px rgba(0,0,0,0.3);
 }
 
 h1{
   text-align:center;
   color:#071f47;
-  font-size:52px;
-  margin-bottom:8px;
+  font-size:46px;
+  margin-bottom:10px;
 }
 
 .description{
   text-align:center;
   color:#666;
   font-size:18px;
-  margin-bottom:30px;
+  margin-bottom:35px;
 }
 
-.top-tools{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  margin-bottom:25px;
-  flex-wrap:wrap;
-}
-
-.search-box{
-  flex:1;
-  min-width:260px;
-}
-
-.search-box input{
+table{
   width:100%;
-  padding:14px;
-  border:1px solid #b8c7da;
-  border-radius:14px;
-  font-size:15px;
+  border-collapse:collapse;
+  margin-top:20px;
 }
 
-.filter-box select{
-  padding:14px;
-  border:1px solid #b8c7da;
-  border-radius:14px;
-  font-size:15px;
-}
-
-.cards-area{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-  gap:20px;
-}
-
-.report-card{
-  background:#f8fbff;
-  border:1px solid #d8e1ef;
-  border-left:8px solid #1450b8;
-  border-radius:20px;
-  padding:22px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
-  transition:0.25s;
-}
-
-.report-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 14px 28px rgba(0,0,0,0.15);
-}
-
-.card-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:12px;
-  margin-bottom:15px;
-}
-
-.report-title{
-  color:#071f47;
-  font-size:22px;
-  font-weight:bold;
-  line-height:1.2;
-}
-
-.status-badge{
-  padding:8px 14px;
-  border-radius:20px;
-  font-size:13px;
-  font-weight:bold;
+th{
+  background:#071f47;
   color:white;
-  white-space:nowrap;
+  padding:14px;
+  font-size:16px;
 }
 
-.status-open{
-  background:#f59e0b;
-}
-
-.status-closed{
-  background:#16a34a;
-}
-
-.info-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:14px;
-}
-
-.info-box{
-  background:white;
-  border:1px solid #e1e8f0;
-  border-radius:14px;
+td{
+  border:1px solid #ddd;
   padding:12px;
+  text-align:center;
+  font-size:15px;
 }
 
-.info-label{
-  color:#004080;
-  font-size:12px;
+tr:nth-child(even){
+  background:#f4f6f8;
+}
+
+.report-link{
+  color:#071f47;
   font-weight:bold;
-  margin-bottom:4px;
+  text-decoration:none;
 }
 
-.info-value{
-  color:#111;
-  font-size:14px;
-  font-weight:bold;
-  word-break:break-word;
+.report-link:hover{
+  color:#1450b8;
+  text-decoration:underline;
 }
 
-.report-id{
-  margin-top:14px;
-  color:#6b7280;
-  font-size:12px;
-  word-break:break-all;
+.no-data{
+  text-align:center;
+  color:#777;
+  font-size:18px;
+  margin-top:30px;
 }
 
-.card-actions{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-top:18px;
-  flex-wrap:wrap;
-}
-
-.status-select{
-  padding:11px;
-  border-radius:12px;
-  border:1px solid #b8c7da;
-  font-weight:bold;
+.buttons{
+  text-align:center;
+  margin-top:30px;
 }
 
 .btn{
   border:none;
   color:white;
-  padding:12px 18px;
+  padding:14px 28px;
   border-radius:12px;
-  font-size:15px;
+  font-size:16px;
   font-weight:bold;
   cursor:pointer;
-  transition:0.25s;
+  margin:6px;
 }
 
-.view-btn{
+.back-btn{
+  background:#c40000;
+}
+
+.home-btn{
   background:#071f47;
-}
-
-.view-btn:hover{
-  background:#1450b8;
 }
 
 .delete-btn{
   background:red;
-  width:45px;
-  height:45px;
+  color:white;
+  border:none;
+  width:42px;
+  height:42px;
   border-radius:50%;
+  cursor:pointer;
   font-size:18px;
+  font-weight:bold;
+  transition:0.3s;
 }
 
 .delete-btn:hover{
@@ -206,42 +125,13 @@ h1{
   transform:scale(1.08);
 }
 
-.buttons{
-  text-align:center;
-  margin-top:35px;
+.action-cell{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:15px;
 }
 
-.back-btn{
-  background:#c40000;
-  padding:14px 30px;
-}
-
-.home-btn{
-  background:#071f47;
-  padding:14px 30px;
-}
-
-.no-data{
-  text-align:center;
-  color:#777;
-  font-size:19px;
-  margin-top:30px;
-  display:none;
-}
-
-@media(max-width:700px){
-  .container{
-    padding:25px;
-  }
-
-  h1{
-    font-size:38px;
-  }
-
-  .info-grid{
-    grid-template-columns:1fr;
-  }
-}
 </style>
 </head>
 
@@ -255,25 +145,18 @@ h1{
     Stored Maintenance Error Decision Aid investigation reports
   </div>
 
-  <div class="top-tools">
-    <div class="search-box">
-      <input id="searchInput" type="text" placeholder="Search by title, aircraft, customer, affected person, or location...">
-    </div>
+  <table>
+    <thead>
+      <tr>
+        <th>MEDA Report ID</th>
+      </tr>
+    </thead>
 
-    <div class="filter-box">
-      <select id="statusFilter">
-        <option value="All">All Status</option>
-        <option value="Open">Open</option>
-        <option value="Closed">Closed</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Pending Corrective Action">Pending Corrective Action</option>
-      </select>
-    </div>
-  </div>
+    <tbody id="medaTableBody">
+    </tbody>
+  </table>
 
-  <div id="cardsArea" class="cards-area"></div>
-
-  <div id="noData" class="no-data">
+  <div id="noData" class="no-data" style="display:none;">
     No MEDA reports found.
   </div>
 
@@ -297,8 +180,7 @@ import {
   getDatabase,
   ref,
   onValue,
-  remove,
-  update
+  remove
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
@@ -314,174 +196,63 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-const cardsArea = document.getElementById("cardsArea");
+const tableBody = document.getElementById("medaTableBody");
 const noData = document.getElementById("noData");
-const searchInput = document.getElementById("searchInput");
-const statusFilter = document.getElementById("statusFilter");
-
-let allReports = [];
 
 const reportsRef = ref(database, "medaReports");
 
 onValue(reportsRef, (snapshot) => {
 
-  allReports = [];
+  tableBody.innerHTML = "";
 
   if(snapshot.exists()){
 
+    noData.style.display = "none";
+
     snapshot.forEach((childSnapshot) => {
-      allReports.push({
-        id: childSnapshot.key,
-        data: childSnapshot.val()
-      });
+
+      const reportId = childSnapshot.key;
+      const report = childSnapshot.val();
+
+      const title = report.title || "Untitled MEDA Report";
+      const aircraft = report.aircraft || "N/A";
+      const customer = report.customer || "N/A";
+      const status = report.status || "Open";
+
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>
+
+          <div class="action-cell">
+
+            <a class="report-link" href="MEDA-Details.html?id=${reportId}">
+              ID: ${reportId} | ${title} | Aircraft: ${aircraft} | Customer: ${customer} | Status: ${status}
+            </a>
+
+            <button
+              class="delete-btn"
+              onclick="deleteReport('${reportId}')"
+            >
+              🗑
+            </button>
+
+          </div>
+
+        </td>
+      `;
+
+      tableBody.appendChild(row);
+
     });
 
-  }
+  } else {
 
-  renderReports();
+    noData.style.display = "block";
+
+  }
 
 });
-
-function renderReports(){
-
-  cardsArea.innerHTML = "";
-
-  const searchText = searchInput.value.toLowerCase();
-  const selectedStatus = statusFilter.value;
-
-  const filteredReports = allReports.filter(item => {
-
-    const report = item.data;
-
-    const title = (report.title || "").toLowerCase();
-    const aircraft = (report.aircraft || "").toLowerCase();
-    const customer = (report.customer || "").toLowerCase();
-    const affectedPerson = (report.affectedPerson || "").toLowerCase();
-    const location = (report.location || "").toLowerCase();
-    const status = report.status || "Open";
-
-    const matchesSearch =
-      title.includes(searchText) ||
-      aircraft.includes(searchText) ||
-      customer.includes(searchText) ||
-      affectedPerson.includes(searchText) ||
-      location.includes(searchText);
-
-    const matchesStatus =
-      selectedStatus === "All" || status === selectedStatus;
-
-    return matchesSearch && matchesStatus;
-
-  });
-
-  if(filteredReports.length === 0){
-    noData.style.display = "block";
-    return;
-  }
-
-  noData.style.display = "none";
-
-  filteredReports.forEach(item => {
-
-    const reportId = item.id;
-    const report = item.data;
-
-    const title = report.title || "Untitled MEDA Report";
-    const aircraft = report.aircraft || "N/A";
-    const customer = report.customer || "N/A";
-    const date = report.date || "N/A";
-    const location = report.location || "N/A";
-    const affectedPerson = report.affectedPerson || "N/A";
-    const eventType = report.eventType || "N/A";
-    const status = report.status || "Open";
-
-    const statusClass = status === "Closed" ? "status-closed" : "status-open";
-
-    const card = document.createElement("div");
-    card.className = "report-card";
-
-    card.innerHTML = `
-      <div class="card-header">
-        <div class="report-title">${title}</div>
-        <div class="status-badge ${statusClass}">${status}</div>
-      </div>
-
-      <div class="info-grid">
-        <div class="info-box">
-          <div class="info-label">Date</div>
-          <div class="info-value">${date}</div>
-        </div>
-
-        <div class="info-box">
-          <div class="info-label">Aircraft</div>
-          <div class="info-value">${aircraft}</div>
-        </div>
-
-        <div class="info-box">
-          <div class="info-label">Customer</div>
-          <div class="info-value">${customer}</div>
-        </div>
-
-        <div class="info-box">
-          <div class="info-label">Affected Person</div>
-          <div class="info-value">${affectedPerson}</div>
-        </div>
-
-        <div class="info-box">
-          <div class="info-label">Location</div>
-          <div class="info-value">${location}</div>
-        </div>
-
-        <div class="info-box">
-          <div class="info-label">Event Type</div>
-          <div class="info-value">${eventType}</div>
-        </div>
-      </div>
-
-      <div class="report-id">
-        MEDA ID: ${reportId}
-      </div>
-
-      <div class="card-actions">
-
-        <select class="status-select" onchange="changeStatus('${reportId}', this.value)">
-          <option ${status === "Open" ? "selected" : ""}>Open</option>
-          <option ${status === "In Progress" ? "selected" : ""}>In Progress</option>
-          <option ${status === "Pending Corrective Action" ? "selected" : ""}>Pending Corrective Action</option>
-          <option ${status === "Closed" ? "selected" : ""}>Closed</option>
-        </select>
-
-        <button class="btn view-btn" onclick="window.location.href='MEDA-Details.html?id=${reportId}'">
-          View Report
-        </button>
-
-        <button class="delete-btn" onclick="deleteReport('${reportId}')">
-          🗑
-        </button>
-
-      </div>
-    `;
-
-    cardsArea.appendChild(card);
-
-  });
-
-}
-
-window.changeStatus = function(reportId, newStatus){
-
-  update(ref(database, "medaReports/" + reportId), {
-    status: newStatus,
-    statusUpdatedAt: new Date().toLocaleString()
-  })
-  .then(() => {
-    alert("Report status updated to: " + newStatus);
-  })
-  .catch((error) => {
-    alert("Error updating status: " + error.message);
-  });
-
-};
 
 window.deleteReport = function(reportId){
 
@@ -491,7 +262,9 @@ window.deleteReport = function(reportId){
 
   if(!confirmDelete) return;
 
-  remove(ref(database, "medaReports/" + reportId))
+  remove(
+    ref(database, "medaReports/" + reportId)
+  )
   .then(() => {
     alert("MEDA Report deleted successfully.");
   })
@@ -500,9 +273,6 @@ window.deleteReport = function(reportId){
   });
 
 };
-
-searchInput.addEventListener("input", renderReports);
-statusFilter.addEventListener("change", renderReports);
 
 </script>
 
