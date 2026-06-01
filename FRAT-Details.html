@@ -3,157 +3,210 @@
 <head>
 <meta charset="UTF-8">
 <title>FRAT Details</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 
-body{font-family:Arial,sans-serif;background:white;color:#111;}
+body{
+  font-family:Arial,sans-serif;
+  background:#f4f7fb;
+  color:#111;
+  padding:25px;
+}
+
+.container{
+  max-width:1350px;
+  margin:auto;
+  background:white;
+  border-radius:24px;
+  padding:30px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
 
 .header{
-  display:flex;justify-content:space-between;align-items:flex-start;
-  padding:10px 22px 5px 22px;
+  background:linear-gradient(135deg,#071f47,#1450b8);
+  color:white;
+  padding:30px;
+  border-radius:22px;
+  text-align:center;
+  margin-bottom:25px;
 }
 
-h1{color:#004080;font-size:28px;letter-spacing:2px;}
-
-.controls{display:flex;gap:10px;align-items:flex-start;}
-
-.control-box{
-  border:1px solid #004080;padding:5px;width:170px;font-size:12px;
+.header h1{
+  font-size:42px;
+  margin-bottom:8px;
 }
 
-select{width:100%;padding:5px;margin-top:3px;}
-
-.reset-btn{
-  width:125px;height:92px;border:none;background:#e6e6e6;
-  color:#004080;font-weight:bold;cursor:pointer;
+.header p{
+  font-size:17px;
+  color:#dbeafe;
 }
 
-.hide-btn{
-  width:210px;height:92px;border:none;background:#004080;
-  color:white;font-size:20px;font-weight:bold;cursor:pointer;
+.section{
+  margin-top:25px;
+  border:1px solid #d8e1ef;
+  border-radius:18px;
+  overflow:hidden;
+  background:white;
 }
-
-.instructions{padding:20px 22px 8px;color:#004080;font-size:12px;}
-
-.flight-info{padding:0 22px 15px;}
-
-.flight-info-box{border:1px solid #004080;padding:15px;}
-
-.flight-info-title{
-  background:#004080;color:white;font-weight:bold;
-  padding:6px;margin-bottom:12px;font-size:16px;
-}
-
-.flight-grid{
-  display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;
-}
-
-.flight-field label{
-  display:block;font-size:13px;font-weight:bold;color:#004080;margin-bottom:5px;
-}
-
-.flight-field input{
-  width:100%;padding:8px;border:1px solid #ccc;border-radius:5px;
-}
-
-input:disabled,select:disabled{
-  background:#f8fbff;color:#111;font-weight:bold;
-}
-
-.main{display:flex;padding:0 22px 20px;}
-
-.left{width:67%;}
-
-.right{width:33%;border-left:1px solid #ccc;}
 
 .section-title{
-  background:#004080;color:white;font-weight:bold;font-size:17px;
-  padding:5px;margin-top:8px;
+  background:#004080;
+  color:white;
+  padding:14px 18px;
+  font-size:21px;
+  font-weight:bold;
 }
 
-.items{
-  display:grid;grid-template-columns:1fr 1fr 1fr;
-  gap:10px 25px;padding:8px 5px 12px;
+.section-body{
+  padding:22px;
 }
 
-.item{
-  display:grid;grid-template-columns:1fr 75px;
-  gap:8px;font-size:14px;min-height:48px;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:18px;
 }
 
-.radio-group label{display:block;font-size:14px;}
+.field label{
+  display:block;
+  color:#004080;
+  font-weight:bold;
+  margin-bottom:6px;
+}
 
-input[type="radio"]{transform:scale(1.2);margin-right:5px;}
+input,select{
+  width:100%;
+  padding:11px;
+  border:1px solid #b8c7da;
+  border-radius:10px;
+  font-size:15px;
+  background:white;
+}
+
+input:disabled,
+select:disabled{
+  background:#f8fbff;
+  color:#111;
+  font-weight:600;
+}
+
+.factor-card{
+  border:1px solid #d8e1ef;
+  border-left:8px solid #1450b8;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:18px;
+  background:#f8fbff;
+}
+
+.factor-card h3{
+  color:#071f47;
+  margin-bottom:12px;
+  font-size:22px;
+}
+
+.factor-row{
+  display:grid;
+  grid-template-columns:1fr 120px;
+  gap:14px;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.radio-group label{
+  display:block;
+  font-size:14px;
+  color:#111;
+}
+
+input[type="radio"]{
+  width:auto;
+  margin-right:5px;
+}
 
 .total-line{
-  border-top:3px solid #004080;display:flex;justify-content:flex-end;
-  align-items:center;gap:18px;padding:15px 12px;margin-top:10px;
+  border-top:3px solid #004080;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:center;
+  gap:18px;
+  padding:20px;
+  margin-top:25px;
 }
 
-.total-label{font-size:23px;color:#004080;font-weight:bold;}
+.total-label{
+  font-size:23px;
+  color:#004080;
+  font-weight:bold;
+}
 
 .risk-result{
-  width:160px;padding:15px;border-radius:5px;text-align:center;
-  font-size:20px;font-weight:bold;
+  width:180px;
+  padding:16px;
+  border-radius:10px;
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
 }
 
-.low{background:#2f9144;color:#000;}
-.moderate{background:#ffd966;color:#000;}
-.high{background:#ff1a0a;color:#000;}
+.low{background:#2f9144;color:white;}
+.moderate{background:#ffd966;color:#111;}
+.high{background:#ff1a0a;color:white;}
 
 .risk-number{
-  display:block;font-size:16px;margin-top:5px;font-weight:normal;
+  display:block;
+  font-size:16px;
+  margin-top:5px;
 }
 
 .risk-comment{
-  max-width:420px;padding:15px;border-radius:10px;font-size:15px;
-  font-weight:bold;line-height:1.5;background:#d8f3dc;
-  color:#14532d;border:1px solid #2f9144;text-align:left;
+  max-width:520px;
+  padding:15px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:bold;
+  line-height:1.5;
 }
-
-.risk-assessment{margin-top:15px;padding:0 5px;}
-
-.risk-assessment h2{color:#004080;margin-bottom:10px;}
-
-.risk-table{
-  border-collapse:collapse;width:95%;text-align:center;font-size:14px;
-}
-
-.risk-table td,.risk-table th{border:1px solid #ddd;padding:8px;}
-
-.gray{background:#bfbfbf;}
-.green{background:#2f9144;}
-.yellow{background:#ffd966;}
-.red{background:#ff1a0a;}
-
-.details-table{width:100%;border-collapse:collapse;font-size:12px;}
-
-.details-table th{
-  background:#e5e5e5;border:1px solid #ccc;padding:5px;
-}
-
-.details-table td{border:1px solid #ccc;padding:6px;}
-
-.category-cell{background:#f4f4f4;vertical-align:top;width:34%;}
-.factor-cell{text-align:right;width:50%;}
-.score-cell{text-align:center;width:16%;font-weight:bold;}
-.alt{background:#d9d9d9;}
-.selected{background:#9bd0f5!important;}
 
 .status-box{
-  margin:20px 22px;padding:18px;border-radius:14px;
-  text-align:center;font-size:20px;font-weight:bold;border:2px solid #ddd;
+  margin-top:25px;
+  padding:20px;
+  border-radius:18px;
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+  border:2px solid #d8e1ef;
 }
 
-.status-open{background:#fff7ed;color:#c2410c;border-color:#fb923c;}
-.status-closed{background:#e8f5e9;color:#14532d;border-color:#2f9144;}
+.status-open{
+  background:#fff7ed;
+  color:#c2410c;
+  border-color:#fb923c;
+}
 
-.bottom-buttons{text-align:center;margin:20px;}
+.status-closed{
+  background:#e8f5e9;
+  color:#14532d;
+  border-color:#2f9144;
+}
+
+.btn-area{
+  text-align:center;
+  margin-top:30px;
+}
 
 .btn{
-  border:none;color:white;padding:14px 28px;border-radius:12px;
-  font-size:16px;font-weight:bold;cursor:pointer;margin:6px;
+  border:none;
+  padding:15px 28px;
+  border-radius:12px;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:6px;
 }
 
 .edit-btn{background:#9333ea;}
@@ -164,110 +217,111 @@ input[type="radio"]{transform:scale(1.2);margin-right:5px;}
 .home-btn{background:#0b2a66;}
 
 .saved-box{
-  margin:20px;background:#e8f5e9;color:#14532d;border:1px solid #2f9144;
-  padding:16px;border-radius:14px;display:none;font-weight:bold;text-align:center;
+  margin-top:25px;
+  background:#e8f5e9;
+  color:#14532d;
+  border:1px solid #2f9144;
+  padding:16px;
+  border-radius:14px;
+  display:none;
+  font-weight:bold;
+  text-align:center;
 }
 
 .loading{
-  text-align:center;font-size:20px;color:#004080;font-weight:bold;padding:40px;
+  text-align:center;
+  padding:30px;
+  color:#666;
+  font-size:18px;
+  font-weight:bold;
 }
 
 @media(max-width:900px){
-  .main{flex-direction:column;}
-  .left,.right{width:100%;}
-  .items{grid-template-columns:1fr;}
-  .header{flex-direction:column;gap:10px;}
-  .controls{flex-wrap:wrap;}
-  .flight-grid{grid-template-columns:1fr;}
+  .factor-row{
+    grid-template-columns:1fr;
+  }
+
+  .header h1{
+    font-size:32px;
+  }
 }
 
 @media print{
-  .bottom-buttons,.saved-box,.controls{display:none!important;}
-  body{background:white;}
+  body{
+    background:white;
+    padding:0;
+  }
+
+  .container{
+    box-shadow:none;
+    border-radius:0;
+  }
+
+  .btn-area,
+  .saved-box{
+    display:none!important;
+  }
 }
 </style>
 </head>
 
 <body>
 
+<div class="container">
+
 <div class="header">
-  <h1>FLIGHT RISK ASSESSMENT TOOL</h1>
-
-  <div class="controls">
-    <div class="control-box">
-      Select Pilot Type
-      <select id="pilotType" onchange="calculateRisk()">
-        <option value="VFR">VFR</option>
-        <option value="IFR">IFR</option>
-      </select>
-    </div>
-
-    <div class="control-box">
-      Select Experience Level
-      <select id="experience" onchange="calculateRisk()">
-        <option value="LESS_100">&lt;100 In Type</option>
-        <option value="MORE_100">&gt;100 In Type</option>
-      </select>
-    </div>
-
-    <button class="reset-btn" onclick="resetForm()">Form Reset</button>
-    <button class="hide-btn" onclick="toggleDetails()">Hide Details</button>
-  </div>
-</div>
-
-<div class="instructions">
-  Instructions: Check the True radio button opposite each statement that applies to your flight.
+  <h1>Flight Risk Assessment Tool - FRAT</h1>
+  <p>Full flight risk assessment report loaded from Firebase.</p>
 </div>
 
 <div id="loadingBox" class="loading">Loading FRAT Report...</div>
 
 <div id="reportForm" style="display:none;">
 
-<div class="flight-info">
-  <div class="flight-info-box">
+<div class="section">
+  <div class="section-title">1. Flight Information</div>
+  <div class="section-body">
 
-    <div class="flight-info-title">Flight Information</div>
+    <div class="grid">
 
-    <div class="flight-grid">
-
-      <div class="flight-field">
+      <div class="field">
         <label>FRAT Report ID</label>
-        <input type="text" id="fratId">
+        <input id="fratId">
       </div>
 
-      <div class="flight-field">
+      <div class="field">
         <label>Firebase ID</label>
-        <input type="text" id="firebaseId" disabled>
+        <input id="firebaseId" disabled>
       </div>
 
-      <div class="flight-field">
+      <div class="field">
         <label>Name</label>
-        <input type="text" id="pilotName">
+        <input id="pilotName">
       </div>
 
-      <div class="flight-field">
+      <div class="field">
         <label>License</label>
-        <input type="text" id="licenseNumber">
+        <input id="licenseNumber">
       </div>
 
-      <div class="flight-field">
+      <div class="field">
         <label>From</label>
-        <input type="text" id="flightFrom">
+        <input id="flightFrom">
       </div>
 
-      <div class="flight-field">
+      <div class="field">
         <label>To</label>
-        <input type="text" id="flightTo">
+        <input id="flightTo">
       </div>
 
-      <div class="flight-field">
+      <div class="field">
         <label>Created At</label>
-        <input type="text" id="createdAt" disabled>
+        <input id="createdAt" disabled>
       </div>
 
-      <div class="flight-field">
+      <div class="field">
         <label>Updated At</label>
-        <input type="text" id="updatedAt" disabled>
+        <input id="updatedAt" disabled>
       </div>
 
     </div>
@@ -275,30 +329,62 @@ input[type="radio"]{transform:scale(1.2);margin-right:5px;}
   </div>
 </div>
 
-<div class="main">
+<div class="section">
+  <div class="section-title">2. Pilot Type and Experience</div>
+  <div class="section-body">
 
-  <div class="left" id="formArea"></div>
+    <div class="grid">
+      <div class="field">
+        <label>Pilot Type</label>
+        <select id="pilotType" onchange="calculateRisk()">
+          <option value="VFR">VFR</option>
+          <option value="IFR">IFR</option>
+        </select>
+      </div>
 
-  <div class="right" id="detailsArea">
-    <table class="details-table" id="detailsTable">
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Category</th>
-          <th>Score</th>
-        </tr>
-      </thead>
-      <tbody id="detailsBody"></tbody>
-    </table>
+      <div class="field">
+        <label>Experience Level</label>
+        <select id="experience" onchange="calculateRisk()">
+          <option value="LESS_100">&lt;100 In Type</option>
+          <option value="MORE_100">&gt;100 In Type</option>
+        </select>
+      </div>
+    </div>
+
   </div>
+</div>
 
+<div class="section">
+  <div class="section-title">3. FRAT Risk Factors</div>
+  <div class="section-body" id="formArea"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">4. Total Risk Result</div>
+  <div class="section-body">
+
+    <div class="total-line">
+      <div class="total-label">Total Risk Value</div>
+
+      <div id="riskResult" class="risk-result low">
+        LOW RISK
+        <span class="risk-number">0</span>
+      </div>
+
+      <div id="riskComment" class="risk-comment">
+        OK TO OPERATE:<br>
+        Risk is acceptable and flight operations may continue under standard operational controls.
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <div id="reportStatusBox" class="status-box">
   Report Status: Loading...
 </div>
 
-<div class="bottom-buttons">
+<div class="btn-area">
   <button id="editBtn" class="btn edit-btn" onclick="enableEdit()">Edit Report</button>
   <button id="saveBtn" class="btn save-btn" onclick="saveChanges()">Save Changes</button>
   <button class="btn print-btn" onclick="window.print()">Print</button>
@@ -313,9 +399,18 @@ input[type="radio"]{transform:scale(1.2);margin-right:5px;}
 
 </div>
 
+</div>
+
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+import {
+  getDatabase,
+  ref,
+  get,
+  update
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
@@ -330,13 +425,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-window.database = database;
-window.dbRef = ref;
-window.dbGet = get;
-window.dbUpdate = update;
-</script>
-
-<script>
 const params = new URLSearchParams(window.location.search);
 const reportId = params.get("id");
 
@@ -402,143 +490,81 @@ const fratItems = [
   }
 ];
 
-const formArea = document.getElementById("formArea");
-const detailsBody = document.getElementById("detailsBody");
-
 function safeId(text){
   return text.replaceAll(" ","_").replaceAll("-","_").replaceAll("/","_").replaceAll("&","_");
 }
 
 function setValue(id,value){
   const el = document.getElementById(id);
-  if(el) el.value = value || "";
+  if(el){
+    el.value = value || "";
+  }
 }
 
 function buildForm(){
+
+  const formArea = document.getElementById("formArea");
   formArea.innerHTML = "";
 
   fratItems.forEach(section => {
-    const title = document.createElement("div");
-    title.className = "section-title";
-    title.innerText = section.type;
-    formArea.appendChild(title);
 
-    const itemsDiv = document.createElement("div");
-    itemsDiv.className = "items";
+    const card = document.createElement("div");
+    card.className = "factor-card";
+
+    let html = `
+      <h3>${section.type}</h3>
+    `;
 
     section.items.forEach((item,index) => {
+
       const id = safeId(section.type) + "_" + index;
 
-      const div = document.createElement("div");
-      div.className = "item";
+      html += `
+        <div class="factor-row">
+          <div>
+            <strong>${item[0]}</strong><br>
+            <span style="color:#56657d;">Score: ${item[1]}</span>
+          </div>
 
-      div.innerHTML = `
-        <div>${item[0]}</div>
-        <div class="radio-group">
-          <label>
-            <input type="radio" name="${id}" value="true" data-score="${item[1]}" data-type="${section.type}" data-category="${item[0]}" onchange="calculateRisk()">True
-          </label>
-          <label>
-            <input type="radio" name="${id}" value="false" data-score="0" data-type="${section.type}" data-category="${item[0]}" onchange="calculateRisk()" checked>False
-          </label>
+          <div class="radio-group">
+            <label>
+              <input 
+                type="radio" 
+                name="${id}" 
+                value="true" 
+                data-score="${item[1]}" 
+                data-type="${section.type}" 
+                data-category="${item[0]}" 
+                onchange="calculateRisk()"
+              > True
+            </label>
+
+            <label>
+              <input 
+                type="radio" 
+                name="${id}" 
+                value="false" 
+                data-score="0" 
+                data-type="${section.type}" 
+                data-category="${item[0]}" 
+                onchange="calculateRisk()" 
+                checked
+              > False
+            </label>
+          </div>
         </div>
       `;
 
-      itemsDiv.appendChild(div);
     });
 
-    formArea.appendChild(itemsDiv);
+    card.innerHTML = html;
+    formArea.appendChild(card);
+
   });
-
-  formArea.innerHTML += `
-    <div class="total-line">
-      <div class="total-label">Total Risk Value</div>
-
-      <div id="riskResult" class="risk-result low">
-        LOW RISK
-        <span class="risk-number">0</span>
-      </div>
-
-      <div id="riskComment" class="risk-comment">
-        OK TO OPERATE:<br>
-        Risk is acceptable and flight operations may continue under standard operational controls.
-      </div>
-    </div>
-
-    <div class="risk-assessment">
-      <h2>Risk Assessment</h2>
-
-      <table class="risk-table">
-        <tr>
-          <th>Pilot</th>
-          <th>Experience</th>
-          <th>Low Risk</th>
-          <th>Moderate Risk</th>
-          <th>High Risk</th>
-        </tr>
-
-        <tr>
-          <td class="gray" rowspan="2">IFR</td>
-          <td class="gray">&lt;100 In Type</td>
-          <td class="green">20 to 25</td>
-          <td class="yellow">25 to 30</td>
-          <td class="red">&gt;30</td>
-        </tr>
-
-        <tr>
-          <td class="gray">&gt;100 In Type</td>
-          <td class="green">25 to 30</td>
-          <td class="yellow">30 to 35</td>
-          <td class="red">&gt;35</td>
-        </tr>
-
-        <tr>
-          <td class="gray" rowspan="2">VFR</td>
-          <td class="gray">&lt;100 In Type</td>
-          <td class="green">5 to 15</td>
-          <td class="yellow">15 to 20</td>
-          <td class="red">&gt;20</td>
-        </tr>
-
-        <tr>
-          <td class="gray">&gt;100 In Type</td>
-          <td class="green">15 to 20</td>
-          <td class="yellow">20 to 25</td>
-          <td class="red">&gt;25</td>
-        </tr>
-      </table>
-    </div>
-  `;
-
-  buildDetails();
-}
-
-function buildDetails(){
-  detailsBody.innerHTML = "";
-
-  fratItems.forEach(section => {
-    section.items.forEach((item,index) => {
-      const tr = document.createElement("tr");
-
-      tr.innerHTML = `
-        ${index === 0 ? `<td class="category-cell" rowspan="${section.items.length}">${section.type}</td>` : ""}
-        <td class="factor-cell ${index % 2 === 0 ? 'alt' : ''}">${item[0]}</td>
-        <td class="score-cell">${item[1]}</td>
-      `;
-
-      detailsBody.appendChild(tr);
-    });
-  });
-
-  const totalRow = document.createElement("tr");
-  totalRow.innerHTML = `
-    <td colspan="2">Grand Total</td>
-    <td class="score-cell" id="grandTotal">0</td>
-  `;
-  detailsBody.appendChild(totalRow);
 }
 
 function getRiskLevel(total){
+
   const pilotType = document.getElementById("pilotType").value;
   const experience = document.getElementById("experience").value;
 
@@ -570,23 +596,12 @@ function getRiskLevel(total){
 }
 
 window.calculateRisk = function(){
-  let total = 0;
 
-  document.querySelectorAll(".selected").forEach(e => {
-    e.classList.remove("selected");
-  });
+  let total = 0;
 
   document.querySelectorAll("input[type='radio']:checked").forEach(radio => {
     if(radio.value === "true"){
       total += Number(radio.dataset.score);
-
-      const rows = document.querySelectorAll("#detailsBody tr");
-
-      rows.forEach(row => {
-        if(row.innerText.includes(radio.dataset.category)){
-          row.querySelectorAll("td").forEach(td => td.classList.add("selected"));
-        }
-      });
     }
   });
 
@@ -598,7 +613,7 @@ window.calculateRisk = function(){
 
   if(level === "LOW RISK"){
     box.classList.add("low");
-    comment.innerHTML = `OK TO OPERATE:<br>Risk is acceptable and flight operations may continue under standard operational controls.`;
+    comment.innerHTML = "OK TO OPERATE:<br>Risk is acceptable and flight operations may continue under standard operational controls.";
     comment.style.background = "#d8f3dc";
     comment.style.color = "#14532d";
     comment.style.border = "1px solid #2f9144";
@@ -606,7 +621,7 @@ window.calculateRisk = function(){
 
   if(level === "MODERATE RISK"){
     box.classList.add("moderate");
-    comment.innerHTML = `CAUTION:<br>Moderate risk identified. Notify the Operations area before continuing the flight.`;
+    comment.innerHTML = "CAUTION:<br>Moderate risk identified. Notify the Operations area before continuing the flight.";
     comment.style.background = "#fff3cd";
     comment.style.color = "#664d03";
     comment.style.border = "1px solid #ffd966";
@@ -614,30 +629,49 @@ window.calculateRisk = function(){
 
   if(level === "HIGH RISK"){
     box.classList.add("high");
-    comment.innerHTML = `NO-GO:<br>High risk identified. Flight operations are NOT authorized until the risk is reduced or mitigated.`;
+    comment.innerHTML = "NO-GO:<br>High risk identified. Flight operations are NOT authorized until the risk is reduced or mitigated.";
     comment.style.background = "#f8d7da";
     comment.style.color = "#842029";
     comment.style.border = "1px solid #ff1a0a";
   }
 
-  box.innerHTML = `${level}<span class="risk-number">${total}</span>`;
-  document.getElementById("grandTotal").innerText = total;
+  box.innerHTML = `
+    ${level}
+    <span class="risk-number">${total}</span>
+  `;
 
   return {total,level};
 };
 
-function populateForm(){
-  setValue("firebaseId",reportId);
-  setValue("fratId",currentData.fratId || reportId);
-  setValue("createdAt",currentData.createdAt);
-  setValue("updatedAt",currentData.updatedAt);
+function updateStatusBox(){
 
-  setValue("pilotName",currentData.pilotName);
-  setValue("licenseNumber",currentData.licenseNumber);
-  setValue("flightFrom",currentData.flightFrom);
-  setValue("flightTo",currentData.flightTo);
-  setValue("pilotType",currentData.pilotType);
-  setValue("experience",currentData.experienceLevel);
+  const box = document.getElementById("reportStatusBox");
+  const status = currentData.status || "Open";
+
+  box.classList.remove("status-open","status-closed");
+
+  if(status === "Closed"){
+    box.classList.add("status-closed");
+    box.innerHTML = "Report Status: CLOSED";
+  }else{
+    box.classList.add("status-open");
+    box.innerHTML = "Report Status: OPEN";
+  }
+}
+
+function populateForm(){
+
+  setValue("firebaseId", reportId);
+  setValue("fratId", currentData.fratId || reportId);
+  setValue("createdAt", currentData.createdAt);
+  setValue("updatedAt", currentData.updatedAt);
+
+  setValue("pilotName", currentData.pilotName);
+  setValue("licenseNumber", currentData.licenseNumber);
+  setValue("flightFrom", currentData.flightFrom);
+  setValue("flightTo", currentData.flightTo);
+  setValue("pilotType", currentData.pilotType || "VFR");
+  setValue("experience", currentData.experienceLevel || "LESS_100");
 
   document.querySelectorAll("input[type='radio'][value='false']").forEach(radio => {
     radio.checked = true;
@@ -657,31 +691,22 @@ function populateForm(){
   updateStatusBox();
 }
 
-function updateStatusBox(){
-  const box = document.getElementById("reportStatusBox");
-  const status = currentData.status || "Open";
-
-  box.classList.remove("status-open","status-closed");
-
-  if(status === "Closed"){
-    box.classList.add("status-closed");
-    box.innerHTML = "Report Status: CLOSED";
-  }else{
-    box.classList.add("status-open");
-    box.innerHTML = "Report Status: OPEN";
-  }
-}
-
 function lockForm(){
+
   document.querySelectorAll("input, select").forEach(el => {
     el.disabled = true;
   });
+
+  document.getElementById("firebaseId").disabled = true;
+  document.getElementById("createdAt").disabled = true;
+  document.getElementById("updatedAt").disabled = true;
 
   document.getElementById("editBtn").style.display = "inline-block";
   document.getElementById("saveBtn").style.display = "none";
 }
 
 window.enableEdit = function(){
+
   document.querySelectorAll("input, select").forEach(el => {
     el.disabled = false;
   });
@@ -694,45 +719,16 @@ window.enableEdit = function(){
   document.getElementById("saveBtn").style.display = "inline-block";
 };
 
-window.resetForm = function(){
-  if(!confirm("Do you want to reset this FRAT information?")) return;
-
-  document.querySelectorAll("input[type='radio'][value='false']").forEach(radio => {
-    radio.checked = true;
-  });
-
-  document.getElementById("pilotType").value = "VFR";
-  document.getElementById("experience").value = "LESS_100";
-  document.getElementById("pilotName").value = "";
-  document.getElementById("licenseNumber").value = "";
-  document.getElementById("flightFrom").value = "";
-  document.getElementById("flightTo").value = "";
-
-  calculateRisk();
-};
-
-window.toggleDetails = function(){
-  const details = document.getElementById("detailsArea");
-  const btn = document.querySelector(".hide-btn");
-
-  if(details.style.display === "none"){
-    details.style.display = "block";
-    btn.innerText = "Hide Details";
-  }else{
-    details.style.display = "none";
-    btn.innerText = "Show Details";
-  }
-};
-
 function collectSelectedFactors(){
+
   const selectedFactors = [];
 
   document.querySelectorAll("input[type='radio']:checked").forEach(radio => {
     if(radio.value === "true"){
       selectedFactors.push({
-        type:radio.dataset.type,
-        category:radio.dataset.category,
-        score:Number(radio.dataset.score)
+        type: radio.dataset.type,
+        category: radio.dataset.category,
+        score: Number(radio.dataset.score)
       });
     }
   });
@@ -741,30 +737,31 @@ function collectSelectedFactors(){
 }
 
 window.saveChanges = function(){
+
   const risk = calculateRisk();
 
   const updatedData = {
-    fratId:document.getElementById("fratId").value.trim(),
-    pilotName:document.getElementById("pilotName").value.trim(),
-    licenseNumber:document.getElementById("licenseNumber").value.trim(),
-    flightFrom:document.getElementById("flightFrom").value.trim(),
-    flightTo:document.getElementById("flightTo").value.trim(),
-    pilotType:document.getElementById("pilotType").value,
-    experienceLevel:document.getElementById("experience").value,
-    totalRiskValue:risk.total,
-    riskLevel:risk.level,
-    riskComment:document.getElementById("riskComment").innerText,
-    selectedFactors:collectSelectedFactors(),
-    status:currentData.status || "Open",
-    createdAt:currentData.createdAt || "",
-    updatedAt:new Date().toLocaleString()
+    fratId: document.getElementById("fratId").value.trim(),
+    pilotName: document.getElementById("pilotName").value.trim(),
+    licenseNumber: document.getElementById("licenseNumber").value.trim(),
+    flightFrom: document.getElementById("flightFrom").value.trim(),
+    flightTo: document.getElementById("flightTo").value.trim(),
+    pilotType: document.getElementById("pilotType").value,
+    experienceLevel: document.getElementById("experience").value,
+    totalRiskValue: risk.total,
+    riskLevel: risk.level,
+    riskComment: document.getElementById("riskComment").innerText,
+    selectedFactors: collectSelectedFactors(),
+    status: currentData.status || "Open",
+    createdAt: currentData.createdAt || "",
+    updatedAt: new Date().toLocaleString()
   };
 
-  window.dbUpdate(window.dbRef(window.database,"fratReports/" + reportId),updatedData)
+  update(ref(database,"fratReports/" + reportId), updatedData)
   .then(() => {
-    alert("FRAT Report updated successfully.");
     document.getElementById("savedBox").style.display = "block";
-    currentData = {...currentData,...updatedData};
+    alert("FRAT Report updated successfully.");
+    currentData = {...currentData, ...updatedData};
     populateForm();
     lockForm();
   })
@@ -774,13 +771,15 @@ window.saveChanges = function(){
 };
 
 function loadReport(){
+
   if(!reportId){
     document.getElementById("loadingBox").innerHTML = "No FRAT Report ID was found in the URL.";
     return;
   }
 
-  window.dbGet(window.dbRef(window.database,"fratReports/" + reportId))
+  get(ref(database,"fratReports/" + reportId))
   .then(snapshot => {
+
     if(!snapshot.exists()){
       document.getElementById("loadingBox").innerHTML = "FRAT Report not found in Firebase.";
       return;
@@ -793,6 +792,7 @@ function loadReport(){
 
     populateForm();
     lockForm();
+
   })
   .catch(error => {
     document.getElementById("loadingBox").innerHTML = "Error loading FRAT Report: " + error.message;
@@ -801,6 +801,7 @@ function loadReport(){
 
 buildForm();
 loadReport();
+
 </script>
 
 </body>
