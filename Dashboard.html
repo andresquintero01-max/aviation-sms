@@ -38,7 +38,7 @@ function destroyChart(id){
   if(charts[id]) charts[id].destroy();
 }
 
-function createBar(id, labels, values, title){
+function createBar(id, labels, values, title, colors){
   destroyChart(id);
 
   charts[id] = new Chart(document.getElementById(id), {
@@ -48,12 +48,7 @@ function createBar(id, labels, values, title){
       datasets:[{
         label:title,
         data:values,
-        backgroundColor:[
-          "#082567",
-          "#f1c40f",
-          "#e74c3c",
-          "#2ecc71"
-        ],
+        backgroundColor:colors || ["#082567","#e60000","#2ecc71","#f39c12"],
         borderRadius:12
       }]
     },
@@ -69,10 +64,7 @@ function createBar(id, labels, values, title){
         }
       },
       scales:{
-        y:{
-          beginAtZero:true,
-          ticks:{precision:0}
-        }
+        y:{beginAtZero:true,ticks:{precision:0}}
       }
     }
   });
@@ -90,6 +82,7 @@ function createPie(id, labels, values, title){
         backgroundColor:[
           "#2ecc71",
           "#f1c40f",
+          "#ff9800",
           "#e74c3c",
           "#95a5a6"
         ]
@@ -102,7 +95,7 @@ function createPie(id, labels, values, title){
           display:true,
           text:title,
           color:"#555",
-          font:{size:22,weight:"bold"}
+          font:{size:24,weight:"bold"}
         },
         legend:{position:"top"}
       }
@@ -120,11 +113,7 @@ function isReportClosed(r){
     ""
   ).toString().toLowerCase();
 
-  return (
-    status.includes("closed") ||
-    status === "true" ||
-    status === "yes"
-  );
+  return status.includes("closed") || status === "true" || status === "yes";
 }
 
 function getDate(r){
@@ -151,12 +140,36 @@ function getResidualData(r){
   return { text, value };
 }
 
-function getMocRiskLevel(r){
-  return (
-    r.residualRisk?.level ||
-    r.initialRisk?.level ||
-    "Not Assessed"
-  );
+function getMocRiskLevel(r,type){
+  if(type === "initial"){
+    return r.initialRisk?.level || "Not Assessed";
+  }
+
+  if(type === "residual"){
+    return r.residualRisk?.level || "Not Assessed";
+  }
+
+  return "Not Assessed";
+}
+
+function countMocRisk(type){
+  let low = 0;
+  let medium = 0;
+  let high = 0;
+  let extreme = 0;
+  let notAssessed = 0;
+
+  mocReports.forEach(r => {
+    const risk = getMocRiskLevel(r,type).toLowerCase();
+
+    if(risk.includes("low")) low++;
+    else if(risk.includes("medium")) medium++;
+    else if(risk.includes("high")) high++;
+    else if(risk.includes("extreme")) extreme++;
+    else notAssessed++;
+  });
+
+  return {low,medium,high,extreme,notAssessed};
 }
 
 function renderDashboard(){
@@ -259,8 +272,7 @@ function renderDashboard(){
       r.reportType ||
       "Other";
 
-    categories[category] =
-      (categories[category] || 0) + 1;
+    categories[category] = (categories[category] || 0) + 1;
 
   });
 
@@ -307,18 +319,14 @@ function renderDashboard(){
 
   let mocOpen = 0;
   let mocClosed = 0;
-  let mocHighExtreme = 0;
 
   mocReports.forEach(m => {
     if(isReportClosed(m)) mocClosed++;
     else mocOpen++;
-
-    const risk = getMocRiskLevel(m).toLowerCase();
-
-    if(risk.includes("high") || risk.includes("extreme")){
-      mocHighExtreme++;
-    }
   });
+
+  const initialMoc = countMocRisk("initial");
+  const residualMoc = countMocRisk("residual");
 
   const safetyScore =
     total === 0
@@ -349,7 +357,9 @@ function renderDashboard(){
 
   setText("mocTotal", mocReports.length);
   setText("mocOpen", mocOpen);
-  setText("mocHigh", mocHighExtreme);
+  setText("mocClosed", mocClosed);
+  setText("mocInitialHigh", initialMoc.high + initialMoc.extreme);
+  setText("mocResidualHigh", residualMoc.high + residualMoc.extreme);
 
   createPie(
     "riskChart",
@@ -374,7 +384,8 @@ function renderDashboard(){
     "statusChart",
     ["Open","Closed"],
     [open,closed],
-    "Open vs Closed Reports"
+    "Open vs Closed Reports",
+    ["#e60000","#2ecc71"]
   );
 
   createBar(
@@ -395,28 +406,55 @@ function renderDashboard(){
     "fratChart",
     ["Total FRAT","High Risk","No Go"],
     [fratReports.length,fratHigh,fratNoGo],
-    "FRAT Monitoring"
+    "FRAT Monitoring",
+    ["#082567","#f1c40f","#e74c3c"]
   );
 
   createBar(
     "medaChart",
     ["Total MEDA","Open","Closed"],
     [medaReports.length,medaOpen,medaClosed],
-    "MEDA Monitoring"
+    "MEDA Monitoring",
+    ["#082567","#e60000","#2ecc71"]
+  );
+
+  createPie(
+    "mocInitialRiskChart",
+    ["Low","Medium","High","Extreme","Not Assessed"],
+    [
+      initialMoc.low,
+      initialMoc.medium,
+      initialMoc.high,
+      initialMoc.extreme,
+      initialMoc.notAssessed
+    ],
+    "MOC Initial Risk Distribution"
+  );
+
+  createPie(
+    "mocResidualRiskChart",
+    ["Low","Medium","High","Extreme","Not Assessed"],
+    [
+      residualMoc.low,
+      residualMoc.medium,
+      residualMoc.high,
+      residualMoc.extreme,
+      residualMoc.notAssessed
+    ],
+    "MOC Residual Risk Distribution"
   );
 
   createBar(
-    "mocChart",
-    ["Total MOC","Open","High / Extreme"],
-    [mocReports.length,mocOpen,mocHighExtreme],
-    "Management of Change Monitoring"
+    "mocStatusChart",
+    ["Total MOC","Open","Closed"],
+    [mocReports.length,mocOpen,mocClosed],
+    "MOC Status Monitoring",
+    ["#082567","#e60000","#2ecc71"]
   );
 }
 
 function loadSMSReports(){
-  const reportsRef = ref(db, "smsReports");
-
-  onValue(reportsRef, snapshot => {
+  onValue(ref(db, "smsReports"), snapshot => {
     const data = snapshot.val() || {};
     smsReports = Object.values(data);
     renderDashboard();
@@ -424,9 +462,7 @@ function loadSMSReports(){
 }
 
 function loadFRATReports(){
-  const reportsRef = ref(db, "fratReports");
-
-  onValue(reportsRef, snapshot => {
+  onValue(ref(db, "fratReports"), snapshot => {
     const data = snapshot.val() || {};
     fratReports = Object.values(data);
     renderDashboard();
@@ -434,9 +470,7 @@ function loadFRATReports(){
 }
 
 function loadMEDAReports(){
-  const reportsRef = ref(db, "medaReports");
-
-  onValue(reportsRef, snapshot => {
+  onValue(ref(db, "medaReports"), snapshot => {
     const data = snapshot.val() || {};
     medaReports = Object.values(data);
     renderDashboard();
@@ -444,9 +478,7 @@ function loadMEDAReports(){
 }
 
 function loadMOCReports(){
-  const reportsRef = ref(db, "mocReports");
-
-  onValue(reportsRef, snapshot => {
+  onValue(ref(db, "mocReports"), snapshot => {
     const data = snapshot.val() || {};
     mocReports = Object.values(data);
     renderDashboard();
@@ -476,12 +508,7 @@ window.onload = function(){
 body{
   font-family:Arial,sans-serif;
   min-height:100vh;
-  background:linear-gradient(
-    135deg,
-    #071f47,
-    #0b2a66,
-    #1450b8
-  );
+  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
   padding:30px;
 }
 
@@ -524,11 +551,7 @@ h1{
 }
 
 .card{
-  background:linear-gradient(
-    135deg,
-    #071f47,
-    #0b2a66
-  );
+  background:linear-gradient(135deg,#071f47,#0b2a66);
   color:white;
   border-radius:28px;
   padding:35px;
@@ -537,28 +560,16 @@ h1{
 }
 
 .card.red{
-  background:linear-gradient(
-    135deg,
-    #d63031,
-    #ff3b30
-  );
+  background:linear-gradient(135deg,#d00000,#ff1f1f);
 }
 
 .card.yellow{
-  background:linear-gradient(
-    135deg,
-    #cfa000,
-    #ffd400
-  );
+  background:linear-gradient(135deg,#cfa000,#ffd400);
   color:#071f47;
 }
 
 .card.green{
-  background:linear-gradient(
-    135deg,
-    #138d75,
-    #2ecc71
-  );
+  background:linear-gradient(135deg,#138d75,#2ecc71);
 }
 
 .card h2{
@@ -658,30 +669,62 @@ canvas{
   box-shadow:0 10px 25px rgba(0,0,0,0.10);
 }
 
-.back-btn{
-  margin-top:40px;
-  width:100%;
-  padding:20px;
+.moc-risk-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:30px;
+  margin-top:35px;
+}
+
+.home-btn{
+  margin-top:45px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  width:320px;
+  margin-left:auto;
+  margin-right:auto;
+  padding:18px 28px;
   border:none;
   border-radius:18px;
-  background:#c0392b;
+  background:linear-gradient(135deg,#071f47,#1450b8);
   color:white;
   font-size:22px;
   font-weight:bold;
   cursor:pointer;
+  box-shadow:0 12px 25px rgba(0,0,0,0.25);
 }
 
-.back-btn:hover{
-  background:#922b21;
+.home-btn:hover{
+  transform:translateY(-2px);
+  background:linear-gradient(135deg,#0b2a66,#1d4ed8);
+}
+
+.home-icon{
+  background:#ffffff22;
+  padding:8px 12px;
+  border-radius:12px;
+  font-size:26px;
 }
 
 @media(max-width:900px){
-  .charts-columns{
+  .charts-columns,
+  .moc-risk-grid{
     flex-direction:column;
+    display:block;
+  }
+
+  .moc-risk-grid .module-chart-box{
+    margin-bottom:30px;
   }
 
   .module-main-title{
     font-size:50px;
+  }
+
+  .home-btn{
+    width:100%;
   }
 }
 </style>
@@ -708,7 +751,7 @@ canvas{
       <p>Total SMS Reports</p>
     </div>
 
-    <div class="card yellow">
+    <div class="card red">
       <h2 id="openReports">0</h2>
       <p>Open Reports</p>
     </div>
@@ -828,7 +871,7 @@ canvas{
           <p>Total MEDA</p>
         </div>
 
-        <div class="card yellow">
+        <div class="card red">
           <h2 id="medaOpen">0</h2>
           <p>Open MEDA</p>
         </div>
@@ -869,27 +912,50 @@ canvas{
           <p>Total MOC</p>
         </div>
 
-        <div class="card yellow">
+        <div class="card red">
           <h2 id="mocOpen">0</h2>
           <p>Open MOC</p>
         </div>
 
+        <div class="card green">
+          <h2 id="mocClosed">0</h2>
+          <p>Closed MOC</p>
+        </div>
+
         <div class="card red">
-          <h2 id="mocHigh">0</h2>
-          <p>High / Extreme MOC</p>
+          <h2 id="mocInitialHigh">0</h2>
+          <p>Initial High / Extreme</p>
+        </div>
+
+        <div class="card red">
+          <h2 id="mocResidualHigh">0</h2>
+          <p>Residual High / Extreme</p>
         </div>
 
       </div>
 
     </div>
 
+    <div class="moc-risk-grid">
+
+      <div class="module-chart-box">
+        <canvas id="mocInitialRiskChart"></canvas>
+      </div>
+
+      <div class="module-chart-box">
+        <canvas id="mocResidualRiskChart"></canvas>
+      </div>
+
+    </div>
+
     <div class="module-chart-box">
-      <canvas id="mocChart"></canvas>
+      <canvas id="mocStatusChart"></canvas>
     </div>
 
   </div>
 
-  <button class="back-btn" onclick="goBack()">
+  <button class="home-btn" onclick="goBack()">
+    <span class="home-icon">🏠</span>
     Back to Home
   </button>
 
