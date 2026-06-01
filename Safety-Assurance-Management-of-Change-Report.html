@@ -33,15 +33,8 @@ body{
   margin-bottom:25px;
 }
 
-.header h1{
-  font-size:42px;
-  margin-bottom:8px;
-}
-
-.header p{
-  font-size:17px;
-  color:#dbeafe;
-}
+.header h1{font-size:42px;margin-bottom:8px;}
+.header p{font-size:17px;color:#dbeafe;}
 
 .section{
   margin-top:25px;
@@ -59,9 +52,7 @@ body{
   font-weight:bold;
 }
 
-.section-body{
-  padding:22px;
-}
+.section-body{padding:22px;}
 
 .grid{
   display:grid;
@@ -149,14 +140,22 @@ textarea{
 
 .risk-result{
   margin-top:15px;
-  padding:15px;
+  padding:18px;
   border-radius:14px;
-  text-align:center;
-  font-size:18px;
+  text-align:left;
+  font-size:15px;
   font-weight:bold;
   background:#eef4ff;
   color:#071f47;
   border:1px solid #c8d8f0;
+  line-height:1.6;
+}
+
+.risk-result-title{
+  text-align:center;
+  font-size:19px;
+  margin-bottom:10px;
+  color:#071f47;
 }
 
 .action-row{
@@ -233,7 +232,7 @@ textarea{
 
 <div class="header">
   <h1>Safety Assurance - Management of Change</h1>
-  <p>Management of Change report with risk assessment, controls, action plan, and approval tracking.</p>
+  <p>Management of Change report with risk assessment, ICAO definitions, controls, action plan, and approval tracking.</p>
 </div>
 
 <div class="section">
@@ -351,56 +350,10 @@ textarea{
 
       <div class="matrix-box">
         <h3>Initial Risk Matrix</h3>
-
-        <table class="matrix">
-          <tr>
-            <th>Severity ↓ / Probability →</th>
-            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
-          </tr>
-          <tr>
-            <th>5</th>
-            <td class="medium" onclick="selectRisk('initial',5,1)">5</td>
-            <td class="high" onclick="selectRisk('initial',5,2)">10</td>
-            <td class="high" onclick="selectRisk('initial',5,3)">15</td>
-            <td class="extreme" onclick="selectRisk('initial',5,4)">20</td>
-            <td class="extreme" onclick="selectRisk('initial',5,5)">25</td>
-          </tr>
-          <tr>
-            <th>4</th>
-            <td class="medium" onclick="selectRisk('initial',4,1)">4</td>
-            <td class="medium" onclick="selectRisk('initial',4,2)">8</td>
-            <td class="high" onclick="selectRisk('initial',4,3)">12</td>
-            <td class="high" onclick="selectRisk('initial',4,4)">16</td>
-            <td class="extreme" onclick="selectRisk('initial',4,5)">20</td>
-          </tr>
-          <tr>
-            <th>3</th>
-            <td class="low" onclick="selectRisk('initial',3,1)">3</td>
-            <td class="medium" onclick="selectRisk('initial',3,2)">6</td>
-            <td class="medium" onclick="selectRisk('initial',3,3)">9</td>
-            <td class="high" onclick="selectRisk('initial',3,4)">12</td>
-            <td class="high" onclick="selectRisk('initial',3,5)">15</td>
-          </tr>
-          <tr>
-            <th>2</th>
-            <td class="low" onclick="selectRisk('initial',2,1)">2</td>
-            <td class="low" onclick="selectRisk('initial',2,2)">4</td>
-            <td class="medium" onclick="selectRisk('initial',2,3)">6</td>
-            <td class="medium" onclick="selectRisk('initial',2,4)">8</td>
-            <td class="high" onclick="selectRisk('initial',2,5)">10</td>
-          </tr>
-          <tr>
-            <th>1</th>
-            <td class="low" onclick="selectRisk('initial',1,1)">1</td>
-            <td class="low" onclick="selectRisk('initial',1,2)">2</td>
-            <td class="low" onclick="selectRisk('initial',1,3)">3</td>
-            <td class="low" onclick="selectRisk('initial',1,4)">4</td>
-            <td class="medium" onclick="selectRisk('initial',1,5)">5</td>
-          </tr>
-        </table>
+        <table class="matrix" id="initialMatrix"></table>
 
         <div id="initialRiskResult" class="risk-result">
-          Initial Risk: Not selected
+          <div class="risk-result-title">Initial Risk: Not selected</div>
         </div>
       </div>
 
@@ -513,56 +466,10 @@ textarea{
 
       <div class="matrix-box">
         <h3>Residual Risk Matrix</h3>
-
-        <table class="matrix">
-          <tr>
-            <th>Severity ↓ / Probability →</th>
-            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
-          </tr>
-          <tr>
-            <th>5</th>
-            <td class="medium" onclick="selectRisk('residual',5,1)">5</td>
-            <td class="high" onclick="selectRisk('residual',5,2)">10</td>
-            <td class="high" onclick="selectRisk('residual',5,3)">15</td>
-            <td class="extreme" onclick="selectRisk('residual',5,4)">20</td>
-            <td class="extreme" onclick="selectRisk('residual',5,5)">25</td>
-          </tr>
-          <tr>
-            <th>4</th>
-            <td class="medium" onclick="selectRisk('residual',4,1)">4</td>
-            <td class="medium" onclick="selectRisk('residual',4,2)">8</td>
-            <td class="high" onclick="selectRisk('residual',4,3)">12</td>
-            <td class="high" onclick="selectRisk('residual',4,4)">16</td>
-            <td class="extreme" onclick="selectRisk('residual',4,5)">20</td>
-          </tr>
-          <tr>
-            <th>3</th>
-            <td class="low" onclick="selectRisk('residual',3,1)">3</td>
-            <td class="medium" onclick="selectRisk('residual',3,2)">6</td>
-            <td class="medium" onclick="selectRisk('residual',3,3)">9</td>
-            <td class="high" onclick="selectRisk('residual',3,4)">12</td>
-            <td class="high" onclick="selectRisk('residual',3,5)">15</td>
-          </tr>
-          <tr>
-            <th>2</th>
-            <td class="low" onclick="selectRisk('residual',2,1)">2</td>
-            <td class="low" onclick="selectRisk('residual',2,2)">4</td>
-            <td class="medium" onclick="selectRisk('residual',2,3)">6</td>
-            <td class="medium" onclick="selectRisk('residual',2,4)">8</td>
-            <td class="high" onclick="selectRisk('residual',2,5)">10</td>
-          </tr>
-          <tr>
-            <th>1</th>
-            <td class="low" onclick="selectRisk('residual',1,1)">1</td>
-            <td class="low" onclick="selectRisk('residual',1,2)">2</td>
-            <td class="low" onclick="selectRisk('residual',1,3)">3</td>
-            <td class="low" onclick="selectRisk('residual',1,4)">4</td>
-            <td class="medium" onclick="selectRisk('residual',1,5)">5</td>
-          </tr>
-        </table>
+        <table class="matrix" id="residualMatrix"></table>
 
         <div id="residualRiskResult" class="risk-result">
-          Residual Risk: Not selected
+          <div class="risk-result-title">Residual Risk: Not selected</div>
         </div>
       </div>
 
@@ -667,6 +574,52 @@ window.dbSet = set;
 let initialRisk = null;
 let residualRisk = null;
 
+const severityDefinitions = {
+  5:{
+    name:"Catastrophic",
+    definition:"According to ICAO SMS guidance, this may involve equipment destroyed and/or multiple fatalities."
+  },
+  4:{
+    name:"Hazardous",
+    definition:"According to ICAO SMS guidance, this may involve a large reduction in safety margins, serious injury, major equipment damage, or major operational disruption."
+  },
+  3:{
+    name:"Major",
+    definition:"According to ICAO SMS guidance, this may involve a significant reduction in safety margins, injury, increased workload, or serious incident potential."
+  },
+  2:{
+    name:"Minor",
+    definition:"According to ICAO SMS guidance, this may involve nuisance, operating limitations, minor incident, or use of emergency procedures."
+  },
+  1:{
+    name:"Negligible",
+    definition:"According to ICAO SMS guidance, this means consequences are less than minor, with little or no safety impact."
+  }
+};
+
+const probabilityDefinitions = {
+  5:{
+    name:"Frequent",
+    definition:"According to ICAO SMS guidance, this is likely to occur many times or has occurred frequently."
+  },
+  4:{
+    name:"Likely",
+    definition:"According to ICAO SMS guidance, this is likely to occur sometimes or has occurred several times."
+  },
+  3:{
+    name:"Occasional",
+    definition:"According to ICAO SMS guidance, this is likely to occur at some time or has occurred infrequently."
+  },
+  2:{
+    name:"Remote",
+    definition:"According to ICAO SMS guidance, this is unlikely to occur, but possible."
+  },
+  1:{
+    name:"Extremely Remote",
+    definition:"According to ICAO SMS guidance, this is very unlikely to occur."
+  }
+};
+
 function riskLevel(score){
   if(score <= 4) return "Low";
   if(score <= 9) return "Medium";
@@ -674,32 +627,126 @@ function riskLevel(score){
   return "Extreme";
 }
 
-function selectRisk(type,severity,probability){
+function riskAssessmentText(level){
+  if(level === "Low"){
+    return "Acceptable risk level. Risk may be managed through normal operational controls.";
+  }
+
+  if(level === "Medium"){
+    return "Tolerable risk level with controls. Additional mitigation or monitoring should be applied before implementation.";
+  }
+
+  if(level === "High"){
+    return "Significant risk level. Management review and mitigation actions are required before implementation.";
+  }
+
+  return "Unacceptable risk level. Immediate mitigation actions are required before implementation.";
+}
+
+function riskColorClass(score){
+  const level = riskLevel(score);
+
+  if(level === "Low") return "low";
+  if(level === "Medium") return "medium";
+  if(level === "High") return "high";
+  return "extreme";
+}
+
+function buildMatrix(matrixId,type){
+  const matrix = document.getElementById(matrixId);
+
+  let html = `
+    <tr>
+      <th>Severity ↓ / Probability →</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+    </tr>
+  `;
+
+  for(let severity = 5; severity >= 1; severity--){
+
+    html += `<tr><th>${severity}</th>`;
+
+    for(let probability = 1; probability <= 5; probability++){
+      const score = severity * probability;
+      const color = riskColorClass(score);
+
+      html += `
+        <td class="${color}" onclick="selectRisk('${type}',${severity},${probability},this)">
+          ${score}
+        </td>
+      `;
+    }
+
+    html += `</tr>`;
+  }
+
+  matrix.innerHTML = html;
+}
+
+function selectRisk(type,severity,probability,cell){
   const score = severity * probability;
   const level = riskLevel(score);
 
-  if(type === "initial"){
-    initialRisk = {severity, probability, score, level};
-    document.getElementById("initialRiskResult").innerHTML =
-      `Initial Risk: ${level} | Severity ${severity} x Probability ${probability} = ${score}`;
+  const severityInfo = severityDefinitions[severity];
+  const probabilityInfo = probabilityDefinitions[probability];
+  const assessment = riskAssessmentText(level);
 
-    document.querySelectorAll(".matrix-box")[0].querySelectorAll("td").forEach(td => {
+  const riskData = {
+    severity:severity,
+    severityName:severityInfo.name,
+    severityDefinition:severityInfo.definition,
+    probability:probability,
+    probabilityName:probabilityInfo.name,
+    probabilityDefinition:probabilityInfo.definition,
+    score:score,
+    level:level,
+    riskAssessment:assessment
+  };
+
+  const html = `
+    <div class="risk-result-title">
+      ${type === "initial" ? "INITIAL RISK" : "RESIDUAL RISK"}: ${level.toUpperCase()}
+    </div>
+
+    <strong>Severity:</strong> ${severity} - ${severityInfo.name}<br>
+    ${severityInfo.definition}<br><br>
+
+    <strong>Probability:</strong> ${probability} - ${probabilityInfo.name}<br>
+    ${probabilityInfo.definition}<br><br>
+
+    <strong>Risk Score:</strong> ${score}<br>
+    <strong>Calculation:</strong> Severity ${severity} x Probability ${probability} = ${score}<br><br>
+
+    <strong>Risk Assessment:</strong><br>
+    ${assessment}
+  `;
+
+  if(type === "initial"){
+    initialRisk = riskData;
+
+    document.getElementById("initialRiskResult").innerHTML = html;
+
+    document.querySelectorAll("#initialMatrix td").forEach(td => {
       td.classList.remove("selected-risk");
     });
 
-    event.target.classList.add("selected-risk");
+    cell.classList.add("selected-risk");
   }
 
   if(type === "residual"){
-    residualRisk = {severity, probability, score, level};
-    document.getElementById("residualRiskResult").innerHTML =
-      `Residual Risk: ${level} | Severity ${severity} x Probability ${probability} = ${score}`;
+    residualRisk = riskData;
 
-    document.querySelectorAll(".matrix-box")[1].querySelectorAll("td").forEach(td => {
+    document.getElementById("residualRiskResult").innerHTML = html;
+
+    document.querySelectorAll("#residualMatrix td").forEach(td => {
       td.classList.remove("selected-risk");
     });
 
-    event.target.classList.add("selected-risk");
+    cell.classList.add("selected-risk");
   }
 }
 
@@ -791,8 +838,12 @@ function resetForm(){
     initialRisk = null;
     residualRisk = null;
 
-    document.getElementById("initialRiskResult").innerHTML = "Initial Risk: Not selected";
-    document.getElementById("residualRiskResult").innerHTML = "Residual Risk: Not selected";
+    document.getElementById("initialRiskResult").innerHTML =
+      `<div class="risk-result-title">Initial Risk: Not selected</div>`;
+
+    document.getElementById("residualRiskResult").innerHTML =
+      `<div class="risk-result-title">Residual Risk: Not selected</div>`;
+
     document.getElementById("savedBox").style.display = "none";
 
     document.querySelectorAll(".selected-risk").forEach(el => {
@@ -800,6 +851,9 @@ function resetForm(){
     });
   }
 }
+
+buildMatrix("initialMatrix","initial");
+buildMatrix("residualMatrix","residual");
 </script>
 
 </body>
