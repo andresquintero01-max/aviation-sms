@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>SMS Database</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-
 *{
   box-sizing:border-box;
 }
@@ -14,24 +14,43 @@ body{
   margin:0;
   padding:35px;
   font-family:'Segoe UI', Arial, sans-serif;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
   min-height:100vh;
+  background:
+    radial-gradient(circle at top left, rgba(255,152,0,0.28), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(28,99,219,0.45), transparent 38%),
+    linear-gradient(135deg,#020617,#071f47,#1450b8);
+}
+
+.header{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.header-badge{
+  display:inline-block;
+  background:rgba(255,255,255,0.16);
+  color:#dbeafe;
+  padding:10px 24px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:2px;
+  margin-bottom:14px;
+  border:1px solid rgba(255,255,255,0.25);
 }
 
 h1{
-  text-align:center;
   color:white;
-  font-size:58px;
-  margin-bottom:10px;
+  font-size:62px;
+  margin:0;
   letter-spacing:1px;
-  text-shadow:0 5px 14px rgba(0,0,0,0.35);
+  text-shadow:0 8px 18px rgba(0,0,0,0.38);
 }
 
 .subtitle{
-  text-align:center;
   color:#dbeafe;
-  font-size:18px;
-  margin-bottom:30px;
+  font-size:19px;
+  margin-top:12px;
   font-weight:500;
 }
 
@@ -43,10 +62,12 @@ h1{
 .toolbar{
   max-width:1450px;
   margin:0 auto 30px auto;
-  background:white;
-  padding:22px;
-  border-radius:22px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.22);
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(12px);
+  padding:24px;
+  border-radius:28px;
+  box-shadow:0 22px 55px rgba(0,0,0,0.28);
+  border:1px solid rgba(255,255,255,0.6);
 }
 
 .toolbar-buttons{
@@ -58,22 +79,23 @@ h1{
 
 .tool-btn{
   border:none;
-  padding:15px 22px;
-  border-radius:14px;
-  font-weight:bold;
+  padding:15px 24px;
+  border-radius:16px;
+  font-weight:900;
   color:white;
   cursor:pointer;
   font-size:15px;
-  box-shadow:0 8px 18px rgba(0,0,0,0.22);
-  transition:0.2s;
+  box-shadow:0 10px 22px rgba(0,0,0,0.22);
+  transition:0.25s;
   text-decoration:none;
   display:inline-flex;
   align-items:center;
   justify-content:center;
+  gap:8px;
 }
 
 .tool-btn:hover{
-  transform:translateY(-2px);
+  transform:translateY(-3px);
 }
 
 .filter-btn{
@@ -89,15 +111,15 @@ h1{
 }
 
 .hazard-btn{
-  background:linear-gradient(135deg,#dc2626,#ef4444);
+  background:linear-gradient(135deg,#d83b00,#ff9800);
 }
 
 .filter-panel{
   display:none;
   margin-top:22px;
   background:#f8fafc;
-  padding:20px;
-  border-radius:18px;
+  padding:22px;
+  border-radius:22px;
   border:1px solid #dbe3ef;
 }
 
@@ -110,26 +132,51 @@ h1{
 .filter-panel input,
 .filter-panel select{
   width:100%;
-  padding:14px;
-  border-radius:12px;
+  padding:15px;
+  border-radius:14px;
   border:1px solid #cbd5e1;
   font-size:14px;
   outline:none;
 }
 
+.filter-panel input:focus,
+.filter-panel select:focus{
+  border-color:#1450b8;
+  box-shadow:0 0 0 4px rgba(20,80,184,0.12);
+}
+
 .record{
-  background:white;
+  background:rgba(255,255,255,0.97);
   margin-bottom:26px;
-  padding:26px;
-  border-radius:24px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.22);
+  padding:28px;
+  border-radius:28px;
+  box-shadow:0 22px 55px rgba(0,0,0,0.26);
   transition:0.25s;
-  border-left:12px solid #071f47;
+  border-left:12px solid #1450b8;
+  position:relative;
+  overflow:hidden;
+}
+
+.record::before{
+  content:"";
+  position:absolute;
+  width:320px;
+  height:320px;
+  background:radial-gradient(circle,rgba(20,80,184,0.10),transparent 70%);
+  top:-160px;
+  right:-120px;
 }
 
 .record:hover{
-  transform:translateY(-4px);
-  box-shadow:0 24px 55px rgba(0,0,0,0.28);
+  transform:translateY(-5px);
+  box-shadow:0 28px 65px rgba(0,0,0,0.32);
+}
+
+.top-row,
+.info,
+.edit-area{
+  position:relative;
+  z-index:2;
 }
 
 .top-row{
@@ -142,14 +189,18 @@ h1{
 }
 
 .report-id{
-  font-size:22px;
-  font-weight:bold;
+  font-size:23px;
+  font-weight:900;
   color:#071f47;
 }
 
 .report-id a{
-  color:#5e2ca5;
+  color:#5b21b6;
   text-decoration:none;
+}
+
+.report-id a:hover{
+  text-decoration:underline;
 }
 
 .actions-row{
@@ -170,13 +221,13 @@ h1{
 }
 
 .status{
-  padding:8px 14px;
+  padding:9px 15px;
   border-radius:999px;
   color:white;
   font-size:12px;
-  font-weight:bold;
+  font-weight:900;
   display:inline-block;
-  box-shadow:0 4px 12px rgba(0,0,0,0.18);
+  box-shadow:0 5px 14px rgba(0,0,0,0.20);
 }
 
 .open{
@@ -212,33 +263,33 @@ h1{
   padding:16px 18px;
   border-radius:18px;
   font-size:15px;
-  font-weight:bold;
+  font-weight:900;
   min-width:220px;
   text-align:center;
-  box-shadow:0 8px 18px rgba(0,0,0,0.18);
+  box-shadow:0 9px 20px rgba(0,0,0,0.18);
 }
 
 .edit-btn{
-  background:linear-gradient(135deg,#071f47,#0b2a66);
+  background:linear-gradient(135deg,#071f47,#1450b8);
   color:white;
   border:none;
-  border-radius:14px;
-  padding:13px 20px;
+  border-radius:15px;
+  padding:13px 21px;
   cursor:pointer;
-  font-weight:bold;
+  font-weight:900;
   font-size:14px;
-  box-shadow:0 8px 18px rgba(0,0,0,0.22);
+  box-shadow:0 9px 20px rgba(0,0,0,0.22);
 }
 
 .save-btn{
   background:linear-gradient(135deg,#16a34a,#22c55e);
   color:white;
   border:none;
-  border-radius:14px;
-  padding:13px 20px;
+  border-radius:15px;
+  padding:14px 24px;
   cursor:pointer;
-  font-weight:bold;
-  font-size:14px;
+  font-weight:900;
+  font-size:15px;
 }
 
 .delete-btn{
@@ -246,29 +297,29 @@ h1{
   color:white;
   border:none;
   border-radius:50%;
-  width:44px;
-  height:44px;
+  width:46px;
+  height:46px;
   cursor:pointer;
   font-size:18px;
-  font-weight:bold;
-  box-shadow:0 8px 18px rgba(0,0,0,0.22);
+  font-weight:900;
+  box-shadow:0 9px 20px rgba(0,0,0,0.22);
 }
 
 .info{
-  margin-top:12px;
+  margin-top:14px;
   line-height:1.8;
   color:#222;
   font-size:15px;
   background:#f8fafc;
-  padding:18px;
-  border-radius:16px;
+  padding:20px;
+  border-radius:20px;
   border:1px solid #e5e7eb;
 }
 
 .info-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:10px 22px;
+  gap:12px 24px;
 }
 
 .full-info{
@@ -276,7 +327,7 @@ h1{
 }
 
 .label{
-  font-weight:bold;
+  font-weight:900;
   color:#071f47;
 }
 
@@ -284,8 +335,8 @@ h1{
   margin-top:18px;
   display:none;
   background:#f8fafc;
-  padding:20px;
-  border-radius:18px;
+  padding:22px;
+  border-radius:22px;
   border:1px solid #dbe3ef;
 }
 
@@ -293,11 +344,11 @@ h1{
 .edit-area textarea,
 .edit-area select{
   width:100%;
-  padding:13px;
+  padding:14px;
   margin-top:8px;
   margin-bottom:14px;
   border:1px solid #cbd5e1;
-  border-radius:12px;
+  border-radius:14px;
   font-family:'Segoe UI', Arial, sans-serif;
   font-size:14px;
 }
@@ -311,7 +362,7 @@ h1{
   background:rgba(255,255,255,0.14);
   border:1px solid rgba(255,255,255,0.25);
   padding:18px;
-  border-radius:20px;
+  border-radius:22px;
   margin:10px 0 28px 0;
   display:flex;
   justify-content:center;
@@ -324,27 +375,20 @@ h1{
   min-width:240px;
 }
 
-.back{
-  display:block;
-  width:290px;
-  margin:42px auto 10px auto;
-  text-align:center;
-  background:linear-gradient(135deg,#dc2626,#ef4444);
-  color:white;
-  padding:17px;
-  text-decoration:none;
-  border-radius:16px;
-  font-weight:bold;
-  font-size:17px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.28);
+.bottom-home{
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  flex-wrap:wrap;
+  margin:45px auto 10px auto;
 }
 
 .empty{
   text-align:center;
   background:white;
-  padding:45px;
-  border-radius:22px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.22);
+  padding:50px;
+  border-radius:26px;
+  box-shadow:0 22px 55px rgba(0,0,0,0.26);
   font-size:22px;
   color:#555;
 }
@@ -375,17 +419,20 @@ h1{
   .full-info{
     grid-column:1;
   }
-}
 
+  .tool-btn{
+    width:100%;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<h1>SMS Database</h1>
-
-<div class="subtitle">
-Real-Time Safety Management System Database
+<div class="header">
+  <div class="header-badge">SAFETY MANAGEMENT SYSTEM</div>
+  <h1>SMS Database</h1>
+  <div class="subtitle">Real-Time Safety Management System Database</div>
 </div>
 
 <div class="toolbar">
@@ -401,7 +448,7 @@ Real-Time Safety Management System Database
     </button>
 
     <a class="tool-btn hazard-btn" href="Hazard-Identification.html">
-      ← Back to Hazard Identification
+      ⚠️ Hazard Identification
     </a>
 
     <a class="tool-btn home-btn" href="index.html">
@@ -438,9 +485,15 @@ Real-Time Safety Management System Database
 
 <div class="container" id="data"></div>
 
-<a class="back" href="Hazard-Identification.html">
-Back to Hazard Identification
-</a>
+<div class="bottom-home">
+  <a class="tool-btn hazard-btn" href="Hazard-Identification.html">
+    ⚠️ Hazard Identification
+  </a>
+
+  <a class="tool-btn home-btn" href="index.html">
+    🏠 Home
+  </a>
+</div>
 
 <script type="module">
 
@@ -831,7 +884,7 @@ nav.className = "nav-between";
 nav.innerHTML = `
 
 <a class="tool-btn hazard-btn" href="Hazard-Identification.html">
-← Back to Hazard Identification
+⚠️ Hazard Identification
 </a>
 
 <a class="tool-btn home-btn" href="index.html">
