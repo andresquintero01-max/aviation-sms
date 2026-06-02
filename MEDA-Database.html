@@ -107,36 +107,6 @@ h1{
   background:linear-gradient(90deg,transparent,#1450b8,#ff9800,transparent);
 }
 
-.filter-box{
-  background:#f8fbff;
-  border:1px solid #e5e7eb;
-  padding:22px;
-  border-radius:26px;
-  margin-bottom:26px;
-  box-shadow:0 14px 32px rgba(0,0,0,0.10);
-}
-
-.filter-title{
-  font-weight:900;
-  color:#071f47;
-  margin-bottom:12px;
-  font-size:18px;
-}
-
-.search-input{
-  width:100%;
-  padding:16px;
-  border:1px solid #cbd5e1;
-  border-radius:16px;
-  font-size:16px;
-  outline:none;
-}
-
-.search-input:focus{
-  border-color:#1450b8;
-  box-shadow:0 0 0 4px rgba(20,80,184,0.12);
-}
-
 .top-buttons,
 .bottom-buttons{
   display:flex;
@@ -171,6 +141,10 @@ h1{
   transform:translateY(-3px);
 }
 
+.filter-btn{
+  background:linear-gradient(135deg,#7c3aed,#a855f7);
+}
+
 .meda-btn{
   background:linear-gradient(135deg,#d83b00,#ff9800);
 }
@@ -198,6 +172,37 @@ h1{
   border-radius:50%;
   padding:0;
   font-size:20px;
+}
+
+.filter-box{
+  display:none;
+  background:#f8fbff;
+  border:1px solid #e5e7eb;
+  padding:22px;
+  border-radius:26px;
+  margin-bottom:26px;
+  box-shadow:0 14px 32px rgba(0,0,0,0.10);
+}
+
+.filter-title{
+  font-weight:900;
+  color:#071f47;
+  margin-bottom:12px;
+  font-size:18px;
+}
+
+.search-input{
+  width:100%;
+  padding:16px;
+  border:1px solid #cbd5e1;
+  border-radius:16px;
+  font-size:16px;
+  outline:none;
+}
+
+.search-input:focus{
+  border-color:#1450b8;
+  box-shadow:0 0 0 4px rgba(20,80,184,0.12);
 }
 
 .counter{
@@ -393,17 +398,12 @@ h1{
 
   <div class="title-line"></div>
 
-  <div class="filter-box">
-    <div class="filter-title">Search MEDA Reports</div>
-    <input 
-      id="searchInput" 
-      class="search-input" 
-      placeholder="Search by MEDA ID, title, affected person, aircraft, customer, date, status..."
-      oninput="applyFilter()"
-    >
-  </div>
-
   <div class="top-buttons">
+
+    <button class="btn filter-btn" onclick="toggleFilters()">
+      🔎 Filters
+    </button>
+
     <button class="btn meda-btn" onclick="window.location.href='MEDA.html'">
       🛠️ MEDA
     </button>
@@ -411,6 +411,17 @@ h1{
     <button class="btn home-btn" onclick="window.location.href='index.html'">
       🏠 Home
     </button>
+
+  </div>
+
+  <div class="filter-box" id="filterBox">
+    <div class="filter-title">Search MEDA Reports</div>
+    <input 
+      id="searchInput" 
+      class="search-input" 
+      placeholder="Search by MEDA ID, title, affected person, aircraft, customer, date, status..."
+      oninput="applyFilter()"
+    >
   </div>
 
   <div id="counter" class="counter"></div>
@@ -422,6 +433,11 @@ h1{
   </div>
 
   <div class="bottom-buttons">
+
+    <button class="btn filter-btn" onclick="toggleFilters()">
+      🔎 Filters
+    </button>
+
     <button class="btn meda-btn" onclick="window.location.href='MEDA.html'">
       🛠️ MEDA
     </button>
@@ -429,6 +445,7 @@ h1{
     <button class="btn home-btn" onclick="window.location.href='index.html'">
       🏠 Home
     </button>
+
   </div>
 
   <div class="footer">
@@ -468,6 +485,11 @@ const noData = document.getElementById("noData");
 const counter = document.getElementById("counter");
 
 let allReports = [];
+
+window.toggleFilters = function(){
+  const box = document.getElementById("filterBox");
+  box.style.display = box.style.display === "block" ? "none" : "block";
+};
 
 function clean(value){
   return String(value || "")
@@ -614,6 +636,10 @@ function renderReports(reports){
       separator.className = "separator-buttons";
 
       separator.innerHTML = `
+        <button class="btn filter-btn" onclick="toggleFilters()">
+          🔎 Filters
+        </button>
+
         <button class="btn meda-btn" onclick="window.location.href='MEDA.html'">
           🛠️ MEDA
         </button>
