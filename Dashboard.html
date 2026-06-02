@@ -59,7 +59,7 @@ function createBar(id, labels, values, title, colors){
       datasets:[{
         label:title,
         data:values,
-        backgroundColor:colors || [COLORS.blue,COLORS.mor,COLORS.green,COLORS.red,COLORS.gray],
+        backgroundColor:colors || [COLORS.blue,COLORS.yellow,COLORS.green,COLORS.red,COLORS.gray],
         borderRadius:12
       }]
     },
@@ -385,7 +385,7 @@ function renderDashboard(){
     ["Acceptable","Medium / MOR","Not Acceptable","Not Assessed"],
     [acceptable,tolerable,notAcceptable,notAssessed],
     "Risk Distribution",
-    [COLORS.green,COLORS.mor,COLORS.red,COLORS.gray]
+    [COLORS.green,COLORS.yellow,COLORS.red,COLORS.gray]
   );
 
   createPie(
@@ -398,7 +398,7 @@ function renderDashboard(){
       residualNotAssessed
     ],
     "Residual Risk Distribution",
-    [COLORS.green,COLORS.mor,COLORS.red,COLORS.gray]
+    [COLORS.green,COLORS.yellow,COLORS.red,COLORS.gray]
   );
 
   createBar(
@@ -422,7 +422,7 @@ function renderDashboard(){
     Object.keys(categories),
     Object.values(categories),
     "Reports by Category",
-    [COLORS.blue,COLORS.mor,COLORS.yellow,COLORS.red,COLORS.gray]
+    [COLORS.blue,COLORS.orange,COLORS.yellow,COLORS.red,COLORS.gray]
   );
 
   createBar(
@@ -430,7 +430,7 @@ function renderDashboard(){
     ["Total FRAT","High FRAT","No Go"],
     [fratReports.length,fratHigh,fratNoGo],
     "FRAT Monitoring",
-    [COLORS.blue,COLORS.mor,COLORS.red]
+    [COLORS.blue,COLORS.yellow,COLORS.red]
   );
 
   createBar(
@@ -452,12 +452,12 @@ function renderDashboard(){
       initialMoc.notAssessed
     ],
     "MOC Initial Risk Distribution",
-    [COLORS.green,COLORS.mor,COLORS.yellow,COLORS.red,COLORS.gray]
+    [COLORS.green,COLORS.yellow,COLORS.orange,COLORS.red,COLORS.gray]
   );
 
   createPie(
     "mocResidualRiskChart",
-    ["Low","Medium / MOR","High","Extreme","Not Assessed"],
+    ["Low","Medium","High","Extreme","Not Assessed"],
     [
       residualMoc.low,
       residualMoc.medium,
@@ -466,7 +466,7 @@ function renderDashboard(){
       residualMoc.notAssessed
     ],
     "MOC Residual Risk Distribution",
-    [COLORS.green,COLORS.mor,COLORS.yellow,COLORS.red,COLORS.gray]
+    [COLORS.green,COLORS.yellow,COLORS.orange,COLORS.red,COLORS.gray]
   );
 
   createBar(
