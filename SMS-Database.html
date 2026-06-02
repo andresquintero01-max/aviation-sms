@@ -16,58 +16,80 @@ body{
   font-family:'Segoe UI', Arial, sans-serif;
   min-height:100vh;
   background:
-    radial-gradient(circle at top left, rgba(255,152,0,0.28), transparent 30%),
+    radial-gradient(circle at top left, rgba(255,152,0,0.30), transparent 30%),
     radial-gradient(circle at bottom right, rgba(28,99,219,0.45), transparent 38%),
-    linear-gradient(135deg,#020617,#071f47,#1450b8);
+    linear-gradient(rgba(5,20,55,0.86), rgba(5,20,55,0.94)),
+    url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+}
+
+.page{
+  max-width:1500px;
+  margin:auto;
+  background:rgba(255,255,255,0.13);
+  border:1px solid rgba(255,255,255,0.25);
+  backdrop-filter:blur(14px);
+  border-radius:38px;
+  padding:35px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.42);
 }
 
 .header{
   text-align:center;
-  margin-bottom:30px;
+  margin-bottom:28px;
+}
+
+.logo{
+  width:95px;
+  height:95px;
+  margin:0 auto 18px;
+  border-radius:28px;
+  background:linear-gradient(135deg,#ff9800,#1450b8);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  box-shadow:0 18px 35px rgba(0,0,0,0.35);
 }
 
 .header-badge{
   display:inline-block;
-  background:rgba(255,255,255,0.16);
-  color:#dbeafe;
+  background:rgba(255,255,255,0.20);
+  color:white;
   padding:10px 24px;
   border-radius:999px;
-  font-size:14px;
+  font-size:13px;
   font-weight:900;
   letter-spacing:2px;
-  margin-bottom:14px;
-  border:1px solid rgba(255,255,255,0.25);
+  margin-bottom:15px;
+  border:1px solid rgba(255,255,255,0.30);
 }
 
 h1{
   color:white;
-  font-size:62px;
+  font-size:64px;
   margin:0;
+  font-weight:900;
   letter-spacing:1px;
-  text-shadow:0 8px 18px rgba(0,0,0,0.38);
+  text-shadow:0 8px 20px rgba(0,0,0,0.45);
 }
 
 .subtitle{
   color:#dbeafe;
-  font-size:19px;
+  font-size:20px;
   margin-top:12px;
   font-weight:500;
 }
 
-.container{
-  max-width:1450px;
-  margin:auto;
-}
-
 .toolbar{
-  max-width:1450px;
-  margin:0 auto 30px auto;
   background:rgba(255,255,255,0.96);
-  backdrop-filter:blur(12px);
   padding:24px;
   border-radius:28px;
-  box-shadow:0 22px 55px rgba(0,0,0,0.28);
-  border:1px solid rgba(255,255,255,0.6);
+  box-shadow:0 18px 45px rgba(0,0,0,0.28);
+  margin-bottom:28px;
 }
 
 .toolbar-buttons{
@@ -85,7 +107,7 @@ h1{
   color:white;
   cursor:pointer;
   font-size:15px;
-  box-shadow:0 10px 22px rgba(0,0,0,0.22);
+  box-shadow:0 10px 22px rgba(0,0,0,0.25);
   transition:0.25s;
   text-decoration:none;
   display:inline-flex;
@@ -95,23 +117,23 @@ h1{
 }
 
 .tool-btn:hover{
-  transform:translateY(-3px);
+  transform:translateY(-4px);
 }
 
 .filter-btn{
-  background:linear-gradient(135deg,#7c3aed,#a855f7);
+  background:linear-gradient(135deg,#5b21b6,#a855f7);
 }
 
 .excel-btn{
-  background:linear-gradient(135deg,#15803d,#22c55e);
-}
-
-.home-btn{
-  background:linear-gradient(135deg,#071f47,#1450b8);
+  background:linear-gradient(135deg,#047857,#22c55e);
 }
 
 .hazard-btn{
   background:linear-gradient(135deg,#d83b00,#ff9800);
+}
+
+.home-btn{
+  background:linear-gradient(135deg,#071f47,#1450b8);
 }
 
 .filter-panel{
@@ -139,37 +161,35 @@ h1{
   outline:none;
 }
 
-.filter-panel input:focus,
-.filter-panel select:focus{
-  border-color:#1450b8;
-  box-shadow:0 0 0 4px rgba(20,80,184,0.12);
+.container{
+  margin:auto;
 }
 
 .record{
-  background:rgba(255,255,255,0.97);
+  background:rgba(255,255,255,0.96);
   margin-bottom:26px;
   padding:28px;
   border-radius:28px;
-  box-shadow:0 22px 55px rgba(0,0,0,0.26);
+  box-shadow:0 20px 50px rgba(0,0,0,0.28);
   transition:0.25s;
-  border-left:12px solid #1450b8;
+  border-left:12px solid #ff9800;
   position:relative;
   overflow:hidden;
+}
+
+.record:hover{
+  transform:translateY(-5px);
+  box-shadow:0 28px 65px rgba(0,0,0,0.34);
 }
 
 .record::before{
   content:"";
   position:absolute;
-  width:320px;
-  height:320px;
-  background:radial-gradient(circle,rgba(20,80,184,0.10),transparent 70%);
-  top:-160px;
-  right:-120px;
-}
-
-.record:hover{
-  transform:translateY(-5px);
-  box-shadow:0 28px 65px rgba(0,0,0,0.32);
+  width:340px;
+  height:340px;
+  background:radial-gradient(circle,rgba(20,80,184,0.11),transparent 70%);
+  top:-170px;
+  right:-130px;
 }
 
 .top-row,
@@ -199,10 +219,6 @@ h1{
   text-decoration:none;
 }
 
-.report-id a:hover{
-  text-decoration:underline;
-}
-
 .actions-row{
   display:flex;
   align-items:flex-start;
@@ -227,7 +243,7 @@ h1{
   font-size:12px;
   font-weight:900;
   display:inline-block;
-  box-shadow:0 5px 14px rgba(0,0,0,0.20);
+  box-shadow:0 5px 14px rgba(0,0,0,0.22);
 }
 
 .open{
@@ -358,12 +374,13 @@ h1{
   resize:vertical;
 }
 
-.nav-between{
-  background:rgba(255,255,255,0.14);
+.nav-between,
+.bottom-home{
+  background:rgba(255,255,255,0.15);
   border:1px solid rgba(255,255,255,0.25);
   padding:18px;
-  border-radius:22px;
-  margin:10px 0 28px 0;
+  border-radius:24px;
+  margin:12px 0 28px 0;
   display:flex;
   justify-content:center;
   gap:14px;
@@ -371,16 +388,8 @@ h1{
   backdrop-filter:blur(8px);
 }
 
-.nav-between a{
-  min-width:240px;
-}
-
 .bottom-home{
-  display:flex;
-  justify-content:center;
-  gap:16px;
-  flex-wrap:wrap;
-  margin:45px auto 10px auto;
+  margin-top:40px;
 }
 
 .empty{
@@ -395,7 +404,12 @@ h1{
 
 @media(max-width:900px){
   body{
-    padding:20px;
+    padding:18px;
+  }
+
+  .page{
+    padding:22px;
+    border-radius:28px;
   }
 
   h1{
@@ -429,10 +443,13 @@ h1{
 
 <body>
 
+<div class="page">
+
 <div class="header">
+  <div class="logo">🗂️</div>
   <div class="header-badge">SAFETY MANAGEMENT SYSTEM</div>
   <h1>SMS Database</h1>
-  <div class="subtitle">Real-Time Safety Management System Database</div>
+  <div class="subtitle">Real-Time Hazard Reports, Risk Status and Safety Records</div>
 </div>
 
 <div class="toolbar">
@@ -493,6 +510,8 @@ h1{
   <a class="tool-btn home-btn" href="index.html">
     🏠 Home
   </a>
+</div>
+
 </div>
 
 <script type="module">
