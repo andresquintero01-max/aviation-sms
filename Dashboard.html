@@ -33,11 +33,11 @@ let mocReports = [];
 const COLORS = {
   blue:"#082567",
   purple:"#9333ea",
-  green:"#22c55e",
-  mor:"#ff5a00",
+  green:"#2ecc71",
+  orange:"#ff8c00",
   yellow:"#f1c40f",
-  red:"#e53935",
-  gray:"#9e9e9e"
+  red:"#e74c3c",
+  gray:"#95a5a6"
 };
 
 function setText(id,value){
@@ -59,7 +59,7 @@ function createBar(id, labels, values, title, colors){
       datasets:[{
         label:title,
         data:values,
-        backgroundColor:colors || [COLORS.blue,COLORS.yellow,COLORS.green,COLORS.red,COLORS.gray],
+        backgroundColor:colors || [COLORS.blue,COLORS.orange,COLORS.green,COLORS.red,COLORS.gray],
         borderRadius:12
       }]
     },
@@ -70,8 +70,8 @@ function createBar(id, labels, values, title, colors){
         title:{
           display:true,
           text:title,
-          color:"#071f47",
-          font:{size:26,weight:"bold"}
+          color:"#333",
+          font:{size:24,weight:"bold"}
         }
       },
       scales:{
@@ -97,21 +97,14 @@ function createPie(id, labels, values, title, colors){
     },
     options:{
       responsive:true,
-      cutout:"52%",
       plugins:{
         title:{
           display:true,
           text:title,
-          color:"#071f47",
-          font:{size:26,weight:"bold"}
+          color:"#333",
+          font:{size:24,weight:"bold"}
         },
-        legend:{
-          position:"top",
-          labels:{
-            color:"#444",
-            font:{size:13,weight:"bold"}
-          }
-        }
+        legend:{position:"top"}
       }
     }
   });
@@ -177,7 +170,7 @@ function countMocRisk(type){
     const risk = getMocRiskLevel(r,type).toLowerCase();
 
     if(risk.includes("low")) low++;
-    else if(risk.includes("medium") || risk.includes("mor")) medium++;
+    else if(risk.includes("medium")) medium++;
     else if(risk.includes("high")) high++;
     else if(risk.includes("extreme")) extreme++;
     else notAssessed++;
@@ -236,13 +229,11 @@ function renderDashboard(){
     }else if(
       riskText.includes("tolerable") ||
       riskText.includes("mor") ||
-      riskText.includes("medium") ||
       (riskValue >= 5 && riskValue <= 14)
     ){
       tolerable++;
     }else if(
       riskText.includes("acceptable") ||
-      riskText.includes("low") ||
       (riskValue >= 1 && riskValue <= 4)
     ){
       acceptable++;
@@ -263,14 +254,13 @@ function renderDashboard(){
     }else if(
       residualText.includes("tolerable") ||
       residualText.includes("mor") ||
-      residualText.includes("medium") ||
+      residualText.includes("yellow") ||
       residualText.includes("orange") ||
       (residualValue >= 5 && residualValue <= 14)
     ){
       residualTolerable++;
     }else if(
       residualText.includes("acceptable") ||
-      residualText.includes("low") ||
       residualText.includes("green") ||
       (residualValue >= 1 && residualValue <= 4)
     ){
@@ -323,6 +313,7 @@ function renderDashboard(){
       fratText.includes("high") ||
       fratText.includes("moderate") ||
       fratText.includes("mor") ||
+      fratText.includes("yellow") ||
       fratText.includes("orange") ||
       fratText.includes("amarillo")
     ){
@@ -382,15 +373,15 @@ function renderDashboard(){
 
   createPie(
     "riskChart",
-    ["Acceptable","Medium / MOR","Not Acceptable","Not Assessed"],
+    ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
     [acceptable,tolerable,notAcceptable,notAssessed],
     "Risk Distribution",
-    [COLORS.green,COLORS.yellow,COLORS.red,COLORS.gray]
+    [COLORS.green,COLORS.orange,COLORS.red,COLORS.gray]
   );
 
   createPie(
     "residualRiskChart",
-    ["Acceptable","Medium / MOR","Not Acceptable","Not Assessed"],
+    ["Acceptable","Tolerable","Not Acceptable","Not Assessed"],
     [
       residualAcceptable,
       residualTolerable,
@@ -398,7 +389,7 @@ function renderDashboard(){
       residualNotAssessed
     ],
     "Residual Risk Distribution",
-    [COLORS.green,COLORS.yellow,COLORS.red,COLORS.gray]
+    [COLORS.green,COLORS.orange,COLORS.red,COLORS.gray]
   );
 
   createBar(
@@ -422,15 +413,15 @@ function renderDashboard(){
     Object.keys(categories),
     Object.values(categories),
     "Reports by Category",
-    [COLORS.blue,COLORS.orange,COLORS.yellow,COLORS.red,COLORS.gray]
+    [COLORS.blue,COLORS.orange,COLORS.green,COLORS.red,COLORS.gray]
   );
 
   createBar(
     "fratChart",
-    ["Total FRAT","High FRAT","No Go"],
+    ["Total FRAT","High Risk","No Go"],
     [fratReports.length,fratHigh,fratNoGo],
     "FRAT Monitoring",
-    [COLORS.blue,COLORS.yellow,COLORS.red]
+    [COLORS.blue,COLORS.orange,COLORS.red]
   );
 
   createBar(
@@ -443,7 +434,7 @@ function renderDashboard(){
 
   createPie(
     "mocInitialRiskChart",
-    ["Low","Medium / MOR","High","Extreme","Not Assessed"],
+    ["Low","Medium","High","Extreme","Not Assessed"],
     [
       initialMoc.low,
       initialMoc.medium,
@@ -538,7 +529,7 @@ body{
   font-family:'Segoe UI', Arial, sans-serif;
   min-height:100vh;
   background:
-    radial-gradient(circle at top left, rgba(255,90,0,0.22), transparent 28%),
+    radial-gradient(circle at top left, rgba(255,140,0,0.22), transparent 28%),
     radial-gradient(circle at bottom right, rgba(147,51,234,0.24), transparent 30%),
     linear-gradient(135deg,#020617,#071f47,#1450b8);
   padding:30px;
@@ -574,7 +565,7 @@ body{
   width:320px;
   height:320px;
   border-radius:50%;
-  background:rgba(255,90,0,0.22);
+  background:rgba(255,140,0,0.20);
   top:-120px;
   right:-90px;
 }
@@ -652,7 +643,7 @@ h1{
   color:#071f47;
   font-size:30px;
   margin:40px 0 20px;
-  border-left:8px solid #ff5a00;
+  border-left:8px solid #ff8c00;
   padding-left:14px;
   font-weight:bold;
 }
@@ -674,21 +665,20 @@ h1{
 }
 
 .card.red{
-  background:linear-gradient(135deg,#b91c1c,#e53935);
+  background:linear-gradient(135deg,#b91c1c,#e74c3c);
 }
 
 .card.orange{
-  background:linear-gradient(135deg,#d83b00,#ff5a00);
-  color:white;
+  background:linear-gradient(135deg,#c05600,#ff8c00);
 }
 
 .card.yellow{
-  background:linear-gradient(135deg,#f1c40f,#ffd84d);
+  background:linear-gradient(135deg,#ff8c00,#f1c40f);
   color:#071f47;
 }
 
 .card.green{
-  background:linear-gradient(135deg,#138d75,#22c55e);
+  background:linear-gradient(135deg,#138d75,#2ecc71);
 }
 
 .card.purple{
@@ -696,7 +686,7 @@ h1{
 }
 
 .card.gray{
-  background:linear-gradient(135deg,#6b7280,#9e9e9e);
+  background:linear-gradient(135deg,#6b7280,#95a5a6);
 }
 
 .card h2{
@@ -773,7 +763,7 @@ canvas{
 .module-line{
   flex:1;
   height:3px;
-  background:linear-gradient(90deg,transparent,#ff5a00,transparent);
+  background:linear-gradient(90deg,transparent,#ff8c00,transparent);
 }
 
 .module-main-title{
@@ -787,7 +777,7 @@ canvas{
   content:"";
   width:130px;
   height:6px;
-  background:#ff5a00;
+  background:#ff8c00;
   position:absolute;
   left:50%;
   transform:translateX(-50%);
@@ -811,7 +801,7 @@ canvas{
   color:#071f47;
   font-weight:bold;
   margin-bottom:25px;
-  border-left:8px solid #ff5a00;
+  border-left:8px solid #ff8c00;
   padding-left:12px;
 }
 
@@ -1021,7 +1011,7 @@ canvas{
 
         <div class="card orange">
           <h2 id="fratHigh">0</h2>
-          <p>High FRAT</p>
+          <p>High Risk FRAT</p>
         </div>
 
         <div class="card red">
