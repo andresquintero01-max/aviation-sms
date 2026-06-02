@@ -16,57 +16,137 @@ body{
   font-family:'Segoe UI', Arial, sans-serif;
   min-height:100vh;
   background:
-  radial-gradient(circle at top left, rgba(255,255,255,0.18), transparent 28%),
-  linear-gradient(135deg,#061b3d,#082b66,#1450b8);
+  radial-gradient(circle at top left, rgba(255,152,0,0.30), transparent 30%),
+  radial-gradient(circle at bottom right, rgba(28,99,219,0.45), transparent 38%),
+  linear-gradient(rgba(5,20,55,0.86),rgba(5,20,55,0.94)),
+  url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
   padding:35px;
 }
 
 .container{
-  max-width:1250px;
+  max-width:1300px;
   margin:auto;
-  background:rgba(255,255,255,0.97);
-  padding:45px;
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(14px);
+  padding:50px;
+  border-radius:40px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.45);
+  position:relative;
+  overflow:hidden;
+}
+
+.container::before{
+  content:"";
+  position:absolute;
+  width:480px;
+  height:480px;
+  background:radial-gradient(circle,rgba(20,80,184,0.18),transparent 70%);
+  top:-200px;
+  right:-160px;
+}
+
+.container::after{
+  content:"";
+  position:absolute;
+  width:340px;
+  height:340px;
+  background:radial-gradient(circle,rgba(255,152,0,0.18),transparent 70%);
+  bottom:-150px;
+  left:-120px;
+}
+
+.content{
+  position:relative;
+  z-index:2;
+}
+
+.logo{
+  width:112px;
+  height:112px;
+  margin:0 auto 20px;
   border-radius:32px;
-  box-shadow:0 25px 65px rgba(0,0,0,0.35);
+  background:linear-gradient(135deg,#071f47,#1450b8,#22b573);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:50px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.30);
+}
+
+.badge{
+  display:block;
+  width:max-content;
+  margin:0 auto 16px;
+  background:#eaf2ff;
+  color:#071f47;
+  padding:10px 24px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:1.8px;
 }
 
 h1{
   text-align:center;
   color:#071f47;
-  font-size:54px;
-  margin-bottom:8px;
+  font-size:58px;
+  margin-bottom:10px;
+  font-weight:900;
 }
 
 .description{
   text-align:center;
-  color:#555;
-  font-size:18px;
+  color:#56657d;
+  font-size:19px;
   margin-bottom:28px;
+  font-weight:500;
 }
 
-.top-actions{
+.title-line{
+  width:230px;
+  height:6px;
+  margin:0 auto 32px;
+  border-radius:10px;
+  background:linear-gradient(90deg,transparent,#1450b8,#22b573,#ff9800,transparent);
+}
+
+.top-actions,
+.bottom-buttons{
   display:flex;
   justify-content:center;
-  flex-wrap:wrap;
   gap:14px;
-  margin-bottom:22px;
+  flex-wrap:wrap;
+  margin-bottom:30px;
+  background:#f8fbff;
+  padding:18px;
+  border-radius:24px;
+  border:1px solid #e5e7eb;
+  box-shadow:0 14px 32px rgba(0,0,0,0.10);
+}
+
+.bottom-buttons{
+  margin-top:40px;
+  margin-bottom:0;
 }
 
 .btn{
   border:none;
   color:white;
-  padding:13px 25px;
-  border-radius:14px;
+  padding:15px 28px;
+  border-radius:16px;
   font-size:15px;
-  font-weight:bold;
+  font-weight:900;
   cursor:pointer;
-  margin:6px;
   transition:0.25s;
+  box-shadow:0 10px 22px rgba(0,0,0,0.22);
 }
 
 .btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 18px rgba(0,0,0,0.25);
+  transform:translateY(-3px);
 }
 
 .filter-btn{
@@ -74,57 +154,107 @@ h1{
 }
 
 .excel-btn{
-  background:linear-gradient(135deg,#0b8a3a,#22c55e);
+  background:linear-gradient(135deg,#047857,#22c55e);
 }
 
-.back-btn{
-  background:linear-gradient(135deg,#c40000,#ff2b2b);
+.moc-btn{
+  background:linear-gradient(135deg,#d83b00,#ff9800);
 }
 
 .home-btn{
-  background:linear-gradient(135deg,#071f47,#0b2a66);
+  background:linear-gradient(135deg,#071f47,#1450b8);
+}
+
+.open-btn{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+}
+
+.save-btn{
+  background:linear-gradient(135deg,#047857,#22c55e);
+}
+
+.status-btn{
+  background:linear-gradient(135deg,#6b21a8,#9333ea);
+}
+
+.delete-btn{
+  background:linear-gradient(135deg,#dc2626,#ef4444);
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  padding:0;
+  font-size:20px;
 }
 
 .filter-panel{
-  background:#f8fbff;
-  border:1px solid #c8d8f0;
-  padding:20px;
-  border-radius:18px;
-  margin-bottom:28px;
   display:grid;
   grid-template-columns:1.2fr 0.8fr 1fr 1fr;
   gap:14px;
+  background:#f8fbff;
+  border:1px solid #e5e7eb;
+  padding:22px;
+  border-radius:26px;
+  margin-bottom:28px;
+  box-shadow:0 14px 32px rgba(0,0,0,0.10);
 }
 
 .filter-panel input,
 .filter-panel select{
   width:100%;
-  padding:14px;
-  border:1px solid #b8c7da;
-  border-radius:12px;
+  padding:15px;
+  border:1px solid #cbd5e1;
+  border-radius:14px;
   font-size:15px;
   background:white;
+  outline:none;
+}
+
+.filter-panel input:focus,
+.filter-panel select:focus{
+  border-color:#1450b8;
+  box-shadow:0 0 0 4px rgba(20,80,184,0.12);
 }
 
 .counter{
   text-align:center;
   color:#071f47;
-  font-weight:bold;
-  margin-bottom:18px;
+  font-weight:900;
+  margin-bottom:20px;
+  font-size:17px;
 }
 
 .report-card{
-  background:white;
-  border-radius:24px;
-  padding:24px;
-  margin-bottom:22px;
-  box-shadow:0 10px 28px rgba(0,0,0,0.12);
-  border-left:9px solid #071f47;
+  background:linear-gradient(135deg,#ffffff,#f8fbff);
+  border-radius:28px;
+  padding:26px;
+  margin-bottom:24px;
+  box-shadow:0 18px 45px rgba(0,0,0,0.14);
+  border-left:10px solid #1450b8;
   transition:0.25s;
+  position:relative;
+  overflow:hidden;
+}
+
+.report-card::before{
+  content:"";
+  position:absolute;
+  width:320px;
+  height:320px;
+  background:radial-gradient(circle,rgba(20,80,184,0.10),transparent 70%);
+  top:-160px;
+  right:-120px;
 }
 
 .report-card:hover{
-  transform:scale(1.01);
+  transform:translateY(-5px);
+  box-shadow:0 26px 60px rgba(0,0,0,0.20);
+}
+
+.card-header,
+.details-grid,
+.actions{
+  position:relative;
+  z-index:2;
 }
 
 .card-header{
@@ -137,41 +267,42 @@ h1{
 }
 
 .event-title{
-  font-size:25px;
-  font-weight:800;
+  font-size:26px;
+  font-weight:900;
   color:#071f47;
   margin-bottom:6px;
 }
 
 .meta{
-  color:#555;
+  color:#56657d;
   font-size:15px;
   line-height:1.7;
 }
 
 .status{
   display:inline-block;
-  padding:7px 16px;
+  padding:8px 18px;
   border-radius:999px;
   color:white;
   font-size:13px;
-  font-weight:bold;
+  font-weight:900;
+  box-shadow:0 8px 18px rgba(0,0,0,0.18);
 }
 
 .status.open{
-  background:#0b8a3a;
+  background:linear-gradient(135deg,#047857,#22c55e);
 }
 
 .status.closed{
-  background:#555;
+  background:linear-gradient(135deg,#475569,#64748b);
 }
 
 .status.in-progress{
-  background:#1450b8;
+  background:linear-gradient(135deg,#071f47,#1450b8);
 }
 
 .status.pending-corrective-action{
-  background:#ff9800;
+  background:linear-gradient(135deg,#d83b00,#ff9800);
 }
 
 .details-grid{
@@ -183,15 +314,15 @@ h1{
 
 .detail-box{
   background:#f4f7fb;
-  padding:14px;
-  border-radius:16px;
+  padding:15px;
+  border-radius:18px;
   border:1px solid #dce3ef;
 }
 
 .detail-label{
   font-size:12px;
-  color:#777;
-  font-weight:bold;
+  color:#64748b;
+  font-weight:900;
   text-transform:uppercase;
   margin-bottom:6px;
 }
@@ -199,23 +330,23 @@ h1{
 .detail-value{
   font-size:15px;
   color:#071f47;
-  font-weight:700;
+  font-weight:800;
   word-break:break-word;
 }
 
 .moc-id-input{
   width:100%;
-  padding:11px;
+  padding:12px;
   border:1px solid #cbd5e1;
-  border-radius:12px;
+  border-radius:14px;
   font-size:15px;
-  font-weight:bold;
+  font-weight:800;
   color:#071f47;
 }
 
 .small-note{
   font-size:12px;
-  color:#777;
+  color:#64748b;
   margin-top:6px;
 }
 
@@ -227,53 +358,51 @@ h1{
   align-items:center;
 }
 
-.open-btn{
-  background:linear-gradient(135deg,#004aad,#1473e6);
-}
-
-.save-btn{
-  background:linear-gradient(135deg,#006b3c,#00a65a);
-}
-
-.status-btn{
-  background:linear-gradient(135deg,#6b21a8,#9333ea);
-}
-
-.delete-btn{
-  background:linear-gradient(135deg,#d00000,#ff1f1f);
-  width:48px;
-  height:48px;
-  border-radius:50%;
-  padding:0;
-  font-size:20px;
-}
-
 .separator-buttons{
-  text-align:center;
-  margin:28px 0;
+  margin:30px 0;
   padding:18px;
-  background:#eef4ff;
-  border-radius:22px;
-  border:1px dashed #9bb7e0;
+  background:rgba(255,255,255,0.18);
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,0.30);
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
+  backdrop-filter:blur(8px);
 }
 
 .no-data{
   text-align:center;
-  color:#777;
-  font-size:19px;
+  color:#56657d;
+  font-size:20px;
   margin-top:35px;
-  background:#f4f6f8;
-  padding:35px;
-  border-radius:22px;
+  background:#f8fbff;
+  padding:42px;
+  border-radius:24px;
+  border:1px solid #e5e7eb;
+  font-weight:700;
+}
+
+.footer{
+  margin-top:35px;
+  text-align:center;
+  color:#51617b;
+  font-size:14px;
+  letter-spacing:3px;
+  font-weight:900;
 }
 
 @media(max-width:900px){
-  h1{
-    font-size:40px;
+  body{
+    padding:20px;
   }
 
   .container{
-    padding:25px;
+    padding:30px 22px;
+  }
+
+  h1{
+    font-size:42px;
   }
 
   .filter-panel{
@@ -283,6 +412,10 @@ h1{
   .event-title{
     font-size:21px;
   }
+
+  .btn{
+    width:100%;
+  }
 }
 </style>
 </head>
@@ -290,6 +423,11 @@ h1{
 <body>
 
 <div class="container">
+<div class="content">
+
+  <div class="logo">📊</div>
+
+  <div class="badge">MANAGEMENT OF CHANGE DATABASE</div>
 
   <h1>MOC Database</h1>
 
@@ -297,10 +435,12 @@ h1{
     Stored Management of Change Safety Assurance Reports
   </div>
 
+  <div class="title-line"></div>
+
   <div class="top-actions">
     <button class="btn filter-btn" onclick="toggleFilters()">🔎 Filters</button>
     <button class="btn excel-btn" onclick="downloadExcel()">📥 Download Excel</button>
-    <button class="btn back-btn" onclick="window.location.href='Safety-Assurance-Management-of-Change.html'">← Back to MOC</button>
+    <button class="btn moc-btn" onclick="window.location.href='Safety-Assurance-Management-of-Change.html'">📋 MOC</button>
     <button class="btn home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
   </div>
 
@@ -342,6 +482,17 @@ h1{
     No MOC reports found.
   </div>
 
+  <div class="bottom-buttons">
+    <button class="btn filter-btn" onclick="toggleFilters()">🔎 Filters</button>
+    <button class="btn moc-btn" onclick="window.location.href='Safety-Assurance-Management-of-Change.html'">📋 MOC</button>
+    <button class="btn home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+  </div>
+
+  <div class="footer">
+    AVIATION SAFETY MANAGEMENT PLATFORM
+  </div>
+
+</div>
 </div>
 
 <script type="module">
@@ -544,12 +695,16 @@ function renderReports(reports){
       separator.className = "separator-buttons";
 
       separator.innerHTML = `
-        <button class="btn back-btn" onclick="window.location.href='Safety-Assurance-Management-of-Change.html'">
-          Back to MOC
+        <button class="btn filter-btn" onclick="toggleFilters()">
+          🔎 Filters
+        </button>
+
+        <button class="btn moc-btn" onclick="window.location.href='Safety-Assurance-Management-of-Change.html'">
+          📋 MOC
         </button>
 
         <button class="btn home-btn" onclick="window.location.href='index.html'">
-          Home
+          🏠 Home
         </button>
       `;
 
@@ -756,4 +911,3 @@ window.downloadExcel = function(){
 
 </body>
 </html>
-
