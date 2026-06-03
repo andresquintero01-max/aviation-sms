@@ -6,398 +6,313 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-    font-family:'Segoe UI', Arial, sans-serif;
-    min-height:100vh;
-    background:
-    radial-gradient(circle at top left, rgba(255,152,0,0.30), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(28,99,219,0.45), transparent 38%),
-    linear-gradient(rgba(5,20,55,0.86), rgba(5,20,55,0.94)),
-    url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
-    background-size:cover;
-    background-position:center;
-    background-attachment:fixed;
-    padding:35px;
+  font-family:'Segoe UI',Arial,sans-serif;
+  min-height:100vh;
+  background:
+  radial-gradient(circle at top left, rgba(255,152,0,0.30), transparent 30%),
+  radial-gradient(circle at bottom right, rgba(28,99,219,0.45), transparent 38%),
+  linear-gradient(rgba(5,20,55,0.86), rgba(5,20,55,0.94)),
+  url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+  padding:35px;
 }
 
 .container{
-    max-width:1220px;
-    margin:auto;
-    background:rgba(255,255,255,0.96);
-    backdrop-filter:blur(14px);
-    border-radius:40px;
-    padding:55px;
-    box-shadow:0 30px 80px rgba(0,0,0,0.45);
-    position:relative;
-    overflow:hidden;
-}
-
-.container::before{
-    content:"";
-    position:absolute;
-    width:470px;
-    height:470px;
-    background:radial-gradient(circle,rgba(20,80,184,0.18),transparent 70%);
-    top:-190px;
-    right:-150px;
-}
-
-.container::after{
-    content:"";
-    position:absolute;
-    width:340px;
-    height:340px;
-    background:radial-gradient(circle,rgba(255,152,0,0.18),transparent 70%);
-    bottom:-150px;
-    left:-120px;
-}
-
-.content{
-    position:relative;
-    z-index:2;
+  max-width:1220px;
+  margin:auto;
+  background:rgba(255,255,255,0.96);
+  border-radius:40px;
+  padding:55px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.45);
 }
 
 .logo{
-    width:112px;
-    height:112px;
-    margin:0 auto 22px;
-    border-radius:32px;
-    background:linear-gradient(135deg,#071f47,#1450b8,#ff9800);
-    color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:50px;
-    box-shadow:0 18px 40px rgba(0,0,0,0.30);
+  width:112px;
+  height:112px;
+  margin:0 auto 22px;
+  border-radius:32px;
+  background:linear-gradient(135deg,#071f47,#1450b8,#ff9800);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:50px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.30);
 }
 
 .badge{
-    display:block;
-    width:max-content;
-    margin:0 auto 16px auto;
-    background:#eaf2ff;
-    color:#071f47;
-    padding:10px 24px;
-    border-radius:999px;
-    font-size:14px;
-    font-weight:900;
-    letter-spacing:1.8px;
+  display:block;
+  width:max-content;
+  margin:0 auto 16px;
+  background:#eaf2ff;
+  color:#071f47;
+  padding:10px 24px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:1.8px;
 }
 
 h1{
-    text-align:center;
-    color:#071f47;
-    font-size:58px;
-    margin-bottom:12px;
-    font-weight:900;
+  text-align:center;
+  color:#071f47;
+  font-size:58px;
+  margin-bottom:12px;
+  font-weight:900;
 }
 
 .subtitle{
-    text-align:center;
-    color:#56657d;
-    font-size:19px;
-    margin-bottom:22px;
-    line-height:1.6;
-    font-weight:500;
+  text-align:center;
+  color:#56657d;
+  font-size:19px;
+  margin-bottom:22px;
+  line-height:1.6;
 }
 
 .title-line{
-    width:230px;
-    height:6px;
-    margin:0 auto 38px;
-    border-radius:10px;
-    background:linear-gradient(90deg,transparent,#1450b8,#ff9800,transparent);
+  width:230px;
+  height:6px;
+  margin:0 auto 38px;
+  border-radius:10px;
+  background:linear-gradient(90deg,transparent,#1450b8,#ff9800,transparent);
 }
 
 .top-buttons{
-    display:flex;
-    gap:14px;
-    flex-wrap:wrap;
-    justify-content:center;
-    align-items:center;
-    background:#f8fbff;
-    padding:20px;
-    border-radius:26px;
-    border:1px solid #e5e7eb;
-    box-shadow:0 14px 32px rgba(0,0,0,0.10);
-    margin-bottom:30px;
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  justify-content:center;
+  background:#f8fbff;
+  padding:20px;
+  border-radius:26px;
+  border:1px solid #e5e7eb;
+  box-shadow:0 14px 32px rgba(0,0,0,0.10);
+  margin-bottom:30px;
 }
 
-.btn{
-    border:none;
-    color:white;
-    padding:15px 26px;
-    border-radius:16px;
-    font-size:15px;
-    font-weight:900;
-    cursor:pointer;
-    transition:0.25s;
-    box-shadow:0 10px 22px rgba(0,0,0,0.22);
+button,.btn{
+  border:none;
+  color:white;
+  padding:15px 24px;
+  border-radius:16px;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+  transition:0.25s;
+  box-shadow:0 10px 22px rgba(0,0,0,0.22);
 }
 
-.btn:hover{
-    transform:translateY(-3px);
-}
+button:hover,.btn:hover{transform:translateY(-3px);}
 
-.culture-btn{
-    background:linear-gradient(135deg,#5b21b6,#8b5cf6);
-}
+.culture-btn{background:linear-gradient(135deg,#5b21b6,#8b5cf6);}
+.print-btn{background:linear-gradient(135deg,#047857,#22c55e);}
+.add-btn{background:linear-gradient(135deg,#d83b00,#ff9800);}
+.home-btn{background:linear-gradient(135deg,#071f47,#1450b8);}
+.save-btn{background:linear-gradient(135deg,#071f47,#1450b8);}
+.delete-btn{background:linear-gradient(135deg,#dc2626,#ef4444);}
+.open-btn{background:linear-gradient(135deg,#0077b6,#00b4d8);}
+.submit-btn{background:linear-gradient(135deg,#047857,#22c55e);}
 
-.print-btn{
-    background:linear-gradient(135deg,#047857,#22c55e);
-}
-
-.add-btn{
-    background:linear-gradient(135deg,#d83b00,#ff9800);
-}
-
-.home-btn{
-    background:linear-gradient(135deg,#071f47,#1450b8);
-}
-
-.save-btn{
-    background:linear-gradient(135deg,#071f47,#1450b8);
-    color:white;
-}
-
-.delete-btn{
-    background:linear-gradient(135deg,#dc2626,#ef4444);
-    color:white;
-}
-
-.open-btn{
-    background:linear-gradient(135deg,#0077b6,#00b4d8);
-    color:white;
-}
-
-.form-box{
-    background:linear-gradient(135deg,#ffffff,#f8fbff);
-    padding:28px;
-    border-radius:28px;
-    margin-bottom:32px;
-    border-left:10px solid #1450b8;
-    box-shadow:0 16px 35px rgba(0,0,0,0.12);
+.form-box,.ack-box,.records-box{
+  background:linear-gradient(135deg,#ffffff,#f8fbff);
+  padding:28px;
+  border-radius:28px;
+  margin-bottom:32px;
+  border-left:10px solid #1450b8;
+  box-shadow:0 16px 35px rgba(0,0,0,0.12);
 }
 
 label{
-    display:block;
-    font-weight:900;
-    color:#071f47;
-    margin-top:15px;
-    margin-bottom:8px;
+  display:block;
+  font-weight:900;
+  color:#071f47;
+  margin-top:15px;
+  margin-bottom:8px;
 }
 
-input,
-select,
-textarea{
-    width:100%;
-    padding:15px;
-    border:1px solid #cbd5e1;
-    border-radius:14px;
-    font-size:16px;
-    font-family:'Segoe UI', Arial, sans-serif;
-    outline:none;
-    background:#f8fbff;
-}
-
-input:focus,
-select:focus,
-textarea:focus{
-    border-color:#1450b8;
-    box-shadow:0 0 0 4px rgba(20,80,184,0.12);
-    background:white;
+input,select,textarea{
+  width:100%;
+  padding:15px;
+  border:1px solid #cbd5e1;
+  border-radius:14px;
+  font-size:16px;
+  font-family:'Segoe UI',Arial,sans-serif;
+  background:#f8fbff;
 }
 
 textarea{
-    min-height:125px;
-    resize:vertical;
-}
-
-button{
-    padding:14px 20px;
-    border:none;
-    border-radius:16px;
-    cursor:pointer;
-    font-size:16px;
-    font-weight:900;
-    margin-top:15px;
-    transition:0.25s;
-}
-
-button:hover{
-    transform:translateY(-3px);
+  min-height:120px;
+  resize:vertical;
 }
 
 .card{
-    background:linear-gradient(135deg,#ffffff,#f8fbff);
-    border-radius:28px;
-    padding:26px;
-    margin-bottom:22px;
-    box-shadow:0 18px 45px rgba(0,0,0,0.14);
-    border-left:10px solid #1450b8;
-    position:relative;
-    overflow:hidden;
-}
-
-.card::before{
-    content:"";
-    position:absolute;
-    width:320px;
-    height:320px;
-    background:radial-gradient(circle,rgba(20,80,184,0.10),transparent 70%);
-    top:-160px;
-    right:-120px;
-}
-
-.card h2,
-.meta,
-.description,
-.actions,
-.status{
-    position:relative;
-    z-index:2;
+  background:linear-gradient(135deg,#ffffff,#f8fbff);
+  border-radius:28px;
+  padding:26px;
+  margin-bottom:22px;
+  box-shadow:0 18px 45px rgba(0,0,0,0.14);
+  border-left:10px solid #1450b8;
 }
 
 .card h2{
-    color:#071f47;
-    margin-bottom:10px;
-    font-size:28px;
-    font-weight:900;
+  color:#071f47;
+  margin-bottom:10px;
+  font-size:28px;
+  font-weight:900;
 }
 
 .meta{
-    color:#56657d;
-    font-size:15px;
-    margin-bottom:10px;
-    line-height:1.6;
+  color:#56657d;
+  font-size:15px;
+  margin-bottom:10px;
+  line-height:1.6;
 }
 
 .description{
-    color:#333;
-    line-height:1.7;
-    margin-top:12px;
-    background:#f8fafc;
-    padding:16px;
-    border-radius:18px;
-    border:1px solid #e5e7eb;
+  color:#333;
+  line-height:1.7;
+  margin-top:12px;
+  background:#f8fafc;
+  padding:16px;
+  border-radius:18px;
+  border:1px solid #e5e7eb;
+  white-space:pre-wrap;
 }
 
 .actions{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:15px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:15px;
 }
 
 .status{
-    display:inline-block;
-    padding:8px 15px;
-    border-radius:999px;
-    font-weight:900;
-    color:white;
-    margin-top:8px;
-    box-shadow:0 8px 18px rgba(0,0,0,0.18);
+  display:inline-block;
+  padding:8px 15px;
+  border-radius:999px;
+  font-weight:900;
+  color:white;
+  margin-top:8px;
 }
 
-.Alert{
-    background:linear-gradient(135deg,#dc2626,#ef4444);
+.Alert{background:linear-gradient(135deg,#dc2626,#ef4444);}
+.Bulletin{background:linear-gradient(135deg,#071f47,#1450b8);}
+.Communication{background:linear-gradient(135deg,#047857,#22c55e);}
+
+.question-box{
+  background:white;
+  padding:18px;
+  border-radius:18px;
+  margin-top:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
 }
 
-.Bulletin{
-    background:linear-gradient(135deg,#071f47,#1450b8);
-}
-
-.Communication{
-    background:linear-gradient(135deg,#047857,#22c55e);
+.record-card{
+  background:white;
+  padding:18px;
+  border-radius:18px;
+  margin-top:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.10);
+  color:#071f47;
+  line-height:1.7;
 }
 
 .empty{
-    text-align:center;
-    color:#56657d;
-    font-size:19px;
-    padding:35px;
-    background:#f8fbff;
-    border-radius:24px;
-    border:1px solid #e5e7eb;
-    font-weight:700;
+  text-align:center;
+  color:#56657d;
+  font-size:19px;
+  padding:35px;
+  background:#f8fbff;
+  border-radius:24px;
+  border:1px solid #e5e7eb;
+  font-weight:700;
 }
 
+.hidden{display:none;}
+
+.admin-note{
+  background:#fff7ed;
+  color:#9a3412;
+  padding:16px;
+  border-radius:16px;
+  margin-top:18px;
+  font-weight:800;
+}
+
+.result-box{
+  padding:22px;
+  border-radius:22px;
+  margin-bottom:25px;
+  font-size:18px;
+  font-weight:900;
+}
+
+.success{background:#dcfce7;color:#166534;}
+.error{background:#fee2e2;color:#991b1b;}
+
 .bottom-buttons{
-    margin-top:35px;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
+  margin-top:35px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
 }
 
 .bottom-buttons button{
-    min-height:64px;
-    margin-top:0;
-    color:white;
-    font-size:20px;
+  min-height:64px;
+  font-size:20px;
 }
 
 .footer{
-    margin-top:35px;
-    text-align:center;
-    color:#51617b;
-    font-size:14px;
-    letter-spacing:3px;
-    font-weight:900;
+  margin-top:35px;
+  text-align:center;
+  color:#51617b;
+  font-size:14px;
+  letter-spacing:3px;
+  font-weight:900;
 }
 
+.print-title{display:none;}
+
 @media print{
-    .form-box,
-    .top-buttons,
-    .actions,
-    .bottom-buttons,
-    .footer{
-        display:none;
-    }
+  .form-box,.top-buttons,.actions,.bottom-buttons,.footer,.ack-box,.delete-btn{
+    display:none!important;
+  }
 
-    body{
-        background:white;
-        padding:0;
-    }
+  body{background:white!important;padding:0!important;}
 
-    .container{
-        box-shadow:none;
-        border-radius:0;
-    }
+  .container{
+    box-shadow:none!important;
+    border-radius:0!important;
+  }
+
+  .records-box{
+    display:block!important;
+    box-shadow:none!important;
+    border-left:none!important;
+    background:white!important;
+  }
+
+  .print-title{
+    display:block!important;
+    text-align:center;
+    color:#071f47;
+    font-size:28px;
+    margin-bottom:25px;
+    font-weight:900;
+  }
 }
 
 @media(max-width:800px){
-    body{
-        padding:20px;
-    }
-
-    .container{
-        padding:35px 22px;
-    }
-
-    h1{
-        font-size:40px;
-    }
-
-    .subtitle{
-        font-size:17px;
-    }
-
-    .top-buttons,
-    .bottom-buttons{
-        grid-template-columns:1fr;
-        flex-direction:column;
-    }
-
-    .btn,
-    .bottom-buttons button{
-        width:100%;
-    }
+  body{padding:20px;}
+  .container{padding:35px 22px;}
+  h1{font-size:40px;}
+  .top-buttons,.bottom-buttons{grid-template-columns:1fr;flex-direction:column;}
+  button,.btn{width:100%;}
 }
 </style>
 </head>
@@ -405,253 +320,517 @@ button:hover{
 <body>
 
 <div class="container">
-<div class="content">
 
-    <div class="logo">📢</div>
+  <div class="logo">📢</div>
+  <div class="badge">SAFETY COMMUNICATION</div>
 
-    <div class="badge">SAFETY COMMUNICATION</div>
+  <h1>Safety Bulletins & Alerts</h1>
 
-    <h1>Safety Bulletins & Alerts</h1>
+  <div class="subtitle">
+    Safety bulletins, alerts, lessons learned and safety promotion acknowledgment records.
+  </div>
 
-    <div class="subtitle">
-        Upload, manage and communicate safety bulletins, alerts, lessons learned and safety promotion material.
+  <div class="title-line"></div>
+
+  <div class="top-buttons">
+    <button class="btn culture-btn" onclick="goBack()">👥 Safety Promotion Culture</button>
+    <button class="btn print-btn admin-only" onclick="window.print()">🖨 Print Records</button>
+    <button class="btn add-btn admin-only" onclick="newBulletin()">➕ Add New Bulletin</button>
+    <button class="btn home-btn" onclick="goHome()">🏠 Home</button>
+  </div>
+
+  <div class="form-box admin-only" id="formBox">
+
+    <label>Type</label>
+    <select id="type">
+      <option value="Bulletin">Safety Bulletin</option>
+      <option value="Alert">Safety Alert</option>
+      <option value="Communication">Safety Communication</option>
+    </select>
+
+    <label>Title</label>
+    <input type="text" id="title" placeholder="Example: Tool Control Safety Alert">
+
+    <label>Reference / Report Number</label>
+    <input type="text" id="reference" placeholder="Example: SB-2026-001">
+
+    <label>Issue Date</label>
+    <input type="date" id="date">
+
+    <label>Department / Area</label>
+    <input type="text" id="area" placeholder="Example: Maintenance, QA, Tool Room, Ramp">
+
+    <label>Description / Safety Message</label>
+    <textarea id="description" placeholder="Write the safety message, lesson learned, hazard, corrective action or communication here..."></textarea>
+
+    <label>Google Drive Link</label>
+    <input type="url" id="driveLink" placeholder="Paste Google Drive link here">
+
+    <label>Question 1</label>
+    <input type="text" id="question1" placeholder="Example: What is the main risk described in this bulletin?">
+
+    <label>Question 2</label>
+    <input type="text" id="question2" placeholder="Example: What action must be taken to prevent recurrence?">
+
+    <button class="save-btn" onclick="saveBulletin()">💾 Save Bulletin / Alert</button>
+
+    <div class="admin-note">
+      Admin view: you can create bulletins and questions. Technicians can only read, answer and submit acknowledgment.
     </div>
 
-    <div class="title-line"></div>
+  </div>
 
-    <div class="top-buttons">
-        <button class="btn culture-btn" onclick="goBack()">👥 Safety Promotion Culture</button>
-        <button class="btn print-btn" onclick="window.print()">🖨️ Print Page</button>
-        <button class="btn add-btn" onclick="newBulletin()">➕ Add New Bulletin</button>
-        <button class="btn home-btn" onclick="goHome()">🏠 Home</button>
+  <div class="result-box hidden" id="resultBox"></div>
+
+  <div id="bulletinsList"></div>
+
+  <div class="ack-box hidden" id="ackBox">
+
+    <h2 style="color:#071f47;margin-bottom:10px;">Bulletin Acknowledgment</h2>
+
+    <div class="meta" id="selectedBulletinInfo"></div>
+
+    <label>Employee Name</label>
+    <input type="text" id="employeeName" placeholder="Enter employee name">
+
+    <label>Employee Number / Company ID</label>
+    <input type="text" id="employeeId" placeholder="Enter employee number">
+
+    <label>Date</label>
+    <input type="text" id="ackDate" readonly>
+
+    <div class="question-box">
+      <strong id="displayQuestion1">Question 1</strong>
+      <textarea id="answer1" placeholder="Write your answer here..."></textarea>
     </div>
 
-    <div class="form-box" id="formBox">
-
-        <label>Type</label>
-        <select id="type">
-            <option value="Bulletin">Safety Bulletin</option>
-            <option value="Alert">Safety Alert</option>
-            <option value="Communication">Safety Communication</option>
-        </select>
-
-        <label>Title</label>
-        <input type="text" id="title" placeholder="Example: Tool Control Safety Alert">
-
-        <label>Reference / Report Number</label>
-        <input type="text" id="reference" placeholder="Example: SB-2026-001">
-
-        <label>Issue Date</label>
-        <input type="date" id="date">
-
-        <label>Department / Area</label>
-        <input type="text" id="area" placeholder="Example: Maintenance, QA, Tool Room, Ramp">
-
-        <label>Description</label>
-        <textarea id="description" placeholder="Write the safety message, lesson learned, hazard, corrective action or communication here..."></textarea>
-
-        <label>Google Drive Link</label>
-        <input type="url" id="driveLink" placeholder="Paste Google Drive link here">
-
-        <button class="save-btn" onclick="saveBulletin()">Save Bulletin / Alert</button>
-
+    <div class="question-box">
+      <strong id="displayQuestion2">Question 2</strong>
+      <textarea id="answer2" placeholder="Write your answer here..."></textarea>
     </div>
 
-    <div id="bulletinsList"></div>
+    <button class="submit-btn" onclick="submitAcknowledgment()">✅ Submit Acknowledgment</button>
 
-    <div class="bottom-buttons">
-        <button class="home-btn" onclick="goHome()">🏠 Home</button>
-        <button class="culture-btn" onclick="goBack()">👥 Safety Promotion Culture</button>
-    </div>
+  </div>
 
-    <div class="footer">
-        AVIATION SAFETY MANAGEMENT PLATFORM
-    </div>
+  <div class="records-box admin-only">
+    <div class="print-title">Safety Bulletin Acknowledgment Records</div>
+    <h2 style="color:#071f47;">Safety Promotion Records</h2>
+    <div id="recordsList"></div>
+  </div>
+
+  <div class="bottom-buttons">
+    <button class="home-btn" onclick="goHome()">🏠 Home</button>
+    <button class="culture-btn" onclick="goBack()">👥 Safety Promotion Culture</button>
+  </div>
+
+  <div class="footer">
+    AVIATION SAFETY MANAGEMENT PLATFORM
+  </div>
 
 </div>
-</div>
 
-<script>
+<script type="module">
 
-let bulletins =
-JSON.parse(localStorage.getItem("safetyBulletinsAlerts")) || [];
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
-function saveBulletin(){
+import {
+  getDatabase,
+  ref,
+  set,
+  push,
+  onValue,
+  remove
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    const type =
-    document.getElementById("type").value;
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
 
-    const title =
-    document.getElementById("title").value;
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-    const reference =
-    document.getElementById("reference").value;
+let userRole = (localStorage.getItem("userRole") || "tech").toLowerCase();
 
-    const date =
-    document.getElementById("date").value;
+const isAdmin =
+userRole === "admin" ||
+userRole === "manager" ||
+userRole === "sms manager";
 
-    const area =
-    document.getElementById("area").value;
+const bulletinsRef = ref(db, "safetyPromotion/bulletins");
+const recordsRef = ref(db, "safetyPromotion/bulletinAcknowledgments");
 
-    const description =
-    document.getElementById("description").value;
+let bulletins = [];
+let selectedBulletin = null;
 
-    const driveLink =
-    document.getElementById("driveLink").value;
-
-    if(title.trim() === ""){
-        alert("Please enter a title.");
-        return;
-    }
-
-    const bulletin = {
-        id: Date.now(),
-        type:type,
-        title:title,
-        reference:reference,
-        date:date,
-        area:area,
-        description:description,
-        driveLink:driveLink
-    };
-
-    bulletins.push(bulletin);
-
-    localStorage.setItem(
-        "safetyBulletinsAlerts",
-        JSON.stringify(bulletins)
-    );
-
-    clearForm();
-    displayBulletins();
-
-    alert("Safety Bulletin / Alert saved successfully.");
+function applyRoleAccess(){
+  if(!isAdmin){
+    document.querySelectorAll(".admin-only").forEach(element => {
+      element.style.display = "none";
+    });
+  }
 }
+
+window.saveBulletin = function(){
+
+  if(!isAdmin){
+    alert("You are not authorized to create bulletins.");
+    return;
+  }
+
+  const type = document.getElementById("type").value;
+  const title = document.getElementById("title").value.trim();
+  const reference = document.getElementById("reference").value.trim();
+  const date = document.getElementById("date").value;
+  const area = document.getElementById("area").value.trim();
+  const description = document.getElementById("description").value.trim();
+  const driveLink = document.getElementById("driveLink").value.trim();
+  const question1 = document.getElementById("question1").value.trim();
+  const question2 = document.getElementById("question2").value.trim();
+
+  if(title === ""){
+    alert("Please enter a title.");
+    return;
+  }
+
+  if(description === ""){
+    alert("Please enter the bulletin description.");
+    return;
+  }
+
+  if(question1 === "" || question2 === ""){
+    alert("Please enter both bulletin questions.");
+    return;
+  }
+
+  const newRef = push(bulletinsRef);
+
+  const bulletin = {
+    id:newRef.key,
+    type:type,
+    title:title,
+    reference:reference,
+    date:date,
+    area:area,
+    description:description,
+    driveLink:driveLink,
+    question1:question1,
+    question2:question2,
+    createdDate:new Date().toLocaleString(),
+    timestamp:new Date().toISOString()
+  };
+
+  set(newRef, bulletin).then(() => {
+    clearForm();
+    alert("Safety Bulletin / Alert saved successfully.");
+  });
+};
 
 function displayBulletins(){
 
-    const list =
-    document.getElementById("bulletinsList");
+  const list = document.getElementById("bulletinsList");
+  list.innerHTML = "";
 
-    list.innerHTML = "";
+  if(bulletins.length === 0){
+    list.innerHTML = `<div class="empty">No Safety Bulletins or Alerts saved yet.</div>`;
+    return;
+  }
 
-    if(bulletins.length === 0){
+  bulletins.slice().reverse().forEach(item => {
 
-        list.innerHTML =
-        `<div class="empty">No Safety Bulletins or Alerts saved yet.</div>`;
+    const card = document.createElement("div");
+    card.className = "card";
 
-        return;
+    card.innerHTML = `
+      <h2>${item.title || "Untitled Bulletin"}</h2>
+
+      <div class="meta">
+        <strong>Reference:</strong> ${item.reference || "N/A"} |
+        <strong>Date:</strong> ${item.date || "N/A"} |
+        <strong>Area:</strong> ${item.area || "N/A"}
+      </div>
+
+      <span class="status ${item.type}">
+        ${item.type || "Bulletin"}
+      </span>
+
+      <div class="description">
+        ${item.description || "No description entered."}
+      </div>
+
+      <div class="meta" style="margin-top:12px;">
+        <strong>Attachment / Google Drive:</strong>
+        ${item.driveLink ? "Available" : "No link added"}
+      </div>
+
+      <div class="actions">
+        ${
+          item.driveLink
+          ? `<button class="open-btn" onclick="openDriveLink('${item.id}')">📄 Open Bulletin</button>`
+          : ""
+        }
+
+        <button class="submit-btn" onclick="startAcknowledgment('${item.id}')">
+          ✅ Read & Answer
+        </button>
+
+        ${
+          isAdmin
+          ? `<button class="delete-btn" onclick="deleteBulletin('${item.id}')">🗑 Delete</button>`
+          : ""
+        }
+      </div>
+    `;
+
+    list.appendChild(card);
+  });
+}
+
+function loadBulletins(){
+
+  onValue(bulletinsRef, snapshot => {
+
+    bulletins = [];
+
+    if(snapshot.exists()){
+      snapshot.forEach(child => {
+        bulletins.push({
+          id:child.key,
+          ...child.val()
+        });
+      });
     }
 
-    bulletins
-    .slice()
-    .reverse()
-    .forEach(function(item){
+    displayBulletins();
+  });
+}
 
-        const card =
-        document.createElement("div");
+window.openDriveLink = function(id){
 
-        card.className =
-        "card";
+  const item = bulletins.find(b => b.id === id);
 
-        card.innerHTML = `
-            <h2>${item.title}</h2>
+  if(!item || !item.driveLink){
+    alert("No Google Drive link available.");
+    return;
+  }
 
-            <div class="meta">
-                <strong>Reference:</strong> ${item.reference || "N/A"} |
-                <strong>Date:</strong> ${item.date || "N/A"} |
-                <strong>Area:</strong> ${item.area || "N/A"}
-            </div>
+  window.open(item.driveLink, "_blank");
+};
 
-            <span class="status ${item.type}">
-                ${item.type}
-            </span>
+window.startAcknowledgment = function(id){
 
-            <div class="description">
-                ${item.description || "No description entered."}
-            </div>
+  const item = bulletins.find(b => b.id === id);
 
-            <div class="meta" style="margin-top:12px;">
-                <strong>Google Drive Link:</strong>
-                ${item.driveLink ? "Available" : "No link added"}
-            </div>
+  if(!item){
+    alert("Bulletin not found.");
+    return;
+  }
 
-            <div class="actions">
-                ${
-                    item.driveLink
-                    ? `<button class="open-btn" onclick="openDriveLink(${item.id})">Open Drive Link</button>`
-                    : ""
-                }
+  selectedBulletin = item;
 
-                <button class="delete-btn" onclick="deleteBulletin(${item.id})">
-                    Delete
-                </button>
-            </div>
-        `;
+  document.getElementById("selectedBulletinInfo").innerHTML = `
+    <strong>Bulletin:</strong> ${item.title || "N/A"}<br>
+    <strong>Reference:</strong> ${item.reference || "N/A"}<br>
+    <strong>Type:</strong> ${item.type || "N/A"}
+  `;
 
-        list.appendChild(card);
+  document.getElementById("displayQuestion1").innerText =
+  "1. " + (item.question1 || "Question 1");
 
+  document.getElementById("displayQuestion2").innerText =
+  "2. " + (item.question2 || "Question 2");
+
+  document.getElementById("employeeName").value = "";
+  document.getElementById("employeeId").value = "";
+  document.getElementById("answer1").value = "";
+  document.getElementById("answer2").value = "";
+  document.getElementById("ackDate").value = new Date().toLocaleString();
+
+  document.getElementById("ackBox").classList.remove("hidden");
+  document.getElementById("resultBox").classList.add("hidden");
+
+  document.getElementById("ackBox").scrollIntoView({behavior:"smooth"});
+};
+
+window.submitAcknowledgment = function(){
+
+  if(!selectedBulletin){
+    alert("Please select a bulletin first.");
+    return;
+  }
+
+  const employeeName = document.getElementById("employeeName").value.trim();
+  const employeeId = document.getElementById("employeeId").value.trim();
+  const answer1 = document.getElementById("answer1").value.trim();
+  const answer2 = document.getElementById("answer2").value.trim();
+
+  if(employeeName === "" || employeeId === ""){
+    alert("Please enter employee name and employee number.");
+    return;
+  }
+
+  if(answer1 === "" || answer2 === ""){
+    alert("Please answer both questions.");
+    return;
+  }
+
+  const record = {
+    bulletinId:selectedBulletin.id,
+    bulletinTitle:selectedBulletin.title || "",
+    bulletinReference:selectedBulletin.reference || "",
+    bulletinType:selectedBulletin.type || "",
+    employeeName:employeeName,
+    employeeId:employeeId,
+    question1:selectedBulletin.question1 || "",
+    answer1:answer1,
+    question2:selectedBulletin.question2 || "",
+    answer2:answer2,
+    result:"Completed",
+    date:new Date().toLocaleString(),
+    timestamp:new Date().toISOString()
+  };
+
+  push(recordsRef, record).then(() => {
+
+    const resultBox = document.getElementById("resultBox");
+    resultBox.className = "result-box success";
+    resultBox.innerHTML = `
+      ✅ Bulletin acknowledgment completed successfully.<br><br>
+      Employee: ${employeeName}<br>
+      Employee Number: ${employeeId}<br>
+      Bulletin: ${selectedBulletin.title || "N/A"}<br>
+      Date: ${record.date}
+    `;
+
+    document.getElementById("ackBox").classList.add("hidden");
+    resultBox.classList.remove("hidden");
+    resultBox.scrollIntoView({behavior:"smooth"});
+  });
+};
+
+function displayRecords(){
+
+  const recordsList = document.getElementById("recordsList");
+
+  if(!recordsList){
+    return;
+  }
+
+  onValue(recordsRef, snapshot => {
+
+    recordsList.innerHTML = "";
+
+    if(!snapshot.exists()){
+      recordsList.innerHTML = "<p>No bulletin acknowledgment records yet.</p>";
+      return;
+    }
+
+    const records = [];
+
+    snapshot.forEach(child => {
+      records.push({
+        key:child.key,
+        data:child.val()
+      });
     });
-}
 
-function openDriveLink(id){
+    records.reverse().forEach((record,index) => {
 
-    const item =
-    bulletins.find(b => b.id === id);
+      const div = document.createElement("div");
+      div.className = "record-card";
 
-    if(!item || !item.driveLink){
-        alert("No Google Drive link available.");
-        return;
-    }
+      div.innerHTML = `
+        <strong>${index + 1}. Employee:</strong> ${record.data.employeeName || "N/A"}<br>
+        <strong>Employee Number:</strong> ${record.data.employeeId || "N/A"}<br>
+        <strong>Bulletin:</strong> ${record.data.bulletinTitle || "N/A"}<br>
+        <strong>Reference:</strong> ${record.data.bulletinReference || "N/A"}<br>
+        <strong>Result:</strong> ${record.data.result || "Completed"}<br>
+        <strong>Date:</strong> ${record.data.date || "N/A"}<br><br>
 
-    window.open(item.driveLink, "_blank");
-}
+        <strong>Q1:</strong> ${record.data.question1 || "N/A"}<br>
+        <strong>A1:</strong> ${record.data.answer1 || "N/A"}<br><br>
 
-function deleteBulletin(id){
+        <strong>Q2:</strong> ${record.data.question2 || "N/A"}<br>
+        <strong>A2:</strong> ${record.data.answer2 || "N/A"}<br>
 
-    if(confirm("Are you sure you want to delete this bulletin / alert?")){
+        ${
+          isAdmin
+          ? `<button class="delete-btn" onclick="deleteRecord('${record.key}')">🗑 Delete Record</button>`
+          : ""
+        }
+      `;
 
-        bulletins =
-        bulletins.filter(b => b.id !== id);
-
-        localStorage.setItem(
-            "safetyBulletinsAlerts",
-            JSON.stringify(bulletins)
-        );
-
-        displayBulletins();
-    }
-}
-
-function newBulletin(){
-
-    clearForm();
-
-    document.getElementById("formBox").scrollIntoView({
-        behavior:"smooth"
+      recordsList.appendChild(div);
     });
+  });
 }
+
+window.deleteBulletin = function(id){
+
+  if(!isAdmin){
+    alert("You are not authorized to delete bulletins.");
+    return;
+  }
+
+  if(!confirm("Are you sure you want to delete this bulletin?")){
+    return;
+  }
+
+  remove(ref(db, "safetyPromotion/bulletins/" + id)).then(() => {
+    alert("Bulletin deleted successfully.");
+  });
+};
+
+window.deleteRecord = function(id){
+
+  if(!isAdmin){
+    alert("You are not authorized to delete records.");
+    return;
+  }
+
+  if(!confirm("Are you sure you want to delete this acknowledgment record?")){
+    return;
+  }
+
+  remove(ref(db, "safetyPromotion/bulletinAcknowledgments/" + id)).then(() => {
+    alert("Record deleted successfully.");
+  });
+};
+
+window.newBulletin = function(){
+  clearForm();
+  document.getElementById("formBox").scrollIntoView({behavior:"smooth"});
+};
 
 function clearForm(){
-
-    document.getElementById("type").value = "Bulletin";
-    document.getElementById("title").value = "";
-    document.getElementById("reference").value = "";
-    document.getElementById("date").value = "";
-    document.getElementById("area").value = "";
-    document.getElementById("description").value = "";
-    document.getElementById("driveLink").value = "";
+  document.getElementById("type").value = "Bulletin";
+  document.getElementById("title").value = "";
+  document.getElementById("reference").value = "";
+  document.getElementById("date").value = "";
+  document.getElementById("area").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("driveLink").value = "";
+  document.getElementById("question1").value = "";
+  document.getElementById("question2").value = "";
 }
 
-function goBack(){
-    window.location.href = "Safety-Promotion-Culture.html";
-}
+window.goBack = function(){
+  window.location.href = "Safety-Promotion-Culture.html";
+};
 
-function goHome(){
-    window.location.href = "index.html";
-}
+window.goHome = function(){
+  window.location.href = "index.html";
+};
 
-displayBulletins();
+applyRoleAccess();
+loadBulletins();
+displayRecords();
 
 </script>
 
