@@ -7,8 +7,9 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
+import { getDatabase, ref, push, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
   authDomain: "aviation-sms.firebaseapp.com",
@@ -21,6 +22,25 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+
+  const auth = getAuth(app);
+
+onAuthStateChanged(auth, async (user) => {
+  if(!user){
+    window.location.href = "index.html";
+    return;
+  }
+
+  const snapshot = await get(child(ref(db), "users/" + user.uid));
+
+  if(snapshot.exists()){
+    const role = (snapshot.val().role || "").toLowerCase().trim();
+
+    if(role === "tech" || role === "technician"){
+      document.getElementById("smsDatabaseBtn").style.display = "none";
+    }
+  }
+});
 
 window.sendReport = function () {
 
@@ -407,8 +427,8 @@ button:hover,
         ✅ Send Report
       </button>
 
-      <a class="database-btn" href="SMS-Database.html">
-        📊 SMS Database
+      <a class="database-btn" id="smsDatabaseBtn" href="SMS-Database.html">
+      📊 SMS Database
       </a>
 
       <a class="home-btn" href="index.html">
