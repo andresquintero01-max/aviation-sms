@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Reports</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:'Segoe UI',Arial,sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#071f47,#1450b8);
+  padding:35px;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  background:white;
+  padding:40px;
+  border-radius:28px;
+  box-shadow:0 20px 55px rgba(0,0,0,0.35);
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  font-size:48px;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#555;
+  margin-bottom:30px;
+  font-size:18px;
+}
+
+.report-card{
+  background:#f8fbff;
+  border-left:8px solid #1450b8;
+  padding:22px;
+  border-radius:18px;
+  margin-bottom:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.10);
+}
+
+.report-card h2{
+  color:#071f47;
+  margin-bottom:8px;
+}
+
+.status{
+  display:inline-block;
+  padding:8px 16px;
+  border-radius:999px;
+  font-weight:900;
+  margin-top:10px;
+}
+
+.open{background:#fee2e2;color:#991b1b;}
+.progress{background:#fef3c7;color:#92400e;}
+.closed{background:#dcfce7;color:#166534;}
+
+.buttons{
+  display:flex;
+  gap:15px;
+  margin-top:30px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.btn{
+  text-decoration:none;
+  color:white;
+  padding:15px 28px;
+  border-radius:14px;
+  font-weight:900;
+}
+
+.home{background:#071f47;}
+.report{background:#ff9800;}
+
+.empty{
+  text-align:center;
+  color:#666;
+  font-size:20px;
+  padding:35px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>My Reports</h1>
+
+  <div class="subtitle">
+    Here you can see the SMS reports submitted by your user.
+  </div>
+
+  <div id="reportsList"></div>
+
+  <div class="buttons">
+    <a class="btn report" href="SMS-Report.html">Create New Report</a>
+    <a class="btn home" href="index.html">Home</a>
+  </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const auth = getAuth(app);
+
+const reportsList = document.getElementById("reportsList");
+
+function getStatusClass(status){
+  const s = (status || "").toUpperCase();
+
+  if(s === "CLOSED") return "closed";
+  if(s === "IN PROGRESS") return "progress";
+
+  return "open";
+}
+
+onAuthStateChanged(auth, (user) => {
+
+  if(!user){
+    window.location.href = "index.html";
+    return;
+  }
+
+  const reportsRef = ref(db, "smsReports");
+
+  onValue(reportsRef, (snapshot) => {
+
+    const data = snapshot.val() || {};
+    reportsList.innerHTML = "";
+
+    let found = false;
+
+    Object.values(data).forEach(report => {
+
+      if(report.createdByUid === user.uid){
+
+        found = true;
+
+        const status = report.status || "OPEN";
+        const statusClass = getStatusClass(status);
+
+        const card = document.createElement("div");
+        card.className = "report-card";
+
+        card.innerHTML = `
+          <h2>${report.title || "Untitled Report"}</h2>
+          <p><strong>Date:</strong> ${report.date || "N/A"}</p>
+          <p><strong>Airport:</strong> ${report.airport || "N/A"}</p>
+          <p><strong>Aircraft:</strong> ${report.aircraftRegistration || "N/A"}</p>
+          <p><strong>Type:</strong> ${report.reportType || "N/A"}</p>
+          <span class="status ${statusClass}">${status}</span>
+        `;
+
+        reportsList.appendChild(card);
+      }
+
+    });
+
+    if(!found){
+      reportsList.innerHTML = `
+        <div class="empty">
+          You have not submitted any SMS reports yet.
+        </div>
+      `;
+    }
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>
