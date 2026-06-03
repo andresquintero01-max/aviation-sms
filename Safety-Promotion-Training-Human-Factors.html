@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Human Factors</title>
+<title>Human Factors Training</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -13,118 +13,153 @@
 }
 
 body{
-  font-family:Arial,sans-serif;
+  font-family:'Segoe UI', Arial, sans-serif;
   min-height:100vh;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,0.18), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(139,92,246,0.35), transparent 35%),
+    linear-gradient(135deg,#020617,#071f47,#1450b8);
   padding:35px;
 }
 
 .container{
-  max-width:1100px;
+  max-width:1200px;
   margin:auto;
-  background:white;
-  border-radius:30px;
+  background:rgba(255,255,255,0.97);
+  border-radius:36px;
   padding:45px;
-  box-shadow:0 20px 55px rgba(0,0,0,0.35);
+  box-shadow:0 25px 70px rgba(0,0,0,0.38);
 }
 
-h1{
+.header{
+  background:linear-gradient(135deg,#071f47,#1450b8,#8b5cf6);
+  color:white;
+  padding:45px;
+  border-radius:30px;
   text-align:center;
-  color:#071f47;
-  font-size:54px;
-  margin-bottom:10px;
-}
-
-.subtitle{
-  text-align:center;
-  color:#56657d;
-  font-size:19px;
   margin-bottom:35px;
 }
 
-.video-box,
-.quiz-box,
-.result-box,
-.records-box{
-  background:#f4f6f8;
-  border-radius:22px;
-  padding:25px;
-  margin-bottom:25px;
-  border-left:8px solid #8b5cf6;
+.header h1{
+  font-size:54px;
+  margin-bottom:12px;
+}
+
+.header p{
+  font-size:19px;
+  color:#e0e7ff;
+}
+
+.top-buttons{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:30px;
+}
+
+.section{
+  background:#f8fbff;
+  border:1px solid #d8e1ef;
+  border-radius:26px;
+  padding:28px;
+  margin-bottom:28px;
+  border-left:9px solid #8b5cf6;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.section h2{
+  color:#071f47;
+  font-size:28px;
+  margin-bottom:18px;
 }
 
 label{
   display:block;
   margin-top:15px;
-  margin-bottom:6px;
+  margin-bottom:7px;
   font-weight:bold;
   color:#071f47;
 }
 
 input{
   width:100%;
-  padding:14px;
-  border:1px solid #ccc;
-  border-radius:10px;
+  padding:15px;
+  border:1px solid #b8c7da;
+  border-radius:14px;
   font-size:16px;
+  background:white;
 }
 
-button{
-  padding:14px 20px;
+.btn{
   border:none;
-  border-radius:12px;
+  color:white;
+  padding:14px 26px;
+  border-radius:14px;
   font-size:16px;
   font-weight:bold;
   cursor:pointer;
-  margin-top:15px;
+  margin:6px;
+  transition:0.25s;
 }
 
-.save-btn{ background:#071f47; color:white; }
-.add-btn{ background:#ff9800; color:white; }
-.submit-btn{ background:#198754; color:white; }
-.back-btn{ background:#b91c1c; color:white; }
-.home-btn{ background:#333; color:white; }
-.play-btn{ background:#1450b8; color:white; }
-.print-btn{ background:#198754; color:white; }
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(0,0,0,0.25);
+}
+
+.save-btn{background:linear-gradient(135deg,#071f47,#1450b8);}
+.play-btn{background:linear-gradient(135deg,#004aad,#1473e6);}
+.add-btn{background:linear-gradient(135deg,#f59e0b,#ff9800);}
+.submit-btn{background:linear-gradient(135deg,#15803d,#22c55e);}
+.back-btn{background:linear-gradient(135deg,#c40000,#ff3131);}
+.home-btn{background:linear-gradient(135deg,#071f47,#0b2a66);}
+.print-btn{background:linear-gradient(135deg,#006b3c,#22c55e);}
 
 .delete-btn{
-  background:#dc2626;
+  background:linear-gradient(135deg,#d00000,#ff1f1f);
   color:white;
-  padding:10px 16px;
-  border-radius:10px;
-}
-
-.delete-btn:hover{
-  background:#b91c1c;
+  border:none;
+  padding:11px 17px;
+  border-radius:12px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
 iframe{
   width:100%;
-  height:420px;
+  height:440px;
   border:none;
-  border-radius:18px;
-  margin-top:20px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.20);
+  border-radius:22px;
+  margin-top:25px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.22);
 }
 
 .question{
   background:white;
-  padding:18px;
-  border-radius:16px;
-  margin-top:20px;
-  box-shadow:0 6px 16px rgba(0,0,0,0.08);
+  padding:22px;
+  border-radius:20px;
+  margin-top:22px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.10);
+  border:1px solid #d8e1ef;
 }
 
 .question h3{
   color:#071f47;
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
 
 .option{
   display:block;
-  margin:10px 0;
+  margin:12px 0;
   color:#333;
   font-size:16px;
+  font-weight:500;
+}
+
+.option input{
+  width:auto;
+  margin-right:8px;
 }
 
 .hidden{
@@ -132,50 +167,58 @@ iframe{
 }
 
 .success{
-  color:#198754;
+  color:#14532d;
   font-weight:bold;
   font-size:20px;
+  background:#e8f5e9;
+  border-left:9px solid #22c55e;
 }
 
 .error{
-  color:#b91c1c;
+  color:#7f1d1d;
   font-weight:bold;
   font-size:20px;
-}
-
-.top-buttons{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:25px;
+  background:#fee2e2;
+  border-left:9px solid #dc2626;
 }
 
 .record-card{
   background:white;
-  padding:16px;
-  border-radius:14px;
-  margin-top:12px;
-  box-shadow:0 5px 14px rgba(0,0,0,0.08);
+  padding:20px;
+  border-radius:18px;
+  margin-top:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.10);
   color:#071f47;
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:15px;
+  border-left:7px solid #1450b8;
 }
 
 .record-info{
-  line-height:1.6;
+  line-height:1.7;
+}
+
+.note{
+  background:#eef4ff;
+  border:1px solid #c8d8f0;
+  color:#071f47;
+  padding:18px;
+  border-radius:18px;
+  font-weight:bold;
+  margin-bottom:25px;
+  text-align:center;
 }
 
 @media print{
-  .video-box,
+  .section.video-section,
   .quiz-box,
   .top-buttons,
   .add-btn,
   .result-box,
   .delete-btn{
-    display:none;
+    display:none !important;
   }
 
   body{
@@ -184,15 +227,24 @@ iframe{
 
   .container{
     box-shadow:none;
+    border-radius:0;
   }
 }
 
 @media(max-width:800px){
+  body{
+    padding:20px;
+  }
+
   .container{
     padding:25px;
   }
 
-  h1{
+  .header{
+    padding:30px 20px;
+  }
+
+  .header h1{
     font-size:38px;
   }
 
@@ -212,45 +264,37 @@ iframe{
 
 <div class="container">
 
-  <h1>Safety Promotion Training</h1>
-
-  <div class="subtitle">
-    Human Factors - Training Video and Knowledge Check
+  <div class="header">
+    <h1>Human Factors Training</h1>
+    <p>Safety Promotion Training Video and Knowledge Check</p>
   </div>
 
   <div class="top-buttons">
-
-    <button class="back-btn" onclick="location.href='Safety-Promotion-Training.html'">
-      ← Back
-    </button>
-
-    <button class="home-btn" onclick="location.href='index.html'">
-      🏠 Home
-    </button>
-
-    <button class="print-btn" onclick="window.print()">
-      🖨 Print Records
-    </button>
-
+    <button class="btn back-btn" onclick="location.href='Safety-Promotion-Training.html'">← Back</button>
+    <button class="btn home-btn" onclick="location.href='index.html'">🏠 Home</button>
+    <button class="btn print-btn" onclick="window.print()">🖨 Print Records</button>
   </div>
 
-  <div class="video-box">
+  <div class="note">
+    Employees must watch the training video before starting the knowledge check.
+  </div>
+
+  <div class="section video-section">
+    <h2>Training Video</h2>
 
     <label>Training Video Link</label>
     <input type="text" id="videoLink" placeholder="Paste YouTube or Google Drive video link here">
 
-    <button class="save-btn" onclick="saveVideo()">Save Video Link</button>
-    <button class="play-btn" onclick="loadVideo()">▶ Play Video</button>
+    <button class="btn save-btn" onclick="saveVideo()">Save Video Link</button>
+    <button class="btn play-btn" onclick="loadVideo()">▶ Play Video</button>
 
     <div id="videoFrame"></div>
-
   </div>
 
-  <button class="add-btn" onclick="newEmployee()">
-    ➕ New Employee
-  </button>
+  <button class="btn add-btn" onclick="newEmployee()">➕ New Employee</button>
 
-  <div class="quiz-box hidden" id="quizBox">
+  <div class="section quiz-box hidden" id="quizBox">
+    <h2>Knowledge Check</h2>
 
     <label>Employee Name</label>
     <input type="text" id="employeeName" placeholder="Enter employee name">
@@ -296,15 +340,12 @@ iframe{
       </label>
     </div>
 
-    <button class="submit-btn" onclick="submitQuiz()">
-      Submit Training
-    </button>
-
+    <button class="btn submit-btn" onclick="submitQuiz()">Submit Training</button>
   </div>
 
-  <div class="result-box hidden" id="resultBox"></div>
+  <div class="section result-box hidden" id="resultBox"></div>
 
-  <div class="records-box">
+  <div class="section records-box">
     <h2>Training Completion Records</h2>
     <div id="recordsList"></div>
   </div>
@@ -316,8 +357,7 @@ iframe{
 let videoPlayed = false;
 const DELETE_PASSWORD = "Tom";
 
-const savedVideo =
-localStorage.getItem("humanFactorsVideo");
+const savedVideo = localStorage.getItem("humanFactorsVideo");
 
 if(savedVideo){
   document.getElementById("videoLink").value = savedVideo;
@@ -343,8 +383,7 @@ function convertToEmbed(url){
 
 function saveVideo(){
 
-  const link =
-  document.getElementById("videoLink").value.trim();
+  const link = document.getElementById("videoLink").value.trim();
 
   if(link === ""){
     alert("Please paste a video link first.");
@@ -352,29 +391,26 @@ function saveVideo(){
   }
 
   localStorage.setItem("humanFactorsVideo", link);
-
   alert("Video link saved successfully.");
 }
 
 function loadVideo(){
 
-  const link =
-  document.getElementById("videoLink").value.trim();
+  const link = document.getElementById("videoLink").value.trim();
 
   if(link === ""){
     alert("Please paste or save a video link first.");
     return;
   }
 
-  const embedLink =
-  convertToEmbed(link);
+  const embedLink = convertToEmbed(link);
 
   document.getElementById("videoFrame").innerHTML =
-`<iframe
-src="${embedLink}"
-allow="autoplay; encrypted-media"
-allowfullscreen>
-</iframe>`;
+  `<iframe
+    src="${embedLink}"
+    allow="autoplay; encrypted-media"
+    allowfullscreen>
+  </iframe>`;
 
   videoPlayed = true;
 }
@@ -395,27 +431,18 @@ function newEmployee(){
   document.querySelectorAll("input[name='q1']").forEach(r => r.checked = false);
   document.querySelectorAll("input[name='q2']").forEach(r => r.checked = false);
 
-  document.getElementById("quizBox").scrollIntoView({
-    behavior:"smooth"
-  });
+  document.getElementById("quizBox").scrollIntoView({behavior:"smooth"});
 }
 
 function submitQuiz(){
 
-  const name =
-  document.getElementById("employeeName").value.trim();
+  const name = document.getElementById("employeeName").value.trim();
+  const id = document.getElementById("employeeId").value.trim();
 
-  const id =
-  document.getElementById("employeeId").value.trim();
+  const q1 = document.querySelector("input[name='q1']:checked");
+  const q2 = document.querySelector("input[name='q2']:checked");
 
-  const q1 =
-  document.querySelector("input[name='q1']:checked");
-
-  const q2 =
-  document.querySelector("input[name='q2']:checked");
-
-  const resultBox =
-  document.getElementById("resultBox");
+  const resultBox = document.getElementById("resultBox");
 
   if(name === "" || id === ""){
     alert("Please enter employee name and company ID.");
@@ -447,7 +474,7 @@ function submitQuiz(){
       JSON.stringify(records)
     );
 
-    resultBox.className = "result-box success";
+    resultBox.className = "section result-box success";
     resultBox.innerHTML =
     `✅ Training Completed Successfully<br><br>
     Employee: ${name}<br>
@@ -456,14 +483,13 @@ function submitQuiz(){
     Date: ${record.date}`;
 
     document.getElementById("quizBox").classList.add("hidden");
-
     displayRecords();
 
   }else{
 
     videoPlayed = false;
 
-    resultBox.className = "result-box error";
+    resultBox.className = "section result-box error";
     resultBox.innerHTML =
     `❌ Incorrect answers.<br><br>
     The employee must play the training video again before trying the quiz again.`;
@@ -479,8 +505,7 @@ function displayRecords(){
   const records =
   JSON.parse(localStorage.getItem("humanFactorsTrainingRecords")) || [];
 
-  const recordsList =
-  document.getElementById("recordsList");
+  const recordsList = document.getElementById("recordsList");
 
   recordsList.innerHTML = "";
 
@@ -491,11 +516,9 @@ function displayRecords(){
 
   records.forEach(function(record, index){
 
-    const div =
-    document.createElement("div");
+    const div = document.createElement("div");
 
-    div.className =
-    "record-card";
+    div.className = "record-card";
 
     div.innerHTML =
     `<div class="record-info">
@@ -517,8 +540,7 @@ function displayRecords(){
 
 function deleteRecord(index){
 
-  const password =
-  prompt("Enter password to delete this record:");
+  const password = prompt("Enter password to delete this record:");
 
   if(password === null){
     return;
