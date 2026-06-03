@@ -13,116 +13,146 @@
 }
 
 body{
-  font-family:Arial,sans-serif;
+  font-family:'Segoe UI',Arial,sans-serif;
   min-height:100vh;
-  background:linear-gradient(135deg,#071f47,#0b2a66,#1450b8);
+  background:
+  radial-gradient(circle at top left, rgba(255,152,0,0.28), transparent 30%),
+  radial-gradient(circle at bottom right, rgba(28,99,219,0.42), transparent 38%),
+  linear-gradient(rgba(5,20,55,0.88), rgba(5,20,55,0.95)),
+  url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
   padding:35px;
 }
 
 .container{
-  max-width:1100px;
+  max-width:1150px;
   margin:auto;
-  background:white;
-  border-radius:30px;
-  padding:45px;
-  box-shadow:0 20px 55px rgba(0,0,0,0.35);
+  background:rgba(255,255,255,0.97);
+  border-radius:38px;
+  padding:48px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.45);
+}
+
+.logo{
+  width:105px;
+  height:105px;
+  margin:0 auto 20px;
+  border-radius:32px;
+  background:linear-gradient(135deg,#071f47,#1450b8,#ff9800);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:48px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.30);
 }
 
 h1{
   text-align:center;
   color:#071f47;
-  font-size:54px;
+  font-size:56px;
   margin-bottom:10px;
+  font-weight:900;
 }
 
 .subtitle{
   text-align:center;
   color:#56657d;
-  font-size:19px;
+  font-size:20px;
   margin-bottom:35px;
 }
 
-.video-box,
-.quiz-box,
-.result-box,
-.records-box{
-  background:#f4f6f8;
-  border-radius:22px;
-  padding:25px;
+.top-buttons{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:30px;
+}
+
+.box{
+  background:linear-gradient(135deg,#ffffff,#f8fbff);
+  border-radius:26px;
+  padding:28px;
   margin-bottom:25px;
-  border-left:8px solid #1450b8;
+  border-left:10px solid #1450b8;
+  box-shadow:0 14px 34px rgba(0,0,0,0.13);
 }
 
 label{
   display:block;
   margin-top:15px;
-  margin-bottom:6px;
-  font-weight:bold;
+  margin-bottom:7px;
+  font-weight:900;
   color:#071f47;
 }
 
 input{
   width:100%;
-  padding:14px;
-  border:1px solid #ccc;
-  border-radius:10px;
+  padding:15px;
+  border:1px solid #cbd5e1;
+  border-radius:14px;
   font-size:16px;
 }
 
-button{
-  padding:14px 20px;
+button,
+.btn{
+  padding:15px 24px;
   border:none;
-  border-radius:12px;
+  border-radius:15px;
   font-size:16px;
-  font-weight:bold;
+  font-weight:900;
   cursor:pointer;
-  margin-top:15px;
-}
-
-.save-btn{ background:#071f47; color:white; }
-.add-btn{ background:#ff9800; color:white; }
-.submit-btn{ background:#198754; color:white; }
-.back-btn{ background:#b91c1c; color:white; }
-.home-btn{ background:#333; color:white; }
-.play-btn{ background:#1450b8; color:white; }
-.print-btn{ background:#198754; color:white; }
-
-.delete-btn{
-  background:#dc2626;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
   color:white;
-  padding:10px 16px;
-  border-radius:10px;
+  box-shadow:0 10px 22px rgba(0,0,0,0.25);
+  transition:0.3s;
 }
 
-.delete-btn:hover{
-  background:#b91c1c;
+button:hover,
+.btn:hover{
+  transform:translateY(-4px);
 }
+
+.save-btn{ background:linear-gradient(135deg,#071f47,#1450b8); }
+.play-btn{ background:linear-gradient(135deg,#1450b8,#00a2ff); }
+.add-btn{ background:linear-gradient(135deg,#d83b00,#ff9800); margin-bottom:25px; }
+.submit-btn{ background:linear-gradient(135deg,#047857,#22c55e); margin-top:20px; }
+.back-btn{ background:linear-gradient(135deg,#dc2626,#ef4444); }
+.home-btn{ background:linear-gradient(135deg,#071f47,#1450b8); }
+.print-btn{ background:linear-gradient(135deg,#111827,#374151); }
+.delete-btn{ background:linear-gradient(135deg,#dc2626,#ef4444); }
 
 iframe{
   width:100%;
-  height:420px;
+  height:430px;
   border:none;
-  border-radius:18px;
-  margin-top:20px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.20);
+  border-radius:22px;
+  margin-top:22px;
+  box-shadow:0 14px 35px rgba(0,0,0,0.25);
 }
 
 .question{
   background:white;
-  padding:18px;
-  border-radius:16px;
-  margin-top:20px;
-  box-shadow:0 6px 16px rgba(0,0,0,0.08);
+  padding:22px;
+  border-radius:18px;
+  margin-top:22px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
 }
 
 .question h3{
   color:#071f47;
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
 
 .option{
   display:block;
-  margin:10px 0;
+  margin:11px 0;
   color:#333;
   font-size:16px;
 }
@@ -131,32 +161,30 @@ iframe{
   display:none;
 }
 
-.success{
-  color:#198754;
-  font-weight:bold;
+.result-box{
+  padding:25px;
+  border-radius:22px;
+  margin-bottom:25px;
   font-size:20px;
+  font-weight:900;
+}
+
+.success{
+  background:#dcfce7;
+  color:#166534;
 }
 
 .error{
-  color:#b91c1c;
-  font-weight:bold;
-  font-size:20px;
-}
-
-.top-buttons{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:25px;
+  background:#fee2e2;
+  color:#991b1b;
 }
 
 .record-card{
   background:white;
-  padding:16px;
-  border-radius:14px;
-  margin-top:12px;
-  box-shadow:0 5px 14px rgba(0,0,0,0.08);
+  padding:18px;
+  border-radius:18px;
+  margin-top:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.10);
   color:#071f47;
   display:flex;
   justify-content:space-between;
@@ -165,7 +193,16 @@ iframe{
 }
 
 .record-info{
-  line-height:1.6;
+  line-height:1.7;
+}
+
+.admin-note{
+  background:#fff7ed;
+  color:#9a3412;
+  padding:16px;
+  border-radius:16px;
+  margin-top:18px;
+  font-weight:800;
 }
 
 @media print{
@@ -174,8 +211,9 @@ iframe{
   .top-buttons,
   .add-btn,
   .result-box,
-  .delete-btn{
-    display:none;
+  .delete-btn,
+  .admin-only{
+    display:none!important;
   }
 
   body{
@@ -188,8 +226,12 @@ iframe{
 }
 
 @media(max-width:800px){
+  body{
+    padding:20px;
+  }
+
   .container{
-    padding:25px;
+    padding:28px;
   }
 
   h1{
@@ -204,6 +246,11 @@ iframe{
     flex-direction:column;
     align-items:flex-start;
   }
+
+  button,
+  .btn{
+    width:100%;
+  }
 }
 </style>
 </head>
@@ -211,6 +258,8 @@ iframe{
 <body>
 
 <div class="container">
+
+  <div class="logo">🎓</div>
 
   <h1>Safety Promotion Training</h1>
 
@@ -228,29 +277,40 @@ iframe{
       🏠 Home
     </button>
 
-    <button class="print-btn" onclick="window.print()">
+    <button class="print-btn admin-only" onclick="window.print()">
       🖨 Print Records
     </button>
 
   </div>
 
-  <div class="video-box">
+  <div class="box video-box">
 
-    <label>Training Video Link</label>
-    <input type="text" id="videoLink" placeholder="Paste YouTube or Google Drive video link here">
+    <div class="admin-only">
+      <label>Training Video Link</label>
+      <input type="text" id="videoLink" placeholder="Paste YouTube or Google Drive video link here">
 
-    <button class="save-btn" onclick="saveVideo()">Save Video Link</button>
-    <button class="play-btn" onclick="loadVideo()">▶ Play Video</button>
+      <button class="save-btn" onclick="saveVideo()">
+        💾 Save Video Link
+      </button>
+
+      <div class="admin-note">
+        Admin view: you can add or update the training video link. Technicians cannot see or edit this link.
+      </div>
+    </div>
+
+    <button class="play-btn" onclick="loadVideo()">
+      ▶ Play Training Video
+    </button>
 
     <div id="videoFrame"></div>
 
   </div>
 
   <button class="add-btn" onclick="newEmployee()">
-    ➕ New Employee
+    ➕ Start Exam
   </button>
 
-  <div class="quiz-box hidden" id="quizBox">
+  <div class="box quiz-box hidden" id="quizBox">
 
     <label>Employee Name</label>
     <input type="text" id="employeeName" placeholder="Enter employee name">
@@ -297,30 +357,66 @@ iframe{
     </div>
 
     <button class="submit-btn" onclick="submitQuiz()">
-      Submit Training
+      ✅ Submit Training
     </button>
 
   </div>
 
   <div class="result-box hidden" id="resultBox"></div>
 
-  <div class="records-box">
+  <div class="box records-box admin-only">
     <h2>Training Completion Records</h2>
     <div id="recordsList"></div>
   </div>
 
 </div>
 
-<script>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  push,
+  onValue,
+  remove
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
 let videoPlayed = false;
-const DELETE_PASSWORD = "Tom";
+let videoURL = "";
+let userRole = (localStorage.getItem("userRole") || "tech").toLowerCase();
 
-const savedVideo =
-localStorage.getItem("whatIsSMSVideo");
+const isAdmin =
+userRole === "admin" ||
+userRole === "manager" ||
+userRole === "sms manager";
 
-if(savedVideo){
-  document.getElementById("videoLink").value = savedVideo;
+const videoRef = ref(db, "trainingVideos/whatIsSMS/videoLink");
+const recordsRef = ref(db, "trainingRecords/whatIsSMS");
+
+function applyRoleAccess(){
+
+  if(!isAdmin){
+    document.querySelectorAll(".admin-only").forEach(element => {
+      element.style.display = "none";
+    });
+  }
+
 }
 
 function convertToEmbed(url){
@@ -341,7 +437,22 @@ function convertToEmbed(url){
   return url;
 }
 
-function saveVideo(){
+onValue(videoRef, (snapshot) => {
+
+  videoURL = snapshot.val() || "";
+
+  if(isAdmin && document.getElementById("videoLink")){
+    document.getElementById("videoLink").value = videoURL;
+  }
+
+});
+
+window.saveVideo = function(){
+
+  if(!isAdmin){
+    alert("You are not authorized to edit the training video.");
+    return;
+  }
 
   const link =
   document.getElementById("videoLink").value.trim();
@@ -351,38 +462,36 @@ function saveVideo(){
     return;
   }
 
-  localStorage.setItem("whatIsSMSVideo", link);
+  set(videoRef, link).then(() => {
+    alert("Video link saved successfully.");
+  });
 
-  alert("Video link saved successfully.");
-}
+};
 
-function loadVideo(){
+window.loadVideo = function(){
 
-  const link =
-  document.getElementById("videoLink").value.trim();
-
-  if(link === ""){
-    alert("Please paste or save a video link first.");
+  if(videoURL === ""){
+    alert("No training video is available. Please contact the administrator.");
     return;
   }
 
   const embedLink =
-  convertToEmbed(link);
+  convertToEmbed(videoURL);
 
   document.getElementById("videoFrame").innerHTML =
-`<iframe
-src="${embedLink}"
-allow="autoplay; encrypted-media"
-allowfullscreen>
-</iframe>`;
+  `<iframe
+  src="${embedLink}"
+  allow="autoplay; encrypted-media"
+  allowfullscreen>
+  </iframe>`;
 
   videoPlayed = true;
-}
+};
 
-function newEmployee(){
+window.newEmployee = function(){
 
   if(!videoPlayed){
-    alert("Please play the training video before starting the quiz.");
+    alert("Please play the training video before starting the exam.");
     return;
   }
 
@@ -398,9 +507,9 @@ function newEmployee(){
   document.getElementById("quizBox").scrollIntoView({
     behavior:"smooth"
   });
-}
+};
 
-function submitQuiz(){
+window.submitQuiz = function(){
 
   const name =
   document.getElementById("employeeName").value.trim();
@@ -434,30 +543,24 @@ function submitQuiz(){
       employeeId:id,
       course:"What Is SMS?",
       result:"Passed",
-      date:new Date().toLocaleString()
+      date:new Date().toLocaleString(),
+      timestamp:new Date().toISOString()
     };
 
-    let records =
-    JSON.parse(localStorage.getItem("whatIsSMSTrainingRecords")) || [];
+    push(recordsRef, record).then(() => {
 
-    records.push(record);
+      resultBox.className = "result-box success";
+      resultBox.innerHTML =
+      `✅ Training Completed Successfully<br><br>
+      Employee: ${name}<br>
+      Company ID: ${id}<br>
+      Course: What Is SMS?<br>
+      Date: ${record.date}`;
 
-    localStorage.setItem(
-      "whatIsSMSTrainingRecords",
-      JSON.stringify(records)
-    );
+      document.getElementById("quizBox").classList.add("hidden");
+      resultBox.classList.remove("hidden");
 
-    resultBox.className = "result-box success";
-    resultBox.innerHTML =
-    `✅ Training Completed Successfully<br><br>
-    Employee: ${name}<br>
-    Company ID: ${id}<br>
-    Course: What Is SMS?<br>
-    Date: ${record.date}`;
-
-    document.getElementById("quizBox").classList.add("hidden");
-
-    displayRecords();
+    });
 
   }else{
 
@@ -466,66 +569,75 @@ function submitQuiz(){
     resultBox.className = "result-box error";
     resultBox.innerHTML =
     `❌ Incorrect answers.<br><br>
-    The employee must play the training video again before trying the quiz again.`;
+    The employee must play the training video again before trying the exam again.`;
 
     document.getElementById("quizBox").classList.add("hidden");
+    resultBox.classList.remove("hidden");
   }
 
-  resultBox.classList.remove("hidden");
-}
+};
 
 function displayRecords(){
-
-  const records =
-  JSON.parse(localStorage.getItem("whatIsSMSTrainingRecords")) || [];
 
   const recordsList =
   document.getElementById("recordsList");
 
-  recordsList.innerHTML = "";
-
-  if(records.length === 0){
-    recordsList.innerHTML = "<p>No completed training records yet.</p>";
+  if(!recordsList){
     return;
   }
 
-  records.forEach(function(record, index){
+  onValue(recordsRef, (snapshot) => {
 
-    const div =
-    document.createElement("div");
+    recordsList.innerHTML = "";
 
-    div.className =
-    "record-card";
+    if(!snapshot.exists()){
+      recordsList.innerHTML = "<p>No completed training records yet.</p>";
+      return;
+    }
 
-    div.innerHTML =
-    `<div class="record-info">
-      <strong>${index + 1}. ${record.employeeName}</strong><br>
-      Company ID: ${record.employeeId}<br>
-      Course: ${record.course}<br>
-      Result: ${record.result}<br>
-      Date: ${record.date}
-    </div>
+    const records = [];
 
-    <button class="delete-btn" onclick="deleteRecord(${index})">
-      🗑 Delete
-    </button>`;
+    snapshot.forEach(child => {
+      records.push({
+        key: child.key,
+        data: child.val()
+      });
+    });
 
-    recordsList.appendChild(div);
+    records.reverse().forEach((record, index) => {
+
+      const div =
+      document.createElement("div");
+
+      div.className =
+      "record-card";
+
+      div.innerHTML =
+      `<div class="record-info">
+        <strong>${index + 1}. ${record.data.employeeName || "N/A"}</strong><br>
+        Company ID: ${record.data.employeeId || "N/A"}<br>
+        Course: ${record.data.course || "N/A"}<br>
+        Result: ${record.data.result || "N/A"}<br>
+        Date: ${record.data.date || "N/A"}
+      </div>
+
+      ${isAdmin ? `
+      <button class="delete-btn" onclick="deleteRecord('${record.key}')">
+        🗑 Delete
+      </button>` : ""}`;
+
+      recordsList.appendChild(div);
+
+    });
 
   });
+
 }
 
-function deleteRecord(index){
+window.deleteRecord = function(recordKey){
 
-  const password =
-  prompt("Enter password to delete this record:");
-
-  if(password === null){
-    return;
-  }
-
-  if(password !== DELETE_PASSWORD){
-    alert("Incorrect password. Record was not deleted.");
+  if(!isAdmin){
+    alert("You are not authorized to delete records.");
     return;
   }
 
@@ -533,21 +645,13 @@ function deleteRecord(index){
     return;
   }
 
-  let records =
-  JSON.parse(localStorage.getItem("whatIsSMSTrainingRecords")) || [];
+  remove(ref(db, "trainingRecords/whatIsSMS/" + recordKey)).then(() => {
+    alert("Record deleted successfully.");
+  });
 
-  records.splice(index, 1);
+};
 
-  localStorage.setItem(
-    "whatIsSMSTrainingRecords",
-    JSON.stringify(records)
-  );
-
-  displayRecords();
-
-  alert("Record deleted successfully.");
-}
-
+applyRoleAccess();
 displayRecords();
 
 </script>
