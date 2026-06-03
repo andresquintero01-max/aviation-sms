@@ -393,6 +393,20 @@ body{
 <div class="content">
 
     <div class="brand-371q">371Q</div>
+    <div style="text-align:right;margin-bottom:20px;">
+    <button onclick="logout()" id="logoutBtn"
+    style="
+    background:#dc2626;
+    color:white;
+    border:none;
+    padding:12px 22px;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;">
+    LOG OUT
+    </button>
+</div>
 
     <h1>Professional Aviation Safety Software</h1>
 
@@ -482,7 +496,7 @@ body{
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
@@ -582,6 +596,24 @@ document.addEventListener("keydown", function(e){
         window.login();
     }
 });
+
+    window.logout = function(){
+
+    signOut(auth)
+    .then(() => {
+
+        document.getElementById("systemPage").style.display = "none";
+        document.getElementById("loginPage").style.display = "block";
+
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+
+};
 
 onAuthStateChanged(auth, (user) => {
     if(user){
