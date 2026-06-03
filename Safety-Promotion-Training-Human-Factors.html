@@ -2,146 +2,147 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Human Factors Training</title>
+<title>What Is SMS?</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-  font-family:'Segoe UI', Arial, sans-serif;
+  font-family:'Segoe UI',Arial,sans-serif;
   min-height:100vh;
   background:
-    radial-gradient(circle at top left, rgba(255,255,255,0.18), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(139,92,246,0.35), transparent 35%),
-    linear-gradient(135deg,#020617,#071f47,#1450b8);
+  radial-gradient(circle at top left, rgba(255,152,0,0.28), transparent 30%),
+  radial-gradient(circle at bottom right, rgba(28,99,219,0.42), transparent 38%),
+  linear-gradient(rgba(5,20,55,0.88), rgba(5,20,55,0.95)),
+  url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
   padding:35px;
 }
 
 .container{
-  max-width:1200px;
+  max-width:1150px;
   margin:auto;
   background:rgba(255,255,255,0.97);
-  border-radius:36px;
-  padding:45px;
-  box-shadow:0 25px 70px rgba(0,0,0,0.38);
+  border-radius:38px;
+  padding:48px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.45);
 }
 
-.header{
-  background:linear-gradient(135deg,#071f47,#1450b8,#8b5cf6);
+.logo{
+  width:105px;
+  height:105px;
+  margin:0 auto 20px;
+  border-radius:32px;
+  background:linear-gradient(135deg,#071f47,#1450b8,#ff9800);
   color:white;
-  padding:45px;
-  border-radius:30px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:48px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.30);
+}
+
+h1{
   text-align:center;
+  color:#071f47;
+  font-size:56px;
+  margin-bottom:10px;
+  font-weight:900;
+}
+
+.subtitle{
+  text-align:center;
+  color:#56657d;
+  font-size:20px;
   margin-bottom:35px;
-}
-
-.header h1{
-  font-size:54px;
-  margin-bottom:12px;
-}
-
-.header p{
-  font-size:19px;
-  color:#e0e7ff;
 }
 
 .top-buttons{
   display:flex;
   justify-content:center;
-  gap:14px;
+  gap:15px;
   flex-wrap:wrap;
   margin-bottom:30px;
 }
 
-.section{
-  background:#f8fbff;
-  border:1px solid #d8e1ef;
+.box{
+  background:linear-gradient(135deg,#ffffff,#f8fbff);
   border-radius:26px;
   padding:28px;
-  margin-bottom:28px;
-  border-left:9px solid #8b5cf6;
-  box-shadow:0 10px 25px rgba(0,0,0,0.08);
-}
-
-.section h2{
-  color:#071f47;
-  font-size:28px;
-  margin-bottom:18px;
+  margin-bottom:25px;
+  border-left:10px solid #1450b8;
+  box-shadow:0 14px 34px rgba(0,0,0,0.13);
 }
 
 label{
   display:block;
   margin-top:15px;
   margin-bottom:7px;
-  font-weight:bold;
+  font-weight:900;
   color:#071f47;
 }
 
 input{
   width:100%;
   padding:15px;
-  border:1px solid #b8c7da;
+  border:1px solid #cbd5e1;
   border-radius:14px;
   font-size:16px;
-  background:white;
 }
 
-.btn{
+button,.btn{
+  padding:15px 24px;
   border:none;
-  color:white;
-  padding:14px 26px;
-  border-radius:14px;
+  border-radius:15px;
   font-size:16px;
-  font-weight:bold;
+  font-weight:900;
   cursor:pointer;
-  margin:6px;
-  transition:0.25s;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  box-shadow:0 10px 22px rgba(0,0,0,0.25);
+  transition:0.3s;
 }
 
-.btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 18px rgba(0,0,0,0.25);
+button:hover,.btn:hover{
+  transform:translateY(-4px);
 }
 
 .save-btn{background:linear-gradient(135deg,#071f47,#1450b8);}
-.play-btn{background:linear-gradient(135deg,#004aad,#1473e6);}
-.add-btn{background:linear-gradient(135deg,#f59e0b,#ff9800);}
-.submit-btn{background:linear-gradient(135deg,#15803d,#22c55e);}
-.back-btn{background:linear-gradient(135deg,#c40000,#ff3131);}
-.home-btn{background:linear-gradient(135deg,#071f47,#0b2a66);}
-.print-btn{background:linear-gradient(135deg,#006b3c,#22c55e);}
+.play-btn{background:linear-gradient(135deg,#1450b8,#00a2ff);}
+.add-btn{background:linear-gradient(135deg,#d83b00,#ff9800);margin-bottom:25px;}
+.submit-btn{background:linear-gradient(135deg,#047857,#22c55e);margin-top:20px;}
 
-.delete-btn{
-  background:linear-gradient(135deg,#d00000,#ff1f1f);
-  color:white;
-  border:none;
-  padding:11px 17px;
-  border-radius:12px;
-  font-weight:bold;
-  cursor:pointer;
+.back-btn{
+  background:linear-gradient(135deg,#ff6b00,#ff9800);
+  padding:16px 32px;
+  border-radius:999px;
 }
+
+.home-btn{background:linear-gradient(135deg,#071f47,#1450b8);}
+.print-btn{background:linear-gradient(135deg,#111827,#374151);}
+.delete-btn{background:linear-gradient(135deg,#dc2626,#ef4444);}
 
 iframe{
   width:100%;
-  height:440px;
+  height:430px;
   border:none;
   border-radius:22px;
-  margin-top:25px;
-  box-shadow:0 12px 30px rgba(0,0,0,0.22);
+  margin-top:22px;
+  box-shadow:0 14px 35px rgba(0,0,0,0.25);
 }
 
 .question{
   background:white;
   padding:22px;
-  border-radius:20px;
+  border-radius:18px;
   margin-top:22px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.10);
-  border:1px solid #d8e1ef;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
 }
 
 .question h3{
@@ -151,36 +152,23 @@ iframe{
 
 .option{
   display:block;
-  margin:12px 0;
+  margin:11px 0;
   color:#333;
   font-size:16px;
-  font-weight:500;
 }
 
-.option input{
-  width:auto;
-  margin-right:8px;
-}
+.hidden{display:none;}
 
-.hidden{
-  display:none;
-}
-
-.success{
-  color:#14532d;
-  font-weight:bold;
+.result-box{
+  padding:25px;
+  border-radius:22px;
+  margin-bottom:25px;
   font-size:20px;
-  background:#e8f5e9;
-  border-left:9px solid #22c55e;
+  font-weight:900;
 }
 
-.error{
-  color:#7f1d1d;
-  font-weight:bold;
-  font-size:20px;
-  background:#fee2e2;
-  border-left:9px solid #dc2626;
-}
+.success{background:#dcfce7;color:#166534;}
+.error{background:#fee2e2;color:#991b1b;}
 
 .record-card{
   background:white;
@@ -193,69 +181,81 @@ iframe{
   justify-content:space-between;
   align-items:center;
   gap:15px;
-  border-left:7px solid #1450b8;
 }
 
 .record-info{
-  line-height:1.7;
+  line-height:1.8;
+  font-size:16px;
 }
 
-.note{
-  background:#eef4ff;
-  border:1px solid #c8d8f0;
-  color:#071f47;
-  padding:18px;
-  border-radius:18px;
-  font-weight:bold;
-  margin-bottom:25px;
-  text-align:center;
+.admin-note{
+  background:#fff7ed;
+  color:#9a3412;
+  padding:16px;
+  border-radius:16px;
+  margin-top:18px;
+  font-weight:800;
+}
+
+.print-title{
+  display:none;
 }
 
 @media print{
-  .section.video-section,
+  body{
+    background:white!important;
+    padding:10px!important;
+  }
+
+  .container{
+    box-shadow:none!important;
+    padding:20px!important;
+  }
+
+  .video-box,
   .quiz-box,
   .top-buttons,
   .add-btn,
   .result-box,
-  .delete-btn{
-    display:none !important;
+  .delete-btn,
+  .admin-note{
+    display:none!important;
   }
 
-  body{
-    background:white;
+  .records-box{
+    display:block!important;
+    box-shadow:none!important;
+    border-left:none!important;
+    background:white!important;
   }
 
-  .container{
-    box-shadow:none;
-    border-radius:0;
+  .print-title{
+    display:block!important;
+    text-align:center;
+    color:#071f47;
+    font-size:28px;
+    margin-bottom:25px;
+    font-weight:900;
+  }
+
+  h1,.subtitle,.logo{
+    display:none!important;
+  }
+
+  .record-card{
+    box-shadow:none!important;
+    border:1px solid #ddd;
+    break-inside:avoid;
   }
 }
 
 @media(max-width:800px){
-  body{
-    padding:20px;
-  }
-
-  .container{
-    padding:25px;
-  }
-
-  .header{
-    padding:30px 20px;
-  }
-
-  .header h1{
-    font-size:38px;
-  }
-
-  iframe{
-    height:260px;
-  }
-
-  .record-card{
-    flex-direction:column;
-    align-items:flex-start;
-  }
+  body{padding:20px;}
+  .container{padding:28px;}
+  h1{font-size:38px;}
+  iframe{height:260px;}
+  .record-card{flex-direction:column;align-items:flex-start;}
+  button,.btn{width:100%;}
 }
 </style>
 </head>
@@ -264,37 +264,56 @@ iframe{
 
 <div class="container">
 
-  <div class="header">
-    <h1>Human Factors Training</h1>
-    <p>Safety Promotion Training Video and Knowledge Check</p>
+  <div class="logo">🎓</div>
+
+  <h1>Safety Promotion Training</h1>
+
+  <div class="subtitle">
+    What Is SMS? - Training Video and Knowledge Check
   </div>
 
   <div class="top-buttons">
-    <button class="btn back-btn" onclick="location.href='Safety-Promotion-Training.html'">← Back</button>
-    <button class="btn home-btn" onclick="location.href='index.html'">🏠 Home</button>
-    <button class="btn print-btn" onclick="window.print()">🖨 Print Records</button>
+    <button class="back-btn" onclick="location.href='Safety-Promotion-Training.html'">
+      ⬅ Back to Training
+    </button>
+
+    <button class="home-btn" onclick="location.href='index.html'">
+      🏠 Home
+    </button>
+
+    <button class="print-btn admin-only" onclick="window.print()">
+      🖨 Print Records
+    </button>
   </div>
 
-  <div class="note">
-    Employees must watch the training video before starting the knowledge check.
-  </div>
+  <div class="box video-box">
 
-  <div class="section video-section">
-    <h2>Training Video</h2>
+    <div class="admin-only">
+      <label>Training Video Link</label>
+      <input type="text" id="videoLink" placeholder="Paste YouTube or Google Drive video link here">
 
-    <label>Training Video Link</label>
-    <input type="text" id="videoLink" placeholder="Paste YouTube or Google Drive video link here">
+      <button class="save-btn" onclick="saveVideo()">
+        💾 Save Video Link
+      </button>
 
-    <button class="btn save-btn" onclick="saveVideo()">Save Video Link</button>
-    <button class="btn play-btn" onclick="loadVideo()">▶ Play Video</button>
+      <div class="admin-note">
+        Admin view: you can add or update the training video link. Technicians cannot see or edit this link.
+      </div>
+    </div>
+
+    <button class="play-btn" onclick="loadVideo()">
+      ▶ Play Training Video
+    </button>
 
     <div id="videoFrame"></div>
+
   </div>
 
-  <button class="btn add-btn" onclick="newEmployee()">➕ New Employee</button>
+  <button class="add-btn" onclick="newEmployee()">
+    ➕ Start Exam
+  </button>
 
-  <div class="section quiz-box hidden" id="quizBox">
-    <h2>Knowledge Check</h2>
+  <div class="box quiz-box hidden" id="quizBox">
 
     <label>Employee Name</label>
     <input type="text" id="employeeName" placeholder="Enter employee name">
@@ -303,64 +322,104 @@ iframe{
     <input type="text" id="employeeId" placeholder="Enter company ID">
 
     <div class="question">
-      <h3>1. What are Human Factors?</h3>
+      <h3>1. What is SMS?</h3>
 
       <label class="option">
         <input type="radio" name="q1" value="a">
-        A. Conditions that influence human performance
+        A. A system
       </label>
 
       <label class="option">
         <input type="radio" name="q1" value="b">
-        B. Aircraft components
+        B. A Safety Management System
       </label>
 
       <label class="option">
         <input type="radio" name="q1" value="c">
-        C. Weather reports
+        C. A text message
       </label>
     </div>
 
     <div class="question">
-      <h3>2. Which of the following is a Human Factor?</h3>
+      <h3>2. What is Risk?</h3>
 
       <label class="option">
         <input type="radio" name="q2" value="a">
-        A. Fatigue
+        A. A hazard
       </label>
 
       <label class="option">
         <input type="radio" name="q2" value="b">
-        B. Paint color
+        B. Damage
       </label>
 
       <label class="option">
         <input type="radio" name="q2" value="c">
-        C. Aircraft registration number
+        C. The probability and severity of an event
       </label>
     </div>
 
-    <button class="btn submit-btn" onclick="submitQuiz()">Submit Training</button>
+    <button class="submit-btn" onclick="submitQuiz()">
+      ✅ Submit Training
+    </button>
+
   </div>
 
-  <div class="section result-box hidden" id="resultBox"></div>
+  <div class="result-box hidden" id="resultBox"></div>
 
-  <div class="section records-box">
+  <div class="box records-box admin-only">
+    <div class="print-title">Training Completion Records - What Is SMS?</div>
     <h2>Training Completion Records</h2>
     <div id="recordsList"></div>
   </div>
 
 </div>
 
-<script>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  push,
+  onValue,
+  remove
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
 let videoPlayed = false;
-const DELETE_PASSWORD = "Tom";
+let videoURL = "";
 
-const savedVideo = localStorage.getItem("humanFactorsVideo");
+let userRole = (localStorage.getItem("userRole") || "tech").toLowerCase();
 
-if(savedVideo){
-  document.getElementById("videoLink").value = savedVideo;
+const isAdmin =
+userRole === "admin" ||
+userRole === "manager" ||
+userRole === "sms manager";
+
+const videoRef = ref(db, "trainingVideos/whatIsSMS/videoLink");
+const recordsRef = ref(db, "trainingRecords/whatIsSMS");
+
+function applyRoleAccess(){
+  if(!isAdmin){
+    document.querySelectorAll(".admin-only").forEach(element => {
+      element.style.display = "none";
+    });
+  }
 }
 
 function convertToEmbed(url){
@@ -381,7 +440,20 @@ function convertToEmbed(url){
   return url;
 }
 
-function saveVideo(){
+onValue(videoRef, (snapshot) => {
+  videoURL = snapshot.val() || "";
+
+  if(isAdmin && document.getElementById("videoLink")){
+    document.getElementById("videoLink").value = videoURL;
+  }
+});
+
+window.saveVideo = function(){
+
+  if(!isAdmin){
+    alert("You are not authorized to edit the training video.");
+    return;
+  }
 
   const link = document.getElementById("videoLink").value.trim();
 
@@ -390,35 +462,34 @@ function saveVideo(){
     return;
   }
 
-  localStorage.setItem("humanFactorsVideo", link);
-  alert("Video link saved successfully.");
-}
+  set(videoRef, link).then(() => {
+    alert("Video link saved successfully.");
+  });
+};
 
-function loadVideo(){
+window.loadVideo = function(){
 
-  const link = document.getElementById("videoLink").value.trim();
-
-  if(link === ""){
-    alert("Please paste or save a video link first.");
+  if(videoURL === ""){
+    alert("No training video is available. Please contact the administrator.");
     return;
   }
 
-  const embedLink = convertToEmbed(link);
+  const embedLink = convertToEmbed(videoURL);
 
   document.getElementById("videoFrame").innerHTML =
   `<iframe
-    src="${embedLink}"
-    allow="autoplay; encrypted-media"
-    allowfullscreen>
+  src="${embedLink}"
+  allow="autoplay; encrypted-media"
+  allowfullscreen>
   </iframe>`;
 
   videoPlayed = true;
-}
+};
 
-function newEmployee(){
+window.newEmployee = function(){
 
   if(!videoPlayed){
-    alert("Please play the training video before starting the quiz.");
+    alert("Please play the training video before starting the exam.");
     return;
   }
 
@@ -432,9 +503,9 @@ function newEmployee(){
   document.querySelectorAll("input[name='q2']").forEach(r => r.checked = false);
 
   document.getElementById("quizBox").scrollIntoView({behavior:"smooth"});
-}
+};
 
-function submitQuiz(){
+window.submitQuiz = function(){
 
   const name = document.getElementById("employeeName").value.trim();
   const id = document.getElementById("employeeId").value.trim();
@@ -454,100 +525,101 @@ function submitQuiz(){
     return;
   }
 
-  if(q1.value === "a" && q2.value === "a"){
+  if(q1.value === "b" && q2.value === "c"){
 
     const record = {
       employeeName:name,
       employeeId:id,
-      course:"Human Factors",
+      course:"What Is SMS?",
       result:"Passed",
-      date:new Date().toLocaleString()
+      date:new Date().toLocaleString(),
+      timestamp:new Date().toISOString()
     };
 
-    let records =
-    JSON.parse(localStorage.getItem("humanFactorsTrainingRecords")) || [];
+    push(recordsRef, record).then(() => {
 
-    records.push(record);
+      resultBox.className = "result-box success";
+      resultBox.innerHTML =
+      `✅ Training Completed Successfully<br><br>
+      Employee: ${name}<br>
+      Company ID: ${id}<br>
+      Course: What Is SMS?<br>
+      Result: Passed<br>
+      Date: ${record.date}`;
 
-    localStorage.setItem(
-      "humanFactorsTrainingRecords",
-      JSON.stringify(records)
-    );
+      document.getElementById("quizBox").classList.add("hidden");
+      resultBox.classList.remove("hidden");
 
-    resultBox.className = "section result-box success";
-    resultBox.innerHTML =
-    `✅ Training Completed Successfully<br><br>
-    Employee: ${name}<br>
-    Company ID: ${id}<br>
-    Course: Human Factors<br>
-    Date: ${record.date}`;
-
-    document.getElementById("quizBox").classList.add("hidden");
-    displayRecords();
+    });
 
   }else{
 
     videoPlayed = false;
 
-    resultBox.className = "section result-box error";
+    resultBox.className = "result-box error";
     resultBox.innerHTML =
     `❌ Incorrect answers.<br><br>
-    The employee must play the training video again before trying the quiz again.`;
+    The employee must play the training video again before trying the exam again.`;
 
     document.getElementById("quizBox").classList.add("hidden");
+    resultBox.classList.remove("hidden");
   }
-
-  resultBox.classList.remove("hidden");
-}
+};
 
 function displayRecords(){
 
-  const records =
-  JSON.parse(localStorage.getItem("humanFactorsTrainingRecords")) || [];
-
   const recordsList = document.getElementById("recordsList");
 
-  recordsList.innerHTML = "";
-
-  if(records.length === 0){
-    recordsList.innerHTML = "<p>No completed training records yet.</p>";
+  if(!recordsList){
     return;
   }
 
-  records.forEach(function(record, index){
+  onValue(recordsRef, (snapshot) => {
 
-    const div = document.createElement("div");
+    recordsList.innerHTML = "";
 
-    div.className = "record-card";
+    if(!snapshot.exists()){
+      recordsList.innerHTML = "<p>No completed training records yet.</p>";
+      return;
+    }
 
-    div.innerHTML =
-    `<div class="record-info">
-      <strong>${index + 1}. ${record.employeeName}</strong><br>
-      Company ID: ${record.employeeId}<br>
-      Course: ${record.course}<br>
-      Result: ${record.result}<br>
-      Date: ${record.date}
-    </div>
+    const records = [];
 
-    <button class="delete-btn" onclick="deleteRecord(${index})">
-      🗑 Delete
-    </button>`;
+    snapshot.forEach(child => {
+      records.push({
+        key: child.key,
+        data: child.val()
+      });
+    });
 
-    recordsList.appendChild(div);
+    records.reverse().forEach((record, index) => {
 
+      const div = document.createElement("div");
+      div.className = "record-card";
+
+      div.innerHTML =
+      `<div class="record-info">
+        <strong>${index + 1}. Employee: ${record.data.employeeName || "N/A"}</strong><br>
+        <strong>Company ID:</strong> ${record.data.employeeId || "N/A"}<br>
+        <strong>Course:</strong> ${record.data.course || "N/A"}<br>
+        <strong>Result:</strong> ${record.data.result || "N/A"}<br>
+        <strong>Date:</strong> ${record.data.date || "N/A"}
+      </div>
+
+      ${isAdmin ? `
+      <button class="delete-btn" onclick="deleteRecord('${record.key}')">
+        🗑 Delete
+      </button>` : ""}`;
+
+      recordsList.appendChild(div);
+    });
   });
 }
 
-function deleteRecord(index){
+window.deleteRecord = function(recordKey){
 
-  const password = prompt("Enter password to delete this record:");
-
-  if(password === null){
-    return;
-  }
-
-  if(password !== DELETE_PASSWORD){
-    alert("Incorrect password. Record was not deleted.");
+  if(!isAdmin){
+    alert("You are not authorized to delete records.");
     return;
   }
 
@@ -555,21 +627,12 @@ function deleteRecord(index){
     return;
   }
 
-  let records =
-  JSON.parse(localStorage.getItem("humanFactorsTrainingRecords")) || [];
+  remove(ref(db, "trainingRecords/whatIsSMS/" + recordKey)).then(() => {
+    alert("Record deleted successfully.");
+  });
+};
 
-  records.splice(index, 1);
-
-  localStorage.setItem(
-    "humanFactorsTrainingRecords",
-    JSON.stringify(records)
-  );
-
-  displayRecords();
-
-  alert("Record deleted successfully.");
-}
-
+applyRoleAccess();
 displayRecords();
 
 </script>
