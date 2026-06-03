@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,68 +6,237 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
 body{
-  font-family:'Segoe UI',Arial,sans-serif;
+  font-family:'Segoe UI', Arial, sans-serif;
   min-height:100vh;
-  background:linear-gradient(135deg,#071f47,#1450b8);
+  background:
+    radial-gradient(circle at top left, rgba(255,152,0,0.30), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(28,99,219,0.45), transparent 38%),
+    linear-gradient(rgba(5,20,55,0.88), rgba(5,20,55,0.95)),
+    url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
   padding:35px;
 }
 
 .container{
-  max-width:1100px;
+  max-width:1200px;
   margin:auto;
-  background:white;
-  padding:40px;
-  border-radius:28px;
-  box-shadow:0 20px 55px rgba(0,0,0,0.35);
+  background:rgba(255,255,255,0.97);
+  padding:48px;
+  border-radius:38px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.45);
+  position:relative;
+  overflow:hidden;
+}
+
+.container::before{
+  content:"";
+  position:absolute;
+  width:420px;
+  height:420px;
+  background:radial-gradient(circle,rgba(20,80,184,0.14),transparent 70%);
+  top:-180px;
+  right:-140px;
+}
+
+.container::after{
+  content:"";
+  position:absolute;
+  width:320px;
+  height:320px;
+  background:radial-gradient(circle,rgba(255,152,0,0.16),transparent 70%);
+  bottom:-140px;
+  left:-110px;
+}
+
+.content{
+  position:relative;
+  z-index:2;
+}
+
+.logo{
+  width:105px;
+  height:105px;
+  margin:0 auto 20px;
+  border-radius:32px;
+  background:linear-gradient(135deg,#071f47,#1450b8,#ff9800);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:48px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.30);
+}
+
+.badge{
+  width:max-content;
+  margin:0 auto 15px;
+  background:#eaf2ff;
+  color:#071f47;
+  padding:10px 24px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:2px;
 }
 
 h1{
   text-align:center;
   color:#071f47;
-  font-size:48px;
+  font-size:58px;
   margin-bottom:10px;
+  font-weight:900;
 }
 
 .subtitle{
   text-align:center;
-  color:#555;
-  margin-bottom:30px;
-  font-size:18px;
+  color:#56657d;
+  margin-bottom:25px;
+  font-size:20px;
+  font-weight:500;
+}
+
+.title-line{
+  width:240px;
+  height:6px;
+  margin:0 auto 35px;
+  border-radius:10px;
+  background:linear-gradient(90deg,transparent,#ff9800,#1450b8,transparent);
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+  margin-bottom:35px;
+}
+
+.summary-card{
+  background:linear-gradient(135deg,#ffffff,#f8fbff);
+  border-radius:22px;
+  padding:22px;
+  text-align:center;
+  box-shadow:0 12px 28px rgba(0,0,0,0.12);
+  border:1px solid #eef2f7;
+}
+
+.summary-card h2{
+  color:#071f47;
+  font-size:34px;
+  margin-bottom:6px;
+}
+
+.summary-card p{
+  color:#56657d;
+  font-weight:900;
 }
 
 .report-card{
-  background:#f8fbff;
-  border-left:8px solid #1450b8;
-  padding:22px;
-  border-radius:18px;
-  margin-bottom:18px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.10);
+  background:linear-gradient(135deg,#ffffff,#f8fbff);
+  border-left:10px solid #1450b8;
+  padding:28px;
+  border-radius:26px;
+  margin-bottom:24px;
+  box-shadow:0 16px 38px rgba(0,0,0,0.15);
+  transition:0.3s;
 }
 
-.report-card h2{
+.report-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 24px 55px rgba(0,0,0,0.22);
+}
+
+.report-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
+.report-title h2{
   color:#071f47;
+  font-size:30px;
   margin-bottom:8px;
+}
+
+.report-id{
+  color:#64748b;
+  font-size:14px;
+  font-weight:800;
 }
 
 .status{
   display:inline-block;
-  padding:8px 16px;
+  padding:11px 20px;
   border-radius:999px;
   font-weight:900;
-  margin-top:10px;
+  font-size:14px;
+  box-shadow:0 8px 18px rgba(0,0,0,0.18);
 }
 
-.open{background:#fee2e2;color:#991b1b;}
-.progress{background:#fef3c7;color:#92400e;}
-.closed{background:#dcfce7;color:#166534;}
+.open{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.progress{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.closed{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px 28px;
+  background:#f8fafc;
+  padding:20px;
+  border-radius:18px;
+  border:1px solid #e5e7eb;
+}
+
+.info-item{
+  color:#222;
+  font-size:16px;
+  line-height:1.5;
+}
+
+.info-item strong{
+  color:#071f47;
+}
+
+.full{
+  grid-column:1 / 3;
+}
+
+.empty{
+  text-align:center;
+  color:#56657d;
+  font-size:21px;
+  padding:45px;
+  background:#f8fbff;
+  border-radius:24px;
+  border:1px dashed #cbd5e1;
+}
 
 .buttons{
   display:flex;
-  gap:15px;
-  margin-top:30px;
+  gap:16px;
+  margin-top:35px;
   justify-content:center;
   flex-wrap:wrap;
 }
@@ -76,19 +244,79 @@ h1{
 .btn{
   text-decoration:none;
   color:white;
-  padding:15px 28px;
-  border-radius:14px;
+  padding:17px 34px;
+  border-radius:17px;
+  font-weight:900;
+  font-size:17px;
+  box-shadow:0 12px 26px rgba(0,0,0,0.25);
+  transition:0.3s;
+}
+
+.btn:hover{
+  transform:translateY(-4px);
+}
+
+.back{
+  background:linear-gradient(135deg,#dc2626,#ef4444);
+}
+
+.report{
+  background:linear-gradient(135deg,#d83b00,#ff9800);
+}
+
+.home{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+}
+
+.footer{
+  margin-top:32px;
+  text-align:center;
+  color:#51617b;
+  font-size:14px;
+  letter-spacing:3px;
   font-weight:900;
 }
 
-.home{background:#071f47;}
-.report{background:#ff9800;}
+@media(max-width:900px){
+  body{
+    padding:20px;
+  }
 
-.empty{
-  text-align:center;
-  color:#666;
-  font-size:20px;
-  padding:35px;
+  .container{
+    padding:32px 22px;
+    border-radius:30px;
+  }
+
+  h1{
+    font-size:42px;
+  }
+
+  .summary{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .info-grid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:1;
+  }
+
+  .btn{
+    width:100%;
+    text-align:center;
+  }
+}
+
+@media(max-width:520px){
+  .summary{
+    grid-template-columns:1fr;
+  }
+
+  .report-title h2{
+    font-size:24px;
+  }
 }
 </style>
 </head>
@@ -96,20 +324,57 @@ h1{
 <body>
 
 <div class="container">
+<div class="content">
+
+  <div class="logo">📋</div>
+
+  <div class="badge">MY SMS REPORTS</div>
 
   <h1>My Reports</h1>
 
   <div class="subtitle">
-    Here you can see the SMS reports submitted by your user.
+    Track the SMS reports submitted by your user and follow their current status.
+  </div>
+
+  <div class="title-line"></div>
+
+  <div class="summary">
+
+    <div class="summary-card">
+      <h2 id="totalReports">0</h2>
+      <p>Total Reports</p>
+    </div>
+
+    <div class="summary-card">
+      <h2 id="openReports">0</h2>
+      <p>Open</p>
+    </div>
+
+    <div class="summary-card">
+      <h2 id="progressReports">0</h2>
+      <p>In Progress</p>
+    </div>
+
+    <div class="summary-card">
+      <h2 id="closedReports">0</h2>
+      <p>Closed</p>
+    </div>
+
   </div>
 
   <div id="reportsList"></div>
 
   <div class="buttons">
-    <a class="btn report" href="SMS-Report.html">Create New Report</a>
-    <a class="btn home" href="index.html">Home</a>
+    <a class="btn back" href="Hazard-Identification.html">⬅ Back</a>
+    <a class="btn report" href="SMS-Report.html">➕ Create New Report</a>
+    <a class="btn home" href="index.html">🏠 Home</a>
   </div>
 
+  <div class="footer">
+    AVIATION SAFETY MANAGEMENT PLATFORM
+  </div>
+
+</div>
 </div>
 
 <script type="module">
@@ -135,12 +400,21 @@ const auth = getAuth(app);
 const reportsList = document.getElementById("reportsList");
 
 function getStatusClass(status){
-  const s = (status || "").toUpperCase();
+  const s = (status || "OPEN").toUpperCase();
 
-  if(s === "CLOSED") return "closed";
-  if(s === "IN PROGRESS") return "progress";
+  if(s === "CLOSED"){
+    return "closed";
+  }
+
+  if(s === "IN PROGRESS"){
+    return "progress";
+  }
 
   return "open";
+}
+
+function cleanStatus(status){
+  return (status || "OPEN").toUpperCase();
 }
 
 onAuthStateChanged(auth, (user) => {
@@ -158,32 +432,102 @@ onAuthStateChanged(auth, (user) => {
     reportsList.innerHTML = "";
 
     let found = false;
+    let total = 0;
+    let open = 0;
+    let progress = 0;
+    let closed = 0;
 
-    Object.values(data).forEach(report => {
+    Object.values(data).reverse().forEach(report => {
 
       if(report.createdByUid === user.uid){
 
         found = true;
+        total++;
 
-        const status = report.status || "OPEN";
+        const status = cleanStatus(report.status);
         const statusClass = getStatusClass(status);
+
+        if(status === "CLOSED"){
+          closed++;
+        }else if(status === "IN PROGRESS"){
+          progress++;
+        }else{
+          open++;
+        }
 
         const card = document.createElement("div");
         card.className = "report-card";
 
         card.innerHTML = `
-          <h2>${report.title || "Untitled Report"}</h2>
-          <p><strong>Date:</strong> ${report.date || "N/A"}</p>
-          <p><strong>Airport:</strong> ${report.airport || "N/A"}</p>
-          <p><strong>Aircraft:</strong> ${report.aircraftRegistration || "N/A"}</p>
-          <p><strong>Type:</strong> ${report.reportType || "N/A"}</p>
-          <span class="status ${statusClass}">${status}</span>
+          <div class="report-top">
+
+            <div class="report-title">
+              <h2>${report.title || "Untitled Report"}</h2>
+              <div class="report-id">
+                Report ID: ${report.reportId || "N/A"}
+              </div>
+            </div>
+
+            <span class="status ${statusClass}">
+              ${status}
+            </span>
+
+          </div>
+
+          <div class="info-grid">
+
+            <div class="info-item">
+              <strong>Name:</strong> ${report.reporterName || "N/A"}
+            </div>
+
+            <div class="info-item">
+              <strong>Date:</strong> ${report.date || "N/A"}
+            </div>
+
+            <div class="info-item">
+              <strong>Flight Number:</strong> ${report.flightNumber || "N/A"}
+            </div>
+
+            <div class="info-item">
+              <strong>Aircraft Registration:</strong> ${report.aircraftRegistration || "N/A"}
+            </div>
+
+            <div class="info-item">
+              <strong>Airport:</strong> ${report.airport || "N/A"}
+            </div>
+
+            <div class="info-item">
+              <strong>Destination:</strong> ${report.destination || "N/A"}
+            </div>
+
+            <div class="info-item">
+              <strong>Type:</strong> ${report.reportType || "N/A"}
+            </div>
+
+            <div class="info-item">
+              <strong>Risk:</strong> ${report.risk || "NOT ASSESSED"}
+            </div>
+
+            <div class="info-item full">
+              <strong>What Happened:</strong> ${report.whatHappened || "N/A"}
+            </div>
+
+            <div class="info-item full">
+              <strong>Recommendation:</strong> ${report.recommendation || "N/A"}
+            </div>
+
+          </div>
         `;
 
         reportsList.appendChild(card);
       }
 
     });
+
+    document.getElementById("totalReports").innerText = total;
+    document.getElementById("openReports").innerText = open;
+    document.getElementById("progressReports").innerText = progress;
+    document.getElementById("closedReports").innerText = closed;
 
     if(!found){
       reportsList.innerHTML = `
