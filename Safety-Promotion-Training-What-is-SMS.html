@@ -6,11 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
   font-family:'Segoe UI',Arial,sans-serif;
@@ -97,8 +93,7 @@ input{
   font-size:16px;
 }
 
-button,
-.btn{
+button,.btn{
   padding:15px 24px;
   border:none;
   border-radius:15px;
@@ -114,19 +109,24 @@ button,
   transition:0.3s;
 }
 
-button:hover,
-.btn:hover{
+button:hover,.btn:hover{
   transform:translateY(-4px);
 }
 
-.save-btn{ background:linear-gradient(135deg,#071f47,#1450b8); }
-.play-btn{ background:linear-gradient(135deg,#1450b8,#00a2ff); }
-.add-btn{ background:linear-gradient(135deg,#d83b00,#ff9800); margin-bottom:25px; }
-.submit-btn{ background:linear-gradient(135deg,#047857,#22c55e); margin-top:20px; }
-.back-btn{ background:linear-gradient(135deg,#dc2626,#ef4444); }
-.home-btn{ background:linear-gradient(135deg,#071f47,#1450b8); }
-.print-btn{ background:linear-gradient(135deg,#111827,#374151); }
-.delete-btn{ background:linear-gradient(135deg,#dc2626,#ef4444); }
+.save-btn{background:linear-gradient(135deg,#071f47,#1450b8);}
+.play-btn{background:linear-gradient(135deg,#1450b8,#00a2ff);}
+.add-btn{background:linear-gradient(135deg,#d83b00,#ff9800);margin-bottom:25px;}
+.submit-btn{background:linear-gradient(135deg,#047857,#22c55e);margin-top:20px;}
+
+.back-btn{
+  background:linear-gradient(135deg,#ff6b00,#ff9800);
+  padding:16px 32px;
+  border-radius:999px;
+}
+
+.home-btn{background:linear-gradient(135deg,#071f47,#1450b8);}
+.print-btn{background:linear-gradient(135deg,#111827,#374151);}
+.delete-btn{background:linear-gradient(135deg,#dc2626,#ef4444);}
 
 iframe{
   width:100%;
@@ -157,9 +157,7 @@ iframe{
   font-size:16px;
 }
 
-.hidden{
-  display:none;
-}
+.hidden{display:none;}
 
 .result-box{
   padding:25px;
@@ -169,19 +167,12 @@ iframe{
   font-weight:900;
 }
 
-.success{
-  background:#dcfce7;
-  color:#166534;
-}
-
-.error{
-  background:#fee2e2;
-  color:#991b1b;
-}
+.success{background:#dcfce7;color:#166534;}
+.error{background:#fee2e2;color:#991b1b;}
 
 .record-card{
   background:white;
-  padding:18px;
+  padding:20px;
   border-radius:18px;
   margin-top:14px;
   box-shadow:0 8px 20px rgba(0,0,0,0.10);
@@ -193,7 +184,8 @@ iframe{
 }
 
 .record-info{
-  line-height:1.7;
+  line-height:1.8;
+  font-size:16px;
 }
 
 .admin-note{
@@ -205,52 +197,65 @@ iframe{
   font-weight:800;
 }
 
+.print-title{
+  display:none;
+}
+
 @media print{
+  body{
+    background:white!important;
+    padding:10px!important;
+  }
+
+  .container{
+    box-shadow:none!important;
+    padding:20px!important;
+  }
+
   .video-box,
   .quiz-box,
   .top-buttons,
   .add-btn,
   .result-box,
   .delete-btn,
-  .admin-only{
+  .admin-note{
     display:none!important;
   }
 
-  body{
-    background:white;
+  .records-box{
+    display:block!important;
+    box-shadow:none!important;
+    border-left:none!important;
+    background:white!important;
   }
 
-  .container{
-    box-shadow:none;
+  .print-title{
+    display:block!important;
+    text-align:center;
+    color:#071f47;
+    font-size:28px;
+    margin-bottom:25px;
+    font-weight:900;
+  }
+
+  h1,.subtitle,.logo{
+    display:none!important;
+  }
+
+  .record-card{
+    box-shadow:none!important;
+    border:1px solid #ddd;
+    break-inside:avoid;
   }
 }
 
 @media(max-width:800px){
-  body{
-    padding:20px;
-  }
-
-  .container{
-    padding:28px;
-  }
-
-  h1{
-    font-size:38px;
-  }
-
-  iframe{
-    height:260px;
-  }
-
-  .record-card{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  button,
-  .btn{
-    width:100%;
-  }
+  body{padding:20px;}
+  .container{padding:28px;}
+  h1{font-size:38px;}
+  iframe{height:260px;}
+  .record-card{flex-direction:column;align-items:flex-start;}
+  button,.btn{width:100%;}
 }
 </style>
 </head>
@@ -268,9 +273,8 @@ iframe{
   </div>
 
   <div class="top-buttons">
-
     <button class="back-btn" onclick="location.href='Safety-Promotion-Training.html'">
-      ← Back
+      ⬅ Back to Training
     </button>
 
     <button class="home-btn" onclick="location.href='index.html'">
@@ -280,7 +284,6 @@ iframe{
     <button class="print-btn admin-only" onclick="window.print()">
       🖨 Print Records
     </button>
-
   </div>
 
   <div class="box video-box">
@@ -365,6 +368,7 @@ iframe{
   <div class="result-box hidden" id="resultBox"></div>
 
   <div class="box records-box admin-only">
+    <div class="print-title">Training Completion Records - What Is SMS?</div>
     <h2>Training Completion Records</h2>
     <div id="recordsList"></div>
   </div>
@@ -399,6 +403,7 @@ const db = getDatabase(app);
 
 let videoPlayed = false;
 let videoURL = "";
+
 let userRole = (localStorage.getItem("userRole") || "tech").toLowerCase();
 
 const isAdmin =
@@ -410,13 +415,11 @@ const videoRef = ref(db, "trainingVideos/whatIsSMS/videoLink");
 const recordsRef = ref(db, "trainingRecords/whatIsSMS");
 
 function applyRoleAccess(){
-
   if(!isAdmin){
     document.querySelectorAll(".admin-only").forEach(element => {
       element.style.display = "none";
     });
   }
-
 }
 
 function convertToEmbed(url){
@@ -438,13 +441,11 @@ function convertToEmbed(url){
 }
 
 onValue(videoRef, (snapshot) => {
-
   videoURL = snapshot.val() || "";
 
   if(isAdmin && document.getElementById("videoLink")){
     document.getElementById("videoLink").value = videoURL;
   }
-
 });
 
 window.saveVideo = function(){
@@ -454,8 +455,7 @@ window.saveVideo = function(){
     return;
   }
 
-  const link =
-  document.getElementById("videoLink").value.trim();
+  const link = document.getElementById("videoLink").value.trim();
 
   if(link === ""){
     alert("Please paste a video link first.");
@@ -465,7 +465,6 @@ window.saveVideo = function(){
   set(videoRef, link).then(() => {
     alert("Video link saved successfully.");
   });
-
 };
 
 window.loadVideo = function(){
@@ -475,8 +474,7 @@ window.loadVideo = function(){
     return;
   }
 
-  const embedLink =
-  convertToEmbed(videoURL);
+  const embedLink = convertToEmbed(videoURL);
 
   document.getElementById("videoFrame").innerHTML =
   `<iframe
@@ -504,27 +502,18 @@ window.newEmployee = function(){
   document.querySelectorAll("input[name='q1']").forEach(r => r.checked = false);
   document.querySelectorAll("input[name='q2']").forEach(r => r.checked = false);
 
-  document.getElementById("quizBox").scrollIntoView({
-    behavior:"smooth"
-  });
+  document.getElementById("quizBox").scrollIntoView({behavior:"smooth"});
 };
 
 window.submitQuiz = function(){
 
-  const name =
-  document.getElementById("employeeName").value.trim();
+  const name = document.getElementById("employeeName").value.trim();
+  const id = document.getElementById("employeeId").value.trim();
 
-  const id =
-  document.getElementById("employeeId").value.trim();
+  const q1 = document.querySelector("input[name='q1']:checked");
+  const q2 = document.querySelector("input[name='q2']:checked");
 
-  const q1 =
-  document.querySelector("input[name='q1']:checked");
-
-  const q2 =
-  document.querySelector("input[name='q2']:checked");
-
-  const resultBox =
-  document.getElementById("resultBox");
+  const resultBox = document.getElementById("resultBox");
 
   if(name === "" || id === ""){
     alert("Please enter employee name and company ID.");
@@ -555,6 +544,7 @@ window.submitQuiz = function(){
       Employee: ${name}<br>
       Company ID: ${id}<br>
       Course: What Is SMS?<br>
+      Result: Passed<br>
       Date: ${record.date}`;
 
       document.getElementById("quizBox").classList.add("hidden");
@@ -574,13 +564,11 @@ window.submitQuiz = function(){
     document.getElementById("quizBox").classList.add("hidden");
     resultBox.classList.remove("hidden");
   }
-
 };
 
 function displayRecords(){
 
-  const recordsList =
-  document.getElementById("recordsList");
+  const recordsList = document.getElementById("recordsList");
 
   if(!recordsList){
     return;
@@ -606,19 +594,16 @@ function displayRecords(){
 
     records.reverse().forEach((record, index) => {
 
-      const div =
-      document.createElement("div");
-
-      div.className =
-      "record-card";
+      const div = document.createElement("div");
+      div.className = "record-card";
 
       div.innerHTML =
       `<div class="record-info">
-        <strong>${index + 1}. ${record.data.employeeName || "N/A"}</strong><br>
-        Company ID: ${record.data.employeeId || "N/A"}<br>
-        Course: ${record.data.course || "N/A"}<br>
-        Result: ${record.data.result || "N/A"}<br>
-        Date: ${record.data.date || "N/A"}
+        <strong>${index + 1}. Employee: ${record.data.employeeName || "N/A"}</strong><br>
+        <strong>Company ID:</strong> ${record.data.employeeId || "N/A"}<br>
+        <strong>Course:</strong> ${record.data.course || "N/A"}<br>
+        <strong>Result:</strong> ${record.data.result || "N/A"}<br>
+        <strong>Date:</strong> ${record.data.date || "N/A"}
       </div>
 
       ${isAdmin ? `
@@ -627,11 +612,8 @@ function displayRecords(){
       </button>` : ""}`;
 
       recordsList.appendChild(div);
-
     });
-
   });
-
 }
 
 window.deleteRecord = function(recordKey){
@@ -648,7 +630,6 @@ window.deleteRecord = function(recordKey){
   remove(ref(db, "trainingRecords/whatIsSMS/" + recordKey)).then(() => {
     alert("Record deleted successfully.");
   });
-
 };
 
 applyRoleAccess();
