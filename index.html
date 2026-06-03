@@ -634,16 +634,17 @@ function applyRoleAccess(role){
         return;
     }
 
-    if(role === "tech"){
-        dashboardBtn.style.display = "none";
-        assuranceBtn.style.display = "none";
+    if(role === "tech" || role === "technician"){
+    dashboardBtn.style.display = "none";
+    assuranceBtn.style.display = "none";
 
-        policyBtn.style.display = "flex";
-        hazardBtn.style.display = "flex";
-        promotionBtn.style.display = "flex";
+    policyBtn.style.display = "flex";
+    hazardBtn.style.display = "flex";
+    promotionBtn.style.display = "flex";
 
-        newReportBanner.style.display = "none";
+    document.querySelector("#newReportBanner button").style.display = "none";
     }
+
 }
     
 onAuthStateChanged(auth, async (user) => {
@@ -654,7 +655,7 @@ onAuthStateChanged(auth, async (user) => {
 
         if(snapshot.exists()){
             const userData = snapshot.val();
-            const role = userData.role;
+            const role = (userData.role || "").toLowerCase().trim();
 
             localStorage.setItem("userRole", role);
             localStorage.setItem("companyId", userData.companyId || "");
