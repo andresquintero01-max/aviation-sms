@@ -428,8 +428,8 @@ body{
 
     <div class="menu">
 
-        <a class="btn dashboard" href="Dashboard.html">
-            <div class="btn-left">
+    <a class="btn dashboard" id="dashboardBtn" href="Dashboard.html">
+    <div class="btn-left">
                 <div class="icon">📊</div>
                 <div class="text">
                     <h2>Dashboard</h2>
@@ -439,8 +439,8 @@ body{
             <div class="arrow">›</div>
         </a>
 
-        <a class="btn policy" href="SMS-Policy.html">
-            <div class="btn-left">
+    <a class="btn policy" id="policyBtn" href="SMS-Policy.html">
+    <div class="btn-left">
                 <div class="icon">📄</div>
                 <div class="text">
                     <h2>SMS Policy</h2>
@@ -450,8 +450,8 @@ body{
             <div class="arrow">›</div>
         </a>
 
-        <a class="btn hazard" href="Hazard-Identification.html">
-            <div class="btn-left">
+    <a class="btn hazard" id="hazardBtn" href="Hazard-Identification.html">
+    <div class="btn-left">
                 <div class="icon">⚠️</div>
                 <div class="text">
                     <h2>Hazard Identification</h2>
@@ -461,8 +461,8 @@ body{
             <div class="arrow">›</div>
         </a>
 
-        <a class="btn assurance" href="Safety-Assurance.html">
-            <div class="btn-left">
+    <a class="btn assurance" id="assuranceBtn" href="Safety-Assurance.html">
+    <div class="btn-left">
                 <div class="icon">✔️</div>
                 <div class="text">
                     <h2>Safety Assurance</h2>
@@ -472,8 +472,8 @@ body{
             <div class="arrow">›</div>
         </a>
 
-        <a class="btn promotion" href="Safety-Promotion.html">
-            <div class="btn-left">
+    <a class="btn promotion" id="promotionBtn" href="Safety-Promotion.html">
+    <div class="btn-left">
                 <div class="icon">👥</div>
                 <div class="text">
                     <h2>Safety Promotion</h2>
@@ -495,7 +495,7 @@ body{
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, onValue, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
@@ -583,7 +583,7 @@ window.login = function(){
 
     signInWithEmailAndPassword(auth, email, password)
     .then(() => {
-        showSystem();
+    console.log("Login successful");
     })
     .catch((error) => {
         alert("Invalid email or password");
@@ -615,9 +615,57 @@ document.addEventListener("keydown", function(e){
 
 };
 
-onAuthStateChanged(auth, (user) => {
+function applyRoleAccess(role){
+
+    const dashboardBtn = document.getElementById("dashboardBtn");
+    const policyBtn = document.getElementById("policyBtn");
+    const hazardBtn = document.getElementById("hazardBtn");
+    const assuranceBtn = document.getElementById("assuranceBtn");
+    const promotionBtn = document.getElementById("promotionBtn");
+    const newReportBanner = document.getElementById("newReportBanner");
+
+    dashboardBtn.style.display = "flex";
+    policyBtn.style.display = "flex";
+    hazardBtn.style.display = "flex";
+    assuranceBtn.style.display = "flex";
+    promotionBtn.style.display = "flex";
+
+    if(role === "admin"){
+        return;
+    }
+
+    if(role === "tech"){
+        dashboardBtn.style.display = "none";
+        assuranceBtn.style.display = "none";
+
+        policyBtn.style.display = "flex";
+        hazardBtn.style.display = "flex";
+        promotionBtn.style.display = "flex";
+
+        newReportBanner.style.display = "none";
+    }
+}
+    
+onAuthStateChanged(auth, async (user) => {
     if(user){
-        showSystem();
+        const dbRef = ref(database);
+
+        const snapshot = await get(child(dbRef, "users/" + user.uid));
+
+        if(snapshot.exists()){
+            const userData = snapshot.val();
+            const role = userData.role;
+
+            localStorage.setItem("userRole", role);
+            localStorage.setItem("companyId", userData.companyId || "");
+
+            applyRoleAccess(role);
+            showSystem();
+
+        }else{
+            alert("User role not found. Contact administrator.");
+            signOut(auth);
+        }
     }
 });
 
