@@ -59,6 +59,8 @@ window.sendReport = function () {
     title: title,
     reporterName: document.getElementById("name").value,
     date: document.getElementById("date").value,
+    createdByUid: auth.currentUser.uid,
+    createdByEmail: auth.currentUser.email,
     flightNumber: document.getElementById("flightNumber").value,
     aircraftRegistration: document.getElementById("aircraftRegistration").value,
     airport: document.getElementById("airport").value,
