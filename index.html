@@ -378,7 +378,7 @@ body{
     </p>
 
     <div class="login-box">
-        <input type="text" id="username" placeholder="Username">
+        <<input type="email" id="username" placeholder="Email">
         <input type="password" id="password" placeholder="Password">
 
         <button onclick="login()">
@@ -482,6 +482,7 @@ body{
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
@@ -495,10 +496,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
-
-const USERNAME = "Tom";
-const PASSWORD = "Tom";
-const SESSION_HOURS = 6;
+const auth = getAuth(app);
 
 let reportsListenerStarted = false;
 
@@ -556,29 +554,27 @@ window.openDatabaseAndClear = function(){
     window.location.href = "SMS-Database.html";
 };
 
-function checkSession(){
-    const loginTime = localStorage.getItem("smsLoginTime");
-
-    if(loginTime){
-        const elapsed = Date.now() - parseInt(loginTime);
-        const hours = elapsed / (1000 * 60 * 60);
-
-        if(hours < SESSION_HOURS){
-            showSystem();
-        }
-    }
-}
-
 window.login = function(){
-    const user = document.getElementById("username").value;
-    const pass = document.getElementById("password").value;
 
-    if(user === USERNAME && pass === PASSWORD){
-        localStorage.setItem("smsLoginTime", Date.now());
-        showSystem();
-    }else{
-        alert("Invalid Username or Password");
+    const email =
+    document.getElementById("username").value.trim();
+
+    const password =
+    document.getElementById("password").value.trim();
+
+    if(!email || !password){
+        alert("Please enter email and password");
+        return;
     }
+
+    signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+        showSystem();
+    })
+    .catch((error) => {
+        alert("Invalid email or password");
+        console.error(error);
+    });
 };
 
 document.addEventListener("keydown", function(e){
@@ -587,7 +583,11 @@ document.addEventListener("keydown", function(e){
     }
 });
 
-checkSession();
+onAuthStateChanged(auth, (user) => {
+    if(user){
+        showSystem();
+    }
+});
 
 </script>
 
