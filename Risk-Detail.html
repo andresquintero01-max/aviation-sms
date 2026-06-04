@@ -525,6 +525,50 @@ ${mandatoryMessage}
 `;
 }
 
+function restoreSavedRisk(code){
+if(!code || code === "N/A") return;
+
+const severity = code.charAt(0);
+const probability = code.charAt(1);
+
+if(!severityDefinitions[severity] || !probabilityDefinitions[probability]) return;
+
+s = severity;
+p = probability;
+risk = code;
+
+result.innerText = "Risk: " + risk + " → " + getRiskLevel(s,p);
+showDefinition("definitionBox",s,p,risk,true);
+
+document.querySelectorAll("#matrix .cell").forEach(cell=>{
+if(cell.innerText === code){
+cell.classList.add("selected");
+}
+});
+}
+
+function restoreSavedResidualRisk(code){
+if(!code || code === "N/A") return;
+
+const severity = code.charAt(0);
+const probability = code.charAt(1);
+
+if(!severityDefinitions[severity] || !probabilityDefinitions[probability]) return;
+
+rs = severity;
+rp = probability;
+residualRisk = code;
+
+residualResult.innerText = "Risk: " + residualRisk + " → " + getRiskLevel(rs,rp);
+showDefinition("residualDefinitionBox",rs,rp,residualRisk,false);
+
+document.querySelectorAll("#residualMatrix .cell").forEach(cell=>{
+if(cell.innerText === code){
+cell.classList.add("selected");
+}
+});
+}
+
 function loadMainReport(){
 
 if(!key || key === "general"){
@@ -557,6 +601,12 @@ document.getElementById("reportBox").innerHTML=`
 savedRisk.innerText=d.risk||"N/A";
 savedResidualRisk.innerText=d.residualRisk||"N/A";
 
+renderMatrix();
+renderResidualMatrix();
+
+restoreSavedRisk(d.risk);
+restoreSavedResidualRisk(d.residualRisk);
+
 if(d.riskClosed===true){
 const btn=document.getElementById("saveRiskBtn");
 btn.classList.add("closed");
@@ -574,10 +624,10 @@ loadPrintInvestigationData();
 }else{
 document.getElementById("reportBox").innerHTML =
 "<b style='color:red;'>Report not found.</b><br>Key used: "+key;
-}
 
 renderMatrix();
 renderResidualMatrix();
+}
 
 });
 }
@@ -655,11 +705,7 @@ alert("Please select a risk cell first.");
 return;
 }
 
-let requiredInvestigation = false;
-
-if(mandatoryInvestigationRisks.includes(risk)){
-requiredInvestigation = true;
-}
+let requiredInvestigation = mandatoryInvestigationRisks.includes(risk);
 
 update(ref(db,"smsReports/"+key),{
 risk:risk,
