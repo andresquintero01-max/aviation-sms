@@ -330,7 +330,7 @@ Press any cell in the matrix to see the severity and probability definitions.
 <button id="fiveWhysBtn" class="module-btn" onclick="openFiveWhys()">5 Whys</button>
 <button id="shellBtn" class="module-btn" onclick="openSHELL()">SHELL</button>
 <button id="bowTieBtn" class="module-btn" onclick="openBowTie()">Bow-Tie</button>
-<button id="dirtydozenBtn" class="module-btn" onclick="openDirtyDozenone()">Dirty Dozen</button>
+<button id="dirtydozenBtn" class="module-btn" onclick="openDirtyDozen()">Dirty Dozen</button>
 </div>
 
 <div class="cpa-box">
@@ -714,7 +714,7 @@ update(ref(db,"smsReports/"+key+"/investigationModules"),{
 dirtyDozen:true
 }).then(()=>{
 markCompleted("dirtyDozenBtn");
-location.href="Investigation-Dirty-Dozen.html?key="+key;
+location.href="Investigation-DirtyDozen.html?key="+key;
 });
 };
 
