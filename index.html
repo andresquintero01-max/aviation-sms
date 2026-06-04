@@ -89,11 +89,41 @@ body{
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
     margin-bottom:18px;
-}
-
 .brand-371q{
     text-align:center;
-    animation:pulse371 2.8s infinite;
+    margin-bottom:20px;
+}
+
+.q3{
+    font-size:150px;
+    font-weight:900;
+    letter-spacing:8px;
+    background:linear-gradient(
+        135deg,
+        #071f47 0%,
+        #1450b8 30%,
+        #3b82f6 60%,
+        #93c5fd 100%
+    );
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-shadow:
+        0 0 20px rgba(59,130,246,0.25),
+        0 0 40px rgba(59,130,246,0.15);
+    display:inline-block;
+    animation:premiumGlow 3s ease-in-out infinite;
+}
+
+@keyframes premiumGlow{
+    0%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.04);
+    }
+    100%{
+        transform:scale(1);
+    }
 }
 
 .login-container h1,
@@ -394,13 +424,9 @@ body{
 <div class="main-container" id="systemPage">
 <div class="content">
 
-    <img src="images/CONICSO.jpg"
-     alt="371Q Logo"
-     style="
-     width:180px;
-     display:block;
-     margin:0 auto 15px auto;
-     border-radius:20px;">
+    <div class="brand-371q">
+    <span class="q3">371Q</span>
+    </div>
     <div style="text-align:right;margin-bottom:20px;">
     <button onclick="logout()" id="logoutBtn"
     style="
