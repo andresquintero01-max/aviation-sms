@@ -347,8 +347,8 @@ get(ref(db,"smsReports/"+key)).then(snapshot=>{
 
     document.getElementById("reportId").innerText = d.reportId || "N/A";
 
-    if(d.investigationDirtyZone){
-      const x = d.investigationDirtyZone;
+    if(d.investigationDirtyDozen){
+      const x = d.investigationDirtyDozen;
 
       lackCommunication.value = x.lackCommunication || "";
       complacency.value = x.complacency || "";
@@ -374,7 +374,7 @@ get(ref(db,"smsReports/"+key)).then(snapshot=>{
 
 window.saveInvestigation = function(){
 
-  update(ref(db,"smsReports/"+key+"/investigationDirtyZone"),{
+  update(ref(db,"smsReports/"+key+"/investigationDirtyDozen"),{
     lackCommunication:lackCommunication.value,
     complacency:complacency.value,
     lackKnowledge:lackKnowledge.value,
@@ -397,7 +397,7 @@ window.saveInvestigation = function(){
   }).then(()=>{
 
     update(ref(db,"smsReports/"+key+"/investigationModules"),{
-      dirtyZone:true
+      dirtyDozen:true
     });
 
     savedAt.innerText = new Date().toISOString();
@@ -409,7 +409,7 @@ window.saveInvestigation = function(){
 window.deleteInvestigation = function(){
 
   if(confirm("Do you want to delete this Dirty Dozen investigation?")){
-    remove(ref(db,"smsReports/"+key+"/investigationDirtyZone")).then(()=>{
+    remove(ref(db,"smsReports/"+key+"/investigationDirtyDozen")).then(()=>{
 
       lackCommunication.value = "";
       complacency.value = "";
@@ -431,7 +431,7 @@ window.deleteInvestigation = function(){
       savedAt.innerText = "Not saved yet";
 
       update(ref(db,"smsReports/"+key+"/investigationModules"),{
-        dirtyZone:false
+        dirtyDozen:false
       });
 
       alert("Dirty Dozen investigation deleted.");
