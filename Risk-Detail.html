@@ -571,19 +571,43 @@ el.classList.add("completed");
 }
 
 function loadInvestigationModules(data){
+
 if(data){
-if(data.fiveWhys===true) markCompleted("fiveWhysBtn");
-if(data.shell===true) markCompleted("shellBtn");
-if(data.bowTie===true || data.contributingFactors===true) markCompleted("bowTieBtn");
-if(data.dirtyDozen===true) markCompleted("dirtydozenBtn");
+  if(data.fiveWhys===true){
+    markCompleted("fiveWhysBtn");
+  }
+
+  if(data.shell===true){
+    markCompleted("shellBtn");
+  }
+
+  if(data.bowTie===true || data.contributingFactors===true){
+    markCompleted("bowTieBtn");
+  }
+
+  if(data.dirtyDozen===true){
+    markCompleted("dirtydozenBtn");
+  }
 }
 
 if(key && key !== "general"){
-get(ref(db,"smsReports/"+key+"/investigationDirtyDozen")).then(snap=>{
-if(snap.exists()){
-markCompleted("dirtydozenBtn");
-}
-});
+
+  get(ref(db,"smsReports/"+key+"/investigation5Why")).then(snap=>{
+    if(snap.exists()) markCompleted("fiveWhysBtn");
+  });
+
+  get(ref(db,"smsReports/"+key+"/investigationSHELL")).then(snap=>{
+    if(snap.exists()) markCompleted("shellBtn");
+  });
+
+  get(ref(db,"smsReports/"+key+"/investigationBowTie")).then(snap=>{
+    if(snap.exists()) markCompleted("bowTieBtn");
+  });
+
+  get(ref(db,"smsReports/"+key+"/investigationDirtyDozen")).then(snap=>{
+    if(snap.exists()) markCompleted("dirtydozenBtn");
+  });
+
 }
 }
 
