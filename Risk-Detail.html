@@ -387,7 +387,7 @@ Press any cell in the residual matrix to see the severity and probability defini
 <div id="fiveWhysPrint"><b>5 Whys:</b> N/A</div><br>
 <div id="shellPrint"><b>SHELL:</b> N/A</div><br>
 <div id="bowTiePrint"><b>Bow-Tie:</b> N/A</div><br>
-<div id="dirtydozenPrint"><b>Dirty Dozen:</b> N/A</div><br>
+<div id="dirtyDozenPrint"><b>Dirty Dozen:</b> N/A</div><br>
 <div id="hfacsPrint"><b>HFACS:</b> N/A</div><br>
 <div id="medaPrint"><b>MEDA:</b> N/A</div><br>
 <div id="redaPrint"><b>REDA:</b> N/A</div>
@@ -489,21 +489,13 @@ return "";
 return `
 <div class="mandatory-box">
 <h3>Mandatory Safety Action Required</h3>
-
-<p>
-Based on the initial risk assessment selected <b>${code}</b>, this event requires:
-</p>
-
+<p>Based on the initial risk assessment selected <b>${code}</b>, this event requires:</p>
 <ul>
 <li><b>SAG Review:</b> The case must be reviewed by the Safety Action Group.</li>
 <li><b>In-depth Investigation:</b> A formal investigation must be performed.</li>
 <li><b>Recommended Methodologies:</b> MEDA, REDA, HFACS or FRAT.</li>
 </ul>
-
-<p>
-These tools for a deeper investigation are located in the <b>Risk Management Tools</b> tab.
-</p>
-
+<p>These tools for a deeper investigation are located in the <b>Risk Management Tools</b> tab.</p>
 </div>
 `;
 }
@@ -539,7 +531,7 @@ s = severity;
 p = probability;
 risk = code;
 
-result.innerText = "Risk: " + risk + " → " + getRiskLevel(s,p);
+document.getElementById("result").innerText = "Risk: " + risk + " → " + getRiskLevel(s,p);
 showDefinition("definitionBox",s,p,risk,true);
 
 document.querySelectorAll("#matrix .cell").forEach(cell=>{
@@ -561,7 +553,7 @@ rs = severity;
 rp = probability;
 residualRisk = code;
 
-residualResult.innerText = "Risk: " + residualRisk + " → " + getRiskLevel(rs,rp);
+document.getElementById("residualResult").innerText = "Risk: " + residualRisk + " → " + getRiskLevel(rs,rp);
 showDefinition("residualDefinitionBox",rs,rp,residualRisk,false);
 
 document.querySelectorAll("#residualMatrix .cell").forEach(cell=>{
@@ -569,6 +561,30 @@ if(cell.innerText === code){
 cell.classList.add("selected");
 }
 });
+}
+
+function markCompleted(id){
+const el = document.getElementById(id);
+if(el){
+el.classList.add("completed");
+}
+}
+
+function loadInvestigationModules(data){
+if(data){
+if(data.fiveWhys===true) markCompleted("fiveWhysBtn");
+if(data.shell===true) markCompleted("shellBtn");
+if(data.bowTie===true || data.contributingFactors===true) markCompleted("bowTieBtn");
+if(data.dirtyDozen===true) markCompleted("dirtydozenBtn");
+}
+
+if(key && key !== "general"){
+get(ref(db,"smsReports/"+key+"/investigationDirtyDozen")).then(snap=>{
+if(snap.exists()){
+markCompleted("dirtydozenBtn");
+}
+});
+}
 }
 
 function loadMainReport(){
@@ -600,8 +616,8 @@ document.getElementById("reportBox").innerHTML=`
 <b>Risk:</b> ${d.risk || "N/A"}
 `;
 
-savedRisk.innerText=d.risk||"N/A";
-savedResidualRisk.innerText=d.residualRisk||"N/A";
+document.getElementById("savedRisk").innerText=d.risk||"N/A";
+document.getElementById("savedResidualRisk").innerText=d.residualRisk||"N/A";
 
 renderMatrix();
 renderResidualMatrix();
@@ -610,13 +626,11 @@ restoreSavedRisk(d.risk);
 restoreSavedResidualRisk(d.residualRisk);
 
 if(d.riskClosed===true){
-const btn=document.getElementById("saveRiskBtn");
-btn.classList.add("closed");
+document.getElementById("saveRiskBtn").classList.add("closed");
 }
 
 if(d.residualRiskClosed===true){
-const btn=document.getElementById("saveResidualRiskBtn");
-btn.classList.add("closed");
+document.getElementById("saveResidualRiskBtn").classList.add("closed");
 }
 
 loadInvestigationModules(d.investigationModules);
@@ -632,33 +646,6 @@ renderResidualMatrix();
 }
 
 });
-}
-
-function markCompleted(id){
-const el = document.getElementById(id);
-if(el){
-el.classList.add("completed");
-}
-}
-
-function loadInvestigationModules(data){
-if(!data)return;
-
-if(data.fiveWhys===true){
-markCompleted("fiveWhysBtn");
-}
-
-if(data.shell===true){
-markCompleted("shellBtn");
-}
-
-if(data.bowTie===true || data.contributingFactors===true){
-markCompleted("bowTieBtn");
-}
-
-if(data.dirtyDozen===true){
-markCompleted("dirtyDozenBtn");
-}
 }
 
 window.openFiveWhys=function(){
@@ -710,12 +697,7 @@ alert("No valid report key. Open Risk Detail from SMS Database.");
 return;
 }
 
-update(ref(db,"smsReports/"+key+"/investigationModules"),{
-dirtyDozen:true
-}).then(()=>{
-markCompleted("dirtyDozenBtn");
 location.href="Investigation-DirtyDozen.html?key="+key;
-});
 };
 
 window.saveRisk=function(){
@@ -734,13 +716,10 @@ status:"IN PROGRESS",
 sagRequired:requiredInvestigation,
 inDepthInvestigationRequired:requiredInvestigation,
 recommendedInvestigationMethods: requiredInvestigation ? "MEDA / REDA / HFACS / FRAT" : "As required based on safety assessment"
+}).then(()=>{
+document.getElementById("savedRisk").innerText=risk;
+document.getElementById("saveRiskBtn").classList.add("closed");
 });
-
-savedRisk.innerText=risk;
-
-const btn=document.getElementById("saveRiskBtn");
-btn.classList.add("closed");
-
 };
 
 window.saveResidualRisk=function(){
@@ -754,13 +733,10 @@ update(ref(db,"smsReports/"+key),{
 residualRisk:residualRisk,
 residualRiskClosed:true,
 status:"CLOSED"
+}).then(()=>{
+document.getElementById("savedResidualRisk").innerText=residualRisk;
+document.getElementById("saveResidualRiskBtn").classList.add("closed");
 });
-
-savedResidualRisk.innerText=residualRisk;
-
-const btn=document.getElementById("saveResidualRiskBtn");
-btn.classList.add("closed");
-
 };
 
 function renderMatrix(){
@@ -794,7 +770,8 @@ cell.onclick=()=>{
 p=pValue;
 s=sValue;
 risk=code;
-result.innerText="Risk: "+risk+" → "+getRiskLevel(s,p);
+
+document.getElementById("result").innerText="Risk: "+risk+" → "+getRiskLevel(s,p);
 showDefinition("definitionBox",s,p,risk,true);
 
 document.querySelectorAll("#matrix .cell").forEach(c=>c.classList.remove("selected"));
@@ -840,7 +817,7 @@ rp=pValue;
 rs=sValue;
 residualRisk=code;
 
-residualResult.innerText="Risk: "+residualRisk+" → "+getRiskLevel(rs,rp);
+document.getElementById("residualResult").innerText="Risk: "+residualRisk+" → "+getRiskLevel(rs,rp);
 showDefinition("residualDefinitionBox",rs,rp,residualRisk,false);
 
 document.querySelectorAll("#residualMatrix .cell").forEach(c=>c.classList.remove("selected"));
@@ -859,16 +836,20 @@ cpaCounter++;
 
 push(ref(db,"smsReports/"+key+"/CPA"),{
 cpaNumber:cpaCounter,
-controlType:controlType.value,
-actionPlan:actionPlan.value,
-actionDate:actionDate.value,
-emailTo:emailTo.value,
+controlType:document.getElementById("controlType").value,
+actionPlan:document.getElementById("actionPlan").value,
+actionDate:document.getElementById("actionDate").value,
+emailTo:document.getElementById("emailTo").value,
 pdfUrl:"",
 pdfName:"",
 pdfPath:""
 }).then(()=>{
 get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
-if(s.exists()) loadCPA(s.val());
+if(s.exists()){
+loadCPA(s.val());
+}else{
+loadCPA(null);
+}
 });
 });
 };
@@ -950,7 +931,7 @@ Type: ${x.controlType || "N/A"}<br>
 Action: ${x.actionPlan || "N/A"}<br>
 Date: ${x.actionDate || "N/A"}<br>
 Email: ${x.emailTo || "N/A"}<br>
-<button class="send-btn" onclick="sendCPAEmail('${x.emailTo}','${x.controlType}','${x.actionPlan}','${x.actionDate}','${i+1}','${x.pdfUrl||""}')">Send Email</button>
+<button class="send-btn" onclick="sendCPAEmail('${x.emailTo || ""}','${x.controlType || ""}','${x.actionPlan || ""}','${x.actionDate || ""}','${i+1}','${x.pdfUrl || ""}')">Send Email</button>
 ${x.pdfUrl ? `<button class="send-btn" onclick="window.open('${x.pdfUrl}','_blank')">Open Document</button>` : ""}
 `;
 
@@ -984,7 +965,7 @@ if(!data) return "N/A";
 
 Object.entries(data).forEach(([k,v])=>{
 
-if(k === "status" || k === "savedAt"){
+if(k === "status" || k === "savedAt" || k === "investigationId"){
 html += `<b>${cleanLabel(k)}:</b> ${v || "N/A"}<br>`;
 return;
 }
@@ -1002,13 +983,13 @@ return html || "N/A";
 
 async function loadPrintInvestigationData(){
 
-fiveWhysPrint.innerHTML = "<b>5 Whys:</b> N/A";
-shellPrint.innerHTML = "<b>SHELL:</b> N/A";
-bowTiePrint.innerHTML = "<b>Bow-Tie:</b> N/A";
-dirtyDozenPrint.innerHTML = "<b>Dirty Dozen:</b> N/A";
-hfacsPrint.innerHTML = "<b>HFACS:</b> N/A";
-medaPrint.innerHTML = "<b>MEDA:</b> N/A";
-redaPrint.innerHTML = "<b>REDA:</b> N/A";
+document.getElementById("fiveWhysPrint").innerHTML = "<b>5 Whys:</b> N/A";
+document.getElementById("shellPrint").innerHTML = "<b>SHELL:</b> N/A";
+document.getElementById("bowTiePrint").innerHTML = "<b>Bow-Tie:</b> N/A";
+document.getElementById("dirtyDozenPrint").innerHTML = "<b>Dirty Dozen:</b> N/A";
+document.getElementById("hfacsPrint").innerHTML = "<b>HFACS:</b> N/A";
+document.getElementById("medaPrint").innerHTML = "<b>MEDA:</b> N/A";
+document.getElementById("redaPrint").innerHTML = "<b>REDA:</b> N/A";
 
 if(!key || key === "general") return;
 
@@ -1019,48 +1000,52 @@ if(!snap.exists()) return;
 const d = snap.val();
 
 if(d.investigation5Why){
-fiveWhysPrint.innerHTML =
+document.getElementById("fiveWhysPrint").innerHTML =
 "<b>5 Whys:</b><br>" + formatPrintData(d.investigation5Why);
 }
 
 if(d.investigationSHELL){
-shellPrint.innerHTML =
+document.getElementById("shellPrint").innerHTML =
 "<b>SHELL:</b><br>" + formatPrintData(d.investigationSHELL);
 }
 
 if(d.investigationBowTie){
-bowTiePrint.innerHTML =
+document.getElementById("bowTiePrint").innerHTML =
 "<b>Bow-Tie:</b><br>" + formatPrintData(d.investigationBowTie);
 }
 
 if(d.investigationDirtyDozen){
-dirtyDozenPrint.innerHTML =
+document.getElementById("dirtyDozenPrint").innerHTML =
 "<b>Dirty Dozen:</b><br>" + formatPrintData(d.investigationDirtyDozen);
 }
 
 if(d.investigationHFACS){
-hfacsPrint.innerHTML =
+document.getElementById("hfacsPrint").innerHTML =
 "<b>HFACS:</b><br>" + formatPrintData(d.investigationHFACS);
 }
 
 if(d.investigationMEDA){
-medaPrint.innerHTML =
+document.getElementById("medaPrint").innerHTML =
 "<b>MEDA:</b><br>" + formatPrintData(d.investigationMEDA);
 }
 
 if(d.investigationREDA){
-redaPrint.innerHTML =
+document.getElementById("redaPrint").innerHTML =
 "<b>REDA:</b><br>" + formatPrintData(d.investigationREDA);
 }
 
 }
 
 window.printFullFile = async function(){
+try{
 await loadPrintInvestigationData();
+}catch(error){
+console.log("Print data could not be fully loaded:", error);
+}
 
 setTimeout(()=>{
 window.print();
-},500);
+},300);
 };
 
 window.goBack=()=>location.href="SMS-Database.html";
@@ -1072,3 +1057,4 @@ loadMainReport();
 
 </body>
 </html>
+
