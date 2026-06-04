@@ -1,1 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Investigation - Dirty Dozen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#020617,#071f47,#1450b8);
+}
+
+.header{
+  text-align:center;
+  color:white;
+  padding:28px 20px;
+  background:linear-gradient(135deg,#071f47,#1450b8);
+}
+
+.header h1{
+  font-size:52px;
+  margin:0;
+}
+
+.header p{
+  font-size:20px;
+  margin:8px 0 0;
+  color:#dbeafe;
+}
+
+.container{
+  max-width:1250px;
+  margin:25px auto;
+  background:white;
+  border-radius:30px;
+  padding:30px;
+  box-shadow:0 25px 70px rgba(0,0,0,0.35);
+}
+
+.report-box{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#f8fafc;
+  border-radius:18px;
+  padding:18px 25px;
+  margin-bottom:25px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+  font-weight:bold;
+  color:#071f47;
+}
+
+.intro-box{
+  background:linear-gradient(135deg,#eff6ff,#ffffff);
+  border-left:8px solid #1450b8;
+  padding:22px;
+  border-radius:22px;
+  margin-bottom:25px;
+  color:#334155;
+  line-height:1.6;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+
+.card{
+  background:white;
+  border-radius:24px;
+  padding:22px;
+  box-shadow:0 12px 28px rgba(15,23,42,0.12);
+  border:1px solid #e2e8f0;
+  border-left:8px solid #1450b8;
+}
+
+.card h3{
+  margin:0 0 8px;
+  color:#071f47;
+  font-size:23px;
+}
+
+.card p{
+  margin:0 0 12px;
+  color:#64748b;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.final-box{
+  margin-top:22px;
+  border-left:8px solid #15803d;
+  background:linear-gradient(135deg,#f0fdf4,#ffffff);
+}
+
+textarea{
+  width:100%;
+  padding:14px;
+  border:1px solid #cbd5e1;
+  border-radius:14px;
+  font-size:15px;
+  resize:vertical;
+  outline:none;
+  background:#f8fafc;
+  transition:0.25s;
+  margin-top:8px;
+  min-height:90px;
+}
+
+textarea:focus{
+  background:white;
+  border-color:#1450b8;
+  box-shadow:0 0 0 4px rgba(20,80,184,0.14);
+}
+
+label{
+  font-weight:800;
+  color:#334155;
+  display:block;
+  margin-top:12px;
+}
+
+.actions{
+  margin-top:30px;
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
+  border-top:1px solid #e2e8f0;
+  padding-top:25px;
+}
+
+button{
+  border:none;
+  color:white;
+  padding:15px 26px;
+  border-radius:16px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 12px 28px rgba(0,0,0,0.22);
+  transition:0.25s;
+}
+
+button:hover{
+  transform:translateY(-3px) scale(1.03);
+}
+
+.save{background:linear-gradient(135deg,#15803d,#22c55e);}
+.delete{background:linear-gradient(135deg,#b91c1c,#ef4444);}
+.print{background:linear-gradient(135deg,#071f47,#1450b8);}
+.back{background:linear-gradient(135deg,#374151,#6b7280);}
+.home{background:linear-gradient(135deg,#0f766e,#14b8a6);}
+
+@media print{
+  body{background:white;}
+  .header{color:#071f47;background:white;}
+  .container{box-shadow:none;}
+  .actions{display:none;}
+  .card{box-shadow:none;break-inside:avoid;}
+}
+
+@media(max-width:850px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .header h1{
+    font-size:36px;
+  }
+
+  .report-box{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>Investigation - Dirty Dozen</h1>
+  <p>Human Factors Investigation Tool</p>
+</div>
+
+<div class="container">
+
+<div class="report-box">
+  <div>Report ID: <span id="reportId">Loading...</span></div>
+  <div>Saved at: <span id="savedAt">Not saved yet</span></div>
+</div>
+
+<div class="intro-box">
+  <b>Dirty Dozen Analysis:</b><br>
+  Select and document the human factor conditions that may have contributed to the event, finding, or unsafe condition.
+</div>
+
+<div class="grid">
+
+<div class="card">
+  <h3>1. Lack of Communication</h3>
+  <p>Missing, incomplete, unclear, or incorrect transfer of information.</p>
+  <label>Evidence / Notes</label>
+  <textarea id="lackCommunication"></textarea>
+</div>
+
+<div class="card">
+  <h3>2. Complacency</h3>
+  <p>Overconfidence, routine task mindset, or failure to recognize risk.</p>
+  <label>Evidence / Notes</label>
+  <textarea id="complacency"></textarea>
+</div>
+
+<div class="card">
+  <h3>3. Lack of Knowledge</h3>
+  <p>Insufficient training, unfamiliarity with procedures, or lack of technical understanding.</p>
+  <label>Evidence / Notes</label>
+  <textarea id="lackKnowledge"></textarea>
+</div>
+
+<div class="card">
+  <h3>4. Distraction</h3>
+  <p>Attention diverted by interruptions, multitasking, or environmental factors.</p>
+  <label>Evidence / Notes</label>
+  <textarea id="distraction"></textarea>
+</div>
+
+<div class="card">
+  <h3>5. Lack of Teamwork</h3>
+  <p>Poor coordination, weak support, or ineffective cooperation between personnel.</p>
+  <label>Evidence / Notes</label>
+  <textarea id="lackTeamwork"></textarea>
+</div>
+
+<div class="card">
+  <h3>6. Fatigue</h3>
+  <p>Reduced performance due to tiredness, workload, shift schedule, or lack of rest.</p>
+  <label>Evidence / Notes</label>
+  <textarea id="fatigue"></textarea>
+</div>
+
+<div class="card">
+  <h3>7. Lack of Resources</h3>
+  <p>Missing tools, equipment, manpower, materials, time, or documentation.</p>
+  <label>Evidence / Notes</label>
+  <textarea id="lackResources"></textarea>
+</div>
+
+<div class="card">
+  <h3>8. Pressure</h3>
+  <p>Time pressure, production pressure, customer pressure, or operational urgency.</p>
+  <label>Evidence / Notes</label>
+  <textarea id="pressure"></textarea>
+</div>
+
+<div class="card">
+  <h3>9. Lack of Assertiveness</h3>
+  <p>Failure to speak up, stop work, challenge unsafe conditions, or ask for clarification.</p>
+  <label>Evidence / Notes</label>
+  <textarea id="lackAssertiveness"></textarea>
+</div>
+
+<div class="card">
+  <h3>10. Stress</h3>
+  <p>Mental, emotional, or operational stress affecting judgment or performance.</p>
+  <label>Evidence / Notes</label>
+  <textarea id="stress"></textarea>
+</div>
+
+<div class="card">
+  <h3>11. Lack of Awareness</h3>
+  <p>Reduced situational awareness, not recognizing hazards, changes, or consequences.</p>
+  <label>Evidence / Notes</label>
+  <textarea id="lackAwareness"></textarea>
+</div>
+
+<div class="card">
+  <h3>12. Norms</h3>
+  <p>Informal practices, shortcuts, or accepted behaviors that differ from procedures.</p>
+  <label>Evidence / Notes</label>
+  <textarea id="norms"></textarea>
+</div>
+
+</div>
+
+<div class="card final-box">
+  <h3>Final Dirty Dozen Summary</h3>
+  <p>Summarize the main human factor contributors and their safety impact.</p>
+
+  <label>Main Contributing Factors</label>
+  <textarea id="mainContributingFactors"></textarea>
+
+  <label>Safety Impact</label>
+  <textarea id="safetyImpact"></textarea>
+
+  <label>Recommended Corrective / Preventive Actions</label>
+  <textarea id="correctiveActions"></textarea>
+</div>
+
+<div class="actions">
+<button class="save" onclick="saveInvestigation()">💾 Save</button>
+<button class="delete" onclick="deleteInvestigation()">🗑 Delete</button>
+<button class="print" onclick="window.print()">🖨 Print</button>
+<button class="back" onclick="goBack()">⬅ Back to SMS Report Detail</button>
+<button class="home" onclick="goHome()">🏠 Home</button>
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import { getDatabase, ref, get, update, remove }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+authDomain: "aviation-sms.firebaseapp.com",
+databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+projectId: "aviation-sms",
+storageBucket: "aviation-sms.firebasestorage.app",
+messagingSenderId: "147000937860",
+appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const key = new URLSearchParams(window.location.search).get("key");
+
+if(!key){
+  alert("No report key found.");
+}
+
+get(ref(db,"smsReports/"+key)).then(snapshot=>{
+  if(snapshot.exists()){
+    const d = snapshot.val();
+
+    document.getElementById("reportId").innerText = d.reportId || "N/A";
+
+    if(d.investigationDirtyZone){
+      const x = d.investigationDirtyZone;
+
+      lackCommunication.value = x.lackCommunication || "";
+      complacency.value = x.complacency || "";
+      lackKnowledge.value = x.lackKnowledge || "";
+      distraction.value = x.distraction || "";
+      lackTeamwork.value = x.lackTeamwork || "";
+      fatigue.value = x.fatigue || "";
+      lackResources.value = x.lackResources || "";
+      pressure.value = x.pressure || "";
+      lackAssertiveness.value = x.lackAssertiveness || "";
+      stress.value = x.stress || "";
+      lackAwareness.value = x.lackAwareness || "";
+      norms.value = x.norms || "";
+
+      mainContributingFactors.value = x.mainContributingFactors || "";
+      safetyImpact.value = x.safetyImpact || "";
+      correctiveActions.value = x.correctiveActions || "";
+
+      savedAt.innerText = x.savedAt || "Saved";
+    }
+  }
+});
+
+window.saveInvestigation = function(){
+
+  update(ref(db,"smsReports/"+key+"/investigationDirtyZone"),{
+    lackCommunication:lackCommunication.value,
+    complacency:complacency.value,
+    lackKnowledge:lackKnowledge.value,
+    distraction:distraction.value,
+    lackTeamwork:lackTeamwork.value,
+    fatigue:fatigue.value,
+    lackResources:lackResources.value,
+    pressure:pressure.value,
+    lackAssertiveness:lackAssertiveness.value,
+    stress:stress.value,
+    lackAwareness:lackAwareness.value,
+    norms:norms.value,
+
+    mainContributingFactors:mainContributingFactors.value,
+    safetyImpact:safetyImpact.value,
+    correctiveActions:correctiveActions.value,
+
+    status:"Saved",
+    savedAt:new Date().toISOString()
+  }).then(()=>{
+
+    update(ref(db,"smsReports/"+key+"/investigationModules"),{
+      dirtyZone:true
+    });
+
+    savedAt.innerText = new Date().toISOString();
+    alert("Dirty Dozen investigation saved successfully.");
+  });
+
+};
+
+window.deleteInvestigation = function(){
+
+  if(confirm("Do you want to delete this Dirty Dozen investigation?")){
+    remove(ref(db,"smsReports/"+key+"/investigationDirtyZone")).then(()=>{
+
+      lackCommunication.value = "";
+      complacency.value = "";
+      lackKnowledge.value = "";
+      distraction.value = "";
+      lackTeamwork.value = "";
+      fatigue.value = "";
+      lackResources.value = "";
+      pressure.value = "";
+      lackAssertiveness.value = "";
+      stress.value = "";
+      lackAwareness.value = "";
+      norms.value = "";
+
+      mainContributingFactors.value = "";
+      safetyImpact.value = "";
+      correctiveActions.value = "";
+
+      savedAt.innerText = "Not saved yet";
+
+      alert("Dirty Dozen investigation deleted.");
+    });
+  }
+
+};
+
+window.goBack = function(){
+  location.href = "Risk-Detail.html?key=" + key;
+};
+
+window.goHome = function(){
+  location.href = "index.html";
+};
+
+</script>
+
+</body>
+</html>
