@@ -112,6 +112,33 @@ button.closed,.module-btn.completed{
   line-height:1.6;
 }
 
+.mandatory-box{
+  margin-top:22px;
+  padding:22px;
+  border-radius:18px;
+  background:#fff1f2;
+  border-left:8px solid #dc2626;
+  color:#7f1d1d;
+  line-height:1.6;
+}
+
+.mandatory-box h3{
+  color:#991b1b;
+}
+
+.mandatory-box ul{
+  margin-top:8px;
+  padding-left:22px;
+}
+
+.method-buttons{
+  margin-top:12px;
+}
+
+.method-buttons button{
+  background:linear-gradient(135deg,#991b1b,#ef4444)!important;
+}
+
 .matrix{
   margin-top:25px;
   display:flex;
@@ -291,6 +318,9 @@ Press any cell in the matrix to see the severity and probability definitions.
 <button id="fiveWhysBtn" class="module-btn" onclick="openFiveWhys()">5 Whys</button>
 <button id="shellBtn" class="module-btn" onclick="openSHELL()">SHELL</button>
 <button id="bowTieBtn" class="module-btn" onclick="openBowTie()">Bow-Tie</button>
+<button id="hfacsBtn" class="module-btn" onclick="openHFACS()">HFACS</button>
+<button id="medaBtn" class="module-btn" onclick="openMEDA()">MEDA</button>
+<button id="redaBtn" class="module-btn" onclick="openREDA()">REDA</button>
 </div>
 
 <div class="cpa-box">
@@ -346,7 +376,10 @@ Press any cell in the residual matrix to see the severity and probability defini
 <h3>Investigation Information</h3>
 <div id="fiveWhysPrint"><b>5 Whys:</b> N/A</div><br>
 <div id="shellPrint"><b>SHELL:</b> N/A</div><br>
-<div id="bowTiePrint"><b>Bow-Tie:</b> N/A</div>
+<div id="bowTiePrint"><b>Bow-Tie:</b> N/A</div><br>
+<div id="hfacsPrint"><b>HFACS:</b> N/A</div><br>
+<div id="medaPrint"><b>MEDA:</b> N/A</div><br>
+<div id="redaPrint"><b>REDA:</b> N/A</div>
 </div>
 
 <button class="print-file-btn" onclick="printFullFile()">Print File</button>
@@ -393,6 +426,8 @@ localStorage.setItem("currentRiskKey",key);
 let p="",s="",risk="",cpaCounter=0;
 let rp="",rs="",residualRisk="";
 
+const mandatoryInvestigationRisks = ["A5","B5","C5","A4","B4","A3"];
+
 const severityDefinitions = {
 A:{name:"Catastrophic",es:"Catastrófica",desc:"Destruction of equipment or multiple fatalities."},
 B:{name:"Hazardous",es:"Peligrosa",desc:"Large reduction in safety margins, serious injuries, or major aircraft damage."},
@@ -431,15 +466,55 @@ if(riskClass==="medium") return "MEDIUM 🟡";
 return "LOW 🟢";
 }
 
-function showDefinition(boxId, severity, probability, code){
+function getMandatoryInvestigationMessage(code){
+if(!mandatoryInvestigationRisks.includes(code)){
+return "";
+}
+
+return `
+<div class="mandatory-box">
+<h3>Mandatory Safety Action Required</h3>
+
+<p>
+Based on the initial risk assessment selected <b>${code}</b>, this event requires:
+</p>
+
+<ul>
+<li><b>SAG Review:</b> The case must be reviewed by the Safety Action Group.</li>
+<li><b>In-depth Investigation:</b> A formal investigation must be performed.</li>
+<li><b>Recommended Methodologies:</b> HFACS, MEDA, REDA, 5 Whys, SHELL, or Bow-Tie.</li>
+</ul>
+
+<p>
+This risk level indicates a high potential safety impact and requires documented corrective and preventive actions.
+</p>
+
+<div class="method-buttons">
+<button onclick="openHFACS()">Open HFACS</button>
+<button onclick="openMEDA()">Open MEDA</button>
+<button onclick="openREDA()">Open REDA</button>
+<button onclick="openFiveWhys()">Open 5 Whys</button>
+</div>
+</div>
+`;
+}
+
+function showDefinition(boxId, severity, probability, code, isInitialRisk){
 const sev = severityDefinitions[severity];
 const prob = probabilityDefinitions[probability];
+
+let mandatoryMessage = "";
+
+if(isInitialRisk === true){
+mandatoryMessage = getMandatoryInvestigationMessage(code);
+}
 
 document.getElementById(boxId).innerHTML = `
 <h3>Risk Selected: ${code}</h3>
 <p><b>Severity ${severity} - ${sev.name} (${sev.es}):</b><br>${sev.desc}</p>
 <p><b>Probability ${probability} - ${prob.name} (${prob.es}):</b><br>${prob.desc}</p>
 <p><b>Risk Level:</b> ${getRiskLevel(severity, probability)}</p>
+${mandatoryMessage}
 `;
 }
 
@@ -476,15 +551,15 @@ savedRisk.innerText=d.risk||"N/A";
 savedResidualRisk.innerText=d.residualRisk||"N/A";
 
 if(d.riskClosed===true){
-  const btn=document.getElementById("saveRiskBtn");
-  btn.innerText="Closed";
-  btn.classList.add("closed");
+const btn=document.getElementById("saveRiskBtn");
+btn.innerText="Closed";
+btn.classList.add("closed");
 }
 
 if(d.residualRiskClosed===true){
-  const btn=document.getElementById("saveResidualRiskBtn");
-  btn.innerText="Closed";
-  btn.classList.add("closed");
+const btn=document.getElementById("saveResidualRiskBtn");
+btn.innerText="Closed";
+btn.classList.add("closed");
 }
 
 loadInvestigationModules(d.investigationModules);
@@ -515,6 +590,18 @@ document.getElementById("shellBtn").classList.add("completed");
 
 if(data.bowTie===true || data.contributingFactors===true){
 document.getElementById("bowTieBtn").classList.add("completed");
+}
+
+if(data.hfacs===true){
+document.getElementById("hfacsBtn").classList.add("completed");
+}
+
+if(data.meda===true){
+document.getElementById("medaBtn").classList.add("completed");
+}
+
+if(data.reda===true){
+document.getElementById("redaBtn").classList.add("completed");
 }
 }
 
@@ -561,6 +648,48 @@ location.href="Investigation-Bow-Tie.html?key="+key;
 });
 };
 
+window.openHFACS=function(){
+if(!key || key === "general"){
+alert("No valid report key. Open Risk Detail from SMS Database.");
+return;
+}
+
+update(ref(db,"smsReports/"+key+"/investigationModules"),{
+hfacs:true
+}).then(()=>{
+document.getElementById("hfacsBtn").classList.add("completed");
+location.href="Investigation-HFACS.html?key="+key;
+});
+};
+
+window.openMEDA=function(){
+if(!key || key === "general"){
+alert("No valid report key. Open Risk Detail from SMS Database.");
+return;
+}
+
+update(ref(db,"smsReports/"+key+"/investigationModules"),{
+meda:true
+}).then(()=>{
+document.getElementById("medaBtn").classList.add("completed");
+location.href="Investigation-MEDA.html?key="+key;
+});
+};
+
+window.openREDA=function(){
+if(!key || key === "general"){
+alert("No valid report key. Open Risk Detail from SMS Database.");
+return;
+}
+
+update(ref(db,"smsReports/"+key+"/investigationModules"),{
+reda:true
+}).then(()=>{
+document.getElementById("redaBtn").classList.add("completed");
+location.href="Investigation-REDA.html?key="+key;
+});
+};
+
 window.saveRisk=function(){
 
 if(!risk){
@@ -568,10 +697,19 @@ alert("Please select a risk cell first.");
 return;
 }
 
+let requiredInvestigation = false;
+
+if(mandatoryInvestigationRisks.includes(risk)){
+requiredInvestigation = true;
+}
+
 update(ref(db,"smsReports/"+key),{
 risk:risk,
 riskClosed:true,
-status:"IN PROGRESS"
+status:"IN PROGRESS",
+sagRequired:requiredInvestigation,
+inDepthInvestigationRequired:requiredInvestigation,
+recommendedInvestigationMethods: requiredInvestigation ? "HFACS / MEDA / REDA / 5 Whys / SHELL / Bow-Tie" : "As required based on safety assessment"
 });
 
 savedRisk.innerText=risk;
@@ -635,7 +773,7 @@ p=pValue;
 s=sValue;
 risk=code;
 result.innerText="Risk: "+risk+" → "+getRiskLevel(s,p);
-showDefinition("definitionBox",s,p,risk);
+showDefinition("definitionBox",s,p,risk,true);
 
 document.querySelectorAll("#matrix .cell").forEach(c=>c.classList.remove("selected"));
 cell.classList.add("selected");
@@ -681,7 +819,7 @@ rs=sValue;
 residualRisk=code;
 
 residualResult.innerText="Risk: "+residualRisk+" → "+getRiskLevel(rs,rp);
-showDefinition("residualDefinitionBox",rs,rp,residualRisk);
+showDefinition("residualDefinitionBox",rs,rp,residualRisk,false);
 
 document.querySelectorAll("#residualMatrix .cell").forEach(c=>c.classList.remove("selected"));
 cell.classList.add("selected");
@@ -845,6 +983,9 @@ async function loadPrintInvestigationData(){
 fiveWhysPrint.innerHTML = "<b>5 Whys:</b> N/A";
 shellPrint.innerHTML = "<b>SHELL:</b> N/A";
 bowTiePrint.innerHTML = "<b>Bow-Tie:</b> N/A";
+hfacsPrint.innerHTML = "<b>HFACS:</b> N/A";
+medaPrint.innerHTML = "<b>MEDA:</b> N/A";
+redaPrint.innerHTML = "<b>REDA:</b> N/A";
 
 if(!key || key === "general") return;
 
@@ -867,6 +1008,21 @@ shellPrint.innerHTML =
 if(d.investigationBowTie){
 bowTiePrint.innerHTML =
 "<b>Bow-Tie:</b><br>" + formatPrintData(d.investigationBowTie);
+}
+
+if(d.investigationHFACS){
+hfacsPrint.innerHTML =
+"<b>HFACS:</b><br>" + formatPrintData(d.investigationHFACS);
+}
+
+if(d.investigationMEDA){
+medaPrint.innerHTML =
+"<b>MEDA:</b><br>" + formatPrintData(d.investigationMEDA);
+}
+
+if(d.investigationREDA){
+redaPrint.innerHTML =
+"<b>REDA:</b><br>" + formatPrintData(d.investigationREDA);
 }
 
 }
