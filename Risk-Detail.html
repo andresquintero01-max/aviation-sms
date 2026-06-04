@@ -84,11 +84,29 @@ button.closed,.module-btn.completed{
   background:linear-gradient(135deg,#dc2626,#ef4444)!important;
 }
 
+.home-btn{
+  background:linear-gradient(135deg,#0f766e,#14b8a6)!important;
+}
+
+.footer-actions{
+  margin-top:30px;
+  display:grid;
+  grid-template-columns:1fr 180px 180px;
+  gap:14px;
+}
+
 .print-file-btn{
   background:linear-gradient(135deg,#111827,#374151)!important;
   width:100%;
-  margin-top:30px;
   font-size:20px;
+  padding:18px;
+  border-radius:18px;
+  margin:0;
+}
+
+.footer-actions button{
+  margin:0;
+  font-size:18px;
   padding:18px;
   border-radius:18px;
 }
@@ -247,7 +265,8 @@ input,select{
   button,
   .bottom,
   .investigation-box,
-  .attachment-box{
+  .attachment-box,
+  .footer-actions{
     display:none!important;
   }
 
@@ -272,6 +291,7 @@ input,select{
   h1{font-size:40px;}
   .matrix-grid{grid-template-columns:45px repeat(5,78px);}
   .cell{width:78px;height:62px;font-size:18px;}
+  .footer-actions{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -371,7 +391,11 @@ Press any cell in the residual matrix to see the severity and probability defini
 <div id="redaPrint"><b>REDA:</b> N/A</div>
 </div>
 
-<button class="print-file-btn" onclick="printFullFile()">Print File</button>
+<div class="footer-actions">
+<button class="print-file-btn" onclick="printFullFile()">🖨️ Print File</button>
+<button class="home-btn" onclick="goHome()">Home</button>
+<button class="back-btn" onclick="goBack()">Back</button>
+</div>
 
 </div>
 
@@ -471,8 +495,12 @@ Based on the initial risk assessment selected <b>${code}</b>, this event require
 <ul>
 <li><b>SAG Review:</b> The case must be reviewed by the Safety Action Group.</li>
 <li><b>In-depth Investigation:</b> A formal investigation must be performed.</li>
-<li><b>Recommended Methodologies:</b> HFACS, MEDA, REDA.</li>
+<li><b>Recommended Methodologies:</b> MEDA, REDA, HFACS or FRAT.</li>
 </ul>
+
+<p>
+These tools for a deeper investigation are located in the <b>Risk Management Tools</b> tab.
+</p>
 
 </div>
 `;
@@ -531,13 +559,11 @@ savedResidualRisk.innerText=d.residualRisk||"N/A";
 
 if(d.riskClosed===true){
 const btn=document.getElementById("saveRiskBtn");
-btn.innerText="Closed";
 btn.classList.add("closed");
 }
 
 if(d.residualRiskClosed===true){
 const btn=document.getElementById("saveResidualRiskBtn");
-btn.innerText="Closed";
 btn.classList.add("closed");
 }
 
@@ -641,13 +667,12 @@ riskClosed:true,
 status:"IN PROGRESS",
 sagRequired:requiredInvestigation,
 inDepthInvestigationRequired:requiredInvestigation,
-recommendedInvestigationMethods: requiredInvestigation ? "HFACS / MEDA / REDA" : "As required based on safety assessment"
+recommendedInvestigationMethods: requiredInvestigation ? "MEDA / REDA / HFACS / FRAT" : "As required based on safety assessment"
 });
 
 savedRisk.innerText=risk;
 
 const btn=document.getElementById("saveRiskBtn");
-btn.innerText="Closed";
 btn.classList.add("closed");
 
 };
@@ -668,7 +693,6 @@ status:"CLOSED"
 savedResidualRisk.innerText=residualRisk;
 
 const btn=document.getElementById("saveResidualRiskBtn");
-btn.innerText="Closed";
 btn.classList.add("closed");
 
 };
@@ -968,6 +992,7 @@ window.print();
 };
 
 window.goBack=()=>location.href="SMS-Database.html";
+window.goHome=()=>location.href="index.html";
 
 loadMainReport();
 
