@@ -310,9 +310,6 @@ Press any cell in the matrix to see the severity and probability definitions.
 <button id="fiveWhysBtn" class="module-btn" onclick="openFiveWhys()">5 Whys</button>
 <button id="shellBtn" class="module-btn" onclick="openSHELL()">SHELL</button>
 <button id="bowTieBtn" class="module-btn" onclick="openBowTie()">Bow-Tie</button>
-<button id="hfacsBtn" class="module-btn" onclick="openHFACS()">HFACS</button>
-<button id="medaBtn" class="module-btn" onclick="openMEDA()">MEDA</button>
-<button id="redaBtn" class="module-btn" onclick="openREDA()">REDA</button>
 </div>
 
 <div class="cpa-box">
@@ -559,31 +556,26 @@ renderResidualMatrix();
 });
 }
 
+function markCompleted(id){
+const el = document.getElementById(id);
+if(el){
+el.classList.add("completed");
+}
+}
+
 function loadInvestigationModules(data){
 if(!data)return;
 
 if(data.fiveWhys===true){
-document.getElementById("fiveWhysBtn").classList.add("completed");
+markCompleted("fiveWhysBtn");
 }
 
 if(data.shell===true){
-document.getElementById("shellBtn").classList.add("completed");
+markCompleted("shellBtn");
 }
 
 if(data.bowTie===true || data.contributingFactors===true){
-document.getElementById("bowTieBtn").classList.add("completed");
-}
-
-if(data.hfacs===true){
-document.getElementById("hfacsBtn").classList.add("completed");
-}
-
-if(data.meda===true){
-document.getElementById("medaBtn").classList.add("completed");
-}
-
-if(data.reda===true){
-document.getElementById("redaBtn").classList.add("completed");
+markCompleted("bowTieBtn");
 }
 }
 
@@ -596,7 +588,7 @@ return;
 update(ref(db,"smsReports/"+key+"/investigationModules"),{
 fiveWhys:true
 }).then(()=>{
-document.getElementById("fiveWhysBtn").classList.add("completed");
+markCompleted("fiveWhysBtn");
 location.href="Investigation-5Why.html?key="+key;
 });
 };
@@ -610,7 +602,7 @@ return;
 update(ref(db,"smsReports/"+key+"/investigationModules"),{
 shell:true
 }).then(()=>{
-document.getElementById("shellBtn").classList.add("completed");
+markCompleted("shellBtn");
 location.href="Investigation-SHELL.html?key="+key;
 });
 };
@@ -625,50 +617,8 @@ update(ref(db,"smsReports/"+key+"/investigationModules"),{
 bowTie:true,
 contributingFactors:false
 }).then(()=>{
-document.getElementById("bowTieBtn").classList.add("completed");
+markCompleted("bowTieBtn");
 location.href="Investigation-Bow-Tie.html?key="+key;
-});
-};
-
-window.openHFACS=function(){
-if(!key || key === "general"){
-alert("No valid report key. Open Risk Detail from SMS Database.");
-return;
-}
-
-update(ref(db,"smsReports/"+key+"/investigationModules"),{
-hfacs:true
-}).then(()=>{
-document.getElementById("hfacsBtn").classList.add("completed");
-location.href="Investigation-HFACS.html?key="+key;
-});
-};
-
-window.openMEDA=function(){
-if(!key || key === "general"){
-alert("No valid report key. Open Risk Detail from SMS Database.");
-return;
-}
-
-update(ref(db,"smsReports/"+key+"/investigationModules"),{
-meda:true
-}).then(()=>{
-document.getElementById("medaBtn").classList.add("completed");
-location.href="Investigation-MEDA.html?key="+key;
-});
-};
-
-window.openREDA=function(){
-if(!key || key === "general"){
-alert("No valid report key. Open Risk Detail from SMS Database.");
-return;
-}
-
-update(ref(db,"smsReports/"+key+"/investigationModules"),{
-reda:true
-}).then(()=>{
-document.getElementById("redaBtn").classList.add("completed");
-location.href="Investigation-REDA.html?key="+key;
 });
 };
 
