@@ -330,7 +330,7 @@ Press any cell in the matrix to see the severity and probability definitions.
 <button id="fiveWhysBtn" class="module-btn" onclick="openFiveWhys()">5 Whys</button>
 <button id="shellBtn" class="module-btn" onclick="openSHELL()">SHELL</button>
 <button id="bowTieBtn" class="module-btn" onclick="openBowTie()">Bow-Tie</button>
-<button id="dirtyZoneBtn" class="module-btn" onclick="openDirtyZone()">Dirty Zone</button>
+<button id="dirtydozenBtn" class="module-btn" onclick="openDirtyDozenone()">Dirty Dozen</button>
 </div>
 
 <div class="cpa-box">
@@ -387,7 +387,7 @@ Press any cell in the residual matrix to see the severity and probability defini
 <div id="fiveWhysPrint"><b>5 Whys:</b> N/A</div><br>
 <div id="shellPrint"><b>SHELL:</b> N/A</div><br>
 <div id="bowTiePrint"><b>Bow-Tie:</b> N/A</div><br>
-<div id="dirtyZonePrint"><b>Dirty Zone:</b> N/A</div><br>
+<div id="dirtydozenPrint"><b>Dirty Dozen:</b> N/A</div><br>
 <div id="hfacsPrint"><b>HFACS:</b> N/A</div><br>
 <div id="medaPrint"><b>MEDA:</b> N/A</div><br>
 <div id="redaPrint"><b>REDA:</b> N/A</div>
@@ -656,8 +656,8 @@ if(data.bowTie===true || data.contributingFactors===true){
 markCompleted("bowTieBtn");
 }
 
-if(data.dirtyZone===true){
-markCompleted("dirtyZoneBtn");
+if(data.dirtyDozen===true){
+markCompleted("dirtyDozenBtn");
 }
 }
 
@@ -704,17 +704,17 @@ location.href="Investigation-Bow-Tie.html?key="+key;
 });
 };
 
-window.openDirtyZone=function(){
+window.openDirtyDozen=function(){
 if(!key || key === "general"){
 alert("No valid report key. Open Risk Detail from SMS Database.");
 return;
 }
 
 update(ref(db,"smsReports/"+key+"/investigationModules"),{
-dirtyZone:true
+dirtyDozen:true
 }).then(()=>{
-markCompleted("dirtyZoneBtn");
-location.href="Investigation-Dirty-Zone.html?key="+key;
+markCompleted("dirtyDozenBtn");
+location.href="Investigation-Dirty-Dozen.html?key="+key;
 });
 };
 
@@ -1005,7 +1005,7 @@ async function loadPrintInvestigationData(){
 fiveWhysPrint.innerHTML = "<b>5 Whys:</b> N/A";
 shellPrint.innerHTML = "<b>SHELL:</b> N/A";
 bowTiePrint.innerHTML = "<b>Bow-Tie:</b> N/A";
-dirtyZonePrint.innerHTML = "<b>Dirty Zone:</b> N/A";
+dirtyDozenPrint.innerHTML = "<b>Dirty Dozen:</b> N/A";
 hfacsPrint.innerHTML = "<b>HFACS:</b> N/A";
 medaPrint.innerHTML = "<b>MEDA:</b> N/A";
 redaPrint.innerHTML = "<b>REDA:</b> N/A";
@@ -1033,9 +1033,9 @@ bowTiePrint.innerHTML =
 "<b>Bow-Tie:</b><br>" + formatPrintData(d.investigationBowTie);
 }
 
-if(d.investigationDirtyZone){
-dirtyZonePrint.innerHTML =
-"<b>Dirty Zone:</b><br>" + formatPrintData(d.investigationDirtyZone);
+if(d.investigationDirtyDozen){
+dirtyDozenPrint.innerHTML =
+"<b>Dirty Dozen:</b><br>" + formatPrintData(d.investigationDirtyDozen);
 }
 
 if(d.investigationHFACS){
