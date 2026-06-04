@@ -983,26 +983,56 @@ return String(text)
 }
 
 function formatPrintData(data){
+
 let html = "";
 
-if(!data) return "N/A";
+if(!data) return "";
 
 Object.entries(data).forEach(([k,v])=>{
 
-if(k === "status" || k === "savedAt" || k === "investigationId"){
-html += `<b>${cleanLabel(k)}:</b> ${v || "N/A"}<br>`;
-return;
-}
+  if(
+      k === "status" ||
+      k === "savedAt" ||
+      k === "investigationId" ||
+      k === "updatedAt"
+  ){
+      return;
+  }
 
-if(typeof v === "object" && v !== null){
-html += `<div class="print-record"><b>${cleanLabel(k)}</b><br>${formatPrintData(v)}</div>`;
-}else{
-html += `<b>${cleanLabel(k)}:</b> ${v || "N/A"}<br>`;
-}
+  if(
+      v === null ||
+      v === undefined ||
+      v === "" ||
+      v === "N/A"
+  ){
+      return;
+  }
+
+  if(typeof v === "object"){
+
+      const nested = formatPrintData(v);
+
+      if(nested.trim() !== ""){
+          html += `
+          <div class="print-record">
+            <h4>${cleanLabel(k)}</h4>
+            ${nested}
+          </div>
+          `;
+      }
+
+  }else{
+
+      html += `
+      <div style="margin-bottom:8px;">
+        <b>${cleanLabel(k)}:</b> ${v}
+      </div>
+      `;
+  }
 
 });
 
-return html || "N/A";
+return html;
 }
 
 async function loadPrintInvestigationData(){
