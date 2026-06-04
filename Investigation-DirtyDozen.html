@@ -6,63 +6,78 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{box-sizing:border-box;}
+*{box-sizing:border-box;margin:0;padding:0;}
 
 body{
-  margin:0;
   font-family:'Segoe UI',Arial,sans-serif;
   min-height:100vh;
-  background:linear-gradient(135deg,#020617,#071f47,#1450b8);
-}
-
-.header{
-  text-align:center;
-  color:white;
-  padding:28px 20px;
-  background:linear-gradient(135deg,#071f47,#1450b8);
-}
-
-.header h1{
-  font-size:52px;
-  margin:0;
-}
-
-.header p{
-  font-size:20px;
-  margin:8px 0 0;
-  color:#dbeafe;
+  background:
+  radial-gradient(circle at top left,rgba(255,152,0,.25),transparent 30%),
+  radial-gradient(circle at bottom right,rgba(20,80,184,.35),transparent 35%),
+  linear-gradient(135deg,#020617,#071f47,#1450b8);
+  padding:35px;
 }
 
 .container{
   max-width:1250px;
-  margin:25px auto;
-  background:white;
-  border-radius:30px;
-  padding:30px;
-  box-shadow:0 25px 70px rgba(0,0,0,0.35);
+  margin:auto;
+  background:rgba(255,255,255,.97);
+  border-radius:34px;
+  padding:45px;
+  box-shadow:0 25px 70px rgba(0,0,0,.35);
 }
 
-.report-box{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:#f8fafc;
-  border-radius:18px;
-  padding:18px 25px;
-  margin-bottom:25px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
-  font-weight:bold;
+h1{
+  text-align:center;
   color:#071f47;
+  font-size:48px;
+  margin-bottom:10px;
 }
 
-.intro-box{
-  background:linear-gradient(135deg,#eff6ff,#ffffff);
-  border-left:8px solid #1450b8;
-  padding:22px;
-  border-radius:22px;
-  margin-bottom:25px;
-  color:#334155;
-  line-height:1.6;
+.subtitle{
+  text-align:center;
+  color:#5b6475;
+  font-size:18px;
+  margin-bottom:35px;
+}
+
+.top-buttons{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:35px;
+}
+
+button{
+  border:none;
+  padding:14px 24px;
+  border-radius:14px;
+  color:white;
+  font-size:16px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 10px 22px rgba(0,0,0,.18);
+}
+
+.save{background:linear-gradient(135deg,#047857,#22c55e);}
+.print{background:linear-gradient(135deg,#071f47,#1450b8);}
+.delete{background:linear-gradient(135deg,#991b1b,#ef4444);}
+.back{background:linear-gradient(135deg,#374151,#6b7280);}
+.home{background:linear-gradient(135deg,#d97706,#f59e0b);}
+
+.section{
+  background:#f8fbff;
+  border:1px solid #e4eaf3;
+  border-radius:24px;
+  padding:28px;
+  margin-bottom:26px;
+}
+
+.section h2{
+  color:#071f47;
+  font-size:28px;
+  margin-bottom:20px;
 }
 
 .grid{
@@ -71,383 +86,322 @@ body{
   gap:18px;
 }
 
-.card{
-  background:white;
-  border-radius:24px;
-  padding:22px;
-  box-shadow:0 12px 28px rgba(15,23,42,0.12);
-  border:1px solid #e2e8f0;
-  border-left:8px solid #1450b8;
-}
-
-.card h3{
-  margin:0 0 8px;
+label{
+  font-weight:900;
   color:#071f47;
-  font-size:23px;
+  display:block;
+  margin-bottom:8px;
 }
 
-.card p{
-  margin:0 0 12px;
-  color:#64748b;
-  font-size:14px;
-  line-height:1.5;
-}
-
-.final-box{
-  margin-top:22px;
-  border-left:8px solid #15803d;
-  background:linear-gradient(135deg,#f0fdf4,#ffffff);
+input,textarea,select{
+  width:100%;
+  padding:14px;
+  border:1px solid #cfd8e3;
+  border-radius:12px;
+  font-size:15px;
+  font-family:inherit;
 }
 
 textarea{
-  width:100%;
-  padding:14px;
-  border:1px solid #cbd5e1;
-  border-radius:14px;
-  font-size:15px;
+  min-height:95px;
   resize:vertical;
-  outline:none;
-  background:#f8fafc;
-  transition:0.25s;
-  margin-top:8px;
-  min-height:90px;
 }
 
-textarea:focus{
+.dirty-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.card{
   background:white;
-  border-color:#1450b8;
-  box-shadow:0 0 0 4px rgba(20,80,184,0.14);
+  border:1px solid #e5e7eb;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 10px 24px rgba(0,0,0,.08);
 }
 
-label{
-  font-weight:800;
-  color:#334155;
-  display:block;
-  margin-top:12px;
+.card h3{
+  color:#1450b8;
+  font-size:22px;
+  margin-bottom:12px;
 }
 
-.actions{
-  margin-top:30px;
-  display:flex;
-  justify-content:center;
-  gap:14px;
-  flex-wrap:wrap;
-  border-top:1px solid #e2e8f0;
-  padding-top:25px;
+.card select{
+  margin-bottom:12px;
 }
 
-button{
-  border:none;
-  color:white;
-  padding:15px 26px;
-  border-radius:16px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-  box-shadow:0 12px 28px rgba(0,0,0,0.22);
-  transition:0.25s;
+.status{
+  text-align:center;
+  margin-top:20px;
+  font-weight:900;
+  color:#047857;
 }
 
-button:hover{
-  transform:translateY(-3px) scale(1.03);
+@media(max-width:900px){
+  .grid,.dirty-grid{grid-template-columns:1fr;}
+  .container{padding:25px;}
+  h1{font-size:36px;}
 }
-
-.save{background:linear-gradient(135deg,#15803d,#22c55e);}
-.delete{background:linear-gradient(135deg,#b91c1c,#ef4444);}
-.print{background:linear-gradient(135deg,#071f47,#1450b8);}
-.back{background:linear-gradient(135deg,#374151,#6b7280);}
-.home{background:linear-gradient(135deg,#0f766e,#14b8a6);}
 
 @media print{
-  body{background:white;}
-  .header{color:#071f47;background:white;}
-  .container{box-shadow:none;}
-  .actions{display:none;}
-  .card{box-shadow:none;break-inside:avoid;}
-}
-
-@media(max-width:850px){
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .header h1{
-    font-size:36px;
-  }
-
-  .report-box{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:8px;
-  }
+  body{background:white;padding:0;}
+  .container{box-shadow:none;border-radius:0;}
+  .top-buttons{display:none;}
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  <h1>Investigation - Dirty Dozen</h1>
-  <p>Human Factors Investigation Tool</p>
-</div>
-
 <div class="container">
 
-<div class="report-box">
-  <div>Report ID: <span id="reportId">Loading...</span></div>
-  <div>Saved at: <span id="savedAt">Not saved yet</span></div>
-</div>
+  <h1>Investigation - Dirty Dozen</h1>
+  <p class="subtitle">Human Factors Investigation Tool</p>
 
-<div class="intro-box">
-  <b>Dirty Dozen Analysis:</b><br>
-  Select and document the human factor conditions that may have contributed to the event, finding, or unsafe condition.
-</div>
+  <div class="top-buttons">
+    <button class="save" onclick="saveInvestigation()">💾 SAVE</button>
+    <button class="print" onclick="window.print()">🖨 PRINT</button>
+    <button class="delete" onclick="deleteInvestigation()">🗑 DELETE</button>
+    <button class="back" onclick="goBack()">← BACK</button>
+    <button class="home" onclick="goHome()">🏠 HOME</button>
+  </div>
 
-<div class="grid">
+  <div class="section">
+    <h2>Event Information</h2>
+    <div class="grid">
+      <div>
+        <label>Report / Investigation ID</label>
+        <input id="investigationId" readonly>
+      </div>
+      <div>
+        <label>Date</label>
+        <input type="date" id="date">
+      </div>
+      <div>
+        <label>Aircraft / Area</label>
+        <input id="aircraftArea">
+      </div>
+      <div>
+        <label>Location</label>
+        <input id="location">
+      </div>
+      <div>
+        <label>Investigator</label>
+        <input id="investigator">
+      </div>
+      <div>
+        <label>Status</label>
+        <select id="status">
+          <option value="Open">Open</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Closed">Closed</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
-<div class="card">
-  <h3>1. Lack of Communication</h3>
-  <p>Missing, incomplete, unclear, or incorrect transfer of information.</p>
-  <label>Evidence / Notes</label>
-  <textarea id="lackCommunication"></textarea>
-</div>
+  <div class="section">
+    <h2>Brief Description of Problem</h2>
+    <textarea id="problemDescription" placeholder="Describe what happened..."></textarea>
+  </div>
 
-<div class="card">
-  <h3>2. Complacency</h3>
-  <p>Overconfidence, routine task mindset, or failure to recognize risk.</p>
-  <label>Evidence / Notes</label>
-  <textarea id="complacency"></textarea>
-</div>
+  <div class="section">
+    <h2>Dirty Dozen Factors</h2>
 
-<div class="card">
-  <h3>3. Lack of Knowledge</h3>
-  <p>Insufficient training, unfamiliarity with procedures, or lack of technical understanding.</p>
-  <label>Evidence / Notes</label>
-  <textarea id="lackKnowledge"></textarea>
-</div>
+    <div class="dirty-grid">
 
-<div class="card">
-  <h3>4. Distraction</h3>
-  <p>Attention diverted by interruptions, multitasking, or environmental factors.</p>
-  <label>Evidence / Notes</label>
-  <textarea id="distraction"></textarea>
-</div>
+      <div class="card">
+        <h3>1. Lack of Communication</h3>
+        <select id="communication"><option>No</option><option>Yes</option></select>
+        <textarea id="communicationNotes" placeholder="Notes..."></textarea>
+      </div>
 
-<div class="card">
-  <h3>5. Lack of Teamwork</h3>
-  <p>Poor coordination, weak support, or ineffective cooperation between personnel.</p>
-  <label>Evidence / Notes</label>
-  <textarea id="lackTeamwork"></textarea>
-</div>
+      <div class="card">
+        <h3>2. Complacency</h3>
+        <select id="complacency"><option>No</option><option>Yes</option></select>
+        <textarea id="complacencyNotes" placeholder="Notes..."></textarea>
+      </div>
 
-<div class="card">
-  <h3>6. Fatigue</h3>
-  <p>Reduced performance due to tiredness, workload, shift schedule, or lack of rest.</p>
-  <label>Evidence / Notes</label>
-  <textarea id="fatigue"></textarea>
-</div>
+      <div class="card">
+        <h3>3. Lack of Knowledge</h3>
+        <select id="knowledge"><option>No</option><option>Yes</option></select>
+        <textarea id="knowledgeNotes" placeholder="Notes..."></textarea>
+      </div>
 
-<div class="card">
-  <h3>7. Lack of Resources</h3>
-  <p>Missing tools, equipment, manpower, materials, time, or documentation.</p>
-  <label>Evidence / Notes</label>
-  <textarea id="lackResources"></textarea>
-</div>
+      <div class="card">
+        <h3>4. Distraction</h3>
+        <select id="distraction"><option>No</option><option>Yes</option></select>
+        <textarea id="distractionNotes" placeholder="Notes..."></textarea>
+      </div>
 
-<div class="card">
-  <h3>8. Pressure</h3>
-  <p>Time pressure, production pressure, customer pressure, or operational urgency.</p>
-  <label>Evidence / Notes</label>
-  <textarea id="pressure"></textarea>
-</div>
+      <div class="card">
+        <h3>5. Lack of Teamwork</h3>
+        <select id="teamwork"><option>No</option><option>Yes</option></select>
+        <textarea id="teamworkNotes" placeholder="Notes..."></textarea>
+      </div>
 
-<div class="card">
-  <h3>9. Lack of Assertiveness</h3>
-  <p>Failure to speak up, stop work, challenge unsafe conditions, or ask for clarification.</p>
-  <label>Evidence / Notes</label>
-  <textarea id="lackAssertiveness"></textarea>
-</div>
+      <div class="card">
+        <h3>6. Fatigue</h3>
+        <select id="fatigue"><option>No</option><option>Yes</option></select>
+        <textarea id="fatigueNotes" placeholder="Notes..."></textarea>
+      </div>
 
-<div class="card">
-  <h3>10. Stress</h3>
-  <p>Mental, emotional, or operational stress affecting judgment or performance.</p>
-  <label>Evidence / Notes</label>
-  <textarea id="stress"></textarea>
-</div>
+      <div class="card">
+        <h3>7. Lack of Resources</h3>
+        <select id="resources"><option>No</option><option>Yes</option></select>
+        <textarea id="resourcesNotes" placeholder="Notes..."></textarea>
+      </div>
 
-<div class="card">
-  <h3>11. Lack of Awareness</h3>
-  <p>Reduced situational awareness, not recognizing hazards, changes, or consequences.</p>
-  <label>Evidence / Notes</label>
-  <textarea id="lackAwareness"></textarea>
-</div>
+      <div class="card">
+        <h3>8. Pressure</h3>
+        <select id="pressure"><option>No</option><option>Yes</option></select>
+        <textarea id="pressureNotes" placeholder="Notes..."></textarea>
+      </div>
 
-<div class="card">
-  <h3>12. Norms</h3>
-  <p>Informal practices, shortcuts, or accepted behaviors that differ from procedures.</p>
-  <label>Evidence / Notes</label>
-  <textarea id="norms"></textarea>
-</div>
+      <div class="card">
+        <h3>9. Lack of Assertiveness</h3>
+        <select id="assertiveness"><option>No</option><option>Yes</option></select>
+        <textarea id="assertivenessNotes" placeholder="Notes..."></textarea>
+      </div>
 
-</div>
+      <div class="card">
+        <h3>10. Stress</h3>
+        <select id="stress"><option>No</option><option>Yes</option></select>
+        <textarea id="stressNotes" placeholder="Notes..."></textarea>
+      </div>
 
-<div class="card final-box">
-  <h3>Final Dirty Dozen Summary</h3>
-  <p>Summarize the main human factor contributors and their safety impact.</p>
+      <div class="card">
+        <h3>11. Lack of Awareness</h3>
+        <select id="awareness"><option>No</option><option>Yes</option></select>
+        <textarea id="awarenessNotes" placeholder="Notes..."></textarea>
+      </div>
 
-  <label>Main Contributing Factors</label>
-  <textarea id="mainContributingFactors"></textarea>
+      <div class="card">
+        <h3>12. Norms</h3>
+        <select id="norms"><option>No</option><option>Yes</option></select>
+        <textarea id="normsNotes" placeholder="Notes..."></textarea>
+      </div>
 
-  <label>Safety Impact</label>
-  <textarea id="safetyImpact"></textarea>
+    </div>
+  </div>
 
-  <label>Recommended Corrective / Preventive Actions</label>
-  <textarea id="correctiveActions"></textarea>
-</div>
+  <div class="section">
+    <h2>Conclusion / Corrective Actions</h2>
+    <label>Root Cause / Contributing Factors</label>
+    <textarea id="rootCause"></textarea>
 
-<div class="actions">
-<button class="save" onclick="saveInvestigation()">💾 Save</button>
-<button class="delete" onclick="deleteInvestigation()">🗑 Delete</button>
-<button class="print" onclick="window.print()">🖨 Print</button>
-<button class="back" onclick="goBack()">⬅ Back to SMS Report Detail</button>
-<button class="home" onclick="goHome()">🏠 Home</button>
-</div>
+    <br><br>
+
+    <label>Corrective Actions</label>
+    <textarea id="correctiveActions"></textarea>
+
+    <br><br>
+
+    <label>Final Comments</label>
+    <textarea id="finalComments"></textarea>
+  </div>
+
+  <div class="status" id="saveStatus"></div>
 
 </div>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-
-import { getDatabase, ref, get, update, remove }
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, set, get, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
-authDomain: "aviation-sms.firebaseapp.com",
-databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
-projectId: "aviation-sms",
-storageBucket: "aviation-sms.firebasestorage.app",
-messagingSenderId: "147000937860",
-appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const key = new URLSearchParams(window.location.search).get("key");
+const urlParams = new URLSearchParams(window.location.search);
+let investigationId =
+  urlParams.get("id") ||
+  localStorage.getItem("selectedInvestigationId") ||
+  "DD-" + Date.now();
 
-if(!key){
-  alert("No report key found.");
+document.getElementById("investigationId").value = investigationId;
+
+const fields = [
+  "date","aircraftArea","location","investigator","status",
+  "problemDescription",
+  "communication","communicationNotes",
+  "complacency","complacencyNotes",
+  "knowledge","knowledgeNotes",
+  "distraction","distractionNotes",
+  "teamwork","teamworkNotes",
+  "fatigue","fatigueNotes",
+  "resources","resourcesNotes",
+  "pressure","pressureNotes",
+  "assertiveness","assertivenessNotes",
+  "stress","stressNotes",
+  "awareness","awarenessNotes",
+  "norms","normsNotes",
+  "rootCause","correctiveActions","finalComments"
+];
+
+async function loadInvestigation(){
+  const snapshot = await get(ref(db, "dirtyDozenInvestigations/" + investigationId));
+
+  if(snapshot.exists()){
+    const data = snapshot.val();
+    fields.forEach(id=>{
+      if(document.getElementById(id)){
+        document.getElementById(id).value = data[id] || "";
+      }
+    });
+  }else{
+    document.getElementById("date").valueAsDate = new Date();
+  }
 }
 
-get(ref(db,"smsReports/"+key)).then(snapshot=>{
-  if(snapshot.exists()){
-    const d = snapshot.val();
+window.saveInvestigation = async function(){
+  const data = {
+    investigationId: investigationId,
+    updatedAt: new Date().toISOString()
+  };
 
-    document.getElementById("reportId").innerText = d.reportId || "N/A";
-
-    if(d.investigationDirtyDozen){
-      const x = d.investigationDirtyDozen;
-
-      lackCommunication.value = x.lackCommunication || "";
-      complacency.value = x.complacency || "";
-      lackKnowledge.value = x.lackKnowledge || "";
-      distraction.value = x.distraction || "";
-      lackTeamwork.value = x.lackTeamwork || "";
-      fatigue.value = x.fatigue || "";
-      lackResources.value = x.lackResources || "";
-      pressure.value = x.pressure || "";
-      lackAssertiveness.value = x.lackAssertiveness || "";
-      stress.value = x.stress || "";
-      lackAwareness.value = x.lackAwareness || "";
-      norms.value = x.norms || "";
-
-      mainContributingFactors.value = x.mainContributingFactors || "";
-      safetyImpact.value = x.safetyImpact || "";
-      correctiveActions.value = x.correctiveActions || "";
-
-      savedAt.innerText = x.savedAt || "Saved";
-    }
-  }
-});
-
-window.saveInvestigation = function(){
-
-  update(ref(db,"smsReports/"+key+"/investigationDirtyDozen"),{
-    lackCommunication:lackCommunication.value,
-    complacency:complacency.value,
-    lackKnowledge:lackKnowledge.value,
-    distraction:distraction.value,
-    lackTeamwork:lackTeamwork.value,
-    fatigue:fatigue.value,
-    lackResources:lackResources.value,
-    pressure:pressure.value,
-    lackAssertiveness:lackAssertiveness.value,
-    stress:stress.value,
-    lackAwareness:lackAwareness.value,
-    norms:norms.value,
-
-    mainContributingFactors:mainContributingFactors.value,
-    safetyImpact:safetyImpact.value,
-    correctiveActions:correctiveActions.value,
-
-    status:"Saved",
-    savedAt:new Date().toISOString()
-  }).then(()=>{
-
-    update(ref(db,"smsReports/"+key+"/investigationModules"),{
-      dirtyDozen:true
-    });
-
-    savedAt.innerText = new Date().toISOString();
-    alert("Dirty Dozen investigation saved successfully.");
+  fields.forEach(id=>{
+    data[id] = document.getElementById(id).value;
   });
 
+  await set(ref(db, "dirtyDozenInvestigations/" + investigationId), data);
+
+  document.getElementById("saveStatus").innerText = "Saved successfully.";
+  setTimeout(()=>{
+    document.getElementById("saveStatus").innerText = "";
+  },2500);
 };
 
-window.deleteInvestigation = function(){
+window.deleteInvestigation = async function(){
+  const confirmDelete = confirm("Are you sure you want to delete this Dirty Dozen investigation?");
 
-  if(confirm("Do you want to delete this Dirty Dozen investigation?")){
-    remove(ref(db,"smsReports/"+key+"/investigationDirtyDozen")).then(()=>{
+  if(!confirmDelete) return;
 
-      lackCommunication.value = "";
-      complacency.value = "";
-      lackKnowledge.value = "";
-      distraction.value = "";
-      lackTeamwork.value = "";
-      fatigue.value = "";
-      lackResources.value = "";
-      pressure.value = "";
-      lackAssertiveness.value = "";
-      stress.value = "";
-      lackAwareness.value = "";
-      norms.value = "";
+  await remove(ref(db, "dirtyDozenInvestigations/" + investigationId));
 
-      mainContributingFactors.value = "";
-      safetyImpact.value = "";
-      correctiveActions.value = "";
-
-      savedAt.innerText = "Not saved yet";
-
-      update(ref(db,"smsReports/"+key+"/investigationModules"),{
-        dirtyDozen:false
-      });
-
-      alert("Dirty Dozen investigation deleted.");
-    });
-  }
-
+  alert("Investigation deleted.");
+  window.location.href = "index.html";
 };
 
 window.goBack = function(){
-  location.href = "Risk-Detail.html?key=" + key;
+  window.history.back();
 };
 
 window.goHome = function(){
-  location.href = "index.html";
+  window.location.href = "index.html";
 };
 
+loadInvestigation();
 </script>
 
 </body>
