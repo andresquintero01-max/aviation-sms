@@ -131,14 +131,6 @@ button.closed,.module-btn.completed{
   padding-left:22px;
 }
 
-.method-buttons{
-  margin-top:12px;
-}
-
-.method-buttons button{
-  background:linear-gradient(135deg,#991b1b,#ef4444)!important;
-}
-
 .matrix{
   margin-top:25px;
   display:flex;
@@ -482,19 +474,9 @@ Based on the initial risk assessment selected <b>${code}</b>, this event require
 <ul>
 <li><b>SAG Review:</b> The case must be reviewed by the Safety Action Group.</li>
 <li><b>In-depth Investigation:</b> A formal investigation must be performed.</li>
-<li><b>Recommended Methodologies:</b> HFACS, MEDA, REDA, 5 Whys, SHELL, or Bow-Tie.</li>
+<li><b>Recommended Methodologies:</b> HFACS, MEDA, REDA.</li>
 </ul>
 
-<p>
-This risk level indicates a high potential safety impact and requires documented corrective and preventive actions.
-</p>
-
-<div class="method-buttons">
-<button onclick="openHFACS()">Open HFACS</button>
-<button onclick="openMEDA()">Open MEDA</button>
-<button onclick="openREDA()">Open REDA</button>
-<button onclick="openFiveWhys()">Open 5 Whys</button>
-</div>
 </div>
 `;
 }
@@ -709,7 +691,7 @@ riskClosed:true,
 status:"IN PROGRESS",
 sagRequired:requiredInvestigation,
 inDepthInvestigationRequired:requiredInvestigation,
-recommendedInvestigationMethods: requiredInvestigation ? "HFACS / MEDA / REDA / 5 Whys / SHELL / Bow-Tie" : "As required based on safety assessment"
+recommendedInvestigationMethods: requiredInvestigation ? "HFACS / MEDA / REDA" : "As required based on safety assessment"
 });
 
 savedRisk.innerText=risk;
