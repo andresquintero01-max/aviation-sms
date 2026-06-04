@@ -514,6 +514,40 @@ const auth = getAuth(app);
 
 let reportsListenerStarted = false;
 
+    const SESSION_LIMIT = 2 * 60 * 60 * 1000; // 2 hours
+let sessionTimer = null;
+
+function startSessionControl(){
+    if(sessionTimer){
+        clearInterval(sessionTimer);
+    }
+
+    sessionTimer = setInterval(() => {
+        const loginTime = localStorage.getItem("loginTime");
+
+        if(!loginTime){
+            return;
+        }
+
+        const now = Date.now();
+        const elapsed = now - parseInt(loginTime);
+
+        if(elapsed >= SESSION_LIMIT){
+            clearInterval(sessionTimer);
+
+            localStorage.removeItem("loginTime");
+            localStorage.removeItem("userRole");
+            localStorage.removeItem("companyId");
+
+            signOut(auth).then(() => {
+                alert("Your session expired. Please log in again.");
+                window.location.href = "index.html";
+            });
+        }
+
+    }, 60000); // checks every 1 minute
+}
+
 function showSystem(){
     document.getElementById("loginPage").style.display = "none";
     document.getElementById("systemPage").style.display = "block";
@@ -583,6 +617,7 @@ window.login = function(){
 
     signInWithEmailAndPassword(auth, email, password)
     .then(() => {
+    localStorage.setItem("loginTime", Date.now());
     console.log("Login successful");
     })
     .catch((error) => {
@@ -598,7 +633,11 @@ document.addEventListener("keydown", function(e){
 });
 
     window.logout = function(){
-
+    
+        localStorage.removeItem("loginTime");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("companyId");
+        
     signOut(auth)
     .then(() => {
 
@@ -662,11 +701,16 @@ onAuthStateChanged(auth, async (user) => {
 
             applyRoleAccess(role);
             showSystem();
+            startSessionControl();
 
         }else{
             alert("User role not found. Contact administrator.");
             signOut(auth);
         }
+
+    }else{
+        document.getElementById("systemPage").style.display = "none";
+        document.getElementById("loginPage").style.display = "block";
     }
 });
 
