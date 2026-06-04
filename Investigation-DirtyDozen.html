@@ -430,6 +430,10 @@ window.deleteInvestigation = function(){
 
       savedAt.innerText = "Not saved yet";
 
+      update(ref(db,"smsReports/"+key+"/investigationModules"),{
+        dirtyZone:false
+      });
+
       alert("Dirty Dozen investigation deleted.");
     });
   }
