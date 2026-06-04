@@ -60,6 +60,10 @@ button{
   box-shadow:0 10px 22px rgba(0,0,0,.18);
 }
 
+button:hover{
+  transform:translateY(-2px);
+}
+
 .save{background:linear-gradient(135deg,#047857,#22c55e);}
 .print{background:linear-gradient(135deg,#071f47,#1450b8);}
 .delete{background:linear-gradient(135deg,#991b1b,#ef4444);}
@@ -80,12 +84,6 @@ button{
   margin-bottom:20px;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:18px;
-}
-
 label{
   font-weight:900;
   color:#071f47;
@@ -93,7 +91,7 @@ label{
   margin-bottom:8px;
 }
 
-input,textarea,select{
+textarea,select{
   width:100%;
   padding:14px;
   border:1px solid #cfd8e3;
@@ -136,10 +134,11 @@ textarea{
   margin-top:20px;
   font-weight:900;
   color:#047857;
+  font-size:18px;
 }
 
 @media(max-width:900px){
-  .grid,.dirty-grid{grid-template-columns:1fr;}
+  .dirty-grid{grid-template-columns:1fr;}
   .container{padding:25px;}
   h1{font-size:36px;}
 }
@@ -165,40 +164,6 @@ textarea{
     <button class="delete" onclick="deleteInvestigation()">🗑 DELETE</button>
     <button class="back" onclick="goBack()">← BACK</button>
     <button class="home" onclick="goHome()">🏠 HOME</button>
-  </div>
-
-  <div class="section">
-    <h2>Event Information</h2>
-    <div class="grid">
-      <div>
-        <label>Report / Investigation ID</label>
-        <input id="investigationId" readonly>
-      </div>
-      <div>
-        <label>Date</label>
-        <input type="date" id="date">
-      </div>
-      <div>
-        <label>Aircraft / Area</label>
-        <input id="aircraftArea">
-      </div>
-      <div>
-        <label>Location</label>
-        <input id="location">
-      </div>
-      <div>
-        <label>Investigator</label>
-        <input id="investigator">
-      </div>
-      <div>
-        <label>Status</label>
-        <select id="status">
-          <option value="Open">Open</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Closed">Closed</option>
-        </select>
-      </div>
-    </div>
   </div>
 
   <div class="section">
@@ -288,6 +253,7 @@ textarea{
 
   <div class="section">
     <h2>Conclusion / Corrective Actions</h2>
+
     <label>Root Cause / Contributing Factors</label>
     <textarea id="rootCause"></textarea>
 
@@ -308,7 +274,7 @@ textarea{
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, set, get, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, set, get, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
@@ -324,16 +290,21 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const urlParams = new URLSearchParams(window.location.search);
-let investigationId =
-  urlParams.get("id") ||
-  localStorage.getItem("selectedInvestigationId") ||
-  "DD-" + Date.now();
 
-document.getElementById("investigationId").value = investigationId;
+let key =
+  urlParams.get("key") ||
+  urlParams.get("id") ||
+  urlParams.get("reportId") ||
+  localStorage.getItem("currentRiskKey") ||
+  "";
+
+if(key && key !== "general"){
+  localStorage.setItem("currentRiskKey", key);
+}
 
 const fields = [
-  "date","aircraftArea","location","investigator","status",
   "problemDescription",
+
   "communication","communicationNotes",
   "complacency","complacencyNotes",
   "knowledge","knowledgeNotes",
@@ -346,55 +317,92 @@ const fields = [
   "stress","stressNotes",
   "awareness","awarenessNotes",
   "norms","normsNotes",
-  "rootCause","correctiveActions","finalComments"
+
+  "rootCause",
+  "correctiveActions",
+  "finalComments"
 ];
 
 async function loadInvestigation(){
-  const snapshot = await get(ref(db, "dirtyDozenInvestigations/" + investigationId));
+
+  if(!key || key === "general"){
+    document.getElementById("saveStatus").innerText = "No valid report key. Open this module from Risk Detail.";
+    return;
+  }
+
+  const snapshot = await get(ref(db, "smsReports/" + key + "/investigationDirtyDozen"));
 
   if(snapshot.exists()){
     const data = snapshot.val();
+
     fields.forEach(id=>{
-      if(document.getElementById(id)){
-        document.getElementById(id).value = data[id] || "";
+      const element = document.getElementById(id);
+      if(element){
+        element.value = data[id] || "";
       }
     });
-  }else{
-    document.getElementById("date").valueAsDate = new Date();
   }
 }
 
 window.saveInvestigation = async function(){
+
+  if(!key || key === "general"){
+    alert("No valid report key. Open this module from Risk Detail.");
+    return;
+  }
+
   const data = {
-    investigationId: investigationId,
-    updatedAt: new Date().toISOString()
+    investigationId: key,
+    status: "Saved",
+    savedAt: new Date().toISOString()
   };
 
   fields.forEach(id=>{
-    data[id] = document.getElementById(id).value;
+    const element = document.getElementById(id);
+    if(element){
+      data[id] = element.value;
+    }
   });
 
-  await set(ref(db, "dirtyDozenInvestigations/" + investigationId), data);
+  await set(ref(db, "smsReports/" + key + "/investigationDirtyDozen"), data);
 
-  document.getElementById("saveStatus").innerText = "Saved successfully.";
+  await update(ref(db, "smsReports/" + key + "/investigationModules"), {
+    dirtyDozen: true
+  });
+
+  document.getElementById("saveStatus").innerText = "Dirty Dozen investigation saved successfully.";
+
   setTimeout(()=>{
     document.getElementById("saveStatus").innerText = "";
   },2500);
 };
 
 window.deleteInvestigation = async function(){
+
+  if(!key || key === "general"){
+    alert("No valid report key.");
+    return;
+  }
+
   const confirmDelete = confirm("Are you sure you want to delete this Dirty Dozen investigation?");
 
   if(!confirmDelete) return;
 
-  await remove(ref(db, "dirtyDozenInvestigations/" + investigationId));
+  await remove(ref(db, "smsReports/" + key + "/investigationDirtyDozen"));
 
-  alert("Investigation deleted.");
-  window.location.href = "index.html";
+  await update(ref(db, "smsReports/" + key + "/investigationModules"), {
+    dirtyDozen: false
+  });
+
+  alert("Dirty Dozen investigation deleted.");
 };
 
 window.goBack = function(){
-  window.history.back();
+  if(key && key !== "general"){
+    window.location.href = "Risk-Detail.html?key=" + key;
+  }else{
+    window.history.back();
+  }
 };
 
 window.goHome = function(){
