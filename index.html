@@ -52,43 +52,18 @@ body{
     display:none;
 }
 
-.login-container::before,
-.main-container::before{
-    content:"";
-    position:absolute;
-    width:520px;
-    height:520px;
-    background:radial-gradient(circle,rgba(25,118,255,0.20),transparent 70%);
-    top:-230px;
-    right:-180px;
-}
-
-.login-container::after,
-.main-container::after{
-    content:"";
-    position:absolute;
-    width:350px;
-    height:350px;
-    background:radial-gradient(circle,rgba(255,152,0,0.18),transparent 70%);
-    bottom:-160px;
-    left:-130px;
-}
-
 .content{
     position:relative;
     z-index:2;
 }
 
-.login-371q,
-.brand-371q{
-    font-size:145px;
-    font-weight:900;
-    line-height:1;
-    letter-spacing:8px;
-    background:linear-gradient(135deg,#071f47,#1976ff,#64b5ff);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    margin-bottom:18px;
+.logo-img{
+    width:230px;
+    display:block;
+    margin:0 auto 25px auto;
+    border-radius:22px;
+}
+
 .brand-371q{
     text-align:center;
     margin-bottom:20px;
@@ -98,32 +73,11 @@ body{
     font-size:150px;
     font-weight:900;
     letter-spacing:8px;
-    background:linear-gradient(
-        135deg,
-        #071f47 0%,
-        #1450b8 30%,
-        #3b82f6 60%,
-        #93c5fd 100%
-    );
+    background:linear-gradient(135deg,#071f47,#1450b8,#3b82f6,#93c5fd);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
-    text-shadow:
-        0 0 20px rgba(59,130,246,0.25),
-        0 0 40px rgba(59,130,246,0.15);
     display:inline-block;
     animation:premiumGlow 3s ease-in-out infinite;
-}
-
-@keyframes premiumGlow{
-    0%{
-        transform:scale(1);
-    }
-    50%{
-        transform:scale(1.04);
-    }
-    100%{
-        transform:scale(1);
-    }
 }
 
 .login-container h1,
@@ -168,7 +122,6 @@ body{
     border-radius:16px;
     font-size:17px;
     outline:none;
-    transition:0.3s;
 }
 
 .login-box input:focus{
@@ -186,13 +139,23 @@ body{
     font-size:18px;
     font-weight:900;
     cursor:pointer;
-    transition:0.3s;
     box-shadow:0 14px 28px rgba(0,0,0,0.25);
 }
 
-.login-box button:hover{
-    transform:translateY(-4px);
-    background:linear-gradient(135deg,#0b2a66,#1d4ed8);
+.logout-area{
+    text-align:right;
+    margin-bottom:20px;
+}
+
+.logout-btn{
+    background:#dc2626;
+    color:white;
+    border:none;
+    padding:12px 22px;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
 }
 
 .new-report-banner{
@@ -204,7 +167,6 @@ body{
     margin-bottom:32px;
     text-align:center;
     box-shadow:0 14px 32px rgba(220,38,38,0.35);
-    animation:pulseAlert 1.6s infinite;
 }
 
 .new-report-banner h2{
@@ -243,31 +205,14 @@ body{
     align-items:center;
     justify-content:space-between;
     box-shadow:0 16px 35px rgba(0,0,0,0.12);
-    transition:0.35s;
-    position:relative;
-    overflow:hidden;
     border:1px solid #eef2f7;
+    transition:0.35s;
 }
 
 .btn:hover{
     transform:translateY(-7px);
     box-shadow:0 25px 50px rgba(0,0,0,0.20);
 }
-
-.btn::before{
-    content:"";
-    position:absolute;
-    left:0;
-    top:0;
-    width:10px;
-    height:100%;
-}
-
-.dashboard::before{background:#1976ff;}
-.policy::before{background:#4f46e5;}
-.hazard::before{background:#ff9800;}
-.assurance::before{background:#22c55e;}
-.promotion::before{background:#8b5cf6;}
 
 .btn-left{
     display:flex;
@@ -304,18 +249,11 @@ body{
     color:#56657d;
     font-size:19px;
     line-height:1.5;
-    max-width:600px;
 }
 
 .arrow{
     font-size:62px;
     color:#1450b8;
-    transition:0.3s;
-    font-weight:300;
-}
-
-.btn:hover .arrow{
-    transform:translateX(10px);
 }
 
 .footer{
@@ -332,15 +270,9 @@ body{
     to{opacity:1; transform:translateY(0);}
 }
 
-@keyframes pulse371{
+@keyframes premiumGlow{
     0%{transform:scale(1);}
-    50%{transform:scale(1.035);}
-    100%{transform:scale(1);}
-}
-
-@keyframes pulseAlert{
-    0%{transform:scale(1);}
-    50%{transform:scale(1.02);}
+    50%{transform:scale(1.04);}
     100%{transform:scale(1);}
 }
 
@@ -350,8 +282,7 @@ body{
         padding:35px 22px;
     }
 
-    .login-371q,
-    .brand-371q{
+    .q3{
         font-size:85px;
         letter-spacing:3px;
     }
@@ -361,24 +292,14 @@ body{
         font-size:38px;
     }
 
-    .login-container p,
-    .subtitle{
-        font-size:17px;
-    }
-
     .btn{
         flex-direction:column;
         align-items:flex-start;
-        gap:22px;
     }
 
     .btn-left{
         flex-direction:column;
         align-items:flex-start;
-    }
-
-    .arrow{
-        align-self:flex-end;
     }
 
     .text h2{
@@ -395,135 +316,118 @@ body{
 <body>
 
 <div class="login-container" id="loginPage">
-<div class="content">
+    <div class="content">
 
-    <img src="images/CONICSO.jpg"
-     alt="371Q Logo"
-     style="width:220px; display:block; margin:0 auto 20px auto;">
+        <img src="images/CONICSO.jpg" class="logo-img" alt="371Q Logo">
 
-    <h1>Professional Aviation Safety Software</h1>
+        <h1>Professional Aviation Safety Software</h1>
 
-    <p>
-        Integrated Safety Management System platform for hazard tracking,
-        risk analysis, safety assurance, safety promotion and real-time
-        operational safety visibility.
-    </p>
+        <p>
+            Integrated Safety Management System platform for hazard tracking,
+            risk analysis, safety assurance, safety promotion and real-time
+            operational safety visibility.
+        </p>
 
-    <div class="login-box">
-        <input type="email" id="username" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
+        <div class="login-box">
+            <input type="email" id="username" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()">ENTER SYSTEM</button>
+        </div>
 
-        <button onclick="login()">
-            ENTER SYSTEM
-        </button>
     </div>
-
-</div>
 </div>
 
 <div class="main-container" id="systemPage">
-<div class="content">
+    <div class="content">
 
-    <div class="brand-371q">
-    <span class="q3">371Q</span>
-    </div>
-    <div style="text-align:right;margin-bottom:20px;">
-    <button onclick="logout()" id="logoutBtn"
-    style="
-    background:#dc2626;
-    color:white;
-    border:none;
-    padding:12px 22px;
-    border-radius:12px;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;">
-    LOG OUT
-    </button>
-</div>
+        <div class="brand-371q">
+            <span class="q3">371Q</span>
+        </div>
 
-    <h1>Professional Aviation Safety Software</h1>
+        <div class="logout-area">
+            <button onclick="logout()" id="logoutBtn" class="logout-btn">LOG OUT</button>
+        </div>
 
-    <div class="subtitle">
-        SKY QUALITY has developed
-        <span class="highlight">371Q</span>,
-        an advanced integrated Safety Management System platform designed to provide
-        real-time operational safety visibility, hazard tracking, risk analysis,
-        safety performance monitoring and proactive decision-making.
-    </div>
+        <h1>Professional Aviation Safety Software</h1>
 
-    <div class="new-report-banner" id="newReportBanner">
-        <h2>🚨 NEW REPORTS: <span id="newReportCount">0</span></h2>
-        <p>You have new SMS reports pending review.</p>
-        <button onclick="openDatabaseAndClear()">
-            OPEN SMS DATABASE
-        </button>
-    </div>
+        <div class="subtitle">
+            SKY QUALITY has developed
+            <span class="highlight">371Q</span>,
+            an advanced integrated Safety Management System platform designed to provide
+            real-time operational safety visibility, hazard tracking, risk analysis,
+            safety performance monitoring and proactive decision-making.
+        </div>
 
-    <div class="menu">
+        <div class="new-report-banner" id="newReportBanner">
+            <h2>🚨 NEW REPORTS: <span id="newReportCount">0</span></h2>
+            <p>You have new SMS reports pending review.</p>
+            <button onclick="openDatabaseAndClear()">OPEN SMS DATABASE</button>
+        </div>
 
-    <a class="btn dashboard" id="dashboardBtn" href="Dashboard.html">
-    <div class="btn-left">
-                <div class="icon">📊</div>
-                <div class="text">
-                    <h2>Dashboard</h2>
-                    <p>General overview of SMS reports, indicators and system status.</p>
+        <div class="menu">
+
+            <a class="btn dashboard" id="dashboardBtn" href="Dashboard.html">
+                <div class="btn-left">
+                    <div class="icon">📊</div>
+                    <div class="text">
+                        <h2>Dashboard</h2>
+                        <p>General overview of SMS reports, indicators and system status.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="arrow">›</div>
-        </a>
+                <div class="arrow">›</div>
+            </a>
 
-    <a class="btn policy" id="policyBtn" href="SMS-Policy.html">
-    <div class="btn-left">
-                <div class="icon">📄</div>
-                <div class="text">
-                    <h2>SMS Policy</h2>
-                    <p>Policies, manuals, objectives and emergency plans.</p>
+            <a class="btn policy" id="policyBtn" href="SMS-Policy.html">
+                <div class="btn-left">
+                    <div class="icon">📄</div>
+                    <div class="text">
+                        <h2>SMS Policy</h2>
+                        <p>Policies, manuals, objectives and emergency plans.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="arrow">›</div>
-        </a>
+                <div class="arrow">›</div>
+            </a>
 
-    <a class="btn hazard" id="hazardBtn" href="Hazard-Identification.html">
-    <div class="btn-left">
-                <div class="icon">⚠️</div>
-                <div class="text">
-                    <h2>Hazard Identification</h2>
-                    <p>Hazard reporting and risk identification system.</p>
+            <a class="btn hazard" id="hazardBtn" href="Hazard-Identification.html">
+                <div class="btn-left">
+                    <div class="icon">⚠️</div>
+                    <div class="text">
+                        <h2>Hazard Identification</h2>
+                        <p>Hazard reporting and risk identification system.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="arrow">›</div>
-        </a>
+                <div class="arrow">›</div>
+            </a>
 
-    <a class="btn assurance" id="assuranceBtn" href="Safety-Assurance.html">
-    <div class="btn-left">
-                <div class="icon">✔️</div>
-                <div class="text">
-                    <h2>Safety Assurance</h2>
-                    <p>Audits, inspections and safety performance monitoring.</p>
+            <a class="btn assurance" id="assuranceBtn" href="Safety-Assurance.html">
+                <div class="btn-left">
+                    <div class="icon">✔️</div>
+                    <div class="text">
+                        <h2>Safety Assurance</h2>
+                        <p>Audits, inspections and safety performance monitoring.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="arrow">›</div>
-        </a>
+                <div class="arrow">›</div>
+            </a>
 
-    <a class="btn promotion" id="promotionBtn" href="Safety-Promotion.html">
-    <div class="btn-left">
-                <div class="icon">👥</div>
-                <div class="text">
-                    <h2>Safety Promotion</h2>
-                    <p>Training, communication and safety culture.</p>
+            <a class="btn promotion" id="promotionBtn" href="Safety-Promotion.html">
+                <div class="btn-left">
+                    <div class="icon">👥</div>
+                    <div class="text">
+                        <h2>Safety Promotion</h2>
+                        <p>Training, communication and safety culture.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="arrow">›</div>
-        </a>
+                <div class="arrow">›</div>
+            </a>
+
+        </div>
+
+        <div class="footer">
+            ONE SYSTEM • REAL-TIME SAFETY • TOTAL CONTROL
+        </div>
 
     </div>
-
-    <div class="footer">
-        ONE SYSTEM • REAL-TIME SAFETY • TOTAL CONTROL
-    </div>
-
-</div>
 </div>
 
 <script type="module">
@@ -547,8 +451,7 @@ const database = getDatabase(app);
 const auth = getAuth(app);
 
 let reportsListenerStarted = false;
-
-    const SESSION_LIMIT = 2 * 60 * 60 * 1000; // 2 hours
+const SESSION_LIMIT = 2 * 60 * 60 * 1000;
 let sessionTimer = null;
 
 function startSessionControl(){
@@ -563,8 +466,7 @@ function startSessionControl(){
             return;
         }
 
-        const now = Date.now();
-        const elapsed = now - parseInt(loginTime);
+        const elapsed = Date.now() - parseInt(loginTime);
 
         if(elapsed >= SESSION_LIMIT){
             clearInterval(sessionTimer);
@@ -578,14 +480,18 @@ function startSessionControl(){
                 window.location.href = "index.html";
             });
         }
-
-    }, 60000); // checks every 1 minute
+    }, 60000);
 }
 
 function showSystem(){
     document.getElementById("loginPage").style.display = "none";
     document.getElementById("systemPage").style.display = "block";
     startNewReportCounter();
+}
+
+function showLogin(){
+    document.getElementById("systemPage").style.display = "none";
+    document.getElementById("loginPage").style.display = "block";
 }
 
 function startNewReportCounter(){
@@ -595,7 +501,6 @@ function startNewReportCounter(){
     const reportsRef = ref(database, "smsReports");
 
     onValue(reportsRef, (snapshot)=>{
-
         const data = snapshot.val() || {};
         const reports = Object.values(data);
 
@@ -628,21 +533,13 @@ function startNewReportCounter(){
 }
 
 window.openDatabaseAndClear = function(){
-    localStorage.setItem(
-        "lastSeenSMSReportTime",
-        new Date().toISOString()
-    );
-
+    localStorage.setItem("lastSeenSMSReportTime", new Date().toISOString());
     window.location.href = "SMS-Database.html";
 };
 
 window.login = function(){
-
-    const email =
-    document.getElementById("username").value.trim();
-
-    const password =
-    document.getElementById("password").value.trim();
+    const email = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
 
     if(!email || !password){
         alert("Please enter email and password");
@@ -651,8 +548,8 @@ window.login = function(){
 
     signInWithEmailAndPassword(auth, email, password)
     .then(() => {
-    localStorage.setItem("loginTime", Date.now());
-    console.log("Login successful");
+        localStorage.setItem("loginTime", Date.now());
+        console.log("Login successful");
     })
     .catch((error) => {
         alert("Invalid email or password");
@@ -666,36 +563,29 @@ document.addEventListener("keydown", function(e){
     }
 });
 
-    window.logout = function(){
-    
-        localStorage.removeItem("loginTime");
+window.logout = function(){
+    localStorage.removeItem("loginTime");
     localStorage.removeItem("userRole");
     localStorage.removeItem("companyId");
-        
+
     signOut(auth)
     .then(() => {
-
-        document.getElementById("systemPage").style.display = "none";
-        document.getElementById("loginPage").style.display = "block";
-
+        showLogin();
         document.getElementById("username").value = "";
         document.getElementById("password").value = "";
-
     })
     .catch((error) => {
         console.error(error);
     });
-
 };
 
 function applyRoleAccess(role){
-
     const dashboardBtn = document.getElementById("dashboardBtn");
     const policyBtn = document.getElementById("policyBtn");
     const hazardBtn = document.getElementById("hazardBtn");
     const assuranceBtn = document.getElementById("assuranceBtn");
     const promotionBtn = document.getElementById("promotionBtn");
-    const newReportBanner = document.getElementById("newReportBanner");
+    const databaseButton = document.querySelector("#newReportBanner button");
 
     dashboardBtn.style.display = "flex";
     policyBtn.style.display = "flex";
@@ -704,26 +594,29 @@ function applyRoleAccess(role){
     promotionBtn.style.display = "flex";
 
     if(role === "admin"){
+        if(databaseButton){
+            databaseButton.style.display = "inline-block";
+        }
         return;
     }
 
     if(role === "tech" || role === "technician"){
-    dashboardBtn.style.display = "none";
-    assuranceBtn.style.display = "none";
+        dashboardBtn.style.display = "none";
+        assuranceBtn.style.display = "none";
 
-    policyBtn.style.display = "flex";
-    hazardBtn.style.display = "flex";
-    promotionBtn.style.display = "flex";
+        policyBtn.style.display = "flex";
+        hazardBtn.style.display = "flex";
+        promotionBtn.style.display = "flex";
 
-    document.querySelector("#newReportBanner button").style.display = "none";
+        if(databaseButton){
+            databaseButton.style.display = "none";
+        }
     }
-
 }
-    
+
 onAuthStateChanged(auth, async (user) => {
     if(user){
         const dbRef = ref(database);
-
         const snapshot = await get(child(dbRef, "users/" + user.uid));
 
         if(snapshot.exists()){
@@ -743,8 +636,7 @@ onAuthStateChanged(auth, async (user) => {
         }
 
     }else{
-        document.getElementById("systemPage").style.display = "none";
-        document.getElementById("loginPage").style.display = "block";
+        showLogin();
     }
 });
 
