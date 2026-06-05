@@ -9,13 +9,13 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-  font-family:'Segoe UI',Arial,sans-serif;
+  font-family:'Segoe UI', Arial, sans-serif;
   min-height:100vh;
   background:
-  radial-gradient(circle at top left, rgba(255,152,0,0.30), transparent 30%),
-  radial-gradient(circle at bottom right, rgba(28,99,219,0.45), transparent 38%),
-  linear-gradient(rgba(5,20,55,0.86),rgba(5,20,55,0.94)),
-  url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+    radial-gradient(circle at top left, rgba(255,152,0,0.30), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(28,99,219,0.45), transparent 38%),
+    linear-gradient(rgba(5,20,55,0.86), rgba(5,20,55,0.94)),
+    url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
   background-size:cover;
   background-position:center;
   background-attachment:fixed;
@@ -87,83 +87,45 @@ h1{
   background:linear-gradient(90deg,transparent,#1450b8,#ff9800,transparent);
 }
 
-.filter-box{
-  background:#f8fbff;
-  border:1px solid #e5e7eb;
-  padding:22px;
-  border-radius:26px;
-  margin-bottom:26px;
-  box-shadow:0 14px 32px rgba(0,0,0,0.10);
-}
-
-.filter-title{
-  font-weight:900;
-  color:#071f47;
-  margin-bottom:12px;
-  font-size:18px;
-}
-
-.filter-grid{
-  display:grid;
-  grid-template-columns:1.4fr 1fr 1fr;
-  gap:14px;
-}
-
-.search-input,
-select{
-  width:100%;
-  padding:16px;
-  border:1px solid #cbd5e1;
-  border-radius:16px;
-  font-size:16px;
-  outline:none;
-  background:white;
-}
-
-.search-input:focus,
-select:focus{
-  border-color:#1450b8;
-  box-shadow:0 0 0 4px rgba(20,80,184,0.12);
-}
-
-.top-buttons,
-.bottom-buttons{
+.top-actions{
   display:flex;
   justify-content:center;
-  gap:14px;
   flex-wrap:wrap;
-  margin-bottom:30px;
+  gap:14px;
+  margin-bottom:25px;
   background:#f8fbff;
-  padding:18px;
-  border-radius:24px;
+  padding:20px;
+  border-radius:26px;
   border:1px solid #e5e7eb;
-}
-
-.bottom-buttons{
-  margin-top:40px;
-  margin-bottom:0;
+  box-shadow:0 14px 32px rgba(0,0,0,0.10);
 }
 
 .btn{
   border:none;
   color:white;
-  padding:15px 28px;
+  padding:15px 26px;
   border-radius:16px;
   font-size:15px;
   font-weight:900;
   cursor:pointer;
   transition:0.25s;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
   box-shadow:0 10px 22px rgba(0,0,0,0.22);
 }
 
 .btn:hover{transform:translateY(-3px);}
 
-.overview-btn{background:linear-gradient(135deg,#d83b00,#ff9800);}
+.filter-btn{background:linear-gradient(135deg,#7c3aed,#a855f7);}
+.excel-btn{background:linear-gradient(135deg,#047857,#22c55e);}
+.risk-btn{background:linear-gradient(135deg,#d83b00,#ff9800);}
 .home-btn{background:linear-gradient(135deg,#071f47,#1450b8);}
 .open-btn{background:linear-gradient(135deg,#071f47,#1450b8);}
 .save-btn{background:linear-gradient(135deg,#047857,#22c55e);}
 .status-btn{background:linear-gradient(135deg,#6b21a8,#9333ea);}
-.excel-btn{background:linear-gradient(135deg,#047857,#22c55e);}
 
 .delete-btn{
   background:linear-gradient(135deg,#dc2626,#ef4444);
@@ -172,6 +134,28 @@ select:focus{
   border-radius:50%;
   padding:0;
   font-size:20px;
+}
+
+.filter-panel{
+  background:#f8fbff;
+  border:1px solid #dbe3ef;
+  padding:22px;
+  border-radius:22px;
+  margin-bottom:28px;
+  display:grid;
+  grid-template-columns:1.2fr 0.8fr 1fr 1fr;
+  gap:14px;
+}
+
+.filter-panel input,
+.filter-panel select{
+  width:100%;
+  padding:15px;
+  border:1px solid #cbd5e1;
+  border-radius:14px;
+  font-size:15px;
+  background:white;
+  outline:none;
 }
 
 .counter{
@@ -189,21 +173,6 @@ select:focus{
   margin-bottom:24px;
   box-shadow:0 18px 45px rgba(0,0,0,0.14);
   border-left:10px solid #1450b8;
-  transition:0.25s;
-  position:relative;
-  overflow:hidden;
-}
-
-.report-card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 26px 60px rgba(0,0,0,0.20);
-}
-
-.card-header,
-.details-grid,
-.actions{
-  position:relative;
-  z-index:2;
 }
 
 .card-header{
@@ -235,26 +204,12 @@ select:focus{
   color:white;
   font-size:13px;
   font-weight:900;
-  box-shadow:0 8px 18px rgba(0,0,0,0.18);
 }
 
 .status.open{background:linear-gradient(135deg,#047857,#22c55e);}
 .status.closed{background:linear-gradient(135deg,#475569,#64748b);}
 .status.in-progress{background:linear-gradient(135deg,#071f47,#1450b8);}
 .status.pending-action{background:linear-gradient(135deg,#d83b00,#ff9800);}
-
-.risk-badge{
-  display:inline-block;
-  padding:8px 16px;
-  border-radius:999px;
-  font-weight:900;
-  font-size:13px;
-}
-
-.low-risk{background:#d8f3dc;color:#14532d;}
-.medium-risk{background:#fff3cd;color:#664d03;}
-.high-risk{background:#ffe0b2;color:#9a3412;}
-.extreme-risk{background:#f8d7da;color:#842029;}
 
 .details-grid{
   display:grid;
@@ -295,12 +250,6 @@ select:focus{
   color:#071f47;
 }
 
-.small-note{
-  font-size:12px;
-  color:#64748b;
-  margin-top:6px;
-}
-
 .actions{
   display:flex;
   flex-wrap:wrap;
@@ -309,17 +258,17 @@ select:focus{
   align-items:center;
 }
 
-.separator-buttons{
+.separator-buttons,
+.bottom-buttons{
   margin:30px 0;
   padding:18px;
-  background:rgba(255,255,255,0.18);
+  background:#f8fbff;
   border-radius:24px;
-  border:1px solid rgba(255,255,255,0.30);
   display:flex;
   justify-content:center;
   gap:14px;
   flex-wrap:wrap;
-  backdrop-filter:blur(8px);
+  border:1px solid #e5e7eb;
 }
 
 .no-data{
@@ -343,13 +292,12 @@ select:focus{
   font-weight:900;
 }
 
-@media(max-width:800px){
+@media(max-width:900px){
   body{padding:20px;}
   .container{padding:30px 22px;}
-  h1{font-size:40px;}
-  .event-title{font-size:21px;}
+  h1{font-size:42px;}
+  .filter-panel{grid-template-columns:1fr;}
   .btn{width:100%;}
-  .filter-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -360,9 +308,7 @@ select:focus{
 <div class="content">
 
   <div class="logo">🗂️</div>
-
   <div class="badge">RISK OVERVIEW DATABASE</div>
-
   <h1>Risk Overview Database</h1>
 
   <div class="description">
@@ -371,39 +317,33 @@ select:focus{
 
   <div class="title-line"></div>
 
-  <div class="filter-box">
-    <div class="filter-title">Search Risk Overview Reports</div>
-
-    <div class="filter-grid">
-      <input 
-        id="searchInput" 
-        class="search-input" 
-        placeholder="Search by ID, title, airport, area, hazard, category, status..."
-        oninput="applyFilter()"
-      >
-
-      <select id="riskFilter" onchange="applyFilter()">
-        <option value="">All Risk Levels</option>
-        <option value="LOW RISK">Low Risk</option>
-        <option value="MEDIUM RISK">Medium Risk</option>
-        <option value="HIGH RISK">High Risk</option>
-        <option value="EXTREME RISK">Extreme Risk</option>
-      </select>
-
-      <select id="statusFilter" onchange="applyFilter()">
-        <option value="">All Status</option>
-        <option value="Open">Open</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Pending Action">Pending Action</option>
-        <option value="Closed">Closed</option>
-      </select>
-    </div>
+  <div class="top-actions">
+    <button class="btn filter-btn" onclick="toggleFilters()">🔎 Filters</button>
+    <button class="btn excel-btn" onclick="downloadExcel()">📥 Download Excel</button>
+    <button class="btn risk-btn" onclick="window.location.href='Risk-Overview.html'">📊 Risk Overview</button>
+    <button class="btn home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
   </div>
 
-  <div class="top-buttons">
-    <button class="btn excel-btn" onclick="downloadExcel()">📥 Download Excel</button>
-    <button class="btn overview-btn" onclick="window.location.href='Risk-Overview.html'">📊 Risk Overview</button>
-    <button class="btn home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+  <div id="filterPanel" class="filter-panel">
+    <input id="searchInput" placeholder="Search ID, title, airport, area, hazard..." oninput="applyFilter()">
+
+    <input type="date" id="dateFilter" onchange="applyFilter()">
+
+    <select id="riskFilter" onchange="applyFilter()">
+      <option value="">All Risk Levels</option>
+      <option value="LOW RISK">Low Risk</option>
+      <option value="MEDIUM RISK">Medium Risk</option>
+      <option value="HIGH RISK">High Risk</option>
+      <option value="EXTREME RISK">Extreme Risk</option>
+    </select>
+
+    <select id="statusFilter" onchange="applyFilter()">
+      <option value="">All Status</option>
+      <option value="Open">Open</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Pending Action">Pending Action</option>
+      <option value="Closed">Closed</option>
+    </select>
   </div>
 
   <div id="counter" class="counter"></div>
@@ -415,7 +355,7 @@ select:focus{
   </div>
 
   <div class="bottom-buttons">
-    <button class="btn overview-btn" onclick="window.location.href='Risk-Overview.html'">📊 Risk Overview</button>
+    <button class="btn risk-btn" onclick="window.location.href='Risk-Overview.html'">📊 Risk Overview</button>
     <button class="btn home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
   </div>
 
@@ -468,15 +408,14 @@ function clean(value){
 }
 
 function statusClass(status){
-  return String(status || "Open")
-    .toLowerCase()
-    .replaceAll(" ","-");
+  return String(status || "Open").toLowerCase().replaceAll(" ","-");
 }
 
-function riskClass(level){
-  return String(level || "LOW RISK")
-    .toLowerCase()
-    .replaceAll(" ","-");
+function normalizeDate(value){
+  if(!value) return "";
+  const d = new Date(value);
+  if(isNaN(d)) return "";
+  return d.toISOString().split("T")[0];
 }
 
 function renderReports(reports){
@@ -492,7 +431,7 @@ function renderReports(reports){
   noData.style.display = "none";
   counter.innerHTML = reports.length + " report(s) found";
 
-  reports.forEach((report,index) => {
+  reports.forEach((report, index) => {
 
     const firebaseId = report.firebaseId;
 
@@ -501,49 +440,20 @@ function renderReports(reports){
       report.customId ||
       firebaseId;
 
-    const title =
-      report.title ||
-      "Untitled Risk Overview";
-
-    const airport =
-      report.airport ||
-      "N/A";
-
-    const area =
-      report.area ||
-      "N/A";
-
-    const process =
-      report.process ||
-      "N/A";
-
-    const hazardTitle =
-      report.hazardTitle ||
-      "N/A";
-
-    const hazardCategory =
-      report.hazardCategory ||
-      "N/A";
-
-    const status =
-      report.status ||
-      "Open";
-
-    const date =
-      report.date ||
-      report.createdAt ||
-      "N/A";
+    const title = report.title || "Untitled Risk Overview";
+    const airport = report.airport || "N/A";
+    const area = report.area || "N/A";
+    const process = report.process || "N/A";
+    const hazardTitle = report.hazardTitle || "N/A";
+    const hazardCategory = report.hazardCategory || "N/A";
+    const status = report.status || "Open";
+    const date = report.date || report.createdAt || "N/A";
 
     const initialRisk = report.initialRisk || {};
     const residualRisk = report.residualRisk || {};
 
-    const initialLevel =
-      initialRisk.level ||
-      "LOW RISK";
-
-    const residualLevel =
-      residualRisk.level ||
-      "LOW RISK";
+    const initialLevel = initialRisk.level || "N/A";
+    const residualLevel = residualRisk.level || "N/A";
 
     const card = document.createElement("div");
     card.className = "report-card";
@@ -551,7 +461,9 @@ function renderReports(reports){
     card.innerHTML = `
       <div class="card-header">
         <div>
-          <div class="event-title">${clean(title)}</div>
+          <div class="event-title">
+            ${clean(visibleId)} | ${clean(title)}
+          </div>
 
           <div class="meta">
             <strong>Date:</strong> ${clean(date)}<br>
@@ -576,9 +488,6 @@ function renderReports(reports){
             id="riskOverviewId_${clean(firebaseId)}" 
             value="${clean(visibleId)}"
           >
-          <div class="small-note">
-            You can write your own Risk Overview ID here.
-          </div>
         </div>
 
         <div class="detail-box">
@@ -588,16 +497,12 @@ function renderReports(reports){
 
         <div class="detail-box">
           <div class="detail-label">Initial Risk</div>
-          <div class="detail-value">
-            <span class="risk-badge ${riskClass(initialLevel)}">${clean(initialLevel)}</span>
-          </div>
+          <div class="detail-value">${clean(initialLevel)}</div>
         </div>
 
         <div class="detail-box">
           <div class="detail-label">Residual Risk</div>
-          <div class="detail-value">
-            <span class="risk-badge ${riskClass(residualLevel)}">${clean(residualLevel)}</span>
-          </div>
+          <div class="detail-value">${clean(residualLevel)}</div>
         </div>
 
       </div>
@@ -630,7 +535,7 @@ function renderReports(reports){
       separator.className = "separator-buttons";
 
       separator.innerHTML = `
-        <button class="btn overview-btn" onclick="window.location.href='Risk-Overview.html'">
+        <button class="btn risk-btn" onclick="window.location.href='Risk-Overview.html'">
           📊 Risk Overview
         </button>
 
@@ -648,6 +553,7 @@ function renderReports(reports){
 window.applyFilter = function(){
 
   const searchText = document.getElementById("searchInput").value.toLowerCase().trim();
+  const dateFilter = document.getElementById("dateFilter").value;
   const riskFilter = document.getElementById("riskFilter").value;
   const statusFilter = document.getElementById("statusFilter").value;
 
@@ -665,18 +571,10 @@ window.applyFilter = function(){
       ${report.area || ""}
       ${report.process || ""}
       ${report.evaluator || ""}
-      ${report.date || ""}
-      ${report.reviewDate || ""}
-      ${report.status || ""}
       ${report.hazardTitle || ""}
       ${report.hazardCategory || ""}
       ${report.riskOwner || ""}
-      ${report.hazardDescription || ""}
-      ${report.causes || ""}
-      ${report.consequences || ""}
-      ${report.existingControls || ""}
-      ${report.kpiSpi || ""}
-      ${report.monitoringMethod || ""}
+      ${report.status || ""}
       ${initialRisk.level || ""}
       ${residualRisk.level || ""}
     `.toLowerCase();
@@ -684,16 +582,21 @@ window.applyFilter = function(){
     const matchesSearch =
       searchText === "" || searchArea.includes(searchText);
 
+    const reportDate =
+      normalizeDate(report.date || report.createdAt || "");
+
+    const matchesDate =
+      dateFilter === "" || reportDate === dateFilter;
+
     const matchesRisk =
       riskFilter === "" ||
       (initialRisk.level || "") === riskFilter ||
       (residualRisk.level || "") === riskFilter;
 
     const matchesStatus =
-      statusFilter === "" ||
-      (report.status || "Open") === statusFilter;
+      statusFilter === "" || (report.status || "Open") === statusFilter;
 
-    return matchesSearch && matchesRisk && matchesStatus;
+    return matchesSearch && matchesDate && matchesRisk && matchesStatus;
 
   });
 
@@ -702,6 +605,11 @@ window.applyFilter = function(){
   });
 
   renderReports(filteredReports);
+};
+
+window.toggleFilters = function(){
+  const panel = document.getElementById("filterPanel");
+  panel.style.display = panel.style.display === "none" ? "grid" : "none";
 };
 
 const reportsRef = ref(database, "riskOverviewReports");
