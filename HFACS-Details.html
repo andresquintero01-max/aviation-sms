@@ -1,1 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HFACS Details</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f4f7fb;
+  color:#111;
+  padding:25px;
+}
+
+.container{
+  max-width:1350px;
+  margin:auto;
+  background:white;
+  border-radius:24px;
+  padding:30px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
+
+.header{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+  color:white;
+  padding:30px;
+  border-radius:22px;
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.header h1{
+  font-size:42px;
+  margin-bottom:8px;
+}
+
+.header p{
+  font-size:17px;
+  color:#dbeafe;
+}
+
+.section{
+  margin-top:25px;
+  border:1px solid #d8e1ef;
+  border-radius:18px;
+  overflow:hidden;
+  background:white;
+}
+
+.section-title{
+  background:#004080;
+  color:white;
+  padding:14px 18px;
+  font-size:21px;
+  font-weight:bold;
+}
+
+.section-body{
+  padding:22px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:18px;
+}
+
+.field label{
+  display:block;
+  color:#004080;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+input,textarea{
+  width:100%;
+  padding:11px;
+  border:1px solid #b8c7da;
+  border-radius:10px;
+  font-size:15px;
+  background:white;
+}
+
+textarea{
+  min-height:95px;
+  resize:vertical;
+}
+
+input:disabled,
+textarea:disabled{
+  background:#f8fbff;
+  color:#111;
+  font-weight:600;
+}
+
+.factor-card{
+  border:1px solid #d8e1ef;
+  border-left:8px solid #1450b8;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:18px;
+  background:#f8fbff;
+}
+
+.factor-card h3{
+  color:#071f47;
+  margin-bottom:12px;
+  font-size:22px;
+}
+
+.factor-row{
+  display:grid;
+  grid-template-columns:1fr 90px;
+  gap:14px;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.checkbox-box{
+  text-align:center;
+}
+
+input[type="checkbox"]{
+  width:auto;
+  transform:scale(1.3);
+}
+
+.summary-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+}
+
+.summary-card{
+  border-radius:14px;
+  padding:18px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  color:white;
+}
+
+.unsafe{background:#c40000;}
+.preconditions{background:#d83b00;}
+.supervision{background:#1450b8;}
+.organization{background:#047857;}
+
+.status-box{
+  margin-top:25px;
+  padding:20px;
+  border-radius:18px;
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+  border:2px solid #d8e1ef;
+}
+
+.status-open{
+  background:#fff7ed;
+  color:#c2410c;
+  border-color:#fb923c;
+}
+
+.status-closed{
+  background:#e8f5e9;
+  color:#14532d;
+  border-color:#2f9144;
+}
+
+.btn-area{
+  text-align:center;
+  margin-top:30px;
+}
+
+.btn{
+  border:none;
+  padding:15px 28px;
+  border-radius:12px;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:6px;
+}
+
+.edit-btn{background:#9333ea;}
+.save-btn{background:#2f9144;display:none;}
+.print-btn{background:#004aad;}
+.back-btn{background:#c40000;}
+.hfacs-btn{background:#004080;}
+.home-btn{background:#0b2a66;}
+
+.saved-box{
+  margin-top:25px;
+  background:#e8f5e9;
+  color:#14532d;
+  border:1px solid #2f9144;
+  padding:16px;
+  border-radius:14px;
+  display:none;
+  font-weight:bold;
+  text-align:center;
+}
+
+.loading{
+  text-align:center;
+  padding:30px;
+  color:#666;
+  font-size:18px;
+  font-weight:bold;
+}
+
+@media(max-width:900px){
+  .factor-row{grid-template-columns:1fr;}
+  .header h1{font-size:32px;}
+}
+
+@media print{
+  body{background:white;padding:0;}
+  .container{box-shadow:none;border-radius:0;}
+  .btn-area,.saved-box{display:none!important;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+  <h1>HFACS Details</h1>
+  <p>Full Human Factors Analysis and Classification System report loaded from Firebase.</p>
+</div>
+
+<div id="loadingBox" class="loading">Loading HFACS Report...</div>
+
+<div id="reportForm" style="display:none;">
+
+<div class="section">
+  <div class="section-title">1. Event Information</div>
+  <div class="section-body">
+
+    <div class="grid">
+
+      <div class="field">
+        <label>HFACS Report ID</label>
+        <input id="hfacsId">
+      </div>
+
+      <div class="field">
+        <label>Firebase ID</label>
+        <input id="firebaseId" disabled>
+      </div>
+
+      <div class="field">
+        <label>Report Title</label>
+        <input id="reportTitle">
+      </div>
+
+      <div class="field">
+        <label>Aircraft / Equipment</label>
+        <input id="aircraft">
+      </div>
+
+      <div class="field">
+        <label>Location</label>
+        <input id="location">
+      </div>
+
+      <div class="field">
+        <label>Investigator</label>
+        <input id="investigator">
+      </div>
+
+      <div class="field">
+        <label>Created At</label>
+        <input id="createdAt" disabled>
+      </div>
+
+      <div class="field">
+        <label>Updated At</label>
+        <input id="updatedAt" disabled>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">2. Event Description</div>
+  <div class="section-body">
+    <textarea id="eventDescription"></textarea>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">3. HFACS Factors</div>
+  <div class="section-body" id="formArea"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">4. HFACS Summary</div>
+  <div class="section-body">
+
+    <div class="summary-grid">
+      <div class="summary-card unsafe">
+        Unsafe Acts<br>
+        <span id="unsafeCount">0</span>
+      </div>
+
+      <div class="summary-card preconditions">
+        Preconditions<br>
+        <span id="preconditionsCount">0</span>
+      </div>
+
+      <div class="summary-card supervision">
+        Unsafe Supervision<br>
+        <span id="supervisionCount">0</span>
+      </div>
+
+      <div class="summary-card organization">
+        Organizational Influences<br>
+        <span id="organizationCount">0</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">5. Corrective / Preventive Actions</div>
+  <div class="section-body">
+    <textarea id="correctiveActions"></textarea>
+  </div>
+</div>
+
+<div id="reportStatusBox" class="status-box">
+  Report Status: Loading...
+</div>
+
+<div class="btn-area">
+  <button id="editBtn" class="btn edit-btn" onclick="enableEdit()">Edit Report</button>
+  <button id="saveBtn" class="btn save-btn" onclick="saveChanges()">Save Changes</button>
+  <button class="btn print-btn" onclick="window.print()">Print</button>
+  <button class="btn back-btn" onclick="window.location.href='HFACS-Database.html'">Back to HFACS Database</button>
+  <button class="btn hfacs-btn" onclick="window.location.href='HFACS.html'">Back to HFACS</button>
+  <button class="btn home-btn" onclick="window.location.href='index.html'">Home</button>
+</div>
+
+<div id="savedBox" class="saved-box">
+  HFACS Report updated successfully.
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  get,
+  update
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+const params = new URLSearchParams(window.location.search);
+const reportId = params.get("id");
+
+let currentData = {};
+
+const hfacsItems = [
+  {
+    level:"Unsafe Acts",
+    factors:[
+      "Skill-Based Error",
+      "Decision Error",
+      "Perceptual Error",
+      "Routine Violation",
+      "Exceptional Violation"
+    ]
+  },
+  {
+    level:"Preconditions for Unsafe Acts",
+    factors:[
+      "Adverse Mental State",
+      "Adverse Physiological State",
+      "Physical / Mental Limitation",
+      "Crew Resource Management",
+      "Personal Readiness",
+      "Technological Environment",
+      "Physical Environment"
+    ]
+  },
+  {
+    level:"Unsafe Supervision",
+    factors:[
+      "Inadequate Supervision",
+      "Planned Inappropriate Operations",
+      "Failed to Correct Known Problem",
+      "Supervisory Violation"
+    ]
+  },
+  {
+    level:"Organizational Influences",
+    factors:[
+      "Resource Management",
+      "Organizational Climate",
+      "Organizational Process"
+    ]
+  }
+];
+
+function safeId(text){
+  return text.replaceAll(" ","_").replaceAll("/","_").replaceAll("-","_");
+}
+
+function setValue(id,value){
+  const el = document.getElementById(id);
+  if(el){
+    el.value = value || "";
+  }
+}
+
+function buildForm(){
+
+  const formArea = document.getElementById("formArea");
+  formArea.innerHTML = "";
+
+  hfacsItems.forEach(section => {
+
+    const card = document.createElement("div");
+    card.className = "factor-card";
+
+    let html = `<h3>${section.level}</h3>`;
+
+    section.factors.forEach((factor,index) => {
+
+      const id = safeId(section.level) + "_" + index;
+
+      html += `
+        <div class="factor-row">
+          <div>
+            <strong>${factor}</strong><br>
+            <span style="color:#56657d;">HFACS Level: ${section.level}</span>
+          </div>
+
+          <div class="checkbox-box">
+            <input 
+              type="checkbox" 
+              id="${id}" 
+              data-level="${section.level}" 
+              data-factor="${factor}" 
+              onchange="calculateHFACS()"
+            >
+          </div>
+        </div>
+      `;
+    });
+
+    card.innerHTML = html;
+    formArea.appendChild(card);
+
+  });
+}
+
+window.calculateHFACS = function(){
+
+  let unsafe = 0;
+  let preconditions = 0;
+  let supervision = 0;
+  let organization = 0;
+
+  document.querySelectorAll("input[type='checkbox']:checked").forEach(box => {
+    const level = box.dataset.level;
+
+    if(level === "Unsafe Acts") unsafe++;
+    if(level === "Preconditions for Unsafe Acts") preconditions++;
+    if(level === "Unsafe Supervision") supervision++;
+    if(level === "Organizational Influences") organization++;
+  });
+
+  document.getElementById("unsafeCount").innerText = unsafe;
+  document.getElementById("preconditionsCount").innerText = preconditions;
+  document.getElementById("supervisionCount").innerText = supervision;
+  document.getElementById("organizationCount").innerText = organization;
+
+  return {unsafe, preconditions, supervision, organization};
+};
+
+function updateStatusBox(){
+
+  const box = document.getElementById("reportStatusBox");
+  const status = currentData.status || "Open";
+
+  box.classList.remove("status-open","status-closed");
+
+  if(status === "Closed"){
+    box.classList.add("status-closed");
+    box.innerHTML = "Report Status: CLOSED";
+  }else{
+    box.classList.add("status-open");
+    box.innerHTML = "Report Status: OPEN";
+  }
+}
+
+function populateForm(){
+
+  setValue("firebaseId", reportId);
+  setValue("hfacsId", currentData.hfacsId || reportId);
+  setValue("createdAt", currentData.createdAt);
+  setValue("updatedAt", currentData.updatedAt);
+
+  setValue("reportTitle", currentData.reportTitle);
+  setValue("aircraft", currentData.aircraft);
+  setValue("location", currentData.location);
+  setValue("investigator", currentData.investigator);
+  setValue("eventDescription", currentData.eventDescription);
+  setValue("correctiveActions", currentData.correctiveActions);
+
+  document.querySelectorAll("input[type='checkbox']").forEach(box => {
+    box.checked = false;
+  });
+
+  const selected = currentData.selectedFactors || [];
+
+  selected.forEach(factor => {
+    document.querySelectorAll("input[type='checkbox']").forEach(box => {
+      if(box.dataset.level === factor.level && box.dataset.factor === factor.factor){
+        box.checked = true;
+      }
+    });
+  });
+
+  calculateHFACS();
+  updateStatusBox();
+}
+
+function lockForm(){
+
+  document.querySelectorAll("input, textarea").forEach(el => {
+    el.disabled = true;
+  });
+
+  document.getElementById("firebaseId").disabled = true;
+  document.getElementById("createdAt").disabled = true;
+  document.getElementById("updatedAt").disabled = true;
+
+  document.getElementById("editBtn").style.display = "inline-block";
+  document.getElementById("saveBtn").style.display = "none";
+}
+
+window.enableEdit = function(){
+
+  document.querySelectorAll("input, textarea").forEach(el => {
+    el.disabled = false;
+  });
+
+  document.getElementById("firebaseId").disabled = true;
+  document.getElementById("createdAt").disabled = true;
+  document.getElementById("updatedAt").disabled = true;
+
+  document.getElementById("editBtn").style.display = "none";
+  document.getElementById("saveBtn").style.display = "inline-block";
+};
+
+function collectSelectedFactors(){
+
+  const selectedFactors = [];
+
+  document.querySelectorAll("input[type='checkbox']:checked").forEach(box => {
+    selectedFactors.push({
+      level: box.dataset.level,
+      factor: box.dataset.factor
+    });
+  });
+
+  return selectedFactors;
+}
+
+window.saveChanges = function(){
+
+  const summary = calculateHFACS();
+
+  const updatedData = {
+    hfacsId: document.getElementById("hfacsId").value.trim(),
+    reportTitle: document.getElementById("reportTitle").value.trim(),
+    aircraft: document.getElementById("aircraft").value.trim(),
+    location: document.getElementById("location").value.trim(),
+    investigator: document.getElementById("investigator").value.trim(),
+    eventDescription: document.getElementById("eventDescription").value.trim(),
+    correctiveActions: document.getElementById("correctiveActions").value.trim(),
+    selectedFactors: collectSelectedFactors(),
+    summary: summary,
+    status: currentData.status || "Open",
+    createdAt: currentData.createdAt || "",
+    updatedAt: new Date().toLocaleString()
+  };
+
+  update(ref(database,"hfacsReports/" + reportId), updatedData)
+  .then(() => {
+    document.getElementById("savedBox").style.display = "block";
+    alert("HFACS Report updated successfully.");
+    currentData = {...currentData, ...updatedData};
+    populateForm();
+    lockForm();
+  })
+  .catch(error => {
+    alert("Error updating HFACS Report: " + error.message);
+  });
+};
+
+function loadReport(){
+
+  if(!reportId){
+    document.getElementById("loadingBox").innerHTML = "No HFACS Report ID was found in the URL.";
+    return;
+  }
+
+  get(ref(database,"hfacsReports/" + reportId))
+  .then(snapshot => {
+
+    if(!snapshot.exists()){
+      document.getElementById("loadingBox").innerHTML = "HFACS Report not found in Firebase.";
+      return;
+    }
+
+    currentData = snapshot.val();
+
+    document.getElementById("loadingBox").style.display = "none";
+    document.getElementById("reportForm").style.display = "block";
+
+    populateForm();
+    lockForm();
+
+  })
+  .catch(error => {
+    document.getElementById("loadingBox").innerHTML = "Error loading HFACS Report: " + error.message;
+  });
+}
+
+buildForm();
+loadReport();
+
+</script>
+
+</body>
+</html>
