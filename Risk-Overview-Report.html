@@ -11,18 +11,15 @@
 body{
   font-family:'Segoe UI',Arial,sans-serif;
   min-height:100vh;
-  background:
-    radial-gradient(circle at top left,rgba(255,152,0,.22),transparent 28%),
-    radial-gradient(circle at bottom right,rgba(20,80,184,.35),transparent 35%),
-    linear-gradient(135deg,#020617,#071f47,#0b2a66);
-  color:#111;
+  background:linear-gradient(135deg,#020617,#071f47,#1450b8);
   padding:30px;
+  color:#111;
 }
 
 .container{
   max-width:1450px;
   margin:auto;
-  background:rgba(255,255,255,.96);
+  background:white;
   border-radius:28px;
   padding:32px;
   box-shadow:0 25px 70px rgba(0,0,0,.35);
@@ -171,10 +168,7 @@ textarea{
   box-shadow:0 8px 18px rgba(0,0,0,.18);
 }
 
-.btn:hover{
-  transform:translateY(-1px);
-  opacity:.95;
-}
+.btn:hover{opacity:.92;}
 
 .save-btn{background:linear-gradient(135deg,#004080,#1450b8);}
 .add-btn{background:linear-gradient(135deg,#0f766e,#22c55e);}
@@ -210,7 +204,7 @@ textarea{
 
 <div class="header">
   <h1>Risk Overview Report</h1>
-  <p>Professional risk panorama with multiple hazards, consequences, existing barriers, corrective actions and monitoring.</p>
+  <p>Professional risk panorama with multiple hazards, barriers, corrective actions and monitoring.</p>
 </div>
 
 <div class="section">
@@ -264,16 +258,16 @@ textarea{
     <div id="hazardsContainer"></div>
 
     <div class="btn-area">
-      <button class="btn add-btn" onclick="addHazard()">+ Add Hazard Identification</button>
+      <button class="btn add-btn" onclick="window.addHazard()">+ Add Hazard Identification</button>
     </div>
   </div>
 </div>
 
 <div class="btn-area">
-  <button class="btn save-btn" onclick="saveRiskOverview()">Save Risk Overview Report</button>
-  <button class="btn reset-btn" onclick="resetForm()">Reset Form</button>
+  <button class="btn save-btn" onclick="window.saveRiskOverview()">Save Risk Overview Report</button>
+  <button class="btn reset-btn" onclick="window.resetForm()">Reset Form</button>
   <button class="btn back-btn" onclick="window.location.href='Risk-Overview.html'">Back</button>
-  <button class="btn home-btn" onclick="window.location.href='index.html'">Home</button>
+  <button class="btn home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
 </div>
 
 <div id="savedBox" class="saved-box">
@@ -326,7 +320,7 @@ function setRiskBox(box, level){
   box.innerText = level;
 }
 
-function calculateRisk(card, type){
+window.calculateRisk = function(card,type){
   const probability = Number(card.querySelector("." + type + "Probability").value);
   const severity = Number(card.querySelector("." + type + "Severity").value);
   const value = probability * severity;
@@ -335,23 +329,22 @@ function calculateRisk(card, type){
   card.querySelector("." + type + "RiskValue").value = value;
   card.querySelector("." + type + "RiskLevel").value = level;
 
-  setRiskBox(card.querySelector("." + type + "RiskBox"), level);
+  setRiskBox(card.querySelector("." + type + "RiskBox"),level);
 
-  return { probability, severity, value, level };
-}
+  return {probability,severity,value,level};
+};
 
-function addHazard(){
+window.addHazard = function(){
   hazardCount++;
 
   const container = document.getElementById("hazardsContainer");
-
   const card = document.createElement("div");
   card.className = "hazard-card";
 
   card.innerHTML = `
     <div class="hazard-head">
       <h2>Hazard Identification ${hazardCount}</h2>
-      <button class="btn delete-btn" onclick="removeHazard(this)">Delete</button>
+      <button class="btn delete-btn" onclick="window.removeHazard(this)">Delete</button>
     </div>
 
     <div class="hazard-body">
@@ -394,7 +387,7 @@ function addHazard(){
 
       <div class="sub-title">Causes / Contributing Factors</div>
       <div class="field">
-        <textarea class="causes" placeholder="Describe causes, contributing factors, human factors, process gaps or system weaknesses."></textarea>
+        <textarea class="causes" placeholder="Describe causes, contributing factors, human factors or process gaps."></textarea>
       </div>
 
       <div class="sub-title">Potential Consequences</div>
@@ -406,7 +399,7 @@ function addHazard(){
       <div class="grid">
         <div class="field">
           <label>Probability</label>
-          <select class="initialProbability" onchange="calculateRisk(this.closest('.hazard-card'),'initial')">
+          <select class="initialProbability" onchange="window.calculateRisk(this.closest('.hazard-card'),'initial')">
             <option value="1">1 - Rare</option>
             <option value="2">2 - Unlikely</option>
             <option value="3">3 - Possible</option>
@@ -417,7 +410,7 @@ function addHazard(){
 
         <div class="field">
           <label>Severity</label>
-          <select class="initialSeverity" onchange="calculateRisk(this.closest('.hazard-card'),'initial')">
+          <select class="initialSeverity" onchange="window.calculateRisk(this.closest('.hazard-card'),'initial')">
             <option value="1">1 - Insignificant</option>
             <option value="2">2 - Minor</option>
             <option value="3">3 - Moderate</option>
@@ -441,19 +434,19 @@ function addHazard(){
 
       <div class="sub-title">Existing Barriers / Controls</div>
       <div class="field">
-        <textarea class="existingControls" placeholder="Procedures, training, inspections, equipment, supervision, checklist, physical barriers, monitoring, etc."></textarea>
+        <textarea class="existingControls" placeholder="Procedures, training, inspections, supervision, physical barriers, PPE, checklist, etc."></textarea>
       </div>
 
       <div class="sub-title">Corrective / Preventive Actions</div>
       <div class="cpa-list"></div>
 
-      <button class="btn small-btn" onclick="addCPA(this)">+ Add CPA</button>
+      <button class="btn small-btn" onclick="window.addCPA(this)">+ Add CPA</button>
 
       <div class="sub-title">Residual Risk Assessment</div>
       <div class="grid">
         <div class="field">
           <label>Residual Probability</label>
-          <select class="residualProbability" onchange="calculateRisk(this.closest('.hazard-card'),'residual')">
+          <select class="residualProbability" onchange="window.calculateRisk(this.closest('.hazard-card'),'residual')">
             <option value="1">1 - Rare</option>
             <option value="2">2 - Unlikely</option>
             <option value="3">3 - Possible</option>
@@ -464,7 +457,7 @@ function addHazard(){
 
         <div class="field">
           <label>Residual Severity</label>
-          <select class="residualSeverity" onchange="calculateRisk(this.closest('.hazard-card'),'residual')">
+          <select class="residualSeverity" onchange="window.calculateRisk(this.closest('.hazard-card'),'residual')">
             <option value="1">1 - Insignificant</option>
             <option value="2">2 - Minor</option>
             <option value="3">3 - Moderate</option>
@@ -532,18 +525,18 @@ function addHazard(){
 
   container.appendChild(card);
 
-  addCPA(card.querySelector(".small-btn"));
-  calculateRisk(card,"initial");
-  calculateRisk(card,"residual");
-}
+  window.addCPA(card.querySelector(".small-btn"));
+  window.calculateRisk(card,"initial");
+  window.calculateRisk(card,"residual");
+};
 
-function removeHazard(btn){
+window.removeHazard = function(btn){
   if(confirm("Do you want to delete this hazard item?")){
     btn.closest(".hazard-card").remove();
   }
-}
+};
 
-function addCPA(btn){
+window.addCPA = function(btn){
   const card = btn.closest(".hazard-card");
   const list = card.querySelector(".cpa-list");
   const number = list.children.length + 1;
@@ -583,7 +576,7 @@ function addCPA(btn){
   `;
 
   list.appendChild(row);
-}
+};
 
 function collectCPAs(card){
   const rows = card.querySelectorAll(".cpa-row");
@@ -591,10 +584,10 @@ function collectCPAs(card){
 
   rows.forEach(row => {
     actions.push({
-      action: row.querySelector(".cpaAction").value.trim(),
-      responsible: row.querySelector(".cpaResponsible").value.trim(),
-      dueDate: row.querySelector(".cpaDueDate").value,
-      status: row.querySelector(".cpaStatus").value
+      action:row.querySelector(".cpaAction").value.trim(),
+      responsible:row.querySelector(".cpaResponsible").value.trim(),
+      dueDate:row.querySelector(".cpaDueDate").value,
+      status:row.querySelector(".cpaStatus").value
     });
   });
 
@@ -606,8 +599,8 @@ function collectHazards(){
   const hazards = [];
 
   cards.forEach((card,index) => {
-    const initialRisk = calculateRisk(card,"initial");
-    const residualRisk = calculateRisk(card,"residual");
+    const initialRisk = window.calculateRisk(card,"initial");
+    const residualRisk = window.calculateRisk(card,"residual");
 
     hazards.push({
       itemNumber:index + 1,
@@ -632,7 +625,7 @@ function collectHazards(){
   return hazards;
 }
 
-function saveRiskOverview(){
+window.saveRiskOverview = function(){
   const title = document.getElementById("title").value.trim();
 
   if(title === ""){
@@ -664,7 +657,9 @@ function saveRiskOverview(){
     reviewDate:document.getElementById("reviewDate").value,
     status:document.getElementById("status").value,
     hazards:hazards,
-    createdAt:new Date().toLocaleString()
+    totalHazards:hazards.length,
+    createdAt:new Date().toLocaleString(),
+    createdAtISO:new Date().toISOString()
   };
 
   const newRef = window.dbPush(window.dbRef(window.database,"riskOverviewReports"));
@@ -677,9 +672,9 @@ function saveRiskOverview(){
   .catch(error => {
     alert("Error saving Risk Overview Report: " + error.message);
   });
-}
+};
 
-function resetForm(){
+window.resetForm = function(){
   if(confirm("Do you want to clear the Risk Overview form?")){
     document.querySelectorAll("input, textarea").forEach(el => {
       if(!el.disabled) el.value = "";
@@ -691,12 +686,13 @@ function resetForm(){
     document.getElementById("savedBox").style.display = "none";
 
     hazardCount = 0;
-    addHazard();
+    document.getElementById("date").valueAsDate = new Date();
+    window.addHazard();
   }
-}
+};
 
 document.getElementById("date").valueAsDate = new Date();
-addHazard();
+window.addHazard();
 </script>
 
 </body>
