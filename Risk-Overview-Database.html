@@ -9,12 +9,12 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-  font-family:'Segoe UI', Arial, sans-serif;
+  font-family:'Segoe UI',Arial,sans-serif;
   min-height:100vh;
   background:
-    radial-gradient(circle at top left, rgba(255,152,0,0.30), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(28,99,219,0.45), transparent 38%),
-    linear-gradient(rgba(5,20,55,0.86), rgba(5,20,55,0.94)),
+    radial-gradient(circle at top left,rgba(255,152,0,.30),transparent 30%),
+    radial-gradient(circle at bottom right,rgba(28,99,219,.45),transparent 38%),
+    linear-gradient(rgba(5,20,55,.88),rgba(5,20,55,.95)),
     url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
   background-size:cover;
   background-position:center;
@@ -23,18 +23,14 @@ body{
 }
 
 .container{
-  max-width:1350px;
+  max-width:1450px;
   margin:auto;
-  background:rgba(255,255,255,0.96);
+  background:rgba(255,255,255,.97);
   backdrop-filter:blur(14px);
-  padding:50px;
-  border-radius:40px;
-  box-shadow:0 30px 80px rgba(0,0,0,0.45);
-  position:relative;
-  overflow:hidden;
+  padding:46px;
+  border-radius:38px;
+  box-shadow:0 30px 80px rgba(0,0,0,.45);
 }
-
-.content{position:relative;z-index:2;}
 
 .logo{
   width:112px;
@@ -47,7 +43,7 @@ body{
   align-items:center;
   justify-content:center;
   font-size:50px;
-  box-shadow:0 18px 40px rgba(0,0,0,0.30);
+  box-shadow:0 18px 40px rgba(0,0,0,.30);
 }
 
 .badge{
@@ -66,7 +62,7 @@ body{
 h1{
   text-align:center;
   color:#071f47;
-  font-size:58px;
+  font-size:56px;
   margin-bottom:10px;
   font-weight:900;
 }
@@ -76,7 +72,7 @@ h1{
   color:#56657d;
   font-size:19px;
   margin-bottom:28px;
-  font-weight:500;
+  font-weight:600;
 }
 
 .title-line{
@@ -87,7 +83,9 @@ h1{
   background:linear-gradient(90deg,transparent,#1450b8,#ff9800,transparent);
 }
 
-.top-actions{
+.top-actions,
+.bottom-buttons,
+.separator-buttons{
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
@@ -97,27 +95,27 @@ h1{
   padding:20px;
   border-radius:26px;
   border:1px solid #e5e7eb;
-  box-shadow:0 14px 32px rgba(0,0,0,0.10);
+  box-shadow:0 14px 32px rgba(0,0,0,.10);
 }
 
 .btn{
   border:none;
   color:white;
-  padding:15px 26px;
+  padding:14px 24px;
   border-radius:16px;
   font-size:15px;
   font-weight:900;
   cursor:pointer;
-  transition:0.25s;
+  transition:.25s;
   text-decoration:none;
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:8px;
-  box-shadow:0 10px 22px rgba(0,0,0,0.22);
+  box-shadow:0 10px 22px rgba(0,0,0,.22);
 }
 
-.btn:hover{transform:translateY(-3px);}
+.btn:hover{transform:translateY(-2px);opacity:.94;}
 
 .filter-btn{background:linear-gradient(135deg,#7c3aed,#a855f7);}
 .excel-btn{background:linear-gradient(135deg,#047857,#22c55e);}
@@ -126,15 +124,7 @@ h1{
 .open-btn{background:linear-gradient(135deg,#071f47,#1450b8);}
 .save-btn{background:linear-gradient(135deg,#047857,#22c55e);}
 .status-btn{background:linear-gradient(135deg,#6b21a8,#9333ea);}
-
-.delete-btn{
-  background:linear-gradient(135deg,#dc2626,#ef4444);
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  padding:0;
-  font-size:20px;
-}
+.delete-btn{background:linear-gradient(135deg,#dc2626,#ef4444);}
 
 .filter-panel{
   background:#f8fbff;
@@ -143,7 +133,7 @@ h1{
   border-radius:22px;
   margin-bottom:28px;
   display:grid;
-  grid-template-columns:1.2fr 0.8fr 1fr 1fr;
+  grid-template-columns:1.3fr .8fr 1fr 1fr;
   gap:14px;
 }
 
@@ -171,7 +161,7 @@ h1{
   border-radius:28px;
   padding:26px;
   margin-bottom:24px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.14);
+  box-shadow:0 18px 45px rgba(0,0,0,.14);
   border-left:10px solid #1450b8;
 }
 
@@ -199,7 +189,7 @@ h1{
 
 .status{
   display:inline-block;
-  padding:8px 18px;
+  padding:9px 18px;
   border-radius:999px;
   color:white;
   font-size:13px;
@@ -250,25 +240,53 @@ h1{
   color:#071f47;
 }
 
+.hazard-list{
+  margin-top:22px;
+  display:grid;
+  gap:14px;
+}
+
+.hazard-item{
+  background:white;
+  border:1px solid #d8e1ef;
+  border-radius:20px;
+  padding:18px;
+}
+
+.hazard-title{
+  color:#071f47;
+  font-size:18px;
+  font-weight:900;
+  margin-bottom:8px;
+}
+
+.hazard-meta{
+  color:#56657d;
+  line-height:1.6;
+  font-size:14px;
+}
+
+.risk-pill{
+  display:inline-block;
+  padding:7px 13px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+  margin:4px 5px 4px 0;
+}
+
+.low{background:#d8f3dc;color:#14532d;}
+.medium{background:#fff3cd;color:#664d03;}
+.high{background:#ffe0b2;color:#9a3412;}
+.extreme{background:#f8d7da;color:#842029;}
+.na{background:#e5e7eb;color:#374151;}
+
 .actions{
   display:flex;
   flex-wrap:wrap;
   gap:10px;
   margin-top:22px;
   align-items:center;
-}
-
-.separator-buttons,
-.bottom-buttons{
-  margin:30px 0;
-  padding:18px;
-  background:#f8fbff;
-  border-radius:24px;
-  display:flex;
-  justify-content:center;
-  gap:14px;
-  flex-wrap:wrap;
-  border:1px solid #e5e7eb;
 }
 
 .no-data{
@@ -295,7 +313,7 @@ h1{
 @media(max-width:900px){
   body{padding:20px;}
   .container{padding:30px 22px;}
-  h1{font-size:42px;}
+  h1{font-size:40px;}
   .filter-panel{grid-template-columns:1fr;}
   .btn{width:100%;}
 }
@@ -305,31 +323,30 @@ h1{
 <body>
 
 <div class="container">
-<div class="content">
 
   <div class="logo">🗂️</div>
   <div class="badge">RISK OVERVIEW DATABASE</div>
   <h1>Risk Overview Database</h1>
 
   <div class="description">
-    Stored airport and operational risk panorama reports
+    Stored risk panorama reports with multiple hazard identifications
   </div>
 
   <div class="title-line"></div>
 
   <div class="top-actions">
-    <button class="btn filter-btn" onclick="toggleFilters()">🔎 Filters</button>
-    <button class="btn excel-btn" onclick="downloadExcel()">📥 Download Excel</button>
-    <button class="btn risk-btn" onclick="window.location.href='Risk-Overview.html'">📊 Risk Overview</button>
+    <button class="btn filter-btn" onclick="window.toggleFilters()">🔎 Filters</button>
+    <button class="btn excel-btn" onclick="window.downloadExcel()">📥 Download Excel</button>
+    <button class="btn risk-btn" onclick="window.location.href='Risk-Overview.html'">📊 New Risk Overview</button>
     <button class="btn home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
   </div>
 
   <div id="filterPanel" class="filter-panel">
-    <input id="searchInput" placeholder="Search ID, title, airport, area, hazard..." oninput="applyFilter()">
+    <input id="searchInput" placeholder="Search ID, title, airport, area, hazard, owner..." oninput="window.applyFilter()">
 
-    <input type="date" id="dateFilter" onchange="applyFilter()">
+    <input type="date" id="dateFilter" onchange="window.applyFilter()">
 
-    <select id="riskFilter" onchange="applyFilter()">
+    <select id="riskFilter" onchange="window.applyFilter()">
       <option value="">All Risk Levels</option>
       <option value="LOW RISK">Low Risk</option>
       <option value="MEDIUM RISK">Medium Risk</option>
@@ -337,7 +354,7 @@ h1{
       <option value="EXTREME RISK">Extreme Risk</option>
     </select>
 
-    <select id="statusFilter" onchange="applyFilter()">
+    <select id="statusFilter" onchange="window.applyFilter()">
       <option value="">All Status</option>
       <option value="Open">Open</option>
       <option value="In Progress">In Progress</option>
@@ -355,15 +372,14 @@ h1{
   </div>
 
   <div class="bottom-buttons">
-    <button class="btn risk-btn" onclick="window.location.href='Risk-Overview.html'">📊 Risk Overview</button>
+    <button class="btn risk-btn" onclick="window.location.href='Risk-Overview.html'">📊 New Risk Overview</button>
     <button class="btn home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
   </div>
 
   <div class="footer">
-    AVIATION SAFETY MANAGEMENT PLATFORM
+    371Q AVIATION SAFETY MANAGEMENT PLATFORM
   </div>
 
-</div>
 </div>
 
 <script type="module">
@@ -411,11 +427,71 @@ function statusClass(status){
   return String(status || "Open").toLowerCase().replaceAll(" ","-");
 }
 
+function riskClass(level){
+  const v = String(level || "").toUpperCase();
+
+  if(v === "LOW RISK") return "low";
+  if(v === "MEDIUM RISK") return "medium";
+  if(v === "HIGH RISK") return "high";
+  if(v === "EXTREME RISK") return "extreme";
+
+  return "na";
+}
+
 function normalizeDate(value){
   if(!value) return "";
   const d = new Date(value);
   if(isNaN(d)) return "";
   return d.toISOString().split("T")[0];
+}
+
+function getHazards(report){
+  if(Array.isArray(report.hazards)){
+    return report.hazards;
+  }
+
+  if(report.hazardTitle || report.hazardDescription || report.initialRisk || report.residualRisk){
+    return [{
+      hazardTitle:report.hazardTitle || "N/A",
+      hazardCategory:report.hazardCategory || "N/A",
+      riskOwner:report.riskOwner || "N/A",
+      hazardDescription:report.hazardDescription || "",
+      causes:report.causes || "",
+      consequences:report.consequences || "",
+      initialRisk:report.initialRisk || {},
+      residualRisk:report.residualRisk || {},
+      existingControls:report.existingControls || "",
+      correctiveActions:report.correctiveActions || [],
+      acceptable:report.acceptable || "",
+      kpiSpi:report.kpiSpi || "",
+      monitoringMethod:report.monitoringMethod || "",
+      reviewFrequency:report.reviewFrequency || "",
+      notes:report.notes || ""
+    }];
+  }
+
+  return [];
+}
+
+function getHighestRiskLevel(hazards,type){
+  const order = {
+    "N/A":0,
+    "LOW RISK":1,
+    "MEDIUM RISK":2,
+    "HIGH RISK":3,
+    "EXTREME RISK":4
+  };
+
+  let highest = "N/A";
+
+  hazards.forEach(h => {
+    const level = h[type]?.level || "N/A";
+    if((order[level] || 0) > (order[highest] || 0)){
+      highest = level;
+    }
+  });
+
+  return highest;
 }
 
 function renderReports(reports){
@@ -431,32 +507,72 @@ function renderReports(reports){
   noData.style.display = "none";
   counter.innerHTML = reports.length + " report(s) found";
 
-  reports.forEach((report, index) => {
+  reports.forEach((report,index) => {
 
     const firebaseId = report.firebaseId;
+    const visibleId = report.riskOverviewId || report.customId || firebaseId;
 
-    const visibleId =
-      report.riskOverviewId ||
-      report.customId ||
-      firebaseId;
+    const hazards = getHazards(report);
+    const totalHazards = hazards.length;
 
     const title = report.title || "Untitled Risk Overview";
     const airport = report.airport || "N/A";
     const area = report.area || "N/A";
     const process = report.process || "N/A";
-    const hazardTitle = report.hazardTitle || "N/A";
-    const hazardCategory = report.hazardCategory || "N/A";
+    const evaluator = report.evaluator || "N/A";
     const status = report.status || "Open";
     const date = report.date || report.createdAt || "N/A";
+    const reviewDate = report.reviewDate || "N/A";
 
-    const initialRisk = report.initialRisk || {};
-    const residualRisk = report.residualRisk || {};
-
-    const initialLevel = initialRisk.level || "N/A";
-    const residualLevel = residualRisk.level || "N/A";
+    const highestInitial = getHighestRiskLevel(hazards,"initialRisk");
+    const highestResidual = getHighestRiskLevel(hazards,"residualRisk");
 
     const card = document.createElement("div");
     card.className = "report-card";
+
+    let hazardHtml = "";
+
+    if(totalHazards === 0){
+      hazardHtml = `
+        <div class="hazard-item">
+          <div class="hazard-title">No hazards stored in this report.</div>
+        </div>
+      `;
+    }else{
+      hazards.forEach((hazard,hIndex) => {
+
+        const initialLevel = hazard.initialRisk?.level || "N/A";
+        const residualLevel = hazard.residualRisk?.level || "N/A";
+        const cpaCount = Array.isArray(hazard.correctiveActions) ? hazard.correctiveActions.length : 0;
+
+        hazardHtml += `
+          <div class="hazard-item">
+            <div class="hazard-title">
+              Hazard ${hIndex + 1}: ${clean(hazard.hazardTitle || "Untitled Hazard")}
+            </div>
+
+            <div class="hazard-meta">
+              <strong>Category:</strong> ${clean(hazard.hazardCategory || "N/A")} |
+              <strong>Owner:</strong> ${clean(hazard.riskOwner || "N/A")} |
+              <strong>CPAs:</strong> ${clean(cpaCount)}
+              <br>
+
+              <span class="risk-pill ${riskClass(initialLevel)}">
+                Initial: ${clean(initialLevel)}
+              </span>
+
+              <span class="risk-pill ${riskClass(residualLevel)}">
+                Residual: ${clean(residualLevel)}
+              </span>
+
+              <span class="risk-pill na">
+                Acceptable: ${clean(hazard.acceptable || "N/A")}
+              </span>
+            </div>
+          </div>
+        `;
+      });
+    }
 
     card.innerHTML = `
       <div class="card-header">
@@ -466,11 +582,12 @@ function renderReports(reports){
           </div>
 
           <div class="meta">
-            <strong>Date:</strong> ${clean(date)}<br>
+            <strong>Date:</strong> ${clean(date)} |
+            <strong>Review:</strong> ${clean(reviewDate)}<br>
             <strong>Airport / Station:</strong> ${clean(airport)}<br>
-            <strong>Area:</strong> ${clean(area)} | 
+            <strong>Area:</strong> ${clean(area)} |
             <strong>Process:</strong> ${clean(process)}<br>
-            <strong>Hazard:</strong> ${clean(hazardTitle)}
+            <strong>Evaluator:</strong> ${clean(evaluator)}
           </div>
         </div>
 
@@ -491,38 +608,46 @@ function renderReports(reports){
         </div>
 
         <div class="detail-box">
-          <div class="detail-label">Hazard Category</div>
-          <div class="detail-value">${clean(hazardCategory)}</div>
+          <div class="detail-label">Total Hazards</div>
+          <div class="detail-value">${clean(totalHazards)}</div>
         </div>
 
         <div class="detail-box">
-          <div class="detail-label">Initial Risk</div>
-          <div class="detail-value">${clean(initialLevel)}</div>
+          <div class="detail-label">Highest Initial Risk</div>
+          <div class="detail-value">
+            <span class="risk-pill ${riskClass(highestInitial)}">${clean(highestInitial)}</span>
+          </div>
         </div>
 
         <div class="detail-box">
-          <div class="detail-label">Residual Risk</div>
-          <div class="detail-value">${clean(residualLevel)}</div>
+          <div class="detail-label">Highest Residual Risk</div>
+          <div class="detail-value">
+            <span class="risk-pill ${riskClass(highestResidual)}">${clean(highestResidual)}</span>
+          </div>
         </div>
 
       </div>
 
+      <div class="hazard-list">
+        ${hazardHtml}
+      </div>
+
       <div class="actions">
 
-        <button class="btn open-btn" onclick="openReport('${clean(firebaseId)}')">
+        <button class="btn open-btn" onclick="window.openReport('${clean(firebaseId)}')">
           Open Report
         </button>
 
-        <button class="btn save-btn" onclick="saveRiskOverviewId('${clean(firebaseId)}')">
+        <button class="btn save-btn" onclick="window.saveRiskOverviewId('${clean(firebaseId)}')">
           Save ID
         </button>
 
-        <button class="btn status-btn" onclick="toggleStatus('${clean(firebaseId)}', '${clean(status)}')">
-          ${status === "Open" ? "Close Report" : "Open Report"}
+        <button class="btn status-btn" onclick="window.toggleStatus('${clean(firebaseId)}','${clean(status)}')">
+          ${status === "Closed" ? "Reopen Report" : "Close Report"}
         </button>
 
-        <button class="btn delete-btn" onclick="deleteReport('${clean(firebaseId)}')">
-          🗑
+        <button class="btn delete-btn" onclick="window.deleteReport('${clean(firebaseId)}')">
+          🗑 Delete
         </button>
 
       </div>
@@ -536,7 +661,7 @@ function renderReports(reports){
 
       separator.innerHTML = `
         <button class="btn risk-btn" onclick="window.location.href='Risk-Overview.html'">
-          📊 Risk Overview
+          📊 New Risk Overview
         </button>
 
         <button class="btn home-btn" onclick="window.location.href='index.html'">
@@ -559,8 +684,21 @@ window.applyFilter = function(){
 
   filteredReports = allReports.filter(report => {
 
-    const initialRisk = report.initialRisk || {};
-    const residualRisk = report.residualRisk || {};
+    const hazards = getHazards(report);
+
+    const hazardsSearch = hazards.map(h => `
+      ${h.hazardTitle || ""}
+      ${h.hazardCategory || ""}
+      ${h.riskOwner || ""}
+      ${h.hazardDescription || ""}
+      ${h.causes || ""}
+      ${h.consequences || ""}
+      ${h.initialRisk?.level || ""}
+      ${h.residualRisk?.level || ""}
+      ${h.acceptable || ""}
+      ${h.kpiSpi || ""}
+      ${h.monitoringMethod || ""}
+    `).join(" ");
 
     const searchArea = `
       ${report.firebaseId || ""}
@@ -571,27 +709,24 @@ window.applyFilter = function(){
       ${report.area || ""}
       ${report.process || ""}
       ${report.evaluator || ""}
-      ${report.hazardTitle || ""}
-      ${report.hazardCategory || ""}
-      ${report.riskOwner || ""}
       ${report.status || ""}
-      ${initialRisk.level || ""}
-      ${residualRisk.level || ""}
+      ${hazardsSearch}
     `.toLowerCase();
 
     const matchesSearch =
       searchText === "" || searchArea.includes(searchText);
 
-    const reportDate =
-      normalizeDate(report.date || report.createdAt || "");
+    const reportDate = normalizeDate(report.date || report.createdAtISO || report.createdAt || "");
 
     const matchesDate =
       dateFilter === "" || reportDate === dateFilter;
 
     const matchesRisk =
       riskFilter === "" ||
-      (initialRisk.level || "") === riskFilter ||
-      (residualRisk.level || "") === riskFilter;
+      hazards.some(h =>
+        (h.initialRisk?.level || "") === riskFilter ||
+        (h.residualRisk?.level || "") === riskFilter
+      );
 
     const matchesStatus =
       statusFilter === "" || (report.status || "Open") === statusFilter;
@@ -601,7 +736,9 @@ window.applyFilter = function(){
   });
 
   filteredReports.sort((a,b) => {
-    return String(b.firebaseId).localeCompare(String(a.firebaseId));
+    const dateA = a.createdAtISO || a.createdAt || a.firebaseId || "";
+    const dateB = b.createdAtISO || b.createdAt || b.firebaseId || "";
+    return String(dateB).localeCompare(String(dateA));
   });
 
   renderReports(filteredReports);
@@ -612,9 +749,9 @@ window.toggleFilters = function(){
   panel.style.display = panel.style.display === "none" ? "grid" : "none";
 };
 
-const reportsRef = ref(database, "riskOverviewReports");
+const reportsRef = ref(database,"riskOverviewReports");
 
-onValue(reportsRef, (snapshot) => {
+onValue(reportsRef,(snapshot) => {
 
   allReports = [];
 
@@ -625,21 +762,23 @@ onValue(reportsRef, (snapshot) => {
 
   snapshot.forEach((childSnapshot) => {
     allReports.push({
-      firebaseId: childSnapshot.key,
+      firebaseId:childSnapshot.key,
       ...childSnapshot.val()
     });
   });
 
   allReports.sort((a,b) => {
-    return String(b.firebaseId).localeCompare(String(a.firebaseId));
+    const dateA = a.createdAtISO || a.createdAt || a.firebaseId || "";
+    const dateB = b.createdAtISO || b.createdAt || b.firebaseId || "";
+    return String(dateB).localeCompare(String(dateA));
   });
 
-  applyFilter();
+  window.applyFilter();
 
 });
 
 window.openReport = function(reportId){
-  window.location.href = "Risk-Overview-Details.html?id=" + reportId;
+  window.location.href = "Risk-Overview-Details.html?id=" + encodeURIComponent(reportId);
 };
 
 window.saveRiskOverviewId = function(reportId){
@@ -652,9 +791,10 @@ window.saveRiskOverviewId = function(reportId){
     return;
   }
 
-  update(ref(database, "riskOverviewReports/" + reportId), {
-    riskOverviewId: newId,
-    updatedAt: new Date().toLocaleString()
+  update(ref(database,"riskOverviewReports/" + reportId),{
+    riskOverviewId:newId,
+    updatedAt:new Date().toLocaleString(),
+    updatedAtISO:new Date().toISOString()
   })
   .then(() => {
     alert("Risk Overview ID updated successfully.");
@@ -665,13 +805,14 @@ window.saveRiskOverviewId = function(reportId){
 
 };
 
-window.toggleStatus = function(reportId, currentStatus){
+window.toggleStatus = function(reportId,currentStatus){
 
-  const newStatus = currentStatus === "Open" ? "Closed" : "Open";
+  const newStatus = currentStatus === "Closed" ? "Open" : "Closed";
 
-  update(ref(database, "riskOverviewReports/" + reportId), {
-    status: newStatus,
-    updatedAt: new Date().toLocaleString()
+  update(ref(database,"riskOverviewReports/" + reportId),{
+    status:newStatus,
+    updatedAt:new Date().toLocaleString(),
+    updatedAtISO:new Date().toISOString()
   })
   .then(() => {
     alert("Report status changed to " + newStatus + ".");
@@ -690,7 +831,7 @@ window.deleteReport = function(reportId){
 
   if(!confirmDelete) return;
 
-  remove(ref(database, "riskOverviewReports/" + reportId))
+  remove(ref(database,"riskOverviewReports/" + reportId))
   .then(() => {
     alert("Risk Overview Report deleted successfully.");
   })
@@ -702,34 +843,73 @@ window.deleteReport = function(reportId){
 
 window.downloadExcel = function(){
 
-  let csv = "Risk Overview ID,Title,Airport,Area,Process,Hazard Title,Hazard Category,Initial Risk,Residual Risk,Status,Date,Review Date,Evaluator\n";
+  let csv = "Risk Overview ID,Report Title,Airport,Area,Process,Evaluator,Report Status,Report Date,Review Date,Hazard Number,Hazard Title,Hazard Category,Risk Owner,Initial Risk,Residual Risk,Risk Acceptable,CPA Count,KPI/SPI,Monitoring Method,Review Frequency\n";
 
   filteredReports.forEach(report => {
 
-    const initialRisk = report.initialRisk || {};
-    const residualRisk = report.residualRisk || {};
+    const hazards = getHazards(report);
 
-    const row = [
-      report.riskOverviewId || report.firebaseId || "",
-      report.title || "",
-      report.airport || "",
-      report.area || "",
-      report.process || "",
-      report.hazardTitle || "",
-      report.hazardCategory || "",
-      initialRisk.level || "",
-      residualRisk.level || "",
-      report.status || "Open",
-      report.date || "",
-      report.reviewDate || "",
-      report.evaluator || ""
-    ];
+    if(hazards.length === 0){
+      const row = [
+        report.riskOverviewId || report.firebaseId || "",
+        report.title || "",
+        report.airport || "",
+        report.area || "",
+        report.process || "",
+        report.evaluator || "",
+        report.status || "Open",
+        report.date || "",
+        report.reviewDate || "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ];
 
-    csv += row.map(value => `"${String(value).replaceAll('"','""')}"`).join(",") + "\n";
+      csv += row.map(v => `"${String(v).replaceAll('"','""')}"`).join(",") + "\n";
+    }
+
+    hazards.forEach((hazard,index) => {
+
+      const cpaCount = Array.isArray(hazard.correctiveActions) ? hazard.correctiveActions.length : 0;
+
+      const row = [
+        report.riskOverviewId || report.firebaseId || "",
+        report.title || "",
+        report.airport || "",
+        report.area || "",
+        report.process || "",
+        report.evaluator || "",
+        report.status || "Open",
+        report.date || "",
+        report.reviewDate || "",
+        index + 1,
+        hazard.hazardTitle || "",
+        hazard.hazardCategory || "",
+        hazard.riskOwner || "",
+        hazard.initialRisk?.level || "",
+        hazard.residualRisk?.level || "",
+        hazard.acceptable || "",
+        cpaCount,
+        hazard.kpiSpi || "",
+        hazard.monitoringMethod || "",
+        hazard.reviewFrequency || ""
+      ];
+
+      csv += row.map(v => `"${String(v).replaceAll('"','""')}"`).join(",") + "\n";
+
+    });
 
   });
 
-  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const blob = new Blob([csv],{type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
 
   const link = document.createElement("a");
