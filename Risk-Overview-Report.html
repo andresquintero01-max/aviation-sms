@@ -531,7 +531,7 @@ textarea{
 </div>
 
 <div class="btn-area">
-  <button class="btn save-btn" onclick="saveRiskOverview()">Save Risk Overview Report</button>
+  <button class="btn save-btn" onclick="window.saveRiskOverview()">Save Risk Overview Report</button>
   <button class="btn reset-btn" onclick="resetForm()">Reset Form</button>
   <button class="btn back-btn" onclick="window.location.href='Risk-Overview.html'">Back to Risk Overview</button>
   <button class="btn home-btn" onclick="window.location.href='index.html'">Home</button>
@@ -642,7 +642,7 @@ function collectActions(){
   ];
 }
 
-function saveRiskOverview(){
+window.saveRiskOverview = function(){
   const title = document.getElementById("title").value.trim();
   const hazardTitle = document.getElementById("hazardTitle").value.trim();
 
@@ -701,7 +701,7 @@ function saveRiskOverview(){
   .catch(error => {
     alert("Error saving Risk Overview Report: " + error.message);
   });
-}
+};
 
 function resetForm(){
   if(confirm("Do you want to clear the Risk Overview form?")){
