@@ -1,1 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>REDA Report</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f4f7fb;
+  color:#111;
+  padding:25px;
+}
+
+.container{
+  max-width:1350px;
+  margin:auto;
+  background:white;
+  border-radius:24px;
+  padding:30px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
+
+.header{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+  color:white;
+  padding:30px;
+  border-radius:22px;
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.header h1{
+  font-size:42px;
+  margin-bottom:8px;
+}
+
+.header p{
+  font-size:17px;
+  color:#dbeafe;
+}
+
+.section{
+  margin-top:25px;
+  border:1px solid #d8e1ef;
+  border-radius:18px;
+  overflow:hidden;
+  background:white;
+}
+
+.section-title{
+  background:#004080;
+  color:white;
+  padding:14px 18px;
+  font-size:21px;
+  font-weight:bold;
+}
+
+.section-body{
+  padding:22px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:18px;
+}
+
+.field label{
+  display:block;
+  color:#004080;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:11px;
+  border:1px solid #b8c7da;
+  border-radius:10px;
+  font-size:15px;
+  background:white;
+}
+
+textarea{
+  min-height:95px;
+  resize:vertical;
+}
+
+.factor-card{
+  border:1px solid #d8e1ef;
+  border-left:8px solid #1450b8;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:18px;
+  background:#f8fbff;
+}
+
+.factor-card h3{
+  color:#071f47;
+  margin-bottom:8px;
+  font-size:22px;
+}
+
+.factor-card p{
+  color:#56657d;
+  margin-bottom:14px;
+  line-height:1.4;
+}
+
+.factor-row{
+  display:grid;
+  grid-template-columns:170px 1fr 1fr 1fr;
+  gap:14px;
+  align-items:start;
+}
+
+.action-table{
+  display:grid;
+  gap:16px;
+}
+
+.action-row{
+  display:grid;
+  grid-template-columns:70px 2fr 1fr 1fr 1fr;
+  gap:14px;
+  align-items:start;
+  background:#f8fbff;
+  border:1px solid #d8e1ef;
+  border-radius:16px;
+  padding:16px;
+}
+
+.action-number{
+  background:#004080;
+  color:white;
+  font-weight:bold;
+  border-radius:12px;
+  padding:14px;
+  text-align:center;
+}
+
+.btn-area{
+  text-align:center;
+  margin-top:30px;
+}
+
+.btn{
+  border:none;
+  padding:15px 28px;
+  border-radius:12px;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:6px;
+}
+
+.save-btn{background:#004080;}
+.reset-btn{background:#666;}
+.back-btn{background:#c40000;}
+.home-btn{background:#0b2a66;}
+
+.saved-box{
+  margin-top:25px;
+  background:#e8f5e9;
+  color:#14532d;
+  border:1px solid #2f9144;
+  padding:16px;
+  border-radius:14px;
+  display:none;
+  font-weight:bold;
+  text-align:center;
+}
+
+@media(max-width:1000px){
+  .factor-row,
+  .action-row{
+    grid-template-columns:1fr;
+  }
+
+  .header h1{
+    font-size:32px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+  <h1>Ramp Error Decision Aid - REDA</h1>
+  <p>Ramp handling event investigation tool with contributing factors and REDA subfactors.</p>
+</div>
+
+<div class="section">
+  <div class="section-title">1. Event Information</div>
+  <div class="section-body">
+
+    <div class="grid">
+      <div class="field">
+        <label>Report Title *</label>
+        <input id="title" placeholder="Example: Aircraft Damage During Towing">
+      </div>
+
+      <div class="field">
+        <label>Affected Person / Employee Name</label>
+        <input id="affectedPerson" placeholder="Name of affected person">
+      </div>
+
+      <div class="field">
+        <label>Employee ID</label>
+        <input id="employeeId" placeholder="Employee ID">
+      </div>
+
+      <div class="field">
+        <label>Department / Role</label>
+        <input id="departmentRole" placeholder="Ramp Agent, Tug Driver, Wing Walker, Lead">
+      </div>
+
+      <div class="field">
+        <label>Aircraft Registration</label>
+        <input id="aircraft" placeholder="Example: N321AV">
+      </div>
+
+      <div class="field">
+        <label>Customer</label>
+        <input id="customer" placeholder="Example: Airline / Customer">
+      </div>
+
+      <div class="field">
+        <label>Location</label>
+        <input id="location" placeholder="Example: Ramp, Gate, Hangar, Taxi Lane">
+      </div>
+
+      <div class="field">
+        <label>Date</label>
+        <input type="date" id="date">
+      </div>
+
+      <div class="field">
+        <label>Flight / Operation / Equipment</label>
+        <input id="workOrder" placeholder="Flight number, operation, GSE or equipment involved">
+      </div>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Event Description</label>
+      <textarea id="eventDescription" placeholder="Describe what happened, what was found, when it was detected, and by whom."></textarea>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">2. Ramp Error / Event Type</div>
+  <div class="section-body">
+
+    <div class="grid">
+      <div class="field">
+        <label>Event Type</label>
+        <select id="eventType">
+          <option>Aircraft Damage</option>
+          <option>Vehicle / GSE Contact</option>
+          <option>Incorrect Marshaling</option>
+          <option>Improper Towing / Pushback</option>
+          <option>Failure to Use Wing Walkers</option>
+          <option>Loading / Unloading Error</option>
+          <option>Door / Panel / Hatch Damage</option>
+          <option>FOD Event</option>
+          <option>Fueling / Servicing Error</option>
+          <option>Procedure Not Followed</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Detection Method</label>
+        <select id="detectionMethod">
+          <option>Ramp Observation</option>
+          <option>Customer Finding</option>
+          <option>Supervisor Report</option>
+          <option>Employee Self-Report</option>
+          <option>Audit</option>
+          <option>Post-Operation Inspection</option>
+          <option>Operational Event</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Immediate Action Taken</label>
+        <input id="immediateAction" placeholder="Example: Operation stopped, aircraft inspected, supervisor notified">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">3. REDA Contributing Factors and Subfactors</div>
+  <div class="section-body" id="factorArea"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">4. Root Cause / System Weakness</div>
+  <div class="section-body">
+
+    <div class="grid">
+      <div class="field">
+        <label>Main Contributing Factor</label>
+        <select id="mainFactor">
+          <option>Communication</option>
+          <option>Procedures / Documentation</option>
+          <option>Training / Knowledge</option>
+          <option>GSE / Equipment</option>
+          <option>Work Environment</option>
+          <option>Human Factors</option>
+          <option>Supervision / Leadership</option>
+          <option>Organizational Factors</option>
+          <option>Ramp Layout / Aircraft Design</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Investigation Status</label>
+        <select id="status">
+          <option>Open</option>
+          <option>In Progress</option>
+          <option>Pending Corrective Action</option>
+          <option>Closed</option>
+        </select>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Root Cause Statement</label>
+      <textarea id="rootCause" placeholder="Example: The event occurred because ramp communication and wing walker coordination were not effectively maintained during the operation."></textarea>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>System Weakness Identified</label>
+      <textarea id="systemWeakness" placeholder="Describe the process, supervision, staffing, equipment, training, or communication weakness."></textarea>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">5. Corrective / Preventive Actions</div>
+  <div class="section-body">
+
+    <div class="action-table">
+
+      <div class="action-row">
+        <div class="action-number">CPA 1</div>
+        <div class="field">
+          <label>Corrective / Preventive Action</label>
+          <textarea id="action1" placeholder="Describe the action to correct the condition and prevent recurrence."></textarea>
+        </div>
+        <div class="field">
+          <label>Responsible Person</label>
+          <input id="responsible1">
+        </div>
+        <div class="field">
+          <label>Due Date</label>
+          <input type="date" id="dueDate1">
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="actionStatus1">
+            <option>Open</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+            <option>Verified</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-number">CPA 2</div>
+        <div class="field">
+          <label>Corrective / Preventive Action</label>
+          <textarea id="action2"></textarea>
+        </div>
+        <div class="field">
+          <label>Responsible Person</label>
+          <input id="responsible2">
+        </div>
+        <div class="field">
+          <label>Due Date</label>
+          <input type="date" id="dueDate2">
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="actionStatus2">
+            <option>Open</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+            <option>Verified</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-number">CPA 3</div>
+        <div class="field">
+          <label>Corrective / Preventive Action</label>
+          <textarea id="action3"></textarea>
+        </div>
+        <div class="field">
+          <label>Responsible Person</label>
+          <input id="responsible3">
+        </div>
+        <div class="field">
+          <label>Due Date</label>
+          <input type="date" id="dueDate3">
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="actionStatus3">
+            <option>Open</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+            <option>Verified</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="btn-area">
+  <button class="btn save-btn" onclick="saveREDA()">Save REDA Report</button>
+  <button class="btn reset-btn" onclick="resetForm()">Reset Form</button>
+  <button class="btn back-btn" onclick="window.location.href='REDA.html'">Back to REDA</button>
+  <button class="btn home-btn" onclick="window.location.href='index.html'">Home</button>
+</div>
+
+<div id="savedBox" class="saved-box">
+  REDA Report saved successfully.
+</div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+window.database = database;
+window.dbRef = ref;
+window.dbPush = push;
+window.dbSet = set;
+</script>
+
+<script>
+const redaFactors = [
+  {
+    name:"Communication",
+    examples:"Poor headset communication, unclear hand signals, incomplete briefing, poor coordination between driver and wing walkers.",
+    subfactors:[
+      "Poor verbal communication",
+      "Poor hand signals",
+      "Headset communication issue",
+      "Incomplete briefing",
+      "Incomplete handover",
+      "Assumption not verified",
+      "Communication between ramp team members",
+      "Communication with flight crew",
+      "Other"
+    ]
+  },
+  {
+    name:"Procedures / Documentation",
+    examples:"Ramp procedure not followed, towing checklist not used, unclear procedure, missing customer requirement.",
+    subfactors:[
+      "Procedure unavailable",
+      "Procedure not followed",
+      "Procedure unclear",
+      "Procedure incomplete",
+      "Checklist not used",
+      "Customer procedure not followed",
+      "Ramp safety procedure issue",
+      "Documentation not available",
+      "Other"
+    ]
+  },
+  {
+    name:"Training / Knowledge",
+    examples:"Employee unfamiliar with ramp task, insufficient GSE training, towing or marshalling knowledge gap.",
+    subfactors:[
+      "Inadequate training",
+      "Lack of experience",
+      "Inadequate OJT",
+      "Knowledge gap",
+      "Skill deficiency",
+      "Unfamiliar task",
+      "Incorrect interpretation of procedure",
+      "Other"
+    ]
+  },
+  {
+    name:"GSE / Equipment",
+    examples:"Tug issue, brake issue, headset failure, chock condition, cones unavailable, equipment not suitable.",
+    subfactors:[
+      "GSE unavailable",
+      "Wrong equipment used",
+      "Equipment malfunction",
+      "Brake / steering issue",
+      "Headset issue",
+      "Towbar issue",
+      "Chocks / cones unavailable",
+      "Inspection not completed",
+      "Other"
+    ]
+  },
+  {
+    name:"Work Environment",
+    examples:"Congested ramp, poor lighting, night operation, weather, limited clearance, noise, moving traffic.",
+    subfactors:[
+      "Poor lighting",
+      "Night operation",
+      "Noise",
+      "Weather",
+      "Limited space",
+      "Congested ramp",
+      "Aircraft clearance issue",
+      "Vehicle traffic",
+      "FOD risk",
+      "Other"
+    ]
+  },
+  {
+    name:"Human Factors",
+    examples:"Fatigue, distraction, complacency, time pressure, high workload, loss of situational awareness.",
+    subfactors:[
+      "Fatigue",
+      "Stress",
+      "Distraction",
+      "Interruption",
+      "Complacency",
+      "Overconfidence",
+      "Time pressure",
+      "High workload",
+      "Loss of situational awareness",
+      "Other"
+    ]
+  },
+  {
+    name:"Supervision / Leadership",
+    examples:"Weak ramp oversight, unclear responsibility, inadequate staffing, operation not stopped when conditions changed.",
+    subfactors:[
+      "Inadequate supervision",
+      "Weak oversight",
+      "Unclear responsibility",
+      "Inadequate staffing",
+      "Planning weakness",
+      "Production pressure not managed",
+      "Failure to stop operation",
+      "Incomplete follow-up",
+      "Other"
+    ]
+  },
+  {
+    name:"Organizational Factors",
+    examples:"Staffing pressure, scheduling issue, inadequate resources, training assignment gap, process not standardized.",
+    subfactors:[
+      "Staffing issue",
+      "Scheduling issue",
+      "Resource allocation issue",
+      "Procedure gap",
+      "Policy not clear",
+      "Training assignment gap",
+      "Production pressure",
+      "Process not standardized",
+      "Other"
+    ]
+  },
+  {
+    name:"Ramp Layout / Aircraft Design",
+    examples:"Limited clearance, difficult access, poor visibility around aircraft, confusing markings, aircraft geometry.",
+    subfactors:[
+      "Limited clearance",
+      "Poor visibility",
+      "Confusing ramp markings",
+      "Difficult access",
+      "Aircraft geometry",
+      "Blind spot",
+      "Gate / stand layout issue",
+      "Inadequate signage",
+      "Other"
+    ]
+  }
+];
+
+function safeId(text){
+  return text.replaceAll(" ","_").replaceAll("/","_").replaceAll("-","_");
+}
+
+function buildFactors(){
+  const area = document.getElementById("factorArea");
+  area.innerHTML = "";
+
+  redaFactors.forEach(factor => {
+    const id = safeId(factor.name);
+
+    let options = factor.subfactors.map(sub => `<option>${sub}</option>`).join("");
+
+    area.innerHTML += `
+      <div class="factor-card">
+        <h3>${factor.name}</h3>
+        <p><b>Examples:</b> ${factor.examples}</p>
+
+        <div class="factor-row">
+          <div class="field">
+            <label>Factor Present?</label>
+            <select id="${id}_present">
+              <option>No</option>
+              <option>Yes</option>
+              <option>Unknown</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>REDA Subfactor</label>
+            <select id="${id}_subfactor">
+              ${options}
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Evidence / Description</label>
+            <textarea id="${id}_evidence" placeholder="Describe the evidence found during the investigation."></textarea>
+          </div>
+
+          <div class="field">
+            <label>Recommended Action</label>
+            <textarea id="${id}_action" placeholder="Describe the action needed to reduce recurrence."></textarea>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function collectFactors(){
+  const factors = [];
+
+  redaFactors.forEach(factor => {
+    const id = safeId(factor.name);
+
+    factors.push({
+      name: factor.name,
+      present: document.getElementById(id + "_present").value,
+      subfactor: document.getElementById(id + "_subfactor").value,
+      evidence: document.getElementById(id + "_evidence").value.trim(),
+      recommendedAction: document.getElementById(id + "_action").value.trim()
+    });
+  });
+
+  return factors;
+}
+
+function collectActions(){
+  return [
+    {
+      action: document.getElementById("action1").value.trim(),
+      responsible: document.getElementById("responsible1").value.trim(),
+      dueDate: document.getElementById("dueDate1").value,
+      status: document.getElementById("actionStatus1").value
+    },
+    {
+      action: document.getElementById("action2").value.trim(),
+      responsible: document.getElementById("responsible2").value.trim(),
+      dueDate: document.getElementById("dueDate2").value,
+      status: document.getElementById("actionStatus2").value
+    },
+    {
+      action: document.getElementById("action3").value.trim(),
+      responsible: document.getElementById("responsible3").value.trim(),
+      dueDate: document.getElementById("dueDate3").value,
+      status: document.getElementById("actionStatus3").value
+    }
+  ];
+}
+
+function saveREDA(){
+  const title = document.getElementById("title").value.trim();
+
+  if(title === ""){
+    alert("Report Title is required.");
+    return;
+  }
+
+  const data = {
+    title:title,
+    affectedPerson:document.getElementById("affectedPerson").value.trim(),
+    employeeId:document.getElementById("employeeId").value.trim(),
+    departmentRole:document.getElementById("departmentRole").value.trim(),
+
+    aircraft:document.getElementById("aircraft").value.trim(),
+    customer:document.getElementById("customer").value.trim(),
+    location:document.getElementById("location").value.trim(),
+    date:document.getElementById("date").value,
+    workOrder:document.getElementById("workOrder").value.trim(),
+    eventDescription:document.getElementById("eventDescription").value.trim(),
+
+    eventType:document.getElementById("eventType").value,
+    detectionMethod:document.getElementById("detectionMethod").value,
+    immediateAction:document.getElementById("immediateAction").value.trim(),
+
+    contributingFactors:collectFactors(),
+
+    mainFactor:document.getElementById("mainFactor").value,
+    status:document.getElementById("status").value,
+    rootCause:document.getElementById("rootCause").value.trim(),
+    systemWeakness:document.getElementById("systemWeakness").value.trim(),
+
+    correctiveActions:collectActions(),
+
+    createdAt:new Date().toLocaleString()
+  };
+
+  const newRef = window.dbPush(window.dbRef(window.database,"redaReports"));
+
+  window.dbSet(newRef,data)
+  .then(() => {
+    document.getElementById("savedBox").style.display = "block";
+    alert("REDA Report saved successfully.");
+  })
+  .catch(error => {
+    alert("Error saving REDA Report: " + error.message);
+  });
+}
+
+function resetForm(){
+  if(confirm("Do you want to clear the REDA form?")){
+    document.querySelectorAll("input, textarea").forEach(el => el.value = "");
+    document.querySelectorAll("select").forEach(el => el.selectedIndex = 0);
+    document.getElementById("savedBox").style.display = "none";
+  }
+}
+
+buildFactors();
+</script>
+
+</body>
+</html>
