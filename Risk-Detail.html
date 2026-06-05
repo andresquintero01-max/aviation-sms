@@ -896,9 +896,22 @@ if(s.exists()) loadCPA(s.val());
 };
 
 window.sendCPAEmail=function(email,type,action,date,cpaNumber,pdfUrl){
-const subject = encodeURIComponent("CPA "+cpaNumber+" - Corrective Preventive Action");
+
+const reportBox = document.getElementById("reportBox");
+
+const reportId =
+reportBox.innerHTML.match(/<b>ID:<\/b>\s*([^<]+)/)?.[1]?.trim() || "N/A";
+
+const title =
+reportBox.innerHTML.match(/<b>Title:<\/b>\s*([^<]+)/)?.[1]?.trim() || "N/A";
+
+const subject = encodeURIComponent(
+"CPA "+cpaNumber+" - "+title
+);
 
 const body = encodeURIComponent(
+"Report ID: "+reportId+"\n"+
+"Title: "+title+"\n\n"+
 "CPA "+cpaNumber+"\n\n"+
 "Control Type: "+type+"\n"+
 "Action Plan: "+action+"\n"+
@@ -907,8 +920,12 @@ const body = encodeURIComponent(
 "Please review and follow up accordingly."
 );
 
-window.location.href="mailto:"+email+"?subject="+subject+"&body="+body;
+window.location.href =
+"mailto:"+email+
+"?subject="+subject+
+"&body="+body;
 };
+
 
 window.deleteCPA=async function(id,pdfPath){
 if(pdfPath){
