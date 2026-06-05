@@ -983,11 +983,32 @@ c.appendChild(div);
 let att=document.createElement("div");
 att.className="attachment-item";
 
-att.innerHTML=`
+let attachmentHtml = `
 <b>CPA Attachment ${i+1}</b><br>
-<button onclick="addDriveLink('${id}','${i+1}')">Add Drive Link</button>
-${x.pdfUrl ? `<button onclick="window.open('${x.pdfUrl}','_blank')">Open Document</button>` : "No document link added"}
+<button onclick="addDriveLink('${id}','${i+1}')">+ Add Attachment</button><br><br>
 `;
+
+if(x.attachments){
+
+Object.values(x.attachments).forEach(attDoc=>{
+
+attachmentHtml += `
+<div style="margin-top:8px;">
+<button onclick="window.open('${attDoc.url}','_blank')">
+Open Document
+</button>
+</div>
+`;
+
+});
+
+}else{
+
+attachmentHtml += "No document link added";
+
+}
+
+att.innerHTML = attachmentHtml;
 
 a.appendChild(att);
 });
