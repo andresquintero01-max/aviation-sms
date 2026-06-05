@@ -862,9 +862,7 @@ controlType:document.getElementById("controlType").value,
 actionPlan:document.getElementById("actionPlan").value,
 actionDate:document.getElementById("actionDate").value,
 emailTo:document.getElementById("emailTo").value,
-pdfUrl:"",
-pdfName:"",
-pdfPath:""
+attachments:{}
 }).then(()=>{
 get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
 if(s.exists()){
@@ -877,22 +875,28 @@ loadCPA(null);
 };
 
 window.addDriveLink=async function(id,cpaNumber){
-const driveLink = prompt("Paste Google Drive document link for CPA Attachment "+cpaNumber);
+
+const driveLink = prompt("Paste Google Drive document link");
 
 if(!driveLink){
 alert("No Drive link added.");
 return;
 }
 
-await update(ref(db,"smsReports/"+key+"/CPA/"+id),{
-pdfUrl:driveLink,
-pdfName:"Google Drive Document",
-pdfPath:""
-});
+const attachmentId = Date.now();
+
+await update(
+ref(db,"smsReports/"+key+"/CPA/"+id+"/attachments/"+attachmentId),
+{
+url:driveLink,
+name:"Google Drive Document"
+}
+);
 
 get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
 if(s.exists()) loadCPA(s.val());
 });
+
 };
 
 window.sendCPAEmail=function(email,type,action,date,cpaNumber,pdfUrl){
