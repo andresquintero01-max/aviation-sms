@@ -1,1 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>REDA Database</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:'Segoe UI',Arial,sans-serif;
+  min-height:100vh;
+  background:
+  radial-gradient(circle at top left, rgba(255,152,0,0.30), transparent 30%),
+  radial-gradient(circle at bottom right, rgba(28,99,219,0.45), transparent 38%),
+  linear-gradient(rgba(5,20,55,0.86),rgba(5,20,55,0.94)),
+  url('https://images.unsplash.com/photo-1517976487492-5750f3195933?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+  padding:35px;
+}
+
+.container{
+  max-width:1300px;
+  margin:auto;
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(14px);
+  padding:50px;
+  border-radius:40px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.45);
+  position:relative;
+  overflow:hidden;
+}
+
+.container::before{
+  content:"";
+  position:absolute;
+  width:480px;
+  height:480px;
+  background:radial-gradient(circle,rgba(20,80,184,0.18),transparent 70%);
+  top:-200px;
+  right:-160px;
+}
+
+.container::after{
+  content:"";
+  position:absolute;
+  width:340px;
+  height:340px;
+  background:radial-gradient(circle,rgba(255,152,0,0.18),transparent 70%);
+  bottom:-150px;
+  left:-120px;
+}
+
+.content{position:relative;z-index:2;}
+
+.logo{
+  width:112px;
+  height:112px;
+  margin:0 auto 20px;
+  border-radius:32px;
+  background:linear-gradient(135deg,#071f47,#1450b8,#ff9800);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:50px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.30);
+}
+
+.badge{
+  display:block;
+  width:max-content;
+  margin:0 auto 16px;
+  background:#eaf2ff;
+  color:#071f47;
+  padding:10px 24px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:1.8px;
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  font-size:58px;
+  margin-bottom:10px;
+  font-weight:900;
+}
+
+.description{
+  text-align:center;
+  color:#56657d;
+  font-size:19px;
+  margin-bottom:28px;
+  font-weight:500;
+}
+
+.title-line{
+  width:230px;
+  height:6px;
+  margin:0 auto 32px;
+  border-radius:10px;
+  background:linear-gradient(90deg,transparent,#1450b8,#ff9800,transparent);
+}
+
+.filter-box{
+  background:#f8fbff;
+  border:1px solid #e5e7eb;
+  padding:22px;
+  border-radius:26px;
+  margin-bottom:26px;
+  box-shadow:0 14px 32px rgba(0,0,0,0.10);
+}
+
+.filter-title{
+  font-weight:900;
+  color:#071f47;
+  margin-bottom:12px;
+  font-size:18px;
+}
+
+.search-input{
+  width:100%;
+  padding:16px;
+  border:1px solid #cbd5e1;
+  border-radius:16px;
+  font-size:16px;
+  outline:none;
+}
+
+.search-input:focus{
+  border-color:#1450b8;
+  box-shadow:0 0 0 4px rgba(20,80,184,0.12);
+}
+
+.top-buttons,
+.bottom-buttons{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:30px;
+  background:#f8fbff;
+  padding:18px;
+  border-radius:24px;
+  border:1px solid #e5e7eb;
+}
+
+.bottom-buttons{
+  margin-top:40px;
+  margin-bottom:0;
+}
+
+.btn{
+  border:none;
+  color:white;
+  padding:15px 28px;
+  border-radius:16px;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+  transition:0.25s;
+  box-shadow:0 10px 22px rgba(0,0,0,0.22);
+}
+
+.btn:hover{
+  transform:translateY(-3px);
+}
+
+.reda-btn{
+  background:linear-gradient(135deg,#d83b00,#ff9800);
+}
+
+.home-btn{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+}
+
+.open-btn{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+}
+
+.save-btn{
+  background:linear-gradient(135deg,#047857,#22c55e);
+}
+
+.status-btn{
+  background:linear-gradient(135deg,#6b21a8,#9333ea);
+}
+
+.delete-btn{
+  background:linear-gradient(135deg,#dc2626,#ef4444);
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  padding:0;
+  font-size:20px;
+}
+
+.counter{
+  text-align:center;
+  color:#071f47;
+  font-weight:900;
+  margin-bottom:20px;
+  font-size:17px;
+}
+
+.report-card{
+  background:linear-gradient(135deg,#ffffff,#f8fbff);
+  border-radius:28px;
+  padding:26px;
+  margin-bottom:24px;
+  box-shadow:0 18px 45px rgba(0,0,0,0.14);
+  border-left:10px solid #1450b8;
+  transition:0.25s;
+  position:relative;
+  overflow:hidden;
+}
+
+.report-card::before{
+  content:"";
+  position:absolute;
+  width:320px;
+  height:320px;
+  background:radial-gradient(circle,rgba(20,80,184,0.10),transparent 70%);
+  top:-160px;
+  right:-120px;
+}
+
+.report-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 26px 60px rgba(0,0,0,0.20);
+}
+
+.card-header,
+.details-grid,
+.actions{
+  position:relative;
+  z-index:2;
+}
+
+.card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
+.event-title{
+  font-size:26px;
+  font-weight:900;
+  color:#071f47;
+  margin-bottom:6px;
+}
+
+.meta{
+  color:#56657d;
+  font-size:15px;
+  line-height:1.7;
+}
+
+.status{
+  display:inline-block;
+  padding:8px 18px;
+  border-radius:999px;
+  color:white;
+  font-size:13px;
+  font-weight:900;
+  box-shadow:0 8px 18px rgba(0,0,0,0.18);
+}
+
+.status.open{background:linear-gradient(135deg,#047857,#22c55e);}
+.status.closed{background:linear-gradient(135deg,#475569,#64748b);}
+.status.in-progress{background:linear-gradient(135deg,#071f47,#1450b8);}
+.status.pending-corrective-action{background:linear-gradient(135deg,#d83b00,#ff9800);}
+
+.details-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+  margin-top:18px;
+}
+
+.detail-box{
+  background:#f4f7fb;
+  padding:15px;
+  border-radius:18px;
+  border:1px solid #dce3ef;
+}
+
+.detail-label{
+  font-size:12px;
+  color:#64748b;
+  font-weight:900;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+.detail-value{
+  font-size:15px;
+  color:#071f47;
+  font-weight:800;
+  word-break:break-word;
+}
+
+.reda-id-input{
+  width:100%;
+  padding:12px;
+  border:1px solid #cbd5e1;
+  border-radius:14px;
+  font-size:15px;
+  font-weight:800;
+  color:#071f47;
+}
+
+.small-note{
+  font-size:12px;
+  color:#64748b;
+  margin-top:6px;
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:22px;
+  align-items:center;
+}
+
+.separator-buttons{
+  margin:30px 0;
+  padding:18px;
+  background:rgba(255,255,255,0.18);
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,0.30);
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
+  backdrop-filter:blur(8px);
+}
+
+.no-data{
+  text-align:center;
+  color:#56657d;
+  font-size:20px;
+  margin-top:35px;
+  background:#f8fbff;
+  padding:42px;
+  border-radius:24px;
+  border:1px solid #e5e7eb;
+  font-weight:700;
+}
+
+.footer{
+  margin-top:35px;
+  text-align:center;
+  color:#51617b;
+  font-size:14px;
+  letter-spacing:3px;
+  font-weight:900;
+}
+
+@media(max-width:700px){
+  body{padding:20px;}
+  .container{padding:30px 22px;}
+  h1{font-size:40px;}
+  .event-title{font-size:21px;}
+  .btn{width:100%;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<div class="content">
+
+  <div class="logo">📊</div>
+
+  <div class="badge">REDA INVESTIGATION DATABASE</div>
+
+  <h1>REDA Database</h1>
+
+  <div class="description">
+    Stored Ramp Error Decision Aid Investigation Reports
+  </div>
+
+  <div class="title-line"></div>
+
+  <div class="filter-box">
+    <div class="filter-title">Search REDA Reports</div>
+    <input 
+      id="searchInput" 
+      class="search-input" 
+      placeholder="Search by REDA ID, title, affected person, aircraft, customer, date, status..."
+      oninput="applyFilter()"
+    >
+  </div>
+
+  <div class="top-buttons">
+    <button class="btn reda-btn" onclick="window.location.href='REDA.html'">
+      🔎 REDA
+    </button>
+
+    <button class="btn home-btn" onclick="window.location.href='index.html'">
+      🏠 Home
+    </button>
+  </div>
+
+  <div id="counter" class="counter"></div>
+
+  <div id="redaList"></div>
+
+  <div id="noData" class="no-data" style="display:none;">
+    No REDA reports found.
+  </div>
+
+  <div class="bottom-buttons">
+    <button class="btn reda-btn" onclick="window.location.href='REDA.html'">
+      🔎 REDA
+    </button>
+
+    <button class="btn home-btn" onclick="window.location.href='index.html'">
+      🏠 Home
+    </button>
+  </div>
+
+  <div class="footer">
+    AVIATION SAFETY MANAGEMENT PLATFORM
+  </div>
+
+</div>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  onValue,
+  remove,
+  update
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+const redaList = document.getElementById("redaList");
+const noData = document.getElementById("noData");
+const counter = document.getElementById("counter");
+
+let allReports = [];
+
+function clean(value){
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function statusClass(status){
+  return String(status || "Open")
+    .toLowerCase()
+    .replaceAll(" ","-");
+}
+
+function renderReports(reports){
+
+  redaList.innerHTML = "";
+
+  if(reports.length === 0){
+    noData.style.display = "block";
+    counter.innerHTML = "0 reports found";
+    return;
+  }
+
+  noData.style.display = "none";
+  counter.innerHTML = reports.length + " report(s) found";
+
+  reports.forEach((report, index) => {
+
+    const firebaseId = report.firebaseId;
+
+    const title =
+      report.title ||
+      report.eventTitle ||
+      report.event ||
+      "Untitled REDA Report";
+
+    const affectedPerson =
+      report.affectedPerson ||
+      report.personAffected ||
+      report.employeeName ||
+      report.person ||
+      "N/A";
+
+    const date =
+      report.date ||
+      report.eventDate ||
+      report.createdAt ||
+      "N/A";
+
+    const aircraft =
+      report.aircraft || "N/A";
+
+    const customer =
+      report.customer || "N/A";
+
+    const status =
+      report.status || "Open";
+
+    const redaVisibleId =
+      report.redaId ||
+      report.customId ||
+      firebaseId;
+
+    const card = document.createElement("div");
+    card.className = "report-card";
+
+    card.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="event-title">${clean(title)}</div>
+
+          <div class="meta">
+            <strong>Date:</strong> ${clean(date)}<br>
+            <strong>Affected Person:</strong> ${clean(affectedPerson)}<br>
+            <strong>Aircraft:</strong> ${clean(aircraft)} | 
+            <strong>Customer:</strong> ${clean(customer)}
+          </div>
+        </div>
+
+        <span class="status ${statusClass(status)}">
+          ${clean(status)}
+        </span>
+      </div>
+
+      <div class="details-grid">
+
+        <div class="detail-box">
+          <div class="detail-label">Editable REDA ID</div>
+          <input 
+            class="reda-id-input" 
+            id="redaId_${clean(firebaseId)}" 
+            value="${clean(redaVisibleId)}"
+          >
+          <div class="small-note">
+            You can write your own REDA ID here.
+          </div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Event Title</div>
+          <div class="detail-value">${clean(title)}</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Report Date</div>
+          <div class="detail-value">${clean(date)}</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Affected Person</div>
+          <div class="detail-value">${clean(affectedPerson)}</div>
+        </div>
+
+      </div>
+
+      <div class="actions">
+
+        <button class="btn open-btn" onclick="openReport('${clean(firebaseId)}')">
+          Open Report
+        </button>
+
+        <button class="btn save-btn" onclick="saveREDAId('${clean(firebaseId)}')">
+          Save REDA ID
+        </button>
+
+        <button class="btn status-btn" onclick="toggleStatus('${clean(firebaseId)}', '${clean(status)}')">
+          ${status === "Open" ? "Close Report" : "Open Report"}
+        </button>
+
+        <button class="btn delete-btn" onclick="deleteReport('${clean(firebaseId)}')">
+          🗑
+        </button>
+
+      </div>
+    `;
+
+    redaList.appendChild(card);
+
+    if((index + 1) % 3 === 0){
+      const separator = document.createElement("div");
+      separator.className = "separator-buttons";
+
+      separator.innerHTML = `
+        <button class="btn reda-btn" onclick="window.location.href='REDA.html'">
+          🔎 REDA
+        </button>
+
+        <button class="btn home-btn" onclick="window.location.href='index.html'">
+          🏠 Home
+        </button>
+      `;
+
+      redaList.appendChild(separator);
+    }
+
+  });
+}
+
+window.applyFilter = function(){
+
+  const searchText = document.getElementById("searchInput").value.toLowerCase().trim();
+
+  if(searchText === ""){
+    renderReports(allReports);
+    return;
+  }
+
+  const filtered = allReports.filter(report => {
+
+    const searchArea = `
+      ${report.firebaseId || ""}
+      ${report.redaId || ""}
+      ${report.customId || ""}
+      ${report.title || ""}
+      ${report.eventTitle || ""}
+      ${report.event || ""}
+      ${report.affectedPerson || ""}
+      ${report.personAffected || ""}
+      ${report.employeeName || ""}
+      ${report.person || ""}
+      ${report.aircraft || ""}
+      ${report.customer || ""}
+      ${report.location || ""}
+      ${report.date || ""}
+      ${report.eventDate || ""}
+      ${report.createdAt || ""}
+      ${report.status || ""}
+      ${report.eventType || ""}
+      ${report.detectionMethod || ""}
+      ${report.mainFactor || ""}
+      ${report.workOrder || ""}
+    `.toLowerCase();
+
+    return searchArea.includes(searchText);
+
+  });
+
+  renderReports(filtered);
+};
+
+const reportsRef = ref(database, "redaReports");
+
+onValue(reportsRef, (snapshot) => {
+
+  allReports = [];
+
+  if(!snapshot.exists()){
+    renderReports([]);
+    return;
+  }
+
+  snapshot.forEach((childSnapshot) => {
+    allReports.push({
+      firebaseId: childSnapshot.key,
+      ...childSnapshot.val()
+    });
+  });
+
+  allReports.sort((a,b) => {
+    return String(b.firebaseId).localeCompare(String(a.firebaseId));
+  });
+
+  applyFilter();
+
+});
+
+window.openReport = function(reportId){
+  window.location.href = "REDA-Details.html?id=" + reportId;
+};
+
+window.saveREDAId = function(reportId){
+
+  const input = document.getElementById("redaId_" + reportId);
+  const newREDAId = input.value.trim();
+
+  if(newREDAId === ""){
+    alert("REDA ID cannot be empty.");
+    return;
+  }
+
+  update(ref(database, "redaReports/" + reportId), {
+    redaId: newREDAId,
+    updatedAt: new Date().toLocaleString()
+  })
+  .then(() => {
+    alert("REDA ID updated successfully.");
+  })
+  .catch((error) => {
+    alert("Error updating REDA ID: " + error.message);
+  });
+
+};
+
+window.toggleStatus = function(reportId, currentStatus){
+
+  const newStatus = currentStatus === "Open" ? "Closed" : "Open";
+
+  update(ref(database, "redaReports/" + reportId), {
+    status: newStatus,
+    updatedAt: new Date().toLocaleString()
+  })
+  .then(() => {
+    alert("Report status changed to " + newStatus + ".");
+  })
+  .catch((error) => {
+    alert("Error updating status: " + error.message);
+  });
+
+};
+
+window.deleteReport = function(reportId){
+
+  const confirmDelete = confirm(
+    "Are you sure you want to permanently delete this REDA report?"
+  );
+
+  if(!confirmDelete) return;
+
+  remove(ref(database, "redaReports/" + reportId))
+  .then(() => {
+    alert("REDA Report deleted successfully.");
+  })
+  .catch((error) => {
+    alert("Error deleting report: " + error.message);
+  });
+
+};
+
+</script>
+
+</body>
+</html>
