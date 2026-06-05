@@ -975,7 +975,44 @@ a.appendChild(att);
 }
 
 function cleanLabel(text){
-return String(text)
+
+const labels = {
+fiveWhy1:"Why 1",
+fiveWhy2:"Why 2",
+fiveWhy3:"Why 3",
+fiveWhy4:"Why 4",
+fiveWhy5:"Why 5",
+rootCause:"Root Cause / Contributing Factors",
+correctiveActions:"Corrective Actions",
+finalComments:"Final Comments",
+
+communication:"Lack of Communication",
+communicationNotes:"Communication Notes",
+complacency:"Complacency",
+complacencyNotes:"Complacency Notes",
+knowledge:"Lack of Knowledge",
+knowledgeNotes:"Knowledge Notes",
+distraction:"Distraction",
+distractionNotes:"Distraction Notes",
+teamwork:"Lack of Teamwork",
+teamworkNotes:"Teamwork Notes",
+fatigue:"Fatigue",
+fatigueNotes:"Fatigue Notes",
+resources:"Lack of Resources",
+resourcesNotes:"Resources Notes",
+pressure:"Pressure",
+pressureNotes:"Pressure Notes",
+assertiveness:"Lack of Assertiveness",
+assertivenessNotes:"Assertiveness Notes",
+stress:"Stress",
+stressNotes:"Stress Notes",
+awareness:"Lack of Awareness",
+awarenessNotes:"Awareness Notes",
+norms:"Norms",
+normsNotes:"Norms Notes"
+};
+
+return labels[text] || String(text)
 .replace(/([A-Z])/g," $1")
 .replace(/_/g," ")
 .replace(/-/g," ")
@@ -990,45 +1027,51 @@ if(!data) return "";
 
 Object.entries(data).forEach(([k,v])=>{
 
-  if(
-      k === "status" ||
-      k === "savedAt" ||
-      k === "investigationId" ||
-      k === "updatedAt"
-  ){
-      return;
-  }
+if(
+k === "status" ||
+k === "savedAt" ||
+k === "investigationId" ||
+k === "updatedAt"
+){
+return;
+}
 
-  if(
-      v === null ||
-      v === undefined ||
-      v === "" ||
-      v === "N/A"
-  ){
-      return;
-  }
+if(
+v === null ||
+v === undefined ||
+v === "" ||
+v === "N/A" ||
+v === "No"
+){
+return;
+}
 
-  if(typeof v === "object"){
+if(typeof v === "object"){
 
-      const nested = formatPrintData(v);
+const nested = formatPrintData(v);
 
-      if(nested.trim() !== ""){
-          html += `
-          <div class="print-record">
-            <h4>${cleanLabel(k)}</h4>
-            ${nested}
-          </div>
-          `;
-      }
+if(nested.trim() !== ""){
+html += `
+<div class="print-record">
+<h4>${cleanLabel(k)}</h4>
+${nested}
+</div>
+`;
+}
 
-  }else{
+}else{
 
-      html += `
-      <div style="margin-bottom:8px;">
-        <b>${cleanLabel(k)}:</b> ${v}
-      </div>
-      `;
-  }
+html += `
+<div style="margin-bottom:12px;padding:10px;border-bottom:1px solid #e5e7eb;">
+<div style="font-weight:900;color:#071f47;">
+${cleanLabel(k)}
+</div>
+<div style="margin-top:4px;color:#111827;">
+${v}
+</div>
+</div>
+`;
+}
 
 });
 
@@ -1037,13 +1080,10 @@ return html;
 
 async function loadPrintInvestigationData(){
 
-document.getElementById("fiveWhysPrint").innerHTML = "<b>5 Whys:</b> N/A";
-document.getElementById("shellPrint").innerHTML = "<b>SHELL:</b> N/A";
-document.getElementById("bowTiePrint").innerHTML = "<b>Bow-Tie:</b> N/A";
-document.getElementById("dirtyDozenPrint").innerHTML = "<b>Dirty Dozen:</b> N/A";
-document.getElementById("hfacsPrint").innerHTML = "<b>HFACS:</b> N/A";
-document.getElementById("medaPrint").innerHTML = "<b>MEDA:</b> N/A";
-document.getElementById("redaPrint").innerHTML = "<b>REDA:</b> N/A";
+document.getElementById("fiveWhysPrint").innerHTML = "";
+document.getElementById("shellPrint").innerHTML = "";
+document.getElementById("bowTiePrint").innerHTML = "";
+document.getElementById("dirtyDozenPrint").innerHTML = "";
 
 if(!key || key === "general") return;
 
@@ -1054,38 +1094,35 @@ if(!snap.exists()) return;
 const d = snap.val();
 
 if(d.investigation5Why){
+const content = formatPrintData(d.investigation5Why);
+if(content.trim() !== ""){
 document.getElementById("fiveWhysPrint").innerHTML =
-"<b>5 Whys:</b><br>" + formatPrintData(d.investigation5Why);
+"<div class='print-record'><h4>5 Whys Investigation</h4>" + content + "</div>";
+}
 }
 
 if(d.investigationSHELL){
+const content = formatPrintData(d.investigationSHELL);
+if(content.trim() !== ""){
 document.getElementById("shellPrint").innerHTML =
-"<b>SHELL:</b><br>" + formatPrintData(d.investigationSHELL);
+"<div class='print-record'><h4>SHELL Investigation</h4>" + content + "</div>";
+}
 }
 
 if(d.investigationBowTie){
+const content = formatPrintData(d.investigationBowTie);
+if(content.trim() !== ""){
 document.getElementById("bowTiePrint").innerHTML =
-"<b>Bow-Tie:</b><br>" + formatPrintData(d.investigationBowTie);
+"<div class='print-record'><h4>Bow-Tie Investigation</h4>" + content + "</div>";
+}
 }
 
 if(d.investigationDirtyDozen){
+const content = formatPrintData(d.investigationDirtyDozen);
+if(content.trim() !== ""){
 document.getElementById("dirtyDozenPrint").innerHTML =
-"<b>Dirty Dozen:</b><br>" + formatPrintData(d.investigationDirtyDozen);
+"<div class='print-record'><h4>Dirty Dozen Investigation</h4>" + content + "</div>";
 }
-
-if(d.investigationHFACS){
-document.getElementById("hfacsPrint").innerHTML =
-"<b>HFACS:</b><br>" + formatPrintData(d.investigationHFACS);
-}
-
-if(d.investigationMEDA){
-document.getElementById("medaPrint").innerHTML =
-"<b>MEDA:</b><br>" + formatPrintData(d.investigationMEDA);
-}
-
-if(d.investigationREDA){
-document.getElementById("redaPrint").innerHTML =
-"<b>REDA:</b><br>" + formatPrintData(d.investigationREDA);
 }
 
 }
@@ -1111,4 +1148,3 @@ loadMainReport();
 
 </body>
 </html>
-
