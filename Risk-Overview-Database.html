@@ -15,7 +15,7 @@ body{
   radial-gradient(circle at top left, rgba(255,152,0,0.30), transparent 30%),
   radial-gradient(circle at bottom right, rgba(28,99,219,0.45), transparent 38%),
   linear-gradient(rgba(5,20,55,0.86),rgba(5,20,55,0.94)),
-  url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  url('https://images.unsplash.com/photo-1517976487492-5750f3195933?q=80&w=1400&auto=format&fit=crop');
   background-size:cover;
   background-position:center;
   background-attachment:fixed;
@@ -123,25 +123,16 @@ h1{
   font-size:18px;
 }
 
-.filter-row{
-  display:grid;
-  grid-template-columns:2fr 1fr 1fr;
-  gap:14px;
-}
-
-.search-input,
-.select-input{
+.search-input{
   width:100%;
   padding:16px;
   border:1px solid #cbd5e1;
   border-radius:16px;
   font-size:16px;
   outline:none;
-  background:white;
 }
 
-.search-input:focus,
-.select-input:focus{
+.search-input:focus{
   border-color:#1450b8;
   box-shadow:0 0 0 4px rgba(20,80,184,0.12);
 }
@@ -176,9 +167,7 @@ h1{
   box-shadow:0 10px 22px rgba(0,0,0,0.22);
 }
 
-.btn:hover{
-  transform:translateY(-3px);
-}
+.btn:hover{transform:translateY(-3px);}
 
 .overview-btn{
   background:linear-gradient(135deg,#d83b00,#ff9800);
@@ -188,24 +177,8 @@ h1{
   background:linear-gradient(135deg,#071f47,#1450b8);
 }
 
-.back-btn{
-  background:linear-gradient(135deg,#334155,#475569);
-}
-
-.export-btn{
-  background:linear-gradient(135deg,#047857,#22c55e);
-}
-
 .open-btn{
   background:linear-gradient(135deg,#071f47,#1450b8);
-}
-
-.print-btn{
-  background:linear-gradient(135deg,#d83b00,#ff9800);
-}
-
-.edit-btn{
-  background:linear-gradient(135deg,#0f766e,#14b8a6);
 }
 
 .status-btn{
@@ -298,23 +271,6 @@ h1{
 .status.open{background:linear-gradient(135deg,#047857,#22c55e);}
 .status.closed{background:linear-gradient(135deg,#475569,#64748b);}
 .status.in-progress{background:linear-gradient(135deg,#071f47,#1450b8);}
-.status.pending{background:linear-gradient(135deg,#d83b00,#ff9800);}
-
-.risk-pill{
-  display:inline-block;
-  padding:8px 15px;
-  border-radius:999px;
-  color:white;
-  font-size:13px;
-  font-weight:900;
-  margin-left:6px;
-  background:linear-gradient(135deg,#071f47,#1450b8);
-}
-
-.risk-high{background:linear-gradient(135deg,#dc2626,#ef4444);}
-.risk-medium{background:linear-gradient(135deg,#d83b00,#ff9800);}
-.risk-low{background:linear-gradient(135deg,#047857,#22c55e);}
-.risk-na{background:linear-gradient(135deg,#475569,#64748b);}
 
 .details-grid{
   display:grid;
@@ -343,10 +299,6 @@ h1{
   color:#071f47;
   font-weight:800;
   word-break:break-word;
-}
-
-.long-box{
-  grid-column:1/-1;
 }
 
 .actions{
@@ -391,13 +343,12 @@ h1{
   font-weight:900;
 }
 
-@media(max-width:800px){
+@media(max-width:700px){
   body{padding:20px;}
   .container{padding:30px 22px;}
   h1{font-size:40px;}
   .event-title{font-size:21px;}
   .btn{width:100%;}
-  .filter-row{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -421,43 +372,17 @@ h1{
 
   <div class="filter-box">
     <div class="filter-title">Search Risk Overview Reports</div>
-
-    <div class="filter-row">
-      <input 
-        id="searchInput" 
-        class="search-input" 
-        placeholder="Search by title, department, location, hazard, responsible person..."
-        oninput="applyFilter()"
-      >
-
-      <select id="statusFilter" class="select-input" onchange="applyFilter()">
-        <option value="">All Status</option>
-        <option value="Open">Open</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Closed">Closed</option>
-        <option value="Pending">Pending</option>
-      </select>
-
-      <select id="riskFilter" class="select-input" onchange="applyFilter()">
-        <option value="">All Risk Levels</option>
-        <option value="High">High</option>
-        <option value="Medium">Medium</option>
-        <option value="Low">Low</option>
-      </select>
-    </div>
+    <input 
+      id="searchInput" 
+      class="search-input" 
+      placeholder="Search by title, hazard, department, location, responsible, status..."
+      oninput="applyFilter()"
+    >
   </div>
 
   <div class="top-buttons">
     <button class="btn overview-btn" onclick="window.location.href='Risk-Overview-Report.html'">
-      ➕ New Report
-    </button>
-
-    <button class="btn export-btn" onclick="exportCSV()">
-      ⬇ Export CSV
-    </button>
-
-    <button class="btn back-btn" onclick="window.location.href='Risk-Management.html'">
-      ← Back
+      🔎 Risk Overview
     </button>
 
     <button class="btn home-btn" onclick="window.location.href='index.html'">
@@ -475,15 +400,7 @@ h1{
 
   <div class="bottom-buttons">
     <button class="btn overview-btn" onclick="window.location.href='Risk-Overview-Report.html'">
-      ➕ New Report
-    </button>
-
-    <button class="btn export-btn" onclick="exportCSV()">
-      ⬇ Export CSV
-    </button>
-
-    <button class="btn back-btn" onclick="window.location.href='Risk-Management.html'">
-      ← Back
+      🔎 Risk Overview
     </button>
 
     <button class="btn home-btn" onclick="window.location.href='index.html'">
@@ -528,10 +445,9 @@ const noData = document.getElementById("noData");
 const counter = document.getElementById("counter");
 
 let allReports = [];
-let currentFilteredReports = [];
 
 function clean(value){
-  return String(value || "")
+  return String(formatValue(value))
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
     .replaceAll(">","&gt;")
@@ -539,10 +455,37 @@ function clean(value){
     .replaceAll("'","&#039;");
 }
 
+function formatValue(value){
+  if(value === undefined || value === null || value === "") return "N/A";
+
+  if(Array.isArray(value)){
+    return value.map(item => formatValue(item)).join(", ");
+  }
+
+  if(typeof value === "object"){
+    const possible = [
+      "value","label","name","title","text","description",
+      "riskLevel","level","score","rating","action","hazard"
+    ];
+
+    for(const key of possible){
+      if(value[key] !== undefined && value[key] !== null && String(value[key]).trim() !== ""){
+        return formatValue(value[key]);
+      }
+    }
+
+    return Object.entries(value)
+      .map(([key,val]) => `${key}: ${formatValue(val)}`)
+      .join(" | ");
+  }
+
+  return String(value);
+}
+
 function getValue(report, fields, fallback="N/A"){
   for(const field of fields){
-    if(report[field] !== undefined && report[field] !== null && String(report[field]).trim() !== ""){
-      return report[field];
+    if(report[field] !== undefined && report[field] !== null && String(formatValue(report[field])).trim() !== ""){
+      return formatValue(report[field]);
     }
   }
   return fallback;
@@ -554,28 +497,9 @@ function statusClass(status){
     .replaceAll(" ","-");
 }
 
-function riskClass(risk){
-  const value = String(risk || "").toLowerCase();
-
-  if(value.includes("high") || value.includes("red") || value.includes("a5") || value.includes("b5") || value.includes("c5")){
-    return "risk-high";
-  }
-
-  if(value.includes("medium") || value.includes("yellow") || value.includes("orange")){
-    return "risk-medium";
-  }
-
-  if(value.includes("low") || value.includes("green")){
-    return "risk-low";
-  }
-
-  return "risk-na";
-}
-
 function renderReports(reports){
 
   overviewList.innerHTML = "";
-  currentFilteredReports = reports;
 
   if(reports.length === 0){
     noData.style.display = "block";
@@ -696,19 +620,21 @@ function renderReports(reports){
           </div>
         </div>
 
-        <div>
-          <span class="status ${statusClass(status)}">${clean(status)}</span>
-          <br><br>
-          <span class="risk-pill ${riskClass(initialRisk)}">Initial: ${clean(initialRisk)}</span>
-          <span class="risk-pill ${riskClass(residualRisk)}">Residual: ${clean(residualRisk)}</span>
-        </div>
+        <span class="status ${statusClass(status)}">
+          ${clean(status)}
+        </span>
       </div>
 
       <div class="details-grid">
 
         <div class="detail-box">
-          <div class="detail-label">Reported By</div>
-          <div class="detail-value">${clean(reportedBy)}</div>
+          <div class="detail-label">Initial Risk</div>
+          <div class="detail-value">${clean(initialRisk)}</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Residual Risk</div>
+          <div class="detail-value">${clean(residualRisk)}</div>
         </div>
 
         <div class="detail-box">
@@ -722,23 +648,23 @@ function renderReports(reports){
         </div>
 
         <div class="detail-box">
-          <div class="detail-label">Department / Area</div>
-          <div class="detail-value">${clean(department)}</div>
-        </div>
-
-        <div class="detail-box long-box">
           <div class="detail-label">Hazard</div>
           <div class="detail-value">${clean(hazard)}</div>
         </div>
 
-        <div class="detail-box long-box">
+        <div class="detail-box">
           <div class="detail-label">Recommended Actions</div>
           <div class="detail-value">${clean(actions)}</div>
         </div>
 
-        <div class="detail-box long-box">
-          <div class="detail-label">Total Hazards in this Panorama</div>
+        <div class="detail-box">
+          <div class="detail-label">Total Hazards</div>
           <div class="detail-value">${clean(totalHazards)}</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Firebase ID</div>
+          <div class="detail-value">${clean(firebaseId)}</div>
         </div>
 
       </div>
@@ -746,19 +672,11 @@ function renderReports(reports){
       <div class="actions">
 
         <button class="btn open-btn" onclick="openReport('${clean(firebaseId)}')">
-          👁 View
-        </button>
-
-        <button class="btn print-btn" onclick="printReport('${clean(firebaseId)}')">
-          🖨 Print
-        </button>
-
-        <button class="btn edit-btn" onclick="editReport('${clean(firebaseId)}')">
-          ✏ Edit
+          Open Report
         </button>
 
         <button class="btn status-btn" onclick="toggleStatus('${clean(firebaseId)}', '${clean(status)}')">
-          ${status === "Closed" ? "Open Report" : "Close Report"}
+          ${status === "Open" ? "Close Report" : "Open Report"}
         </button>
 
         <button class="btn delete-btn" onclick="deleteReport('${clean(firebaseId)}')">
@@ -776,11 +694,7 @@ function renderReports(reports){
 
       separator.innerHTML = `
         <button class="btn overview-btn" onclick="window.location.href='Risk-Overview-Report.html'">
-          ➕ New Report
-        </button>
-
-        <button class="btn back-btn" onclick="window.location.href='Risk-Management.html'">
-          ← Back
+          🔎 Risk Overview
         </button>
 
         <button class="btn home-btn" onclick="window.location.href='index.html'">
@@ -797,105 +711,55 @@ function renderReports(reports){
 window.applyFilter = function(){
 
   const searchText = document.getElementById("searchInput").value.toLowerCase().trim();
-  const statusFilter = document.getElementById("statusFilter").value.toLowerCase().trim();
-  const riskFilter = document.getElementById("riskFilter").value.toLowerCase().trim();
+
+  if(searchText === ""){
+    renderReports(allReports);
+    return;
+  }
 
   const filtered = allReports.filter(report => {
-
     const searchArea = JSON.stringify(report).toLowerCase();
-
-    const status = String(getValue(report, ["status","reportStatus"], "Open")).toLowerCase();
-
-    const initialRisk = String(getValue(report, ["initialRisk","riskLevel","risk","initialRiskLevel"], "")).toLowerCase();
-    const residualRisk = String(getValue(report, ["residualRisk","residualRiskLevel","finalRisk"], "")).toLowerCase();
-    const riskArea = initialRisk + " " + residualRisk;
-
-    const matchesSearch = searchText === "" || searchArea.includes(searchText);
-    const matchesStatus = statusFilter === "" || status === statusFilter;
-    const matchesRisk = riskFilter === "" || riskArea.includes(riskFilter);
-
-    return matchesSearch && matchesStatus && matchesRisk;
-
+    return searchArea.includes(searchText);
   });
 
   renderReports(filtered);
 };
 
-function loadReportsFromFirebase(){
+const reportsRef = ref(database, "overviewReports");
 
-  const possibleNodes = [
-    "overviewReports",
-    "riskOverviewReports",
-    "RiskOverviewReports",
-    "riskOverview"
-  ];
+onValue(reportsRef, (snapshot) => {
 
-  let loaded = false;
+  allReports = [];
 
-  possibleNodes.forEach((nodeName) => {
+  if(!snapshot.exists()){
+    renderReports([]);
+    return;
+  }
 
-    const reportsRef = ref(database, nodeName);
-
-    onValue(reportsRef, (snapshot) => {
-
-      if(loaded) return;
-
-      if(snapshot.exists()){
-
-        loaded = true;
-        allReports = [];
-
-        snapshot.forEach((childSnapshot) => {
-          allReports.push({
-            firebaseId: childSnapshot.key,
-            firebaseNode: nodeName,
-            ...childSnapshot.val()
-          });
-        });
-
-        allReports.sort((a,b) => {
-          return String(b.firebaseId).localeCompare(String(a.firebaseId));
-        });
-
-        applyFilter();
-
-      }else{
-        if(!loaded){
-          renderReports([]);
-        }
-      }
-
+  snapshot.forEach((childSnapshot) => {
+    allReports.push({
+      firebaseId: childSnapshot.key,
+      ...childSnapshot.val()
     });
-
   });
-}
 
-loadReportsFromFirebase();
+  allReports.sort((a,b) => {
+    return String(b.firebaseId).localeCompare(String(a.firebaseId));
+  });
+
+  applyFilter();
+
+});
 
 window.openReport = function(reportId){
   window.location.href = "Risk-Overview-Details.html?id=" + reportId;
 };
 
-window.editReport = function(reportId){
-  window.location.href = "Risk-Overview-Report.html?id=" + reportId;
-};
-
-window.printReport = function(reportId){
-  window.location.href = "Risk-Overview-Details.html?id=" + reportId + "&print=true";
-};
-
 window.toggleStatus = function(reportId, currentStatus){
 
-  const report = allReports.find(r => r.firebaseId === reportId);
-  if(!report){
-    alert("Report not found.");
-    return;
-  }
+  const newStatus = currentStatus === "Open" ? "Closed" : "Open";
 
-  const nodeName = report.firebaseNode || "overviewReports";
-  const newStatus = currentStatus === "Closed" ? "Open" : "Closed";
-
-  update(ref(database, nodeName + "/" + reportId), {
+  update(ref(database, "overviewReports/" + reportId), {
     status: newStatus,
     updatedAt: new Date().toLocaleString()
   })
@@ -910,86 +774,19 @@ window.toggleStatus = function(reportId, currentStatus){
 
 window.deleteReport = function(reportId){
 
-  const report = allReports.find(r => r.firebaseId === reportId);
-  if(!report){
-    alert("Report not found.");
-    return;
-  }
-
   const confirmDelete = confirm(
     "Are you sure you want to permanently delete this Risk Overview report?"
   );
 
   if(!confirmDelete) return;
 
-  const nodeName = report.firebaseNode || "overviewReports";
-
-  remove(ref(database, nodeName + "/" + reportId))
+  remove(ref(database, "overviewReports/" + reportId))
   .then(() => {
     alert("Risk Overview report deleted successfully.");
   })
   .catch((error) => {
     alert("Error deleting report: " + error.message);
   });
-
-};
-
-window.exportCSV = function(){
-
-  if(currentFilteredReports.length === 0){
-    alert("No reports to export.");
-    return;
-  }
-
-  const headers = [
-    "Firebase ID",
-    "Title",
-    "Date",
-    "Department",
-    "Location",
-    "Reported By",
-    "Responsible",
-    "Due Date",
-    "Status",
-    "Initial Risk",
-    "Residual Risk",
-    "Hazard",
-    "Recommended Actions"
-  ];
-
-  const rows = currentFilteredReports.map(report => {
-
-    const row = [
-      report.firebaseId,
-      getValue(report, ["title","reportTitle","overviewTitle","eventTitle","riskTitle","name"], ""),
-      getValue(report, ["date","reportDate","createdAt","createdDate","submittedAt"], ""),
-      getValue(report, ["department","area","section"], ""),
-      getValue(report, ["location","station","airport","base"], ""),
-      getValue(report, ["reportedBy","reporter","createdBy","employeeName"], ""),
-      getValue(report, ["responsible","responsiblePerson","assignedTo","owner"], ""),
-      getValue(report, ["dueDate","targetDate","deadline"], ""),
-      getValue(report, ["status","reportStatus"], ""),
-      getValue(report, ["initialRisk","riskLevel","risk","initialRiskLevel"], ""),
-      getValue(report, ["residualRisk","residualRiskLevel","finalRisk"], ""),
-      getValue(report, ["hazard","hazardDescription","description","problem","riskDescription"], ""),
-      getValue(report, ["recommendedActions","actions","correctiveActions","recommendations","controlMeasures"], "")
-    ];
-
-    return row.map(value => `"${String(value || "").replaceAll('"','""')}"`).join(",");
-
-  });
-
-  const csvContent = [headers.join(","), ...rows].join("\n");
-
-  const blob = new Blob([csvContent], {type:"text/csv;charset=utf-8;"});
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "Risk-Overview-Database.csv";
-  link.click();
-
-  URL.revokeObjectURL(url);
 
 };
 
