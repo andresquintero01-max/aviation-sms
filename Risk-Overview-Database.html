@@ -1,1 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Risk Overview Database</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  font-family:'Segoe UI',Arial,sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#020617,#071f47,#1450b8);
+  padding:35px;
+}
+
+.container{
+  max-width:1250px;
+  margin:auto;
+  background:white;
+  padding:35px;
+  border-radius:28px;
+  box-shadow:0 20px 55px rgba(0,0,0,.35);
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  font-size:44px;
+  margin-bottom:8px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#64748b;
+  margin-bottom:25px;
+}
+
+.top-buttons{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:25px;
+}
+
+a,button{
+  border:none;
+  text-decoration:none;
+  padding:13px 24px;
+  border-radius:999px;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+  color:white;
+  background:#071f47;
+  transition:.25s;
+}
+
+a:hover,button:hover{
+  transform:translateY(-3px);
+  background:#1450b8;
+}
+
+.report{background:#f97316;}
+.home{background:#071f47;}
+.back{background:#475569;}
+.excel{background:#16a34a;}
+
+.filters{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  border:1px solid #cbd5e1;
+  font-size:15px;
+}
+
+.cards{
+  display:grid;
+  gap:18px;
+}
+
+.card{
+  border-radius:22px;
+  padding:22px;
+  background:#f8fafc;
+  border-left:8px solid #1450b8;
+  box-shadow:0 8px 22px rgba(0,0,0,.08);
+}
+
+.card-header{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:15px;
+}
+
+.card h2{
+  color:#071f47;
+  font-size:24px;
+}
+
+.badges{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.badge{
+  padding:8px 13px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:900;
+}
+
+.OPEN{background:#fee2e2;color:#991b1b;}
+.INPROGRESS{background:#fef9c3;color:#854d0e;}
+.CLOSED{background:#dcfce7;color:#166534;}
+
+.LOW{background:#dcfce7;color:#166534;}
+.MEDIUM{background:#fef9c3;color:#854d0e;}
+.HIGH{background:#ffedd5;color:#9a3412;}
+.EXTREME{background:#fee2e2;color:#991b1b;}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:15px 0;
+}
+
+.info{
+  background:white;
+  padding:13px;
+  border-radius:14px;
+  border:1px solid #e2e8f0;
+}
+
+.info strong{
+  display:block;
+  color:#334155;
+  margin-bottom:5px;
+}
+
+.text-block{
+  background:white;
+  padding:15px;
+  border-radius:14px;
+  border:1px solid #e2e8f0;
+  margin-top:10px;
+  white-space:pre-wrap;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+
+.view{background:#2563eb;}
+.print{background:#f97316;}
+.edit{background:#0f766e;}
+.delete{background:#dc2626;}
+
+.empty{
+  text-align:center;
+  color:#64748b;
+  font-size:18px;
+  padding:35px;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  padding:30px;
+  overflow:auto;
+  z-index:1000;
+}
+
+.modal-content{
+  max-width:1000px;
+  margin:auto;
+  background:white;
+  border-radius:25px;
+  padding:35px;
+}
+
+.close-modal{
+  float:right;
+  background:#dc2626;
+}
+
+.edit-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+  margin-top:20px;
+}
+
+.full{grid-column:1/3;}
+
+@media(max-width:850px){
+  .filters,.info-grid,.edit-grid{grid-template-columns:1fr;}
+  .full{grid-column:1/2;}
+  h1{font-size:34px;}
+}
+
+@media print{
+  body{background:white;padding:0;}
+  .container{box-shadow:none;border-radius:0;}
+  .top-buttons,.filters,.actions{display:none;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Risk Overview Database</h1>
+<p class="subtitle">Saved Risk Overview Reports - 371Q Professional Safety Software</p>
+
+<div class="top-buttons">
+  <a class="report" href="Risk-Overview-Report.html">➕ New Report</a>
+  <button class="excel" onclick="downloadCSV()">⬇ Export CSV</button>
+  <a class="back" href="Risk-Overview.html">⬅ Back</a>
+  <a class="home" href="index.html">🏠 Home</a>
+</div>
+
+<div class="filters">
+  <input id="searchInput" placeholder="Search by title, department, location, hazard..." oninput="renderReports()">
+
+  <select id="statusFilter" onchange="renderReports()">
+    <option value="">All Status</option>
+    <option value="OPEN">OPEN</option>
+    <option value="IN PROGRESS">IN PROGRESS</option>
+    <option value="CLOSED">CLOSED</option>
+  </select>
+
+  <select id="riskFilter" onchange="renderReports()">
+    <option value="">All Risk Levels</option>
+    <option value="LOW">LOW</option>
+    <option value="MEDIUM">MEDIUM</option>
+    <option value="HIGH">HIGH</option>
+    <option value="EXTREME">EXTREME</option>
+  </select>
+</div>
+
+<div id="records" class="cards"></div>
+
+</div>
+
+<div id="viewModal" class="modal">
+  <div class="modal-content" id="viewContent"></div>
+</div>
+
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeEdit()">X</button>
+    <h1>Edit Risk Overview</h1>
+
+    <div class="edit-grid">
+      <div>
+        <label>Report Title</label>
+        <input id="editTitle">
+      </div>
+
+      <div>
+        <label>Date</label>
+        <input id="editDate" type="date">
+      </div>
+
+      <div>
+        <label>Department / Area</label>
+        <input id="editDepartment">
+      </div>
+
+      <div>
+        <label>Location</label>
+        <input id="editLocation">
+      </div>
+
+      <div>
+        <label>Reported By</label>
+        <input id="editReportedBy">
+      </div>
+
+      <div>
+        <label>Status</label>
+        <select id="editStatus">
+          <option value="OPEN">OPEN</option>
+          <option value="IN PROGRESS">IN PROGRESS</option>
+          <option value="CLOSED">CLOSED</option>
+        </select>
+      </div>
+
+      <div class="full">
+        <label>Hazard Description</label>
+        <textarea id="editHazard"></textarea>
+      </div>
+
+      <div class="full">
+        <label>Potential Consequence</label>
+        <textarea id="editConsequence"></textarea>
+      </div>
+
+      <div class="full">
+        <label>Existing Controls</label>
+        <textarea id="editExistingControls"></textarea>
+      </div>
+
+      <div>
+        <label>Probability</label>
+        <select id="editProbability">
+          <option value="">Select</option>
+          <option value="1">1 - Rare</option>
+          <option value="2">2 - Unlikely</option>
+          <option value="3">3 - Possible</option>
+          <option value="4">4 - Likely</option>
+          <option value="5">5 - Almost Certain</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Severity</label>
+        <select id="editSeverity">
+          <option value="">Select</option>
+          <option value="1">1 - Negligible</option>
+          <option value="2">2 - Minor</option>
+          <option value="3">3 - Moderate</option>
+          <option value="4">4 - Major</option>
+          <option value="5">5 - Catastrophic</option>
+        </select>
+      </div>
+
+      <div class="full">
+        <label>Recommended Actions</label>
+        <textarea id="editActions"></textarea>
+      </div>
+
+      <div>
+        <label>Responsible Person</label>
+        <input id="editResponsible">
+      </div>
+
+      <div>
+        <label>Due Date</label>
+        <input id="editDueDate" type="date">
+      </div>
+
+      <div>
+        <label>Residual Probability</label>
+        <select id="editResidualProbability">
+          <option value="">Select</option>
+          <option value="1">1 - Rare</option>
+          <option value="2">2 - Unlikely</option>
+          <option value="3">3 - Possible</option>
+          <option value="4">4 - Likely</option>
+          <option value="5">5 - Almost Certain</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Residual Severity</label>
+        <select id="editResidualSeverity">
+          <option value="">Select</option>
+          <option value="1">1 - Negligible</option>
+          <option value="2">2 - Minor</option>
+          <option value="3">3 - Moderate</option>
+          <option value="4">4 - Major</option>
+          <option value="5">5 - Catastrophic</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="top-buttons" style="margin-top:25px;">
+      <button class="excel" onclick="saveEdit()">💾 Save Changes</button>
+      <button class="back" onclick="closeEdit()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let allReports = [];
+let editingId = null;
+
+function getCompanyId(){
+  return localStorage.getItem("companyId") || "defaultCompany";
+}
+
+function cleanStatus(status){
+  return (status || "OPEN").replace(/\s/g,"");
+}
+
+function classifyRisk(score){
+  score = Number(score);
+  if(!score) return "";
+  if(score <= 4) return "LOW";
+  if(score <= 9) return "MEDIUM";
+  if(score <= 16) return "HIGH";
+  return "EXTREME";
+}
+
+function safe(value){
+  return value || "";
+}
+
+function loadReports(){
+  const companyId = getCompanyId();
+  const reportsRef = ref(db, "riskOverview/" + companyId);
+
+  onValue(reportsRef, snapshot => {
+    allReports = [];
+
+    snapshot.forEach(child => {
+      const data = child.val();
+      data.id = child.key;
+      allReports.push(data);
+    });
+
+    allReports.sort((a,b) => new Date(b.createdAt || b.date || 0) - new Date(a.createdAt || a.date || 0));
+    renderReports();
+  });
+}
+
+window.renderReports = function(){
+  const container = document.getElementById("records");
+  const search = document.getElementById("searchInput").value.toLowerCase();
+  const statusFilter = document.getElementById("statusFilter").value;
+  const riskFilter = document.getElementById("riskFilter").value;
+
+  let filtered = allReports.filter(r => {
+    const text = `
+      ${r.title}
+      ${r.department}
+      ${r.location}
+      ${r.reportedBy}
+      ${r.hazard}
+      ${r.consequence}
+      ${r.actions}
+      ${r.responsible}
+    `.toLowerCase();
+
+    const matchSearch = text.includes(search);
+    const matchStatus = !statusFilter || r.status === statusFilter;
+    const matchRisk = !riskFilter || r.initialRiskLevel === riskFilter || r.residualRiskLevel === riskFilter;
+
+    return matchSearch && matchStatus && matchRisk;
+  });
+
+  if(filtered.length === 0){
+    container.innerHTML = `<div class="empty">No Risk Overview reports found.</div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(r => `
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>${safe(r.title)}</h2>
+          <p>${safe(r.date)} | ${safe(r.department)} | ${safe(r.location)}</p>
+        </div>
+
+        <div class="badges">
+          <span class="badge ${cleanStatus(r.status)}">${safe(r.status)}</span>
+          <span class="badge ${safe(r.initialRiskLevel)}">Initial: ${safe(r.initialRiskScore)} ${safe(r.initialRiskLevel)}</span>
+          <span class="badge ${safe(r.residualRiskLevel)}">Residual: ${safe(r.residualRiskScore)} ${safe(r.residualRiskLevel)}</span>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info"><strong>Reported By</strong>${safe(r.reportedBy)}</div>
+        <div class="info"><strong>Responsible</strong>${safe(r.responsible)}</div>
+        <div class="info"><strong>Due Date</strong>${safe(r.dueDate)}</div>
+      </div>
+
+      <div class="text-block"><strong>Hazard:</strong><br>${safe(r.hazard)}</div>
+      <div class="text-block"><strong>Recommended Actions:</strong><br>${safe(r.actions)}</div>
+
+      <div class="actions">
+        <button class="view" onclick="viewReport('${r.id}')">👁 View</button>
+        <button class="print" onclick="printReport('${r.id}')">🖨 Print</button>
+        <button class="edit" onclick="openEdit('${r.id}')">✏ Edit</button>
+        <button class="delete" onclick="deleteReport('${r.id}')">🗑 Delete</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+window.viewReport = function(id){
+  const r = allReports.find(item => item.id === id);
+  if(!r) return;
+
+  document.getElementById("viewContent").innerHTML = `
+    <button class="close-modal" onclick="closeView()">X</button>
+
+    <h1>${safe(r.title)}</h1>
+    <p class="subtitle">Risk Overview Full Report</p>
+
+    <div class="info-grid">
+      <div class="info"><strong>Date</strong>${safe(r.date)}</div>
+      <div class="info"><strong>Department</strong>${safe(r.department)}</div>
+      <div class="info"><strong>Location</strong>${safe(r.location)}</div>
+      <div class="info"><strong>Reported By</strong>${safe(r.reportedBy)}</div>
+      <div class="info"><strong>Status</strong>${safe(r.status)}</div>
+      <div class="info"><strong>Responsible</strong>${safe(r.responsible)}</div>
+      <div class="info"><strong>Due Date</strong>${safe(r.dueDate)}</div>
+      <div class="info"><strong>Initial Risk</strong>${safe(r.initialRiskScore)} - ${safe(r.initialRiskLevel)}</div>
+      <div class="info"><strong>Residual Risk</strong>${safe(r.residualRiskScore)} - ${safe(r.residualRiskLevel)}</div>
+    </div>
+
+    <div class="text-block"><strong>Hazard Description</strong><br>${safe(r.hazard)}</div>
+    <div class="text-block"><strong>Potential Consequence</strong><br>${safe(r.consequence)}</div>
+    <div class="text-block"><strong>Existing Controls</strong><br>${safe(r.existingControls)}</div>
+    <div class="text-block"><strong>Recommended Actions</strong><br>${safe(r.actions)}</div>
+
+    <div class="top-buttons" style="margin-top:25px;">
+      <button class="print" onclick="window.print()">🖨 Print</button>
+    </div>
+  `;
+
+  document.getElementById("viewModal").style.display = "block";
+}
+
+window.closeView = function(){
+  document.getElementById("viewModal").style.display = "none";
+}
+
+window.printReport = function(id){
+  viewReport(id);
+  setTimeout(() => window.print(), 300);
+}
+
+window.openEdit = function(id){
+  const r = allReports.find(item => item.id === id);
+  if(!r) return;
+
+  editingId = id;
+
+  document.getElementById("editTitle").value = safe(r.title);
+  document.getElementById("editDate").value = safe(r.date);
+  document.getElementById("editDepartment").value = safe(r.department);
+  document.getElementById("editLocation").value = safe(r.location);
+  document.getElementById("editReportedBy").value = safe(r.reportedBy);
+  document.getElementById("editStatus").value = safe(r.status) || "OPEN";
+
+  document.getElementById("editHazard").value = safe(r.hazard);
+  document.getElementById("editConsequence").value = safe(r.consequence);
+  document.getElementById("editExistingControls").value = safe(r.existingControls);
+
+  document.getElementById("editProbability").value = safe(r.probability);
+  document.getElementById("editSeverity").value = safe(r.severity);
+
+  document.getElementById("editActions").value = safe(r.actions);
+  document.getElementById("editResponsible").value = safe(r.responsible);
+  document.getElementById("editDueDate").value = safe(r.dueDate);
+
+  document.getElementById("editResidualProbability").value = safe(r.residualProbability);
+  document.getElementById("editResidualSeverity").value = safe(r.residualSeverity);
+
+  document.getElementById("editModal").style.display = "block";
+}
+
+window.closeEdit = function(){
+  editingId = null;
+  document.getElementById("editModal").style.display = "none";
+}
+
+window.saveEdit = async function(){
+  if(!editingId) return;
+
+  const companyId = getCompanyId();
+
+  const p = Number(document.getElementById("editProbability").value);
+  const s = Number(document.getElementById("editSeverity").value);
+  const rp = Number(document.getElementById("editResidualProbability").value);
+  const rs = Number(document.getElementById("editResidualSeverity").value);
+
+  const initialScore = p && s ? p * s : "";
+  const residualScore = rp && rs ? rp * rs : "";
+
+  const updatedData = {
+    title:document.getElementById("editTitle").value,
+    date:document.getElementById("editDate").value,
+    department:document.getElementById("editDepartment").value,
+    location:document.getElementById("editLocation").value,
+    reportedBy:document.getElementById("editReportedBy").value,
+    status:document.getElementById("editStatus").value,
+
+    hazard:document.getElementById("editHazard").value,
+    consequence:document.getElementById("editConsequence").value,
+    existingControls:document.getElementById("editExistingControls").value,
+
+    probability:p || "",
+    severity:s || "",
+    initialRiskScore:initialScore,
+    initialRiskLevel:initialScore ? classifyRisk(initialScore) : "",
+
+    actions:document.getElementById("editActions").value,
+    responsible:document.getElementById("editResponsible").value,
+    dueDate:document.getElementById("editDueDate").value,
+
+    residualProbability:rp || "",
+    residualSeverity:rs || "",
+    residualRiskScore:residualScore,
+    residualRiskLevel:residualScore ? classifyRisk(residualScore) : "",
+
+    updatedAt:new Date().toISOString()
+  };
+
+  await update(ref(db, "riskOverview/" + companyId + "/" + editingId), updatedData);
+
+  closeEdit();
+  alert("Report updated successfully.");
+}
+
+window.deleteReport = async function(id){
+  const confirmDelete = confirm("Are you sure you want to delete this Risk Overview report?");
+  if(!confirmDelete) return;
+
+  const companyId = getCompanyId();
+  await remove(ref(db, "riskOverview/" + companyId + "/" + id));
+
+  alert("Report deleted successfully.");
+}
+
+window.downloadCSV = function(){
+  if(allReports.length === 0){
+    alert("No reports to export.");
+    return;
+  }
+
+  const headers = [
+    "Title","Date","Department","Location","Reported By","Status",
+    "Hazard","Consequence","Existing Controls",
+    "Probability","Severity","Initial Risk Score","Initial Risk Level",
+    "Actions","Responsible","Due Date",
+    "Residual Probability","Residual Severity","Residual Risk Score","Residual Risk Level",
+    "Created At"
+  ];
+
+  const rows = allReports.map(r => [
+    safe(r.title),safe(r.date),safe(r.department),safe(r.location),safe(r.reportedBy),safe(r.status),
+    safe(r.hazard),safe(r.consequence),safe(r.existingControls),
+    safe(r.probability),safe(r.severity),safe(r.initialRiskScore),safe(r.initialRiskLevel),
+    safe(r.actions),safe(r.responsible),safe(r.dueDate),
+    safe(r.residualProbability),safe(r.residualSeverity),safe(r.residualRiskScore),safe(r.residualRiskLevel),
+    safe(r.createdAt)
+  ]);
+
+  let csv = headers.join(",") + "\n";
+  rows.forEach(row => {
+    csv += row.map(value => `"${String(value).replace(/"/g,'""')}"`).join(",") + "\n";
+  });
+
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "Risk-Overview-Database.csv";
+  link.click();
+
+  URL.revokeObjectURL(url);
+}
+
+loadReports();
+</script>
+
+</body>
+</html>
