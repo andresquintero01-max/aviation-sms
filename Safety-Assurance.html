@@ -40,7 +40,6 @@ body{
     text-align:center;
     position:relative;
     overflow:hidden;
-    animation:fadeIn 0.8s ease;
 }
 
 .main-container::before{
@@ -101,14 +100,12 @@ h1{
     color:#071f47;
     margin-bottom:12px;
     font-weight:900;
-    letter-spacing:1px;
 }
 
 .subtitle{
     font-size:21px;
     color:#56657d;
     margin-bottom:22px;
-    font-weight:500;
 }
 
 .title-line{
@@ -189,7 +186,6 @@ h1{
     font-size:34px;
     font-weight:900;
     margin-bottom:8px;
-    color:#071f47;
 }
 
 .btn-description{
@@ -202,11 +198,6 @@ h1{
     font-size:58px;
     color:#1450b8;
     text-align:center;
-    transition:0.3s;
-}
-
-.btn:hover .arrow{
-    transform:translateX(8px);
 }
 
 .bottom-buttons{
@@ -228,8 +219,6 @@ h1{
     display:flex;
     align-items:center;
     justify-content:center;
-    transition:0.3s;
-    box-shadow:0 12px 26px rgba(0,0,0,0.26);
 }
 
 .home-btn{
@@ -240,11 +229,6 @@ h1{
     background:linear-gradient(135deg,#d83b00,#ff9800);
 }
 
-.home-btn:hover,
-.dashboard-btn:hover{
-    transform:translateY(-4px);
-}
-
 .footer{
     margin-top:35px;
     color:#51617b;
@@ -253,58 +237,29 @@ h1{
     font-weight:900;
 }
 
-@keyframes fadeIn{
-    from{
-        opacity:0;
-        transform:translateY(20px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+@media(max-width:850px){
+
+.btn{
+grid-template-columns:1fr;
+text-align:center;
 }
 
-@media(max-width:850px){
-    body{
-        padding:20px;
-    }
+.icon{
+margin:auto;
+}
 
-    .main-container{
-        padding:35px 22px;
-    }
+.arrow{
+display:none;
+}
 
-    h1{
-        font-size:46px;
-    }
+.bottom-buttons{
+grid-template-columns:1fr;
+}
 
-    .subtitle{
-        font-size:18px;
-    }
+h1{
+font-size:46px;
+}
 
-    .btn{
-        grid-template-columns:1fr;
-        text-align:center;
-    }
-
-    .icon{
-        margin:auto;
-    }
-
-    .arrow{
-        display:none;
-    }
-
-    .btn-title{
-        font-size:28px;
-    }
-
-    .btn-description{
-        font-size:16px;
-    }
-
-    .bottom-buttons{
-        grid-template-columns:1fr;
-    }
 }
 </style>
 </head>
@@ -314,85 +269,91 @@ h1{
 <div class="main-container">
 <div class="content">
 
-    <div class="logo">✔️</div>
+<div class="logo">✔️</div>
 
-    <div class="badge">SAFETY ASSURANCE</div>
+<div class="badge">SAFETY ASSURANCE</div>
 
-    <h1>Safety Assurance</h1>
+<h1>Safety Assurance</h1>
 
-    <div class="subtitle">
-        Audits and safety performance monitoring
-    </div>
+<div class="subtitle">
+Audits and safety performance monitoring
+</div>
 
-    <div class="title-line"></div>
+<div class="title-line"></div>
 
-    <div class="menu">
+<div class="menu">
 
-        <a class="btn" href="Safety-Performance-Indicators.html">
-            <div class="icon">📈</div>
+<a class="btn" href="Safety-Performance-Indicators.html">
 
-            <div>
-                <div class="btn-title">
-                    Safety Performance Monitoring
-                </div>
+<div class="icon">📈</div>
 
-                <div class="btn-description">
-                    Monitor KPIs, inspections, trends and operational safety performance
-                </div>
-            </div>
+<div>
+<div class="btn-title">
+Safety Performance Monitoring
+</div>
 
-            <div class="arrow">›</div>
-        </a>
+<div class="btn-description">
+Monitor KPIs, inspections, trends and operational safety performance
+</div>
+</div>
 
-        <a class="btn" href="#">
-            <div class="icon">🔍</div>
+<div class="arrow">›</div>
 
-            <div>
-                <div class="btn-title">
-                    Audits
-                </div>
+</a>
 
-                <div class="btn-description">
-                    Internal audits, compliance reviews and quality evaluations
-                </div>
-            </div>
+<a class="btn" href="Audits.html">
 
-            <div class="arrow">›</div>
-        </a>
+<div class="icon">🔍</div>
 
-        <a class="btn" href="Safety-Assurance-Management-of-Change.html">
-            <div class="icon">📋</div>
+<div>
+<div class="btn-title">
+Audits
+</div>
 
-            <div>
-                <div class="btn-title">
-                    Management of Change
-                </div>
+<div class="btn-description">
+Internal audits, compliance reviews and quality evaluations
+</div>
+</div>
 
-                <div class="btn-description">
-                    Evaluate operational changes, risk impacts and safety mitigation actions
-                </div>
-            </div>
+<div class="arrow">›</div>
 
-            <div class="arrow">›</div>
-        </a>
+</a>
 
-    </div>
+<a class="btn" href="Safety-Assurance-Management-of-Change.html">
 
-    <div class="bottom-buttons">
+<div class="icon">📋</div>
 
-        <a class="home-btn" href="index.html">
-            🏠 Home
-        </a>
+<div>
+<div class="btn-title">
+Management of Change
+</div>
 
-        <a class="dashboard-btn" href="Dashboard.html">
-            📊 Dashboard
-        </a>
+<div class="btn-description">
+Evaluate operational changes, risk impacts and safety mitigation actions
+</div>
+</div>
 
-    </div>
+<div class="arrow">›</div>
 
-    <div class="footer">
-        AVIATION SAFETY MANAGEMENT PLATFORM
-    </div>
+</a>
+
+</div>
+
+<div class="bottom-buttons">
+
+<a class="home-btn" href="index.html">
+🏠 Home
+</a>
+
+<a class="dashboard-btn" href="Dashboard.html">
+📊 Dashboard
+</a>
+
+</div>
+
+<div class="footer">
+AVIATION SAFETY MANAGEMENT PLATFORM
+</div>
 
 </div>
 </div>
