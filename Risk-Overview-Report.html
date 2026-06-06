@@ -1,1 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Risk Overview Report</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  font-family:'Segoe UI',Arial,sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#020617,#071f47,#1450b8);
+  padding:35px;
+}
+
+.container{
+  max-width:1150px;
+  margin:auto;
+  background:white;
+  padding:40px;
+  border-radius:28px;
+  box-shadow:0 20px 55px rgba(0,0,0,.35);
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  font-size:46px;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#64748b;
+  margin-bottom:30px;
+}
+
+.section{
+  margin-top:28px;
+  padding:25px;
+  border-radius:22px;
+  background:#f8fafc;
+  border-left:8px solid #1450b8;
+}
+
+.section h2{
+  color:#071f47;
+  margin-bottom:18px;
+  font-size:24px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+
+label{
+  font-weight:700;
+  color:#334155;
+  margin-bottom:6px;
+  display:block;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #cbd5e1;
+  font-size:15px;
+}
+
+textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
+.full{grid-column:1/3;}
+
+.risk-box{
+  margin-top:18px;
+  padding:18px;
+  border-radius:16px;
+  font-size:22px;
+  font-weight:800;
+  text-align:center;
+  background:#e2e8f0;
+  color:#0f172a;
+}
+
+.low{background:#dcfce7;color:#166534;}
+.medium{background:#fef9c3;color:#854d0e;}
+.high{background:#ffedd5;color:#9a3412;}
+.extreme{background:#fee2e2;color:#991b1b;}
+
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-top:35px;
+}
+
+button,a{
+  border:none;
+  text-decoration:none;
+  padding:15px 28px;
+  border-radius:999px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  color:white;
+  background:#071f47;
+  transition:.25s;
+}
+
+button:hover,a:hover{
+  transform:translateY(-3px);
+  background:#1450b8;
+}
+
+.save{background:#16a34a;}
+.print{background:#f97316;}
+.database{background:#2563eb;}
+.back{background:#475569;}
+
+.message{
+  margin-top:20px;
+  text-align:center;
+  font-weight:800;
+}
+
+@media(max-width:750px){
+  .grid{grid-template-columns:1fr;}
+  .full{grid-column:1/2;}
+  h1{font-size:34px;}
+}
+
+@media print{
+  body{background:white;padding:0;}
+  .container{box-shadow:none;border-radius:0;}
+  .buttons{display:none;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Risk Overview Report</h1>
+<p class="subtitle">371Q Professional Safety Software</p>
+
+<div class="section">
+<h2>General Information</h2>
+<div class="grid">
+  <div>
+    <label>Report Title</label>
+    <input id="title" placeholder="Enter report title">
+  </div>
+
+  <div>
+    <label>Date</label>
+    <input id="date" type="date">
+  </div>
+
+  <div>
+    <label>Department / Area</label>
+    <input id="department" placeholder="Maintenance, QA, Operations...">
+  </div>
+
+  <div>
+    <label>Location</label>
+    <input id="location" placeholder="Airport, Hangar, Station...">
+  </div>
+
+  <div>
+    <label>Reported By</label>
+    <input id="reportedBy" placeholder="Name">
+  </div>
+
+  <div>
+    <label>Status</label>
+    <select id="status">
+      <option value="OPEN">OPEN</option>
+      <option value="IN PROGRESS">IN PROGRESS</option>
+      <option value="CLOSED">CLOSED</option>
+    </select>
+  </div>
+</div>
+</div>
+
+<div class="section">
+<h2>Hazard Information</h2>
+<div class="grid">
+  <div class="full">
+    <label>Hazard Description</label>
+    <textarea id="hazard" placeholder="Describe the hazard..."></textarea>
+  </div>
+
+  <div class="full">
+    <label>Potential Consequence</label>
+    <textarea id="consequence" placeholder="Describe the possible consequence..."></textarea>
+  </div>
+
+  <div class="full">
+    <label>Existing Controls</label>
+    <textarea id="existingControls" placeholder="Describe current controls..."></textarea>
+  </div>
+</div>
+</div>
+
+<div class="section">
+<h2>Initial Risk Assessment</h2>
+<div class="grid">
+  <div>
+    <label>Probability</label>
+    <select id="probability" onchange="calculateRisk()">
+      <option value="">Select</option>
+      <option value="1">1 - Rare</option>
+      <option value="2">2 - Unlikely</option>
+      <option value="3">3 - Possible</option>
+      <option value="4">4 - Likely</option>
+      <option value="5">5 - Almost Certain</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Severity</label>
+    <select id="severity" onchange="calculateRisk()">
+      <option value="">Select</option>
+      <option value="1">1 - Negligible</option>
+      <option value="2">2 - Minor</option>
+      <option value="3">3 - Moderate</option>
+      <option value="4">4 - Major</option>
+      <option value="5">5 - Catastrophic</option>
+    </select>
+  </div>
+</div>
+
+<div id="initialRiskBox" class="risk-box">Initial Risk: Not calculated</div>
+</div>
+
+<div class="section">
+<h2>Mitigation Actions</h2>
+<div class="grid">
+  <div class="full">
+    <label>Recommended Actions</label>
+    <textarea id="actions" placeholder="Describe corrective or preventive actions..."></textarea>
+  </div>
+
+  <div>
+    <label>Responsible Person</label>
+    <input id="responsible" placeholder="Name">
+  </div>
+
+  <div>
+    <label>Due Date</label>
+    <input id="dueDate" type="date">
+  </div>
+</div>
+</div>
+
+<div class="section">
+<h2>Residual Risk Assessment</h2>
+<div class="grid">
+  <div>
+    <label>Residual Probability</label>
+    <select id="residualProbability" onchange="calculateRisk()">
+      <option value="">Select</option>
+      <option value="1">1 - Rare</option>
+      <option value="2">2 - Unlikely</option>
+      <option value="3">3 - Possible</option>
+      <option value="4">4 - Likely</option>
+      <option value="5">5 - Almost Certain</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Residual Severity</label>
+    <select id="residualSeverity" onchange="calculateRisk()">
+      <option value="">Select</option>
+      <option value="1">1 - Negligible</option>
+      <option value="2">2 - Minor</option>
+      <option value="3">3 - Moderate</option>
+      <option value="4">4 - Major</option>
+      <option value="5">5 - Catastrophic</option>
+    </select>
+  </div>
+</div>
+
+<div id="residualRiskBox" class="risk-box">Residual Risk: Not calculated</div>
+</div>
+
+<div class="buttons">
+  <button class="save" onclick="saveReport()">💾 Save Report</button>
+  <button class="print" onclick="window.print()">🖨 Print</button>
+  <a class="database" href="Risk-Overview-Database.html">🗂 Database</a>
+  <a class="back" href="Risk-Overview.html">⬅ Back</a>
+  <a href="index.html">🏠 Home</a>
+</div>
+
+<div id="message" class="message"></div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+function getCompanyId(){
+  return localStorage.getItem("companyId") || "defaultCompany";
+}
+
+function classifyRisk(score){
+  if(score <= 4) return "LOW";
+  if(score <= 9) return "MEDIUM";
+  if(score <= 16) return "HIGH";
+  return "EXTREME";
+}
+
+function setRiskBox(boxId, label, score){
+  const box = document.getElementById(boxId);
+
+  box.className = "risk-box";
+
+  if(!score){
+    box.innerText = label + ": Not calculated";
+    return;
+  }
+
+  const level = classifyRisk(score);
+
+  if(level === "LOW") box.classList.add("low");
+  if(level === "MEDIUM") box.classList.add("medium");
+  if(level === "HIGH") box.classList.add("high");
+  if(level === "EXTREME") box.classList.add("extreme");
+
+  box.innerText = label + ": " + score + " - " + level;
+}
+
+window.calculateRisk = function(){
+  const p = Number(document.getElementById("probability").value);
+  const s = Number(document.getElementById("severity").value);
+  const rp = Number(document.getElementById("residualProbability").value);
+  const rs = Number(document.getElementById("residualSeverity").value);
+
+  const initialScore = p && s ? p * s : null;
+  const residualScore = rp && rs ? rp * rs : null;
+
+  setRiskBox("initialRiskBox", "Initial Risk", initialScore);
+  setRiskBox("residualRiskBox", "Residual Risk", residualScore);
+}
+
+window.saveReport = async function(){
+  const title = document.getElementById("title").value.trim();
+
+  if(!title){
+    document.getElementById("message").style.color = "red";
+    document.getElementById("message").innerText = "Please enter a report title.";
+    return;
+  }
+
+  const p = Number(document.getElementById("probability").value);
+  const s = Number(document.getElementById("severity").value);
+  const rp = Number(document.getElementById("residualProbability").value);
+  const rs = Number(document.getElementById("residualSeverity").value);
+
+  const initialScore = p && s ? p * s : "";
+  const residualScore = rp && rs ? rp * rs : "";
+
+  const companyId = getCompanyId();
+  const newRef = push(ref(db, "riskOverview/" + companyId));
+
+  const data = {
+    id:newRef.key,
+    title:title,
+    date:document.getElementById("date").value,
+    department:document.getElementById("department").value,
+    location:document.getElementById("location").value,
+    reportedBy:document.getElementById("reportedBy").value,
+    status:document.getElementById("status").value,
+
+    hazard:document.getElementById("hazard").value,
+    consequence:document.getElementById("consequence").value,
+    existingControls:document.getElementById("existingControls").value,
+
+    probability:p || "",
+    severity:s || "",
+    initialRiskScore:initialScore,
+    initialRiskLevel:initialScore ? classifyRisk(initialScore) : "",
+
+    actions:document.getElementById("actions").value,
+    responsible:document.getElementById("responsible").value,
+    dueDate:document.getElementById("dueDate").value,
+
+    residualProbability:rp || "",
+    residualSeverity:rs || "",
+    residualRiskScore:residualScore,
+    residualRiskLevel:residualScore ? classifyRisk(residualScore) : "",
+
+    createdAt:new Date().toISOString()
+  };
+
+  try{
+    await set(newRef, data);
+
+    document.getElementById("message").style.color = "green";
+    document.getElementById("message").innerText = "Risk Overview Report saved successfully.";
+
+    setTimeout(()=>{
+      window.location.href = "Risk-Overview-Database.html";
+    },1200);
+
+  }catch(error){
+    document.getElementById("message").style.color = "red";
+    document.getElementById("message").innerText = "Error saving report: " + error.message;
+  }
+}
+
+document.getElementById("date").valueAsDate = new Date();
+</script>
+
+</body>
+</html>
