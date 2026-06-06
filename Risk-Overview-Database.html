@@ -725,7 +725,8 @@ window.applyFilter = function(){
   renderReports(filtered);
 };
 
-const reportsRef = ref(database, "overviewReports");
+const companyId = localStorage.getItem("companyId") || "defaultCompany";
+const reportsRef = ref(database, "riskOverview/" + companyId);
 
 onValue(reportsRef, (snapshot) => {
 
@@ -759,7 +760,7 @@ window.toggleStatus = function(reportId, currentStatus){
 
   const newStatus = currentStatus === "Open" ? "Closed" : "Open";
 
-  update(ref(database, "overviewReports/" + reportId), {
+  update(ref(database, "riskOverview/" + companyId + "/" + reportId), {
     status: newStatus,
     updatedAt: new Date().toLocaleString()
   })
@@ -780,7 +781,7 @@ window.deleteReport = function(reportId){
 
   if(!confirmDelete) return;
 
-  remove(ref(database, "overviewReports/" + reportId))
+  remove(ref(database, "riskOverview/" + companyId + "/" + reportId))
   .then(() => {
     alert("Risk Overview report deleted successfully.");
   })
