@@ -492,7 +492,7 @@ function getValue(report, fields, fallback="N/A"){
 }
 
 function statusClass(status){
-  return String(status || "Open")
+  return String(status || "OPEN")
     .toLowerCase()
     .replaceAll(" ","-");
 }
@@ -620,9 +620,10 @@ function renderReports(reports){
           </div>
         </div>
 
-        <span class="status ${statusClass(status)}">
-          ${clean(status)}
-        </span>
+        <button class="status ${statusClass(status)}"
+        onclick="toggleStatus('${clean(firebaseId)}','${clean(status)}')">
+        ${clean(status)}
+        </button>
       </div>
 
       <div class="details-grid">
@@ -673,10 +674,6 @@ function renderReports(reports){
 
         <button class="btn open-btn" onclick="openReport('${clean(firebaseId)}')">
           Open Report
-        </button>
-
-        <button class="btn status-btn" onclick="toggleStatus('${clean(firebaseId)}', '${clean(status)}')">
-          ${status === "Open" ? "Close Report" : "Open Report"}
         </button>
 
         <button class="btn delete-btn" onclick="deleteReport('${clean(firebaseId)}')">
@@ -758,11 +755,12 @@ window.openReport = function(reportId){
 
 window.toggleStatus = function(reportId, currentStatus){
 
-  const newStatus = currentStatus === "Open" ? "Closed" : "Open";
+  const cleanStatus = String(currentStatus || "").toUpperCase();
+  const newStatus = cleanStatus === "OPEN" ? "CLOSED" : "OPEN";
 
   update(ref(database, "riskOverview/" + companyId + "/" + reportId), {
     status: newStatus,
-    updatedAt: new Date().toLocaleString()
+    updatedAt: new Date().toISOString()
   })
   .then(() => {
     alert("Report status changed to " + newStatus + ".");
