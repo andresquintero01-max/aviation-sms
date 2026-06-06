@@ -6,289 +6,398 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
   font-family:'Segoe UI',Arial,sans-serif;
   min-height:100vh;
   background:
-    radial-gradient(circle at top left,rgba(255,152,0,.24),transparent 30%),
-    radial-gradient(circle at bottom right,rgba(37,99,235,.42),transparent 38%),
-    linear-gradient(135deg,#020617,#071f47,#1450b8);
+  radial-gradient(circle at top left, rgba(255,152,0,0.30), transparent 30%),
+  radial-gradient(circle at bottom right, rgba(28,99,219,0.45), transparent 38%),
+  linear-gradient(rgba(5,20,55,0.86),rgba(5,20,55,0.94)),
+  url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
   padding:35px;
 }
 
 .container{
-  max-width:1280px;
+  max-width:1300px;
   margin:auto;
-  background:rgba(255,255,255,.96);
-  padding:38px;
-  border-radius:34px;
-  box-shadow:0 25px 70px rgba(0,0,0,.38);
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(14px);
+  padding:50px;
+  border-radius:40px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.45);
+  position:relative;
+  overflow:hidden;
 }
 
-.header{
-  text-align:center;
-  margin-bottom:28px;
+.container::before{
+  content:"";
+  position:absolute;
+  width:480px;
+  height:480px;
+  background:radial-gradient(circle,rgba(20,80,184,0.18),transparent 70%);
+  top:-200px;
+  right:-160px;
 }
 
-.header-icon{font-size:54px;}
+.container::after{
+  content:"";
+  position:absolute;
+  width:340px;
+  height:340px;
+  background:radial-gradient(circle,rgba(255,152,0,0.18),transparent 70%);
+  bottom:-150px;
+  left:-120px;
+}
+
+.content{position:relative;z-index:2;}
+
+.logo{
+  width:112px;
+  height:112px;
+  margin:0 auto 20px;
+  border-radius:32px;
+  background:linear-gradient(135deg,#071f47,#1450b8,#ff9800);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:50px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.30);
+}
+
+.badge{
+  display:block;
+  width:max-content;
+  margin:0 auto 16px;
+  background:#eaf2ff;
+  color:#071f47;
+  padding:10px 24px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:1.8px;
+}
 
 h1{
+  text-align:center;
   color:#071f47;
-  font-size:46px;
-  margin-top:5px;
+  font-size:58px;
+  margin-bottom:10px;
+  font-weight:900;
 }
 
-.subtitle{
-  color:#64748b;
-  margin-top:8px;
-  font-size:17px;
+.description{
+  text-align:center;
+  color:#56657d;
+  font-size:19px;
+  margin-bottom:28px;
+  font-weight:500;
 }
 
-.top-buttons,.actions,.modal-buttons{
+.title-line{
+  width:230px;
+  height:6px;
+  margin:0 auto 32px;
+  border-radius:10px;
+  background:linear-gradient(90deg,transparent,#1450b8,#ff9800,transparent);
+}
+
+.filter-box{
+  background:#f8fbff;
+  border:1px solid #e5e7eb;
+  padding:22px;
+  border-radius:26px;
+  margin-bottom:26px;
+  box-shadow:0 14px 32px rgba(0,0,0,0.10);
+}
+
+.filter-title{
+  font-weight:900;
+  color:#071f47;
+  margin-bottom:12px;
+  font-size:18px;
+}
+
+.filter-row{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  gap:14px;
+}
+
+.search-input,
+.select-input{
+  width:100%;
+  padding:16px;
+  border:1px solid #cbd5e1;
+  border-radius:16px;
+  font-size:16px;
+  outline:none;
+  background:white;
+}
+
+.search-input:focus,
+.select-input:focus{
+  border-color:#1450b8;
+  box-shadow:0 0 0 4px rgba(20,80,184,0.12);
+}
+
+.top-buttons,
+.bottom-buttons{
   display:flex;
   justify-content:center;
   gap:14px;
   flex-wrap:wrap;
+  margin-bottom:30px;
+  background:#f8fbff;
+  padding:18px;
+  border-radius:24px;
+  border:1px solid #e5e7eb;
 }
 
-.top-buttons{margin-bottom:28px;}
+.bottom-buttons{
+  margin-top:40px;
+  margin-bottom:0;
+}
 
-a,button{
+.btn{
   border:none;
-  text-decoration:none;
-  padding:14px 24px;
-  border-radius:999px;
+  color:white;
+  padding:15px 28px;
+  border-radius:16px;
   font-size:15px;
   font-weight:900;
   cursor:pointer;
-  color:white;
-  background:#071f47;
-  transition:.25s;
+  transition:0.25s;
+  box-shadow:0 10px 22px rgba(0,0,0,0.22);
 }
 
-a:hover,button:hover{
+.btn:hover{
   transform:translateY(-3px);
-  filter:brightness(1.08);
 }
 
-.report{background:#f97316;}
-.home{background:#071f47;}
-.back{background:#475569;}
-.excel{background:#16a34a;}
-.view{background:#2563eb;}
-.print{background:#f97316;}
-.edit{background:#0f766e;}
-.delete{background:#dc2626;}
-
-.filters{
-  display:grid;
-  grid-template-columns:2fr 1fr 1fr;
-  gap:15px;
-  margin-bottom:28px;
-  background:#f8fafc;
-  padding:18px;
-  border-radius:22px;
-  border:1px solid #dbeafe;
+.overview-btn{
+  background:linear-gradient(135deg,#d83b00,#ff9800);
 }
 
-input,select,textarea{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:1px solid #cbd5e1;
-  font-size:15px;
-  background:white;
+.home-btn{
+  background:linear-gradient(135deg,#071f47,#1450b8);
 }
 
-textarea{
-  min-height:110px;
-  resize:vertical;
+.back-btn{
+  background:linear-gradient(135deg,#334155,#475569);
 }
 
-.cards{
-  display:grid;
-  gap:24px;
+.export-btn{
+  background:linear-gradient(135deg,#047857,#22c55e);
 }
 
-.card{
+.open-btn{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+}
+
+.print-btn{
+  background:linear-gradient(135deg,#d83b00,#ff9800);
+}
+
+.edit-btn{
+  background:linear-gradient(135deg,#0f766e,#14b8a6);
+}
+
+.status-btn{
+  background:linear-gradient(135deg,#6b21a8,#9333ea);
+}
+
+.delete-btn{
+  background:linear-gradient(135deg,#dc2626,#ef4444);
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  padding:0;
+  font-size:20px;
+}
+
+.counter{
+  text-align:center;
+  color:#071f47;
+  font-weight:900;
+  margin-bottom:20px;
+  font-size:17px;
+}
+
+.report-card{
+  background:linear-gradient(135deg,#ffffff,#f8fbff);
+  border-radius:28px;
+  padding:26px;
+  margin-bottom:24px;
+  box-shadow:0 18px 45px rgba(0,0,0,0.14);
+  border-left:10px solid #1450b8;
+  transition:0.25s;
   position:relative;
   overflow:hidden;
-  border-radius:28px;
-  padding:28px;
-  background:linear-gradient(180deg,#ffffff,#f8fafc);
-  border:1px solid #dbeafe;
-  border-left:9px solid #2563eb;
-  box-shadow:0 16px 35px rgba(15,23,42,.13);
 }
 
-.card::before{
+.report-card::before{
   content:"";
   position:absolute;
-  top:-80px;
-  right:-80px;
-  width:190px;
-  height:190px;
-  background:rgba(37,99,235,.08);
-  border-radius:50%;
+  width:320px;
+  height:320px;
+  background:radial-gradient(circle,rgba(20,80,184,0.10),transparent 70%);
+  top:-160px;
+  right:-120px;
+}
+
+.report-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 26px 60px rgba(0,0,0,0.20);
+}
+
+.card-header,
+.details-grid,
+.actions{
+  position:relative;
+  z-index:2;
 }
 
 .card-header{
-  position:relative;
   display:flex;
   justify-content:space-between;
-  gap:18px;
+  align-items:flex-start;
+  gap:20px;
   flex-wrap:wrap;
   margin-bottom:18px;
 }
 
-.card h2{
-  color:#071f47;
+.event-title{
   font-size:26px;
-  margin-bottom:5px;
+  font-weight:900;
+  color:#071f47;
+  margin-bottom:6px;
 }
 
 .meta{
-  color:#334155;
+  color:#56657d;
   font-size:15px;
+  line-height:1.7;
 }
 
-.badges{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:flex-start;
-}
-
-.badge{
-  padding:10px 15px;
+.status{
+  display:inline-block;
+  padding:8px 18px;
   border-radius:999px;
+  color:white;
   font-size:13px;
   font-weight:900;
+  box-shadow:0 8px 18px rgba(0,0,0,0.18);
 }
 
-.OPEN{background:#fee2e2;color:#991b1b;}
-.INPROGRESS{background:#fef9c3;color:#854d0e;}
-.CLOSED{background:#dcfce7;color:#166534;}
+.status.open{background:linear-gradient(135deg,#047857,#22c55e);}
+.status.closed{background:linear-gradient(135deg,#475569,#64748b);}
+.status.in-progress{background:linear-gradient(135deg,#071f47,#1450b8);}
+.status.pending{background:linear-gradient(135deg,#d83b00,#ff9800);}
 
-.LOW{background:#dcfce7;color:#166534;}
-.MEDIUM{background:#fef9c3;color:#854d0e;}
-.HIGH{background:#ffedd5;color:#9a3412;}
-.EXTREME{background:#fee2e2;color:#991b1b;}
+.risk-pill{
+  display:inline-block;
+  padding:8px 15px;
+  border-radius:999px;
+  color:white;
+  font-size:13px;
+  font-weight:900;
+  margin-left:6px;
+  background:linear-gradient(135deg,#071f47,#1450b8);
+}
 
-.info-grid{
+.risk-high{background:linear-gradient(135deg,#dc2626,#ef4444);}
+.risk-medium{background:linear-gradient(135deg,#d83b00,#ff9800);}
+.risk-low{background:linear-gradient(135deg,#047857,#22c55e);}
+.risk-na{background:linear-gradient(135deg,#475569,#64748b);}
+
+.details-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:14px;
-  margin:18px 0;
+  margin-top:18px;
 }
 
-.info{
-  background:white;
-  padding:16px;
-  border-radius:17px;
-  border:1px solid #e2e8f0;
-  box-shadow:0 6px 16px rgba(15,23,42,.05);
-}
-
-.info strong{
-  display:block;
-  color:#071f47;
-  margin-bottom:7px;
-}
-
-.text-block{
-  background:white;
-  padding:18px;
+.detail-box{
+  background:#f4f7fb;
+  padding:15px;
   border-radius:18px;
-  border:1px solid #e2e8f0;
-  margin-top:12px;
-  white-space:pre-wrap;
-  line-height:1.5;
+  border:1px solid #dce3ef;
 }
 
-.text-block strong{
+.detail-label{
+  font-size:12px;
+  color:#64748b;
+  font-weight:900;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+.detail-value{
+  font-size:15px;
   color:#071f47;
+  font-weight:800;
+  word-break:break-word;
+}
+
+.long-box{
+  grid-column:1/-1;
 }
 
 .actions{
-  justify-content:flex-start;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
   margin-top:22px;
+  align-items:center;
 }
 
-.empty{
-  text-align:center;
-  color:#64748b;
-  font-size:18px;
-  padding:45px;
-  background:#f8fafc;
+.separator-buttons{
+  margin:30px 0;
+  padding:18px;
+  background:rgba(255,255,255,0.18);
   border-radius:24px;
+  border:1px solid rgba(255,255,255,0.30);
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
+  backdrop-filter:blur(8px);
 }
 
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(2,6,23,.72);
-  padding:30px;
-  overflow:auto;
-  z-index:1000;
-}
-
-.modal-content{
-  max-width:1000px;
-  margin:auto;
-  background:white;
-  border-radius:30px;
-  padding:35px;
-  box-shadow:0 25px 70px rgba(0,0,0,.42);
-}
-
-.modal-title{
+.no-data{
   text-align:center;
-  color:#071f47;
-  font-size:36px;
-  margin-bottom:8px;
+  color:#56657d;
+  font-size:20px;
+  margin-top:35px;
+  background:#f8fbff;
+  padding:42px;
+  border-radius:24px;
+  border:1px solid #e5e7eb;
+  font-weight:700;
 }
 
-.close-modal{
-  float:right;
-  background:#dc2626;
-  padding:10px 16px;
+.footer{
+  margin-top:35px;
+  text-align:center;
+  color:#51617b;
+  font-size:14px;
+  letter-spacing:3px;
+  font-weight:900;
 }
 
-.edit-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:16px;
-  margin-top:24px;
-}
-
-.full{grid-column:1/3;}
-
-label{
-  font-weight:800;
-  color:#334155;
-  margin-bottom:7px;
-  display:block;
-}
-
-.modal-buttons{
-  margin-top:28px;
-}
-
-@media(max-width:850px){
-  .filters,.info-grid,.edit-grid{grid-template-columns:1fr;}
-  .full{grid-column:1/2;}
-  h1{font-size:34px;}
-  .container{padding:24px;}
-}
-
-@media print{
-  body{background:white;padding:0;}
-  .container{box-shadow:none;border-radius:0;}
-  .top-buttons,.filters,.actions,.close-modal{display:none!important;}
+@media(max-width:800px){
+  body{padding:20px;}
+  .container{padding:30px 22px;}
+  h1{font-size:40px;}
+  .event-title{font-size:21px;}
+  .btn{width:100%;}
+  .filter-row{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -296,119 +405,110 @@ label{
 <body>
 
 <div class="container">
+<div class="content">
 
-<div class="header">
-  <div class="header-icon">🗂️</div>
+  <div class="logo">📊</div>
+
+  <div class="badge">RISK OVERVIEW DATABASE</div>
+
   <h1>Risk Overview Database</h1>
-  <p class="subtitle">Saved Risk Overview Reports - 371Q Professional Safety Software</p>
-</div>
 
-<div class="top-buttons">
-  <a class="report" href="Risk-Overview-Report.html">➕ New Report</a>
-  <button class="excel" onclick="downloadCSV()">⬇ Export CSV</button>
-  <a class="back" href="Risk-Overview.html">⬅ Back</a>
-  <a class="home" href="index.html">🏠 Home</a>
-</div>
+  <div class="description">
+    Stored Risk Overview Reports - 371Q Professional Safety Software
+  </div>
 
-<div class="filters">
-  <input id="searchInput" placeholder="Search by title, department, location, hazard..." oninput="renderReports()">
+  <div class="title-line"></div>
 
-  <select id="statusFilter" onchange="renderReports()">
-    <option value="">All Status</option>
-    <option value="OPEN">OPEN</option>
-    <option value="IN PROGRESS">IN PROGRESS</option>
-    <option value="CLOSED">CLOSED</option>
-  </select>
+  <div class="filter-box">
+    <div class="filter-title">Search Risk Overview Reports</div>
 
-  <select id="riskFilter" onchange="renderReports()">
-    <option value="">All Risk Levels</option>
-    <option value="LOW">LOW</option>
-    <option value="MEDIUM">MEDIUM</option>
-    <option value="HIGH">HIGH</option>
-    <option value="EXTREME">EXTREME</option>
-  </select>
-</div>
+    <div class="filter-row">
+      <input 
+        id="searchInput" 
+        class="search-input" 
+        placeholder="Search by title, department, location, hazard, responsible person..."
+        oninput="applyFilter()"
+      >
 
-<div id="records" class="cards"></div>
+      <select id="statusFilter" class="select-input" onchange="applyFilter()">
+        <option value="">All Status</option>
+        <option value="Open">Open</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Closed">Closed</option>
+        <option value="Pending">Pending</option>
+      </select>
 
-</div>
-
-<div id="viewModal" class="modal">
-  <div class="modal-content" id="viewContent"></div>
-</div>
-
-<div id="editModal" class="modal">
-  <div class="modal-content">
-    <button class="close-modal" onclick="closeEdit()">X</button>
-    <h2 class="modal-title">Edit Visible Information</h2>
-    <p class="subtitle" style="text-align:center;">This edit does not change probability, severity, or risk calculations.</p>
-
-    <div class="edit-grid">
-      <div>
-        <label>Report Title</label>
-        <input id="editTitle">
-      </div>
-
-      <div>
-        <label>Date</label>
-        <input id="editDate" type="date">
-      </div>
-
-      <div>
-        <label>Department / Area</label>
-        <input id="editDepartment">
-      </div>
-
-      <div>
-        <label>Location</label>
-        <input id="editLocation">
-      </div>
-
-      <div>
-        <label>Reported By</label>
-        <input id="editReportedBy">
-      </div>
-
-      <div>
-        <label>Status</label>
-        <select id="editStatus">
-          <option value="OPEN">OPEN</option>
-          <option value="IN PROGRESS">IN PROGRESS</option>
-          <option value="CLOSED">CLOSED</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Responsible Person</label>
-        <input id="editResponsible">
-      </div>
-
-      <div>
-        <label>Due Date</label>
-        <input id="editDueDate" type="date">
-      </div>
-
-      <div class="full">
-        <label>Hazard</label>
-        <textarea id="editHazard"></textarea>
-      </div>
-
-      <div class="full">
-        <label>Recommended Actions</label>
-        <textarea id="editActions"></textarea>
-      </div>
-    </div>
-
-    <div class="modal-buttons">
-      <button class="excel" onclick="saveEdit()">💾 Save Changes</button>
-      <button class="back" onclick="closeEdit()">Cancel</button>
+      <select id="riskFilter" class="select-input" onchange="applyFilter()">
+        <option value="">All Risk Levels</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
     </div>
   </div>
+
+  <div class="top-buttons">
+    <button class="btn overview-btn" onclick="window.location.href='Risk-Overview-Report.html'">
+      ➕ New Report
+    </button>
+
+    <button class="btn export-btn" onclick="exportCSV()">
+      ⬇ Export CSV
+    </button>
+
+    <button class="btn back-btn" onclick="window.location.href='Risk-Management.html'">
+      ← Back
+    </button>
+
+    <button class="btn home-btn" onclick="window.location.href='index.html'">
+      🏠 Home
+    </button>
+  </div>
+
+  <div id="counter" class="counter"></div>
+
+  <div id="overviewList"></div>
+
+  <div id="noData" class="no-data" style="display:none;">
+    No Risk Overview reports found.
+  </div>
+
+  <div class="bottom-buttons">
+    <button class="btn overview-btn" onclick="window.location.href='Risk-Overview-Report.html'">
+      ➕ New Report
+    </button>
+
+    <button class="btn export-btn" onclick="exportCSV()">
+      ⬇ Export CSV
+    </button>
+
+    <button class="btn back-btn" onclick="window.location.href='Risk-Management.html'">
+      ← Back
+    </button>
+
+    <button class="btn home-btn" onclick="window.location.href='index.html'">
+      🏠 Home
+    </button>
+  </div>
+
+  <div class="footer">
+    AVIATION SAFETY MANAGEMENT PLATFORM
+  </div>
+
+</div>
 </div>
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+import {
+  getDatabase,
+  ref,
+  onValue,
+  remove,
+  update
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
@@ -421,315 +521,478 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const database = getDatabase(app);
+
+const overviewList = document.getElementById("overviewList");
+const noData = document.getElementById("noData");
+const counter = document.getElementById("counter");
 
 let allReports = [];
-let editingId = null;
+let currentFilteredReports = [];
 
-function getCompanyId(){
-  return localStorage.getItem("companyId") || "defaultCompany";
+function clean(value){
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
-function safe(value){
-  return value || "";
-}
-
-function cleanStatus(status){
-  return (status || "OPEN").replace(/\s/g,"");
-}
-
-function firstHazard(r){
-  if(r.hazards && Array.isArray(r.hazards) && r.hazards.length > 0){
-    return r.hazards[0];
+function getValue(report, fields, fallback="N/A"){
+  for(const field of fields){
+    if(report[field] !== undefined && report[field] !== null && String(report[field]).trim() !== ""){
+      return report[field];
+    }
   }
-  return {
-    hazard:r.hazard || "",
-    consequence:r.consequence || "",
-    existingControls:r.existingControls || "",
-    actions:r.actions || ""
-  };
+  return fallback;
 }
 
-function allHazardText(r){
-  if(r.hazards && Array.isArray(r.hazards)){
-    return r.hazards.map(h => `${h.hazard} ${h.actions} ${h.consequence}`).join(" ");
+function statusClass(status){
+  return String(status || "Open")
+    .toLowerCase()
+    .replaceAll(" ","-");
+}
+
+function riskClass(risk){
+  const value = String(risk || "").toLowerCase();
+
+  if(value.includes("high") || value.includes("red") || value.includes("a5") || value.includes("b5") || value.includes("c5")){
+    return "risk-high";
   }
-  return `${r.hazard} ${r.actions} ${r.consequence}`;
+
+  if(value.includes("medium") || value.includes("yellow") || value.includes("orange")){
+    return "risk-medium";
+  }
+
+  if(value.includes("low") || value.includes("green")){
+    return "risk-low";
+  }
+
+  return "risk-na";
 }
 
-function loadReports(){
-  const companyId = getCompanyId();
-  const reportsRef = ref(db, "riskOverview/" + companyId);
+function renderReports(reports){
 
-  onValue(reportsRef, snapshot => {
-    allReports = [];
+  overviewList.innerHTML = "";
+  currentFilteredReports = reports;
 
-    snapshot.forEach(child => {
-      const data = child.val();
-      data.id = child.key;
-      allReports.push(data);
-    });
-
-    allReports.sort((a,b) => new Date(b.createdAt || b.date || 0) - new Date(a.createdAt || a.date || 0));
-    renderReports();
-  });
-}
-
-window.renderReports = function(){
-  const container = document.getElementById("records");
-  const search = document.getElementById("searchInput").value.toLowerCase();
-  const statusFilter = document.getElementById("statusFilter").value;
-  const riskFilter = document.getElementById("riskFilter").value;
-
-  let filtered = allReports.filter(r => {
-    const text = `
-      ${r.title}
-      ${r.department}
-      ${r.location}
-      ${r.reportedBy}
-      ${r.responsible}
-      ${allHazardText(r)}
-    `.toLowerCase();
-
-    const matchSearch = text.includes(search);
-    const matchStatus = !statusFilter || r.status === statusFilter;
-    const matchRisk = !riskFilter || r.initialRiskLevel === riskFilter || r.residualRiskLevel === riskFilter;
-
-    return matchSearch && matchStatus && matchRisk;
-  });
-
-  if(filtered.length === 0){
-    container.innerHTML = `<div class="empty">No Risk Overview reports found.</div>`;
+  if(reports.length === 0){
+    noData.style.display = "block";
+    counter.innerHTML = "0 reports found";
     return;
   }
 
-  container.innerHTML = filtered.map(r => {
-    const h = firstHazard(r);
-    const hazardCount = r.hazards && Array.isArray(r.hazards) ? r.hazards.length : 1;
+  noData.style.display = "none";
+  counter.innerHTML = reports.length + " report(s) found";
 
-    return `
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <h2>${safe(r.title)}</h2>
-            <p class="meta">${safe(r.date)} | ${safe(r.department)} | ${safe(r.location)}</p>
-            <p class="meta">${safe(r.environment)} ${r.operationType ? "| " + safe(r.operationType) : ""}</p>
-          </div>
+  reports.forEach((report, index) => {
 
-          <div class="badges">
-            <span class="badge ${cleanStatus(r.status)}">${safe(r.status)}</span>
-            <span class="badge ${safe(r.initialRiskLevel)}">Initial: ${safe(r.initialRiskScore)} ${safe(r.initialRiskLevel)}</span>
-            <span class="badge ${safe(r.residualRiskLevel)}">Residual: ${safe(r.residualRiskScore)} ${safe(r.residualRiskLevel)}</span>
+    const firebaseId = report.firebaseId;
+
+    const title = getValue(report, [
+      "title",
+      "reportTitle",
+      "overviewTitle",
+      "eventTitle",
+      "riskTitle",
+      "name"
+    ], "Untitled Risk Overview Report");
+
+    const date = getValue(report, [
+      "date",
+      "reportDate",
+      "createdAt",
+      "createdDate",
+      "submittedAt"
+    ], "N/A");
+
+    const department = getValue(report, [
+      "department",
+      "area",
+      "section"
+    ], "N/A");
+
+    const location = getValue(report, [
+      "location",
+      "station",
+      "airport",
+      "base"
+    ], "N/A");
+
+    const responsible = getValue(report, [
+      "responsible",
+      "responsiblePerson",
+      "assignedTo",
+      "owner"
+    ], "N/A");
+
+    const reportedBy = getValue(report, [
+      "reportedBy",
+      "reporter",
+      "createdBy",
+      "employeeName"
+    ], "N/A");
+
+    const dueDate = getValue(report, [
+      "dueDate",
+      "targetDate",
+      "deadline"
+    ], "N/A");
+
+    const hazard = getValue(report, [
+      "hazard",
+      "hazardDescription",
+      "description",
+      "problem",
+      "riskDescription"
+    ], "N/A");
+
+    const actions = getValue(report, [
+      "recommendedActions",
+      "actions",
+      "correctiveActions",
+      "recommendations",
+      "controlMeasures"
+    ], "N/A");
+
+    const totalHazards = getValue(report, [
+      "totalHazards",
+      "hazardCount",
+      "numberOfHazards"
+    ], "N/A");
+
+    const status = getValue(report, [
+      "status",
+      "reportStatus"
+    ], "Open");
+
+    const initialRisk = getValue(report, [
+      "initialRisk",
+      "riskLevel",
+      "risk",
+      "initialRiskLevel"
+    ], "N/A");
+
+    const residualRisk = getValue(report, [
+      "residualRisk",
+      "residualRiskLevel",
+      "finalRisk"
+    ], "N/A");
+
+    const card = document.createElement("div");
+    card.className = "report-card";
+
+    card.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="event-title">${clean(title)}</div>
+
+          <div class="meta">
+            <strong>Date:</strong> ${clean(date)}<br>
+            <strong>Department:</strong> ${clean(department)} |
+            <strong>Location:</strong> ${clean(location)}<br>
+            <strong>Reported By:</strong> ${clean(reportedBy)}
           </div>
         </div>
 
-        <div class="info-grid">
-          <div class="info"><strong>Reported By</strong>${safe(r.reportedBy)}</div>
-          <div class="info"><strong>Responsible</strong>${safe(r.responsible)}</div>
-          <div class="info"><strong>Due Date</strong>${safe(r.dueDate)}</div>
-        </div>
-
-        <div class="text-block"><strong>Hazard:</strong><br>${safe(h.hazard)}</div>
-        <div class="text-block"><strong>Recommended Actions:</strong><br>${safe(h.actions)}</div>
-
-        <div class="text-block"><strong>Total Hazards in this Panorama:</strong> ${hazardCount}</div>
-
-        <div class="actions">
-          <button class="view" onclick="viewReport('${r.id}')">👁 View</button>
-          <button class="print" onclick="printReport('${r.id}')">🖨 Print</button>
-          <button class="edit" onclick="openEdit('${r.id}')">✏ Edit</button>
-          <button class="delete" onclick="deleteReport('${r.id}')">🗑 Delete</button>
+        <div>
+          <span class="status ${statusClass(status)}">${clean(status)}</span>
+          <br><br>
+          <span class="risk-pill ${riskClass(initialRisk)}">Initial: ${clean(initialRisk)}</span>
+          <span class="risk-pill ${riskClass(residualRisk)}">Residual: ${clean(residualRisk)}</span>
         </div>
       </div>
-    `;
-  }).join("");
-}
 
-window.viewReport = function(id){
-  const r = allReports.find(item => item.id === id);
-  if(!r) return;
+      <div class="details-grid">
 
-  let hazardsHtml = "";
+        <div class="detail-box">
+          <div class="detail-label">Reported By</div>
+          <div class="detail-value">${clean(reportedBy)}</div>
+        </div>
 
-  if(r.hazards && Array.isArray(r.hazards)){
-    hazardsHtml = r.hazards.map((h,index) => `
-      <div class="text-block">
-        <strong>Hazard ${index + 1}</strong><br><br>
-        <strong>Description:</strong><br>${safe(h.hazard)}<br><br>
-        <strong>Consequence:</strong><br>${safe(h.consequence)}<br><br>
-        <strong>Existing Controls:</strong><br>${safe(h.existingControls)}<br><br>
-        <strong>Recommended Actions:</strong><br>${safe(h.actions)}<br><br>
-        <strong>Initial Risk:</strong> ${safe(h.initialRiskScore)} - ${safe(h.initialRiskLevel)}<br>
-        <strong>Residual Risk:</strong> ${safe(h.residualRiskScore)} - ${safe(h.residualRiskLevel)}
+        <div class="detail-box">
+          <div class="detail-label">Responsible</div>
+          <div class="detail-value">${clean(responsible)}</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Due Date</div>
+          <div class="detail-value">${clean(dueDate)}</div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Department / Area</div>
+          <div class="detail-value">${clean(department)}</div>
+        </div>
+
+        <div class="detail-box long-box">
+          <div class="detail-label">Hazard</div>
+          <div class="detail-value">${clean(hazard)}</div>
+        </div>
+
+        <div class="detail-box long-box">
+          <div class="detail-label">Recommended Actions</div>
+          <div class="detail-value">${clean(actions)}</div>
+        </div>
+
+        <div class="detail-box long-box">
+          <div class="detail-label">Total Hazards in this Panorama</div>
+          <div class="detail-value">${clean(totalHazards)}</div>
+        </div>
+
       </div>
-    `).join("");
-  }else{
-    hazardsHtml = `
-      <div class="text-block"><strong>Hazard Description</strong><br>${safe(r.hazard)}</div>
-      <div class="text-block"><strong>Potential Consequence</strong><br>${safe(r.consequence)}</div>
-      <div class="text-block"><strong>Existing Controls</strong><br>${safe(r.existingControls)}</div>
-      <div class="text-block"><strong>Recommended Actions</strong><br>${safe(r.actions)}</div>
+
+      <div class="actions">
+
+        <button class="btn open-btn" onclick="openReport('${clean(firebaseId)}')">
+          👁 View
+        </button>
+
+        <button class="btn print-btn" onclick="printReport('${clean(firebaseId)}')">
+          🖨 Print
+        </button>
+
+        <button class="btn edit-btn" onclick="editReport('${clean(firebaseId)}')">
+          ✏ Edit
+        </button>
+
+        <button class="btn status-btn" onclick="toggleStatus('${clean(firebaseId)}', '${clean(status)}')">
+          ${status === "Closed" ? "Open Report" : "Close Report"}
+        </button>
+
+        <button class="btn delete-btn" onclick="deleteReport('${clean(firebaseId)}')">
+          🗑
+        </button>
+
+      </div>
     `;
+
+    overviewList.appendChild(card);
+
+    if((index + 1) % 3 === 0){
+      const separator = document.createElement("div");
+      separator.className = "separator-buttons";
+
+      separator.innerHTML = `
+        <button class="btn overview-btn" onclick="window.location.href='Risk-Overview-Report.html'">
+          ➕ New Report
+        </button>
+
+        <button class="btn back-btn" onclick="window.location.href='Risk-Management.html'">
+          ← Back
+        </button>
+
+        <button class="btn home-btn" onclick="window.location.href='index.html'">
+          🏠 Home
+        </button>
+      `;
+
+      overviewList.appendChild(separator);
+    }
+
+  });
+}
+
+window.applyFilter = function(){
+
+  const searchText = document.getElementById("searchInput").value.toLowerCase().trim();
+  const statusFilter = document.getElementById("statusFilter").value.toLowerCase().trim();
+  const riskFilter = document.getElementById("riskFilter").value.toLowerCase().trim();
+
+  const filtered = allReports.filter(report => {
+
+    const searchArea = JSON.stringify(report).toLowerCase();
+
+    const status = String(getValue(report, ["status","reportStatus"], "Open")).toLowerCase();
+
+    const initialRisk = String(getValue(report, ["initialRisk","riskLevel","risk","initialRiskLevel"], "")).toLowerCase();
+    const residualRisk = String(getValue(report, ["residualRisk","residualRiskLevel","finalRisk"], "")).toLowerCase();
+    const riskArea = initialRisk + " " + residualRisk;
+
+    const matchesSearch = searchText === "" || searchArea.includes(searchText);
+    const matchesStatus = statusFilter === "" || status === statusFilter;
+    const matchesRisk = riskFilter === "" || riskArea.includes(riskFilter);
+
+    return matchesSearch && matchesStatus && matchesRisk;
+
+  });
+
+  renderReports(filtered);
+};
+
+function loadReportsFromFirebase(){
+
+  const possibleNodes = [
+    "overviewReports",
+    "riskOverviewReports",
+    "RiskOverviewReports",
+    "riskOverview"
+  ];
+
+  let loaded = false;
+
+  possibleNodes.forEach((nodeName) => {
+
+    const reportsRef = ref(database, nodeName);
+
+    onValue(reportsRef, (snapshot) => {
+
+      if(loaded) return;
+
+      if(snapshot.exists()){
+
+        loaded = true;
+        allReports = [];
+
+        snapshot.forEach((childSnapshot) => {
+          allReports.push({
+            firebaseId: childSnapshot.key,
+            firebaseNode: nodeName,
+            ...childSnapshot.val()
+          });
+        });
+
+        allReports.sort((a,b) => {
+          return String(b.firebaseId).localeCompare(String(a.firebaseId));
+        });
+
+        applyFilter();
+
+      }else{
+        if(!loaded){
+          renderReports([]);
+        }
+      }
+
+    });
+
+  });
+}
+
+loadReportsFromFirebase();
+
+window.openReport = function(reportId){
+  window.location.href = "Risk-Overview-Details.html?id=" + reportId;
+};
+
+window.editReport = function(reportId){
+  window.location.href = "Risk-Overview-Report.html?id=" + reportId;
+};
+
+window.printReport = function(reportId){
+  window.location.href = "Risk-Overview-Details.html?id=" + reportId + "&print=true";
+};
+
+window.toggleStatus = function(reportId, currentStatus){
+
+  const report = allReports.find(r => r.firebaseId === reportId);
+  if(!report){
+    alert("Report not found.");
+    return;
   }
 
-  document.getElementById("viewContent").innerHTML = `
-    <button class="close-modal" onclick="closeView()">X</button>
+  const nodeName = report.firebaseNode || "overviewReports";
+  const newStatus = currentStatus === "Closed" ? "Open" : "Closed";
 
-    <h2 class="modal-title">${safe(r.title)}</h2>
-    <p class="subtitle" style="text-align:center;">Risk Overview Full Report</p>
+  update(ref(database, nodeName + "/" + reportId), {
+    status: newStatus,
+    updatedAt: new Date().toLocaleString()
+  })
+  .then(() => {
+    alert("Report status changed to " + newStatus + ".");
+  })
+  .catch((error) => {
+    alert("Error updating status: " + error.message);
+  });
 
-    <div class="info-grid">
-      <div class="info"><strong>Date</strong>${safe(r.date)}</div>
-      <div class="info"><strong>Department</strong>${safe(r.department)}</div>
-      <div class="info"><strong>Location</strong>${safe(r.location)}</div>
-      <div class="info"><strong>Environment</strong>${safe(r.environment)}</div>
-      <div class="info"><strong>Operation Type</strong>${safe(r.operationType)}</div>
-      <div class="info"><strong>Reported By</strong>${safe(r.reportedBy)}</div>
-      <div class="info"><strong>Status</strong>${safe(r.status)}</div>
-      <div class="info"><strong>Responsible</strong>${safe(r.responsible)}</div>
-      <div class="info"><strong>Due Date</strong>${safe(r.dueDate)}</div>
-      <div class="info"><strong>Initial Risk</strong>${safe(r.initialRiskScore)} - ${safe(r.initialRiskLevel)}</div>
-      <div class="info"><strong>Residual Risk</strong>${safe(r.residualRiskScore)} - ${safe(r.residualRiskLevel)}</div>
-      <div class="info"><strong>Created At</strong>${safe(r.createdAt)}</div>
-    </div>
+};
 
-    ${hazardsHtml}
+window.deleteReport = function(reportId){
 
-    <div class="modal-buttons">
-      <button class="print" onclick="window.print()">🖨 Print</button>
-    </div>
-  `;
-
-  document.getElementById("viewModal").style.display = "block";
-}
-
-window.closeView = function(){
-  document.getElementById("viewModal").style.display = "none";
-}
-
-window.printReport = function(id){
-  viewReport(id);
-  setTimeout(() => window.print(), 300);
-}
-
-window.openEdit = function(id){
-  const r = allReports.find(item => item.id === id);
-  if(!r) return;
-
-  const h = firstHazard(r);
-  editingId = id;
-
-  document.getElementById("editTitle").value = safe(r.title);
-  document.getElementById("editDate").value = safe(r.date);
-  document.getElementById("editDepartment").value = safe(r.department);
-  document.getElementById("editLocation").value = safe(r.location);
-  document.getElementById("editReportedBy").value = safe(r.reportedBy);
-  document.getElementById("editStatus").value = safe(r.status) || "OPEN";
-  document.getElementById("editResponsible").value = safe(r.responsible);
-  document.getElementById("editDueDate").value = safe(r.dueDate);
-  document.getElementById("editHazard").value = safe(h.hazard);
-  document.getElementById("editActions").value = safe(h.actions);
-
-  document.getElementById("editModal").style.display = "block";
-}
-
-window.closeEdit = function(){
-  editingId = null;
-  document.getElementById("editModal").style.display = "none";
-}
-
-window.saveEdit = async function(){
-  if(!editingId) return;
-
-  const companyId = getCompanyId();
-  const r = allReports.find(item => item.id === editingId);
-  if(!r) return;
-
-  let updatedHazards = r.hazards && Array.isArray(r.hazards) ? [...r.hazards] : null;
-
-  if(updatedHazards && updatedHazards.length > 0){
-    updatedHazards[0] = {
-      ...updatedHazards[0],
-      hazard:document.getElementById("editHazard").value,
-      actions:document.getElementById("editActions").value
-    };
+  const report = allReports.find(r => r.firebaseId === reportId);
+  if(!report){
+    alert("Report not found.");
+    return;
   }
 
-  const updatedData = {
-    title:document.getElementById("editTitle").value,
-    date:document.getElementById("editDate").value,
-    department:document.getElementById("editDepartment").value,
-    location:document.getElementById("editLocation").value,
-    reportedBy:document.getElementById("editReportedBy").value,
-    status:document.getElementById("editStatus").value,
-    responsible:document.getElementById("editResponsible").value,
-    dueDate:document.getElementById("editDueDate").value,
+  const confirmDelete = confirm(
+    "Are you sure you want to permanently delete this Risk Overview report?"
+  );
 
-    hazard:document.getElementById("editHazard").value,
-    actions:document.getElementById("editActions").value,
-
-    updatedAt:new Date().toISOString()
-  };
-
-  if(updatedHazards){
-    updatedData.hazards = updatedHazards;
-  }
-
-  await update(ref(db, "riskOverview/" + companyId + "/" + editingId), updatedData);
-
-  closeEdit();
-  alert("Visible information updated successfully.");
-}
-
-window.deleteReport = async function(id){
-  const confirmDelete = confirm("Are you sure you want to delete this Risk Overview report?");
   if(!confirmDelete) return;
 
-  const companyId = getCompanyId();
-  await remove(ref(db, "riskOverview/" + companyId + "/" + id));
+  const nodeName = report.firebaseNode || "overviewReports";
 
-  alert("Report deleted successfully.");
-}
+  remove(ref(database, nodeName + "/" + reportId))
+  .then(() => {
+    alert("Risk Overview report deleted successfully.");
+  })
+  .catch((error) => {
+    alert("Error deleting report: " + error.message);
+  });
 
-window.downloadCSV = function(){
-  if(allReports.length === 0){
+};
+
+window.exportCSV = function(){
+
+  if(currentFilteredReports.length === 0){
     alert("No reports to export.");
     return;
   }
 
   const headers = [
-    "Title","Date","Environment","Operation Type","Department","Location","Reported By","Status",
-    "Hazard","Recommended Actions","Responsible","Due Date",
-    "Initial Risk Score","Initial Risk Level","Residual Risk Score","Residual Risk Level","Created At"
+    "Firebase ID",
+    "Title",
+    "Date",
+    "Department",
+    "Location",
+    "Reported By",
+    "Responsible",
+    "Due Date",
+    "Status",
+    "Initial Risk",
+    "Residual Risk",
+    "Hazard",
+    "Recommended Actions"
   ];
 
-  const rows = allReports.map(r => {
-    const h = firstHazard(r);
-    return [
-      safe(r.title),safe(r.date),safe(r.environment),safe(r.operationType),safe(r.department),safe(r.location),
-      safe(r.reportedBy),safe(r.status),safe(h.hazard),safe(h.actions),safe(r.responsible),safe(r.dueDate),
-      safe(r.initialRiskScore),safe(r.initialRiskLevel),safe(r.residualRiskScore),safe(r.residualRiskLevel),
-      safe(r.createdAt)
+  const rows = currentFilteredReports.map(report => {
+
+    const row = [
+      report.firebaseId,
+      getValue(report, ["title","reportTitle","overviewTitle","eventTitle","riskTitle","name"], ""),
+      getValue(report, ["date","reportDate","createdAt","createdDate","submittedAt"], ""),
+      getValue(report, ["department","area","section"], ""),
+      getValue(report, ["location","station","airport","base"], ""),
+      getValue(report, ["reportedBy","reporter","createdBy","employeeName"], ""),
+      getValue(report, ["responsible","responsiblePerson","assignedTo","owner"], ""),
+      getValue(report, ["dueDate","targetDate","deadline"], ""),
+      getValue(report, ["status","reportStatus"], ""),
+      getValue(report, ["initialRisk","riskLevel","risk","initialRiskLevel"], ""),
+      getValue(report, ["residualRisk","residualRiskLevel","finalRisk"], ""),
+      getValue(report, ["hazard","hazardDescription","description","problem","riskDescription"], ""),
+      getValue(report, ["recommendedActions","actions","correctiveActions","recommendations","controlMeasures"], "")
     ];
+
+    return row.map(value => `"${String(value || "").replaceAll('"','""')}"`).join(",");
+
   });
 
-  let csv = headers.join(",") + "\n";
-  rows.forEach(row => {
-    csv += row.map(value => `"${String(value).replace(/"/g,'""')}"`).join(",") + "\n";
-  });
+  const csvContent = [headers.join(","), ...rows].join("\n");
 
-  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const blob = new Blob([csvContent], {type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
 
+  const link = document.createElement("a");
   link.href = url;
   link.download = "Risk-Overview-Database.csv";
   link.click();
 
   URL.revokeObjectURL(url);
-}
 
-loadReports();
+};
+
 </script>
 
 </body>
