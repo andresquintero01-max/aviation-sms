@@ -1,1 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Risk Overview Details</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  font-family:'Segoe UI',Arial,sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#020617,#071f47,#1450b8);
+  padding:35px;
+}
+
+.container{
+  max-width:1150px;
+  margin:auto;
+  background:white;
+  padding:40px;
+  border-radius:28px;
+  box-shadow:0 20px 55px rgba(0,0,0,.35);
+}
+
+h1{
+  text-align:center;
+  color:#071f47;
+  font-size:44px;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#64748b;
+  margin-bottom:30px;
+}
+
+.section{
+  margin-top:25px;
+  padding:24px;
+  border-radius:22px;
+  background:#f8fafc;
+  border-left:8px solid #1450b8;
+}
+
+.section h2{
+  color:#071f47;
+  margin-bottom:18px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.box{
+  background:white;
+  border:1px solid #e2e8f0;
+  padding:15px;
+  border-radius:14px;
+}
+
+.box strong{
+  display:block;
+  color:#334155;
+  margin-bottom:6px;
+}
+
+.text{
+  background:white;
+  border:1px solid #e2e8f0;
+  padding:16px;
+  border-radius:14px;
+  white-space:pre-wrap;
+  margin-bottom:14px;
+}
+
+.badge{
+  display:inline-block;
+  padding:10px 16px;
+  border-radius:999px;
+  font-weight:900;
+  margin:5px;
+}
+
+.OPEN{background:#fee2e2;color:#991b1b;}
+.INPROGRESS{background:#fef9c3;color:#854d0e;}
+.CLOSED{background:#dcfce7;color:#166534;}
+
+.LOW{background:#dcfce7;color:#166534;}
+.MEDIUM{background:#fef9c3;color:#854d0e;}
+.HIGH{background:#ffedd5;color:#9a3412;}
+.EXTREME{background:#fee2e2;color:#991b1b;}
+
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:30px;
+}
+
+button,a{
+  border:none;
+  text-decoration:none;
+  padding:14px 26px;
+  border-radius:999px;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+  color:white;
+  background:#071f47;
+  transition:.25s;
+}
+
+button:hover,a:hover{
+  transform:translateY(-3px);
+  background:#1450b8;
+}
+
+.print{background:#f97316;}
+.delete{background:#dc2626;}
+.database{background:#2563eb;}
+.back{background:#475569;}
+
+.message{
+  text-align:center;
+  margin-top:30px;
+  color:#64748b;
+  font-size:18px;
+  font-weight:700;
+}
+
+@media(max-width:850px){
+  .grid{grid-template-columns:1fr;}
+  h1{font-size:34px;}
+}
+
+@media print{
+  body{background:white;padding:0;}
+  .container{box-shadow:none;border-radius:0;}
+  .buttons{display:none;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="content">
+  <h1>Risk Overview Details</h1>
+  <p class="subtitle">Loading report...</p>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, get, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let reportId = null;
+
+function getCompanyId(){
+  return localStorage.getItem("companyId") || "defaultCompany";
+}
+
+function safe(value){
+  return value || "";
+}
+
+function cleanStatus(status){
+  return (status || "OPEN").replace(/\s/g,"");
+}
+
+function getIdFromUrl(){
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id");
+}
+
+async function loadDetails(){
+  reportId = getIdFromUrl();
+
+  if(!reportId){
+    document.getElementById("content").innerHTML = `
+      <h1>Risk Overview Details</h1>
+      <div class="message">No report ID found.</div>
+      <div class="buttons">
+        <a class="database" href="Risk-Overview-Database.html">🗂 Database</a>
+        <a href="index.html">🏠 Home</a>
+      </div>
+    `;
+    return;
+  }
+
+  const companyId = getCompanyId();
+  const reportRef = ref(db, "riskOverview/" + companyId + "/" + reportId);
+  const snapshot = await get(reportRef);
+
+  if(!snapshot.exists()){
+    document.getElementById("content").innerHTML = `
+      <h1>Risk Overview Details</h1>
+      <div class="message">Report not found in Firebase.</div>
+      <div class="buttons">
+        <a class="database" href="Risk-Overview-Database.html">🗂 Database</a>
+        <a href="index.html">🏠 Home</a>
+      </div>
+    `;
+    return;
+  }
+
+  const r = snapshot.val();
+
+  document.getElementById("content").innerHTML = `
+    <h1>${safe(r.title)}</h1>
+    <p class="subtitle">Risk Overview Details - 371Q Professional Safety Software</p>
+
+    <div style="text-align:center;margin-bottom:20px;">
+      <span class="badge ${cleanStatus(r.status)}">${safe(r.status)}</span>
+      <span class="badge ${safe(r.initialRiskLevel)}">Initial Risk: ${safe(r.initialRiskScore)} - ${safe(r.initialRiskLevel)}</span>
+      <span class="badge ${safe(r.residualRiskLevel)}">Residual Risk: ${safe(r.residualRiskScore)} - ${safe(r.residualRiskLevel)}</span>
+    </div>
+
+    <div class="section">
+      <h2>General Information</h2>
+      <div class="grid">
+        <div class="box"><strong>Date</strong>${safe(r.date)}</div>
+        <div class="box"><strong>Department / Area</strong>${safe(r.department)}</div>
+        <div class="box"><strong>Location</strong>${safe(r.location)}</div>
+        <div class="box"><strong>Reported By</strong>${safe(r.reportedBy)}</div>
+        <div class="box"><strong>Responsible Person</strong>${safe(r.responsible)}</div>
+        <div class="box"><strong>Due Date</strong>${safe(r.dueDate)}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Hazard Information</h2>
+      <div class="text"><strong>Hazard Description</strong><br>${safe(r.hazard)}</div>
+      <div class="text"><strong>Potential Consequence</strong><br>${safe(r.consequence)}</div>
+      <div class="text"><strong>Existing Controls</strong><br>${safe(r.existingControls)}</div>
+    </div>
+
+    <div class="section">
+      <h2>Initial Risk Assessment</h2>
+      <div class="grid">
+        <div class="box"><strong>Probability</strong>${safe(r.probability)}</div>
+        <div class="box"><strong>Severity</strong>${safe(r.severity)}</div>
+        <div class="box"><strong>Initial Risk</strong>${safe(r.initialRiskScore)} - ${safe(r.initialRiskLevel)}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Mitigation Actions</h2>
+      <div class="text"><strong>Recommended Actions</strong><br>${safe(r.actions)}</div>
+    </div>
+
+    <div class="section">
+      <h2>Residual Risk Assessment</h2>
+      <div class="grid">
+        <div class="box"><strong>Residual Probability</strong>${safe(r.residualProbability)}</div>
+        <div class="box"><strong>Residual Severity</strong>${safe(r.residualSeverity)}</div>
+        <div class="box"><strong>Residual Risk</strong>${safe(r.residualRiskScore)} - ${safe(r.residualRiskLevel)}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>System Information</h2>
+      <div class="grid">
+        <div class="box"><strong>Created At</strong>${safe(r.createdAt)}</div>
+        <div class="box"><strong>Updated At</strong>${safe(r.updatedAt)}</div>
+        <div class="box"><strong>Firebase ID</strong>${reportId}</div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button class="print" onclick="window.print()">🖨 Print</button>
+      <button class="delete" onclick="deleteThisReport()">🗑 Delete</button>
+      <a class="database" href="Risk-Overview-Database.html">🗂 Database</a>
+      <a class="back" href="Risk-Overview.html">⬅ Back</a>
+      <a href="index.html">🏠 Home</a>
+    </div>
+  `;
+}
+
+window.deleteThisReport = async function(){
+  const confirmDelete = confirm("Are you sure you want to delete this Risk Overview report?");
+  if(!confirmDelete) return;
+
+  const companyId = getCompanyId();
+  await remove(ref(db, "riskOverview/" + companyId + "/" + reportId));
+
+  alert("Report deleted successfully.");
+  window.location.href = "Risk-Overview-Database.html";
+}
+
+loadDetails();
+</script>
+
+</body>
+</html>
