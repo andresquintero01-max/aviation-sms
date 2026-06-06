@@ -11,44 +11,59 @@
 body{
   font-family:'Segoe UI',Arial,sans-serif;
   min-height:100vh;
-  background:linear-gradient(135deg,#020617,#071f47,#1450b8);
+  background:
+    radial-gradient(circle at top left,rgba(255,152,0,.25),transparent 30%),
+    radial-gradient(circle at bottom right,rgba(37,99,235,.38),transparent 38%),
+    linear-gradient(135deg,#020617,#071f47,#1450b8);
   padding:35px;
 }
 
 .container{
-  max-width:1150px;
+  max-width:1250px;
   margin:auto;
-  background:white;
-  padding:40px;
-  border-radius:28px;
-  box-shadow:0 20px 55px rgba(0,0,0,.35);
+  background:rgba(255,255,255,.97);
+  padding:42px;
+  border-radius:34px;
+  box-shadow:0 25px 70px rgba(0,0,0,.38);
+}
+
+.header{
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.header .icon{
+  font-size:58px;
+  margin-bottom:8px;
 }
 
 h1{
-  text-align:center;
   color:#071f47;
-  font-size:46px;
-  margin-bottom:10px;
+  font-size:48px;
 }
 
 .subtitle{
-  text-align:center;
   color:#64748b;
-  margin-bottom:30px;
+  font-size:17px;
+  margin-top:8px;
 }
 
 .section{
   margin-top:28px;
-  padding:25px;
-  border-radius:22px;
-  background:#f8fafc;
-  border-left:8px solid #1450b8;
+  padding:28px;
+  border-radius:26px;
+  background:linear-gradient(180deg,#f8fafc,#eef4ff);
+  border:1px solid #dbeafe;
+  box-shadow:0 10px 26px rgba(15,23,42,.08);
 }
 
 .section h2{
   color:#071f47;
-  margin-bottom:18px;
-  font-size:24px;
+  margin-bottom:20px;
+  font-size:25px;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 .grid{
@@ -57,34 +72,68 @@ h1{
   gap:18px;
 }
 
+.full{grid-column:1/3;}
+
 label{
-  font-weight:700;
+  font-weight:800;
   color:#334155;
-  margin-bottom:6px;
+  margin-bottom:7px;
   display:block;
 }
 
 input,select,textarea{
   width:100%;
-  padding:14px;
-  border-radius:12px;
+  padding:15px;
+  border-radius:14px;
   border:1px solid #cbd5e1;
   font-size:15px;
+  background:white;
 }
 
 textarea{
-  min-height:110px;
+  min-height:105px;
   resize:vertical;
 }
 
-.full{grid-column:1/3;}
+.hazard-card{
+  margin-top:22px;
+  padding:25px;
+  border-radius:26px;
+  background:white;
+  border:2px solid #dbeafe;
+  box-shadow:0 12px 28px rgba(15,23,42,.10);
+}
+
+.hazard-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+  gap:12px;
+}
+
+.hazard-title h3{
+  color:#071f47;
+  font-size:24px;
+}
+
+.definition-box{
+  margin-top:10px;
+  padding:14px;
+  border-radius:14px;
+  background:#eff6ff;
+  color:#1e3a8a;
+  font-size:14px;
+  line-height:1.5;
+  border-left:5px solid #2563eb;
+}
 
 .risk-box{
   margin-top:18px;
-  padding:18px;
-  border-radius:16px;
-  font-size:22px;
-  font-weight:800;
+  padding:20px;
+  border-radius:18px;
+  font-size:23px;
+  font-weight:900;
   text-align:center;
   background:#e2e8f0;
   color:#0f172a;
@@ -98,7 +147,7 @@ textarea{
 .buttons{
   display:flex;
   justify-content:center;
-  gap:16px;
+  gap:15px;
   flex-wrap:wrap;
   margin-top:35px;
 }
@@ -106,10 +155,10 @@ textarea{
 button,a{
   border:none;
   text-decoration:none;
-  padding:15px 28px;
+  padding:15px 26px;
   border-radius:999px;
-  font-size:16px;
-  font-weight:800;
+  font-size:15px;
+  font-weight:900;
   cursor:pointer;
   color:white;
   background:#071f47;
@@ -118,30 +167,41 @@ button,a{
 
 button:hover,a:hover{
   transform:translateY(-3px);
-  background:#1450b8;
+  filter:brightness(1.08);
 }
 
 .save{background:#16a34a;}
 .print{background:#f97316;}
 .database{background:#2563eb;}
 .back{background:#475569;}
+.add{background:#7c3aed;}
+.email{background:#0f766e;}
+.attach{background:#9333ea;}
+.remove{background:#dc2626;}
 
 .message{
   margin-top:20px;
   text-align:center;
-  font-weight:800;
+  font-weight:900;
 }
 
-@media(max-width:750px){
+.file-list{
+  margin-top:10px;
+  font-size:14px;
+  color:#334155;
+}
+
+@media(max-width:850px){
   .grid{grid-template-columns:1fr;}
   .full{grid-column:1/2;}
-  h1{font-size:34px;}
+  h1{font-size:36px;}
+  .container{padding:25px;}
 }
 
 @media print{
   body{background:white;padding:0;}
   .container{box-shadow:none;border-radius:0;}
-  .buttons{display:none;}
+  .buttons,.remove,.add,.email,.attach,input[type="file"]{display:none!important;}
 }
 </style>
 </head>
@@ -150,20 +210,58 @@ button:hover,a:hover{
 
 <div class="container">
 
-<h1>Risk Overview Report</h1>
-<p class="subtitle">371Q Professional Safety Software</p>
+<div class="header">
+  <div class="icon">⚠️</div>
+  <h1>Risk Overview Report</h1>
+  <p class="subtitle">371Q Professional Safety Software | Multi-Hazard Risk Panorama</p>
+</div>
 
 <div class="section">
-<h2>General Information</h2>
+<h2>🧾 General Information</h2>
+
 <div class="grid">
   <div>
     <label>Report Title</label>
-    <input id="title" placeholder="Enter report title">
+    <input id="title" placeholder="Example: Ground Handling Risk Overview">
   </div>
 
   <div>
     <label>Date</label>
     <input id="date" type="date">
+  </div>
+
+  <div>
+    <label>Operational Environment</label>
+    <select id="environment">
+      <option value="">Select</option>
+      <option>Airport</option>
+      <option>Hangar</option>
+      <option>Ramp</option>
+      <option>Ground Handling</option>
+      <option>Line Maintenance</option>
+      <option>Base Maintenance</option>
+      <option>Warehouse</option>
+      <option>Tool Room</option>
+      <option>Office / Administration</option>
+      <option>Other</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Operation Type</label>
+    <select id="operationType">
+      <option value="">Select</option>
+      <option>Aircraft Maintenance</option>
+      <option>Ground Support Equipment</option>
+      <option>Aircraft Towing</option>
+      <option>Fueling</option>
+      <option>Cargo Handling</option>
+      <option>Passenger Handling</option>
+      <option>Cleaning</option>
+      <option>Inspection / Quality Control</option>
+      <option>Training</option>
+      <option>Other</option>
+    </select>
   </div>
 
   <div>
@@ -193,62 +291,25 @@ button:hover,a:hover{
 </div>
 
 <div class="section">
-<h2>Hazard Information</h2>
-<div class="grid">
-  <div class="full">
-    <label>Hazard Description</label>
-    <textarea id="hazard" placeholder="Describe the hazard..."></textarea>
-  </div>
+<h2>🧩 Hazard Panorama</h2>
+<p class="subtitle" style="text-align:left;margin-bottom:10px;">
+  Add one or more hazards under the same risk overview.
+</p>
 
-  <div class="full">
-    <label>Potential Consequence</label>
-    <textarea id="consequence" placeholder="Describe the possible consequence..."></textarea>
-  </div>
+<div id="hazardsContainer"></div>
 
-  <div class="full">
-    <label>Existing Controls</label>
-    <textarea id="existingControls" placeholder="Describe current controls..."></textarea>
-  </div>
+<div class="buttons">
+  <button class="add" onclick="addHazard()">➕ Add Another Hazard</button>
 </div>
 </div>
 
 <div class="section">
-<h2>Initial Risk Assessment</h2>
-<div class="grid">
-  <div>
-    <label>Probability</label>
-    <select id="probability" onchange="calculateRisk()">
-      <option value="">Select</option>
-      <option value="1">1 - Rare</option>
-      <option value="2">2 - Unlikely</option>
-      <option value="3">3 - Possible</option>
-      <option value="4">4 - Likely</option>
-      <option value="5">5 - Almost Certain</option>
-    </select>
-  </div>
+<h2>📌 General Mitigation / Follow-Up</h2>
 
-  <div>
-    <label>Severity</label>
-    <select id="severity" onchange="calculateRisk()">
-      <option value="">Select</option>
-      <option value="1">1 - Negligible</option>
-      <option value="2">2 - Minor</option>
-      <option value="3">3 - Moderate</option>
-      <option value="4">4 - Major</option>
-      <option value="5">5 - Catastrophic</option>
-    </select>
-  </div>
-</div>
-
-<div id="initialRiskBox" class="risk-box">Initial Risk: Not calculated</div>
-</div>
-
-<div class="section">
-<h2>Mitigation Actions</h2>
 <div class="grid">
   <div class="full">
-    <label>Recommended Actions</label>
-    <textarea id="actions" placeholder="Describe corrective or preventive actions..."></textarea>
+    <label>Overall Comments / Follow-Up</label>
+    <textarea id="overallComments" placeholder="Write general comments, follow-up notes, or safety review information..."></textarea>
   </div>
 
   <div>
@@ -260,38 +321,23 @@ button:hover,a:hover{
     <label>Due Date</label>
     <input id="dueDate" type="date">
   </div>
-</div>
-</div>
 
-<div class="section">
-<h2>Residual Risk Assessment</h2>
-<div class="grid">
   <div>
-    <label>Residual Probability</label>
-    <select id="residualProbability" onchange="calculateRisk()">
-      <option value="">Select</option>
-      <option value="1">1 - Rare</option>
-      <option value="2">2 - Unlikely</option>
-      <option value="3">3 - Possible</option>
-      <option value="4">4 - Likely</option>
-      <option value="5">5 - Almost Certain</option>
-    </select>
+    <label>Email To</label>
+    <input id="emailTo" type="email" placeholder="example@company.com">
   </div>
 
   <div>
-    <label>Residual Severity</label>
-    <select id="residualSeverity" onchange="calculateRisk()">
-      <option value="">Select</option>
-      <option value="1">1 - Negligible</option>
-      <option value="2">2 - Minor</option>
-      <option value="3">3 - Moderate</option>
-      <option value="4">4 - Major</option>
-      <option value="5">5 - Catastrophic</option>
-    </select>
+    <label>Attachments</label>
+    <input id="attachments" type="file" multiple onchange="showFiles()">
+    <div id="fileList" class="file-list"></div>
   </div>
 </div>
 
-<div id="residualRiskBox" class="risk-box">Residual Risk: Not calculated</div>
+<div class="buttons">
+  <button class="email" onclick="sendEmail()">📧 Send Email</button>
+  <button class="attach" onclick="document.getElementById('attachments').click()">📎 Attach Files</button>
+</div>
 </div>
 
 <div class="buttons">
@@ -323,6 +369,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+let hazardCount = 0;
+
 function getCompanyId(){
   return localStorage.getItem("companyId") || "defaultCompany";
 }
@@ -334,9 +382,174 @@ function classifyRisk(score){
   return "EXTREME";
 }
 
-function setRiskBox(boxId, label, score){
-  const box = document.getElementById(boxId);
+function riskClass(level){
+  if(level === "LOW") return "low";
+  if(level === "MEDIUM") return "medium";
+  if(level === "HIGH") return "high";
+  if(level === "EXTREME") return "extreme";
+  return "";
+}
 
+function probabilityDefinition(value){
+  const defs = {
+    "1":"Rare: May occur only in exceptional circumstances.",
+    "2":"Unlikely: Could occur, but is not expected during normal operations.",
+    "3":"Possible: Might occur at some time under current conditions.",
+    "4":"Likely: Will probably occur in many circumstances.",
+    "5":"Almost Certain: Expected to occur frequently or repeatedly."
+  };
+  return defs[value] || "Select a probability level to see the definition.";
+}
+
+function severityDefinition(value){
+  const defs = {
+    "1":"Negligible: No injury or very minor operational impact.",
+    "2":"Minor: Minor injury, minor damage, or limited operational disruption.",
+    "3":"Moderate: Medical treatment, reportable event, equipment damage, or operational interruption.",
+    "4":"Major: Serious injury, major damage, significant safety impact, or major operational disruption.",
+    "5":"Catastrophic: Fatality, aircraft loss, multiple serious injuries, or severe system failure."
+  };
+  return defs[value] || "Select a severity level to see the definition.";
+}
+
+window.addHazard = function(){
+  hazardCount++;
+
+  const container = document.getElementById("hazardsContainer");
+  const hazardId = hazardCount;
+
+  const card = document.createElement("div");
+  card.className = "hazard-card";
+  card.id = "hazardCard" + hazardId;
+
+  card.innerHTML = `
+    <div class="hazard-title">
+      <h3>Hazard ${hazardId}</h3>
+      ${hazardId > 1 ? `<button class="remove" onclick="removeHazard(${hazardId})">🗑 Remove</button>` : ``}
+    </div>
+
+    <div class="grid">
+      <div class="full">
+        <label>Hazard Description</label>
+        <textarea id="hazard_${hazardId}" placeholder="Describe the hazard..."></textarea>
+      </div>
+
+      <div class="full">
+        <label>Potential Consequence</label>
+        <textarea id="consequence_${hazardId}" placeholder="Describe the possible consequence..."></textarea>
+      </div>
+
+      <div class="full">
+        <label>Existing Controls</label>
+        <textarea id="existingControls_${hazardId}" placeholder="Describe current controls..."></textarea>
+      </div>
+    </div>
+
+    <div class="section" style="margin-top:18px;">
+      <h2>🟠 Initial Risk Assessment</h2>
+
+      <div class="grid">
+        <div>
+          <label>Probability</label>
+          <select id="probability_${hazardId}" onchange="calculateHazardRisk(${hazardId})">
+            <option value="">Select</option>
+            <option value="1">1 - Rare</option>
+            <option value="2">2 - Unlikely</option>
+            <option value="3">3 - Possible</option>
+            <option value="4">4 - Likely</option>
+            <option value="5">5 - Almost Certain</option>
+          </select>
+          <div id="probDef_${hazardId}" class="definition-box">Select a probability level to see the definition.</div>
+        </div>
+
+        <div>
+          <label>Severity</label>
+          <select id="severity_${hazardId}" onchange="calculateHazardRisk(${hazardId})">
+            <option value="">Select</option>
+            <option value="1">1 - Negligible</option>
+            <option value="2">2 - Minor</option>
+            <option value="3">3 - Moderate</option>
+            <option value="4">4 - Major</option>
+            <option value="5">5 - Catastrophic</option>
+          </select>
+          <div id="sevDef_${hazardId}" class="definition-box">Select a severity level to see the definition.</div>
+        </div>
+      </div>
+
+      <div id="initialRiskBox_${hazardId}" class="risk-box">Initial Risk: Not calculated</div>
+    </div>
+
+    <div class="section" style="margin-top:18px;">
+      <h2>🛡 Mitigation Actions</h2>
+
+      <div class="grid">
+        <div class="full">
+          <label>Recommended Actions</label>
+          <textarea id="actions_${hazardId}" placeholder="Describe corrective or preventive actions..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" style="margin-top:18px;">
+      <h2>🟢 Residual Risk Assessment</h2>
+
+      <div class="grid">
+        <div>
+          <label>Residual Probability</label>
+          <select id="residualProbability_${hazardId}" onchange="calculateHazardRisk(${hazardId})">
+            <option value="">Select</option>
+            <option value="1">1 - Rare</option>
+            <option value="2">2 - Unlikely</option>
+            <option value="3">3 - Possible</option>
+            <option value="4">4 - Likely</option>
+            <option value="5">5 - Almost Certain</option>
+          </select>
+          <div id="resProbDef_${hazardId}" class="definition-box">Select a residual probability level to see the definition.</div>
+        </div>
+
+        <div>
+          <label>Residual Severity</label>
+          <select id="residualSeverity_${hazardId}" onchange="calculateHazardRisk(${hazardId})">
+            <option value="">Select</option>
+            <option value="1">1 - Negligible</option>
+            <option value="2">2 - Minor</option>
+            <option value="3">3 - Moderate</option>
+            <option value="4">4 - Major</option>
+            <option value="5">5 - Catastrophic</option>
+          </select>
+          <div id="resSevDef_${hazardId}" class="definition-box">Select a residual severity level to see the definition.</div>
+        </div>
+      </div>
+
+      <div id="residualRiskBox_${hazardId}" class="risk-box">Residual Risk: Not calculated</div>
+    </div>
+  `;
+
+  container.appendChild(card);
+}
+
+window.removeHazard = function(id){
+  const card = document.getElementById("hazardCard" + id);
+  if(card) card.remove();
+}
+
+window.calculateHazardRisk = function(id){
+  const p = Number(document.getElementById("probability_" + id)?.value);
+  const s = Number(document.getElementById("severity_" + id)?.value);
+  const rp = Number(document.getElementById("residualProbability_" + id)?.value);
+  const rs = Number(document.getElementById("residualSeverity_" + id)?.value);
+
+  document.getElementById("probDef_" + id).innerText = probabilityDefinition(String(p));
+  document.getElementById("sevDef_" + id).innerText = severityDefinition(String(s));
+  document.getElementById("resProbDef_" + id).innerText = probabilityDefinition(String(rp));
+  document.getElementById("resSevDef_" + id).innerText = severityDefinition(String(rs));
+
+  setRiskBox("initialRiskBox_" + id, "Initial Risk", p && s ? p * s : null);
+  setRiskBox("residualRiskBox_" + id, "Residual Risk", rp && rs ? rp * rs : null);
+}
+
+function setRiskBox(boxId,label,score){
+  const box = document.getElementById(boxId);
   box.className = "risk-box";
 
   if(!score){
@@ -345,26 +558,70 @@ function setRiskBox(boxId, label, score){
   }
 
   const level = classifyRisk(score);
-
-  if(level === "LOW") box.classList.add("low");
-  if(level === "MEDIUM") box.classList.add("medium");
-  if(level === "HIGH") box.classList.add("high");
-  if(level === "EXTREME") box.classList.add("extreme");
-
+  box.classList.add(riskClass(level));
   box.innerText = label + ": " + score + " - " + level;
 }
 
-window.calculateRisk = function(){
-  const p = Number(document.getElementById("probability").value);
-  const s = Number(document.getElementById("severity").value);
-  const rp = Number(document.getElementById("residualProbability").value);
-  const rs = Number(document.getElementById("residualSeverity").value);
+function collectHazards(){
+  const hazards = [];
+  const cards = document.querySelectorAll(".hazard-card");
 
-  const initialScore = p && s ? p * s : null;
-  const residualScore = rp && rs ? rp * rs : null;
+  cards.forEach(card => {
+    const id = card.id.replace("hazardCard","");
 
-  setRiskBox("initialRiskBox", "Initial Risk", initialScore);
-  setRiskBox("residualRiskBox", "Residual Risk", residualScore);
+    const p = Number(document.getElementById("probability_" + id)?.value);
+    const s = Number(document.getElementById("severity_" + id)?.value);
+    const rp = Number(document.getElementById("residualProbability_" + id)?.value);
+    const rs = Number(document.getElementById("residualSeverity_" + id)?.value);
+
+    const initialScore = p && s ? p * s : "";
+    const residualScore = rp && rs ? rp * rs : "";
+
+    hazards.push({
+      hazard:document.getElementById("hazard_" + id)?.value || "",
+      consequence:document.getElementById("consequence_" + id)?.value || "",
+      existingControls:document.getElementById("existingControls_" + id)?.value || "",
+      probability:p || "",
+      severity:s || "",
+      initialRiskScore:initialScore,
+      initialRiskLevel:initialScore ? classifyRisk(initialScore) : "",
+      actions:document.getElementById("actions_" + id)?.value || "",
+      residualProbability:rp || "",
+      residualSeverity:rs || "",
+      residualRiskScore:residualScore,
+      residualRiskLevel:residualScore ? classifyRisk(residualScore) : ""
+    });
+  });
+
+  return hazards;
+}
+
+window.showFiles = function(){
+  const files = document.getElementById("attachments").files;
+  const list = document.getElementById("fileList");
+
+  if(!files.length){
+    list.innerText = "";
+    return;
+  }
+
+  list.innerHTML = Array.from(files).map(f => "📎 " + f.name).join("<br>");
+}
+
+window.sendEmail = function(){
+  const to = document.getElementById("emailTo").value.trim();
+  const title = document.getElementById("title").value.trim() || "Risk Overview Report";
+
+  const subject = encodeURIComponent("Risk Overview Report - " + title);
+  const body = encodeURIComponent(
+    "Hello,%0D%0A%0D%0APlease review the Risk Overview Report.%0D%0A%0D%0A" +
+    "Title: " + title + "%0D%0A" +
+    "Location: " + document.getElementById("location").value + "%0D%0A" +
+    "Status: " + document.getElementById("status").value + "%0D%0A%0D%0A" +
+    "Regards."
+  );
+
+  window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
 }
 
 window.saveReport = async function(){
@@ -376,13 +633,19 @@ window.saveReport = async function(){
     return;
   }
 
-  const p = Number(document.getElementById("probability").value);
-  const s = Number(document.getElementById("severity").value);
-  const rp = Number(document.getElementById("residualProbability").value);
-  const rs = Number(document.getElementById("residualSeverity").value);
+  const hazards = collectHazards();
 
-  const initialScore = p && s ? p * s : "";
-  const residualScore = rp && rs ? rp * rs : "";
+  if(hazards.length === 0 || !hazards.some(h => h.hazard.trim())){
+    document.getElementById("message").style.color = "red";
+    document.getElementById("message").innerText = "Please enter at least one hazard.";
+    return;
+  }
+
+  const files = document.getElementById("attachments").files;
+  const attachmentNames = Array.from(files).map(f => f.name);
+
+  const highestInitial = hazards.reduce((max,h)=> Math.max(max, Number(h.initialRiskScore || 0)),0);
+  const highestResidual = hazards.reduce((max,h)=> Math.max(max, Number(h.residualRiskScore || 0)),0);
 
   const companyId = getCompanyId();
   const newRef = push(ref(db, "riskOverview/" + companyId));
@@ -391,34 +654,35 @@ window.saveReport = async function(){
     id:newRef.key,
     title:title,
     date:document.getElementById("date").value,
+    environment:document.getElementById("environment").value,
+    operationType:document.getElementById("operationType").value,
     department:document.getElementById("department").value,
     location:document.getElementById("location").value,
     reportedBy:document.getElementById("reportedBy").value,
     status:document.getElementById("status").value,
-
-    hazard:document.getElementById("hazard").value,
-    consequence:document.getElementById("consequence").value,
-    existingControls:document.getElementById("existingControls").value,
-
-    probability:p || "",
-    severity:s || "",
-    initialRiskScore:initialScore,
-    initialRiskLevel:initialScore ? classifyRisk(initialScore) : "",
-
-    actions:document.getElementById("actions").value,
     responsible:document.getElementById("responsible").value,
     dueDate:document.getElementById("dueDate").value,
+    overallComments:document.getElementById("overallComments").value,
+    emailTo:document.getElementById("emailTo").value,
+    attachmentNames:attachmentNames,
 
-    residualProbability:rp || "",
-    residualSeverity:rs || "",
-    residualRiskScore:residualScore,
-    residualRiskLevel:residualScore ? classifyRisk(residualScore) : "",
+    hazards:hazards,
+
+    hazard:hazards[0]?.hazard || "",
+    consequence:hazards[0]?.consequence || "",
+    existingControls:hazards[0]?.existingControls || "",
+    actions:hazards[0]?.actions || "",
+
+    initialRiskScore:highestInitial || "",
+    initialRiskLevel:highestInitial ? classifyRisk(highestInitial) : "",
+    residualRiskScore:highestResidual || "",
+    residualRiskLevel:highestResidual ? classifyRisk(highestResidual) : "",
 
     createdAt:new Date().toISOString()
   };
 
   try{
-    await set(newRef, data);
+    await set(newRef,data);
 
     document.getElementById("message").style.color = "green";
     document.getElementById("message").innerText = "Risk Overview Report saved successfully.";
@@ -434,6 +698,7 @@ window.saveReport = async function(){
 }
 
 document.getElementById("date").valueAsDate = new Date();
+addHazard();
 </script>
 
 </body>
