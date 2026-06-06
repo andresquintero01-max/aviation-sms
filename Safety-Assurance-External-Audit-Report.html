@@ -1,1 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>External Audit Report</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f4f7fb;
+  color:#111;
+  padding:25px;
+}
+
+.container{
+  max-width:1350px;
+  margin:auto;
+  background:white;
+  border-radius:24px;
+  padding:30px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
+
+.header{
+  background:linear-gradient(135deg,#071f47,#1450b8);
+  color:white;
+  padding:30px;
+  border-radius:22px;
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.header h1{
+  font-size:42px;
+  margin-bottom:8px;
+}
+
+.header p{
+  font-size:17px;
+  color:#dbeafe;
+}
+
+.section{
+  margin-top:25px;
+  border:1px solid #d8e1ef;
+  border-radius:18px;
+  overflow:hidden;
+  background:white;
+}
+
+.section-title{
+  background:#004080;
+  color:white;
+  padding:14px 18px;
+  font-size:21px;
+  font-weight:bold;
+}
+
+.section-body{
+  padding:22px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:18px;
+}
+
+.field label{
+  display:block;
+  color:#004080;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:11px;
+  border:1px solid #b8c7da;
+  border-radius:10px;
+  font-size:15px;
+  background:white;
+}
+
+textarea{
+  min-height:95px;
+  resize:vertical;
+}
+
+.audit-card{
+  border:1px solid #d8e1ef;
+  border-left:8px solid #1450b8;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:18px;
+  background:#f8fbff;
+}
+
+.audit-card h3{
+  color:#071f47;
+  margin-bottom:8px;
+  font-size:22px;
+}
+
+.audit-card p{
+  color:#56657d;
+  margin-bottom:14px;
+  line-height:1.4;
+}
+
+.audit-row{
+  display:grid;
+  grid-template-columns:170px 1fr 1fr 1fr;
+  gap:14px;
+  align-items:start;
+}
+
+.action-table{
+  display:grid;
+  gap:16px;
+}
+
+.action-row{
+  display:grid;
+  grid-template-columns:70px 2fr 1fr 1fr 1fr;
+  gap:14px;
+  align-items:start;
+  background:#f8fbff;
+  border:1px solid #d8e1ef;
+  border-radius:16px;
+  padding:16px;
+}
+
+.action-number{
+  background:#004080;
+  color:white;
+  font-weight:bold;
+  border-radius:12px;
+  padding:14px;
+  text-align:center;
+}
+
+.btn-area{
+  text-align:center;
+  margin-top:30px;
+}
+
+.btn{
+  border:none;
+  padding:15px 28px;
+  border-radius:12px;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:6px;
+}
+
+.save-btn{background:#004080;}
+.reset-btn{background:#666;}
+.back-btn{background:#c40000;}
+.home-btn{background:#0b2a66;}
+
+.saved-box{
+  margin-top:25px;
+  background:#e8f5e9;
+  color:#14532d;
+  border:1px solid #2f9144;
+  padding:16px;
+  border-radius:14px;
+  display:none;
+  font-weight:bold;
+  text-align:center;
+}
+
+@media(max-width:1000px){
+  .audit-row,
+  .action-row{
+    grid-template-columns:1fr;
+  }
+
+  .header h1{
+    font-size:32px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+  <h1>Safety Assurance - External Audit Report</h1>
+  <p>External audit tool for vendors, service providers, contractors and third-party supplier compliance monitoring.</p>
+</div>
+
+<div class="section">
+  <div class="section-title">1. External Audit Information</div>
+  <div class="section-body">
+
+    <div class="grid">
+      <div class="field">
+        <label>Audit Title *</label>
+        <input id="title" placeholder="Example: External Vendor Audit - Fueling Service Provider">
+      </div>
+
+      <div class="field">
+        <label>Audit Number</label>
+        <input id="auditNumber" placeholder="Example: EA-2026-001">
+      </div>
+
+      <div class="field">
+        <label>Auditor Name</label>
+        <input id="auditorName" placeholder="Name of auditor">
+      </div>
+
+      <div class="field">
+        <label>Vendor / Service Provider Name</label>
+        <input id="vendorName" placeholder="Company or provider name">
+      </div>
+
+      <div class="field">
+        <label>Vendor Contact Person</label>
+        <input id="vendorContact" placeholder="Vendor representative name">
+      </div>
+
+      <div class="field">
+        <label>Vendor Email / Phone</label>
+        <input id="vendorContactInfo" placeholder="Email or phone number">
+      </div>
+
+      <div class="field">
+        <label>Service Provided</label>
+        <input id="serviceProvided" placeholder="Example: Fueling, GSE, Cleaning, Parts Supplier">
+      </div>
+
+      <div class="field">
+        <label>Location</label>
+        <input id="location" placeholder="Example: Station, Hangar, Ramp, Vendor Facility">
+      </div>
+
+      <div class="field">
+        <label>Audit Date</label>
+        <input type="date" id="date">
+      </div>
+
+      <div class="field">
+        <label>External Audit Type</label>
+        <select id="auditType">
+          <option>Vendor Audit</option>
+          <option>Service Provider Audit</option>
+          <option>Supplier Audit</option>
+          <option>Contractor Audit</option>
+          <option>Customer Requirement Audit</option>
+          <option>Pre-Approval Audit</option>
+          <option>Follow-Up Audit</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Audit Status</label>
+        <select id="status">
+          <option>Open</option>
+          <option>In Progress</option>
+          <option>Pending Corrective Action</option>
+          <option>Closed</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Vendor Approval Status</label>
+        <select id="vendorApprovalStatus">
+          <option>Approved</option>
+          <option>Approved With Conditions</option>
+          <option>Pending Approval</option>
+          <option>Suspended</option>
+          <option>Not Approved</option>
+        </select>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Audit Scope</label>
+      <textarea id="auditScope" placeholder="Describe the scope of the external audit."></textarea>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Audit Objective</label>
+      <textarea id="auditObjective" placeholder="Describe the objective of the audit."></textarea>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">2. External Audit Criteria / Contractual Requirements</div>
+  <div class="section-body">
+
+    <div class="grid">
+      <div class="field">
+        <label>Reference Standard / Regulation</label>
+        <input id="referenceStandard" placeholder="Example: 14 CFR Part 145, OSHA, SMS Manual, Contract">
+      </div>
+
+      <div class="field">
+        <label>Contract / Agreement Reference</label>
+        <input id="contractReference" placeholder="Example: Vendor agreement, service contract, purchase order">
+      </div>
+
+      <div class="field">
+        <label>Customer / Company Requirement</label>
+        <input id="customerRequirement" placeholder="Example: Internal vendor approval procedure">
+      </div>
+
+      <div class="field">
+        <label>Insurance / Certificate Requirement</label>
+        <input id="insuranceRequirement" placeholder="Example: Insurance certificate, authorization, license">
+      </div>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Audit Criteria Description</label>
+      <textarea id="criteriaDescription" placeholder="Describe the criteria used to evaluate this vendor or external service provider."></textarea>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">3. Vendor / Service Provider Checklist Areas</div>
+  <div class="section-body" id="checklistArea"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">4. Finding / Supplier Performance Summary</div>
+  <div class="section-body">
+
+    <div class="grid">
+      <div class="field">
+        <label>Finding Classification</label>
+        <select id="findingClassification">
+          <option>No Finding</option>
+          <option>Observation</option>
+          <option>Minor Nonconformity</option>
+          <option>Major Nonconformity</option>
+          <option>Opportunity for Improvement</option>
+          <option>Vendor Restriction Required</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Main Finding Area</label>
+        <select id="mainFindingArea">
+          <option>Contract / Service Compliance</option>
+          <option>Training / Qualification</option>
+          <option>Licenses / Certificates</option>
+          <option>Tools / Equipment</option>
+          <option>Safety / SMS</option>
+          <option>Quality Control</option>
+          <option>Documentation / Records</option>
+          <option>Facilities / Housekeeping</option>
+          <option>Performance / Reliability</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Risk / Priority</label>
+        <select id="riskPriority">
+          <option>Low</option>
+          <option>Medium</option>
+          <option>High</option>
+          <option>Critical</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Service Continuation Decision</label>
+        <select id="serviceDecision">
+          <option>Continue Service</option>
+          <option>Continue With Conditions</option>
+          <option>Corrective Action Required Before Next Service</option>
+          <option>Temporary Suspension Recommended</option>
+          <option>Remove From Approved Vendor List</option>
+        </select>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Finding Statement</label>
+      <textarea id="findingStatement" placeholder="Describe the finding or nonconformity identified during the external audit."></textarea>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Objective Evidence</label>
+      <textarea id="evidence" placeholder="Describe evidence reviewed: certificates, training records, service records, interviews, observations, photos or documents."></textarea>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Root Cause / Vendor System Weakness</label>
+      <textarea id="rootCause" placeholder="Describe why the finding occurred and what weakness exists in the vendor or service provider system."></textarea>
+    </div>
+
+    <br>
+
+    <div class="field">
+      <label>Vendor Response / Commitment</label>
+      <textarea id="vendorResponse" placeholder="Document vendor response, commitment, corrective action plan or limitations."></textarea>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">5. Corrective / Preventive Actions</div>
+  <div class="section-body">
+
+    <div class="action-table">
+
+      <div class="action-row">
+        <div class="action-number">CPA 1</div>
+        <div class="field">
+          <label>Corrective / Preventive Action</label>
+          <textarea id="action1" placeholder="Describe the action required from the vendor or company to correct the finding and prevent recurrence."></textarea>
+        </div>
+        <div class="field">
+          <label>Responsible Person</label>
+          <input id="responsible1">
+        </div>
+        <div class="field">
+          <label>Due Date</label>
+          <input type="date" id="dueDate1">
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="actionStatus1">
+            <option>Open</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+            <option>Verified</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-number">CPA 2</div>
+        <div class="field">
+          <label>Corrective / Preventive Action</label>
+          <textarea id="action2"></textarea>
+        </div>
+        <div class="field">
+          <label>Responsible Person</label>
+          <input id="responsible2">
+        </div>
+        <div class="field">
+          <label>Due Date</label>
+          <input type="date" id="dueDate2">
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="actionStatus2">
+            <option>Open</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+            <option>Verified</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-number">CPA 3</div>
+        <div class="field">
+          <label>Corrective / Preventive Action</label>
+          <textarea id="action3"></textarea>
+        </div>
+        <div class="field">
+          <label>Responsible Person</label>
+          <input id="responsible3">
+        </div>
+        <div class="field">
+          <label>Due Date</label>
+          <input type="date" id="dueDate3">
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="actionStatus3">
+            <option>Open</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+            <option>Verified</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="btn-area">
+  <button class="btn save-btn" onclick="saveExternalAudit()">Save External Audit</button>
+  <button class="btn reset-btn" onclick="resetForm()">Reset Form</button>
+  <button class="btn back-btn" onclick="window.location.href='Audits.html'">Back to Audits</button>
+  <button class="btn home-btn" onclick="window.location.href='index.html'">Home</button>
+</div>
+
+<div id="savedBox" class="saved-box">
+  External Audit Report saved successfully.
+</div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2syFrb8S3cxt1Sor1wXrgJcdSZAg1Pq4",
+  authDomain: "aviation-sms.firebaseapp.com",
+  databaseURL: "https://aviation-sms-default-rtdb.firebaseio.com",
+  projectId: "aviation-sms",
+  storageBucket: "aviation-sms.firebasestorage.app",
+  messagingSenderId: "147000937860",
+  appId: "1:147000937860:web:90049a1f5269ef107ca1d1"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+window.database = database;
+window.dbRef = ref;
+window.dbPush = push;
+window.dbSet = set;
+</script>
+
+<script>
+const checklistAreas = [
+  {
+    name:"Vendor Approval / Qualification",
+    examples:"Approved vendor list, qualification process, service authorization, capability and scope approval.",
+    items:[
+      "Vendor approved",
+      "Vendor not approved",
+      "Approval expired",
+      "Scope not approved",
+      "Capability not verified",
+      "Qualification records missing",
+      "Vendor evaluation incomplete",
+      "Other"
+    ]
+  },
+  {
+    name:"Contract / Service Requirements",
+    examples:"Service contract, scope of work, customer requirements, performance expectations and service limitations.",
+    items:[
+      "Contract available",
+      "Contract unavailable",
+      "Scope of work clear",
+      "Scope of work unclear",
+      "Service limitation not defined",
+      "Contract requirement not met",
+      "Customer requirement not followed",
+      "Other"
+    ]
+  },
+  {
+    name:"Licenses / Certificates / Insurance",
+    examples:"Business licenses, aviation certificates, insurance, permits, authorizations and required approvals.",
+    items:[
+      "Certificate current",
+      "Certificate expired",
+      "Insurance current",
+      "Insurance expired",
+      "License missing",
+      "Authorization missing",
+      "Permit not available",
+      "Other"
+    ]
+  },
+  {
+    name:"Training / Competency",
+    examples:"Vendor employee training, qualifications, authorization, recurrent training and task competency.",
+    items:[
+      "Training current",
+      "Training expired",
+      "Training missing",
+      "Qualification current",
+      "Qualification missing",
+      "OJT incomplete",
+      "Competency not verified",
+      "Other"
+    ]
+  },
+  {
+    name:"Safety / SMS / Hazard Reporting",
+    examples:"Vendor safety program, hazard reporting, incident reporting, PPE, safety communication and risk controls.",
+    items:[
+      "Safety program available",
+      "Safety program unavailable",
+      "Hazard reporting process available",
+      "Incident reporting gap",
+      "PPE issue",
+      "Risk control ineffective",
+      "Safety communication gap",
+      "Other"
+    ]
+  },
+  {
+    name:"Quality Control / Service Monitoring",
+    examples:"Inspection process, quality checks, service verification, supervision, release controls and performance monitoring.",
+    items:[
+      "Quality checks performed",
+      "Quality checks missing",
+      "Service verification completed",
+      "Service verification missing",
+      "Supervision inadequate",
+      "Performance monitoring weak",
+      "Repeat service issue",
+      "Other"
+    ]
+  },
+  {
+    name:"Tools / Equipment / Materials",
+    examples:"Tools, GSE, calibrated equipment, materials, parts, chemicals and equipment condition.",
+    items:[
+      "Equipment available",
+      "Equipment unavailable",
+      "Equipment unserviceable",
+      "Calibration current",
+      "Calibration expired",
+      "Material control issue",
+      "Incorrect equipment used",
+      "Other"
+    ]
+  },
+  {
+    name:"Documentation / Records",
+    examples:"Service records, delivery documents, work records, certificates, reports, maintenance records and traceability.",
+    items:[
+      "Records complete",
+      "Records incomplete",
+      "Records unavailable",
+      "Traceability missing",
+      "Incorrect document",
+      "Document revision issue",
+      "Missing signature",
+      "Other"
+    ]
+  },
+  {
+    name:"Facilities / Housekeeping / Environmental",
+    examples:"Vendor facility condition, storage, FOD prevention, chemical control, waste control and general housekeeping.",
+    items:[
+      "Facility acceptable",
+      "Housekeeping issue",
+      "FOD concern",
+      "Chemical labeling issue",
+      "Storage issue",
+      "Waste control issue",
+      "Access / security issue",
+      "Other"
+    ]
+  }
+];
+
+function safeId(text){
+  return text.replaceAll(" ","_").replaceAll("/","_").replaceAll("-","_");
+}
+
+function buildChecklist(){
+  const area = document.getElementById("checklistArea");
+  area.innerHTML = "";
+
+  checklistAreas.forEach(item => {
+    const id = safeId(item.name);
+    let options = item.items.map(sub => `<option>${sub}</option>`).join("");
+
+    area.innerHTML += `
+      <div class="audit-card">
+        <h3>${item.name}</h3>
+        <p><b>Examples:</b> ${item.examples}</p>
+
+        <div class="audit-row">
+          <div class="field">
+            <label>Result</label>
+            <select id="${id}_result">
+              <option>Acceptable</option>
+              <option>Finding</option>
+              <option>Observation</option>
+              <option>Not Applicable</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Checklist Item</label>
+            <select id="${id}_item">
+              ${options}
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Evidence / Notes</label>
+            <textarea id="${id}_evidence" placeholder="Describe vendor evidence reviewed during the audit."></textarea>
+          </div>
+
+          <div class="field">
+            <label>Recommended Action</label>
+            <textarea id="${id}_action" placeholder="Describe the action needed if applicable."></textarea>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function collectChecklist(){
+  const checklist = [];
+
+  checklistAreas.forEach(item => {
+    const id = safeId(item.name);
+
+    checklist.push({
+      area:item.name,
+      result:document.getElementById(id + "_result").value,
+      checklistItem:document.getElementById(id + "_item").value,
+      evidence:document.getElementById(id + "_evidence").value.trim(),
+      recommendedAction:document.getElementById(id + "_action").value.trim()
+    });
+  });
+
+  return checklist;
+}
+
+function collectActions(){
+  return [
+    {
+      action:document.getElementById("action1").value.trim(),
+      responsible:document.getElementById("responsible1").value.trim(),
+      dueDate:document.getElementById("dueDate1").value,
+      status:document.getElementById("actionStatus1").value
+    },
+    {
+      action:document.getElementById("action2").value.trim(),
+      responsible:document.getElementById("responsible2").value.trim(),
+      dueDate:document.getElementById("dueDate2").value,
+      status:document.getElementById("actionStatus2").value
+    },
+    {
+      action:document.getElementById("action3").value.trim(),
+      responsible:document.getElementById("responsible3").value.trim(),
+      dueDate:document.getElementById("dueDate3").value,
+      status:document.getElementById("actionStatus3").value
+    }
+  ];
+}
+
+function saveExternalAudit(){
+  const title = document.getElementById("title").value.trim();
+
+  if(title === ""){
+    alert("Audit Title is required.");
+    return;
+  }
+
+  const data = {
+    auditCategory:"External Audit",
+    title:title,
+    auditNumber:document.getElementById("auditNumber").value.trim(),
+    auditorName:document.getElementById("auditorName").value.trim(),
+    vendorName:document.getElementById("vendorName").value.trim(),
+    vendorContact:document.getElementById("vendorContact").value.trim(),
+    vendorContactInfo:document.getElementById("vendorContactInfo").value.trim(),
+    serviceProvided:document.getElementById("serviceProvided").value.trim(),
+    location:document.getElementById("location").value.trim(),
+    date:document.getElementById("date").value,
+    auditType:document.getElementById("auditType").value,
+    status:document.getElementById("status").value,
+    vendorApprovalStatus:document.getElementById("vendorApprovalStatus").value,
+
+    auditScope:document.getElementById("auditScope").value.trim(),
+    auditObjective:document.getElementById("auditObjective").value.trim(),
+
+    referenceStandard:document.getElementById("referenceStandard").value.trim(),
+    contractReference:document.getElementById("contractReference").value.trim(),
+    customerRequirement:document.getElementById("customerRequirement").value.trim(),
+    insuranceRequirement:document.getElementById("insuranceRequirement").value.trim(),
+    criteriaDescription:document.getElementById("criteriaDescription").value.trim(),
+
+    checklist:collectChecklist(),
+
+    findingClassification:document.getElementById("findingClassification").value,
+    mainFindingArea:document.getElementById("mainFindingArea").value,
+    riskPriority:document.getElementById("riskPriority").value,
+    serviceDecision:document.getElementById("serviceDecision").value,
+    findingStatement:document.getElementById("findingStatement").value.trim(),
+    evidence:document.getElementById("evidence").value.trim(),
+    rootCause:document.getElementById("rootCause").value.trim(),
+    vendorResponse:document.getElementById("vendorResponse").value.trim(),
+
+    correctiveActions:collectActions(),
+
+    createdAt:new Date().toLocaleString()
+  };
+
+  const newRef = window.dbPush(window.dbRef(window.database,"auditReports"));
+
+  window.dbSet(newRef,data)
+  .then(() => {
+    document.getElementById("savedBox").style.display = "block";
+    alert("External Audit Report saved successfully.");
+  })
+  .catch(error => {
+    alert("Error saving External Audit Report: " + error.message);
+  });
+}
+
+function resetForm(){
+  if(confirm("Do you want to clear the External Audit form?")){
+    document.querySelectorAll("input, textarea").forEach(el => el.value = "");
+    document.querySelectorAll("select").forEach(el => el.selectedIndex = 0);
+    document.getElementById("savedBox").style.display = "none";
+  }
+}
+
+buildChecklist();
+</script>
+
+</body>
+</html>
