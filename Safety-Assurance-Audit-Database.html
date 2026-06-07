@@ -513,9 +513,13 @@ function renderReports(reports){
             ${clean(category)}
           </span>
 
-          <span class="status ${statusClass(status)}">
-            ${clean(status)}
-          </span>
+         <button
+          class="status ${statusClass(status)}"
+          onclick="toggleStatus('${clean(firebaseId)}','${clean(status)}')">
+
+          ${clean(status)}
+
+          </button>
         </div>
       </div>
 
@@ -557,23 +561,23 @@ function renderReports(reports){
 
       <div class="actions">
 
-        <button class="btn open-btn" onclick="openReport('${clean(firebaseId)}', '${clean(category)}')">
-          Open Report
-        </button>
+      <button class="btn open-btn" onclick="openReport('${clean(firebaseId)}', '${clean(category)}')">
+      Open Report
+      </button>
 
-        <button class="btn save-btn" onclick="saveAuditId('${clean(firebaseId)}')">
-          Save Audit ID
-        </button>
+      <button class="btn save-btn" onclick="saveAuditId('${clean(firebaseId)}')">
+      Save Audit ID
+      </button>
 
-        <button class="btn status-btn" onclick="toggleStatus('${clean(firebaseId)}', '${clean(status)}')">
-          ${status === "Open" ? "Close Report" : "Open Report"}
-        </button>
+      <button class="btn save-btn" onclick="editReport('${clean(firebaseId)}')">
+      Edit
+      </button>
 
-        <button class="btn delete-btn" onclick="deleteReport('${clean(firebaseId)}')">
-          🗑
-        </button>
+      <button class="btn delete-btn" onclick="deleteReport('${clean(firebaseId)}')">
+    🗑
+  </button>
 
-      </div>
+</div>
     `;
 
     auditList.appendChild(card);
