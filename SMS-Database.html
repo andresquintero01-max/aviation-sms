@@ -254,6 +254,25 @@ h1{
   background:linear-gradient(135deg,#16a34a,#22c55e);
 }
 
+.manual-status-btn{
+  color:white;
+  border:none;
+  border-radius:15px;
+  padding:13px 21px;
+  cursor:pointer;
+  font-weight:900;
+  font-size:14px;
+  box-shadow:0 9px 20px rgba(0,0,0,0.22);
+}
+
+.manual-open{
+  background:linear-gradient(135deg,#047857,#22c55e);
+}
+
+.manual-closed{
+  background:linear-gradient(135deg,#475569,#64748b);
+}
+
 .risk-green{
   background:linear-gradient(135deg,#16a34a,#22c55e);
   color:white;
@@ -613,6 +632,25 @@ location.reload();
 
 };
 
+window.toggleReportStatus = function(key,currentStatus){
+
+const newStatus =
+currentStatus === "CLOSED" ? "OPEN" : "CLOSED";
+
+update(ref(db,"smsReports/"+key),{
+
+status:newStatus,
+updatedAt:new Date().toLocaleString()
+
+}).then(()=>{
+
+alert("Report status changed to " + newStatus + ".");
+location.reload();
+
+});
+
+};
+
 function getRiskClass(value){
 
 if(value === undefined || value === null || value === ""){
@@ -705,6 +743,11 @@ const div = document.createElement("div");
 div.className = "record";
 div.id = "record-"+key;
 
+const manualStatus = item.status || "OPEN";
+
+const manualStatusClass =
+manualStatus === "CLOSED" ? "manual-closed" : "manual-open";
+
 const riskAssessmentStatus =
 item.riskClosed === true
 ? '<div class="status close">RISK ASSESSMENT CLOSED</div>'
@@ -783,6 +826,10 @@ ${residualText}
 </div>
 
 </div>
+
+<button class="manual-status-btn ${manualStatusClass}" onclick="toggleReportStatus('${key}','${manualStatus}')">
+${manualStatus}
+</button>
 
 <button class="edit-btn" onclick="showEdit('${key}')">
 Edit
