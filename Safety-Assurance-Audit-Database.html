@@ -569,13 +569,52 @@ function renderReports(reports){
       Save Audit ID
       </button>
 
-      <button class="btn save-btn" onclick="editReport('${clean(firebaseId)}')">
+      <button class="btn save-btn" onclick="showEdit('${clean(firebaseId)}')">
       Edit
       </button>
 
       <button class="btn delete-btn" onclick="deleteReport('${clean(firebaseId)}')">
     🗑
   </button>
+
+</div>
+<div id="edit-${clean(firebaseId)}" style="display:none; margin-top:20px;">
+
+<label><b>Title:</b></label>
+<input
+id="edit-title-${clean(firebaseId)}"
+style="width:100%;padding:10px;margin:8px 0;"
+value="${clean(title)}">
+
+<label><b>Date:</b></label>
+<input
+id="edit-date-${clean(firebaseId)}"
+style="width:100%;padding:10px;margin:8px 0;"
+value="${clean(date)}">
+
+<label><b>Auditor:</b></label>
+<input
+id="edit-auditor-${clean(firebaseId)}"
+style="width:100%;padding:10px;margin:8px 0;"
+value="${clean(auditorName)}">
+
+<label><b>${category === "External Audit" ? "Vendor / Service Provider" : "Audited Area"}:</b></label>
+<input
+id="edit-area-${clean(firebaseId)}"
+style="width:100%;padding:10px;margin:8px 0;"
+value="${clean(auditedEntity)}">
+
+<label><b>Location:</b></label>
+<input
+id="edit-location-${clean(firebaseId)}"
+style="width:100%;padding:10px;margin:8px 0;"
+value="${clean(location)}">
+
+<button
+class="btn save-btn"
+onclick="saveEdit('${clean(firebaseId)}')">
+Save Changes
+</button>
 
 </div>
     `;
@@ -729,41 +768,52 @@ window.toggleStatus = function(reportId, currentStatus){
 
 };
 
-window.editReport = function(reportId){
+window.showEdit = function(reportId){
 
-  const newTitle = prompt("Enter Audit Title:");
-  if(newTitle === null) return;
+  const editBox = document.getElementById("edit-" + reportId);
 
-  const newDate = prompt("Enter Audit Date:");
-  if(newDate === null) return;
-
-  const newAuditor = prompt("Enter Auditor Name:");
-  if(newAuditor === null) return;
-
-  const newArea = prompt("Enter Audited Area or Vendor:");
-  if(newArea === null) return;
-
-  const newLocation = prompt("Enter Location:");
-  if(newLocation === null) return;
-
-  update(ref(database, "auditReports/" + reportId), {
-    title: newTitle,
-    date: newDate,
-    auditorName: newAuditor,
-    auditedArea: newArea,
-    vendorName: newArea,
-    location: newLocation,
-    updatedAt: new Date().toLocaleString()
-  })
-  .then(() => {
-    alert("Audit information updated successfully.");
-  })
-  .catch((error) => {
-    alert("Error updating audit: " + error.message);
-  });
+  editBox.style.display =
+  editBox.style.display === "block"
+  ? "none"
+  : "block";
 
 };
 
+  window.saveEdit = function(reportId){
+
+  const newTitle =
+  document.getElementById("edit-title-" + reportId).value;
+
+  const newDate =
+  document.getElementById("edit-date-" + reportId).value;
+
+  const newAuditor =
+  document.getElementById("edit-auditor-" + reportId).value;
+
+  const newArea =
+  document.getElementById("edit-area-" + reportId).value;
+
+  const newLocation =
+  document.getElementById("edit-location-" + reportId).value;
+
+  update(ref(database,"auditReports/" + reportId),{
+
+    title:newTitle,
+    date:newDate,
+    auditorName:newAuditor,
+    auditedArea:newArea,
+    vendorName:newArea,
+    location:newLocation,
+    updatedAt:new Date().toLocaleString()
+
+  }).then(()=>{
+
+    alert("Audit updated successfully.");
+    location.reload();
+
+  });
+
+};
   
 window.deleteReport = function(reportId){
 
