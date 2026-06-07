@@ -729,6 +729,42 @@ window.toggleStatus = function(reportId, currentStatus){
 
 };
 
+window.editReport = function(reportId){
+
+  const newTitle = prompt("Enter Audit Title:");
+  if(newTitle === null) return;
+
+  const newDate = prompt("Enter Audit Date:");
+  if(newDate === null) return;
+
+  const newAuditor = prompt("Enter Auditor Name:");
+  if(newAuditor === null) return;
+
+  const newArea = prompt("Enter Audited Area or Vendor:");
+  if(newArea === null) return;
+
+  const newLocation = prompt("Enter Location:");
+  if(newLocation === null) return;
+
+  update(ref(database, "auditReports/" + reportId), {
+    title: newTitle,
+    date: newDate,
+    auditorName: newAuditor,
+    auditedArea: newArea,
+    vendorName: newArea,
+    location: newLocation,
+    updatedAt: new Date().toLocaleString()
+  })
+  .then(() => {
+    alert("Audit information updated successfully.");
+  })
+  .catch((error) => {
+    alert("Error updating audit: " + error.message);
+  });
+
+};
+
+  
 window.deleteReport = function(reportId){
 
   const confirmDelete = confirm(
