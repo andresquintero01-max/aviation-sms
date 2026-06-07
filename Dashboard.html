@@ -29,6 +29,7 @@ let smsReports = [];
 let fratReports = [];
 let medaReports = [];
 let mocReports = [];
+let auditReports = [];
 
 const COLORS = {
   blue:"#082567",
@@ -332,10 +333,20 @@ function renderDashboard(){
   let mocOpen = 0;
   let mocClosed = 0;
 
+  let auditOpen = 0;
+let auditClosed = 0;
+
+
   mocReports.forEach(m => {
     if(isReportClosed(m)) mocClosed++;
     else mocOpen++;
   });
+
+  auditReports.forEach(a => {
+  if(isReportClosed(a)) auditClosed++;
+  else auditOpen++;
+  });
+
 
   const initialMoc = countMocRisk("initial");
   const residualMoc = countMocRisk("residual");
@@ -370,6 +381,9 @@ function renderDashboard(){
   setText("mocTotal", mocReports.length);
   setText("mocOpen", mocOpen);
   setText("mocClosed", mocClosed);
+  setText("auditTotal", auditReports.length);
+  setText("auditOpen", auditOpen);
+  setText("auditClosed", auditClosed);
 
   createPie(
     "riskChart",
@@ -501,6 +515,14 @@ function loadMOCReports(){
   });
 }
 
+function loadAuditReports(){
+  onValue(ref(db, "auditReports"), snapshot => {
+    const data = snapshot.val() || {};
+    auditReports = Object.values(data);
+    renderDashboard();
+  });
+}
+  
 window.goBack = function(){
   location.href = "index.html";
 };
@@ -514,6 +536,7 @@ window.onload = function(){
   loadFRATReports();
   loadMEDAReports();
   loadMOCReports();
+  loadAuditReports();
 };
 
 </script>
@@ -1141,6 +1164,49 @@ canvas{
 
   </div>
 
+<div class="module-container">
+
+  <div class="module-title-wrapper">
+    <div class="module-line"></div>
+    <div class="module-main-title">AUDIT</div>
+    <div class="module-line"></div>
+  </div>
+
+  <div class="module-card-container">
+
+    <div class="module-monitor-title">
+      Audit Monitoring
+    </div>
+
+    <div class="cards">
+
+      <div class="card">
+        <h2 id="auditTotal">0</h2>
+        <p>Total Audits</p>
+      </div>
+
+      <div class="card purple">
+        <h2 id="auditOpen">0</h2>
+        <p>Open Audits</p>
+      </div>
+
+      <div class="card green">
+        <h2 id="auditClosed">0</h2>
+        <p>Closed Audits</p>
+      </div>
+
+    </div>
+
+    <div class="database-btn-wrapper">
+      <button class="database-btn" onclick="openDatabase('Safety-Assurance-Audit-Database.html')">
+        🛡️ Open Audit Database
+      </button>
+    </div>
+
+  </div>
+
+</div>
+  
   <button class="home-btn" onclick="goBack()">
     <span class="home-icon">🏠</span>
     Back to Home
