@@ -992,7 +992,17 @@ div.innerHTML=`
 <button class="delete-btn" onclick="deleteCPA('${id}','${x.pdfPath||""}')">🗑️</button>
 <b>CPA ${i+1}</b><br>
 <button
-style="background:${(x.cpaStatus || 'Open')=='Open'?'red':'green'};color:white;font-weight:bold;"
+style="
+background:${(x.cpaStatus || 'Open')=='Open'?'#dc2626':'#16a34a'};
+color:white;
+font-weight:bold;
+padding:10px 20px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+margin-top:8px;
+margin-bottom:10px;
+"
 onclick="toggleCPAStatus('${id}',this)">
 ${x.cpaStatus || "Open"}
 </button><br><br>
