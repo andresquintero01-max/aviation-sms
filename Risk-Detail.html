@@ -1003,7 +1003,7 @@ cursor:pointer;
 margin-top:8px;
 margin-bottom:10px;
 "
-onclick="toggleCPAStatus('${id}',this)">
+onclick="window.toggleCPAStatus('${id}',this)"
 ${x.cpaStatus || "Open"}
 </button><br><br>
 Type: ${x.controlType || "N/A"}<br>
