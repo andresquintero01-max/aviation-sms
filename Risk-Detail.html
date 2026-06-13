@@ -853,6 +853,24 @@ grid.appendChild(cell);
 m.appendChild(grid);
 }
 
+window.toggleCPAStatus = async function(id,button){
+
+const newStatus =
+button.innerText.trim()=="Open" ? "Closed" : "Open";
+
+await update(
+ref(db,"smsReports/"+key+"/CPA/"+id),
+{
+cpaStatus:newStatus
+}
+);
+
+button.innerText = newStatus;
+button.style.background =
+newStatus=="Open" ? "red" : "green";
+
+}
+  
 window.saveCPA=function(){
 cpaCounter++;
 
@@ -950,23 +968,7 @@ loadCPA(null);
 });
 };
 
-window.toggleCPAStatus = async function(id,button){
 
-const newStatus =
-button.innerText=="Open" ? "Closed" : "Open";
-
-await update(
-ref(db,"smsReports/"+key+"/CPA/"+id),
-{
-cpaStatus:newStatus
-}
-);
-
-button.innerText=newStatus;
-button.style.background=
-newStatus=="Open" ? "red" : "green";
-
-}
   
 function loadCPA(data){
 const c=document.getElementById("cpaContainer");
