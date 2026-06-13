@@ -993,7 +993,7 @@ div.innerHTML=`
 <b>CPA ${i+1}</b><br>
 <button
 style="
-background:${(x.cpaStatus || 'Open')=='Open'?'#dc2626':'#16a34a'};
+background:${(x.cpaStatus || 'Open')=='Open' ? '#dc2626' : '#16a34a'};
 color:white;
 font-weight:bold;
 padding:10px 20px;
@@ -1003,9 +1003,10 @@ cursor:pointer;
 margin-top:8px;
 margin-bottom:10px;
 "
-onclick="window.toggleCPAStatus('${id}',this)"
+onclick="window.toggleCPAStatus('${id}',this)">
 ${x.cpaStatus || "Open"}
-</button><br><br>
+</button>
+<br><br>
 Type: ${x.controlType || "N/A"}<br>
 Action: ${x.actionPlan || "N/A"}<br>
 Date: ${x.actionDate || "N/A"}<br>
