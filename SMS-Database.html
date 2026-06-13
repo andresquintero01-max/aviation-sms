@@ -421,6 +421,45 @@ h1{
   color:#555;
 }
 
+.cost-btn{
+background:linear-gradient(135deg,#92400e,#f59e0b);
+color:white;
+border:none;
+border-radius:15px;
+padding:13px 21px;
+cursor:pointer;
+font-weight:900;
+font-size:14px;
+}
+
+.cost-area{
+display:none;
+margin-top:20px;
+background:#fff7ed;
+padding:20px;
+border-radius:20px;
+border:1px solid #fed7aa;
+}
+
+.cost-row{
+display:grid;
+grid-template-columns:2fr 1fr auto;
+gap:10px;
+margin-bottom:10px;
+}
+
+.cost-row input{
+padding:12px;
+border-radius:10px;
+border:1px solid #cbd5e1;
+}
+
+.cost-total{
+margin-top:15px;
+font-size:22px;
+font-weight:900;
+}
+  
 @media(max-width:900px){
   body{
     padding:18px;
@@ -717,6 +756,88 @@ return "NOT ASSESSED";
 
 }
 
+window.showCosts=function(key){
+
+const box=document.getElementById("cost-"+key);
+
+box.style.display=
+box.style.display==="block"?"none":"block";
+
+if(document.getElementById("cost-list-"+key).children.length===0){
+addCostRow(key);
+}
+
+calculateCostTotal(key);
+
+}
+
+window.addCostRow=function(key){
+
+const list=document.getElementById("cost-list-"+key);
+
+const row=document.createElement("div");
+
+row.className="cost-row";
+
+row.innerHTML=`
+
+<input type="text" class="cost-description-${key}" placeholder="Cost Description">
+
+<input type="number" class="cost-amount-${key}" placeholder="Amount" oninput="calculateCostTotal('${key}')">
+
+<button class="delete-btn" onclick="this.parentElement.remove();calculateCostTotal('${key}')">X</button>
+
+`;
+
+list.appendChild(row);
+
+}
+
+window.calculateCostTotal=function(key){
+
+let total=0;
+
+document.querySelectorAll(".cost-amount-"+key).forEach(x=>{
+
+total+=Number(x.value)||0;
+
+});
+
+document.getElementById("cost-total-"+key).innerHTML=
+"Total Event Cost: $"+total.toLocaleString();
+
+return total;
+
+}
+
+window.saveCosts=function(key){
+
+const desc=document.querySelectorAll(".cost-description-"+key);
+const amount=document.querySelectorAll(".cost-amount-"+key);
+
+let costs=[];
+
+desc.forEach((x,i)=>{
+
+costs.push({
+description:x.value,
+amount:Number(amount[i].value)||0
+});
+
+});
+
+update(ref(db,"smsReports/"+key),{
+costs:costs,
+totalCost:calculateCostTotal(key)
+}).then(()=>{
+
+alert("Costs Saved");
+location.reload();
+
+});
+
+}
+  
 function renderReports(reports){
 
 container.innerHTML = "";
@@ -831,6 +952,10 @@ ${residualText}
 ${manualStatus}
 </button>
 
+<button class="cost-btn" onclick="showCosts('${key}')">
+💰 Costs
+</button>
+
 <button class="edit-btn" onclick="showEdit('${key}')">
 Edit
 </button>
@@ -934,6 +1059,28 @@ ${item.recommendation || "N/A"}
 
 <button class="save-btn" onclick="saveEdit('${key}')">
 Save Changes
+</button>
+
+</div>
+
+<div class="cost-area" id="cost-${key}">
+
+<h3>💰 Event Costs</h3>
+
+<div id="cost-list-${key}"></div>
+
+<button class="edit-btn" onclick="addCostRow('${key}')">
++ Add Cost
+</button>
+
+<div class="cost-total" id="cost-total-${key}">
+Total Event Cost: $0
+</div>
+
+<br>
+
+<button class="save-btn" onclick="saveCosts('${key}')">
+Save Costs
 </button>
 
 </div>
