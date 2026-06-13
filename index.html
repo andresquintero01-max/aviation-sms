@@ -276,7 +276,71 @@ body{
     100%{transform:scale(1);}
 }
 
-@media(max-width:900px){
+    .compliance-btn{
+    position:fixed;
+    top:25px;
+    left:25px;
+    z-index:9999;
+    background:linear-gradient(135deg,#071f47,#1450b8);
+    color:white;
+    border:none;
+    padding:15px 24px;
+    border-radius:18px;
+    font-size:16px;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.metrics-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+    z-index:10000;
+    justify-content:center;
+    align-items:center;
+}
+
+.metrics-box{
+    width:360px;
+    background:white;
+    border-radius:30px;
+    padding:35px;
+    text-align:center;
+    position:relative;
+}
+
+.close-metrics{
+    position:absolute;
+    top:15px;
+    right:15px;
+    width:35px;
+    height:35px;
+    border:none;
+    border-radius:50%;
+    background:red;
+    color:white;
+    cursor:pointer;
+}
+
+.thermo{
+    width:80px;
+    height:220px;
+    background:#ddd;
+    margin:20px auto;
+    border-radius:40px;
+    overflow:hidden;
+    display:flex;
+    align-items:flex-end;
+}
+
+.thermo-fill{
+    width:100%;
+    height:0%;
+    background:linear-gradient(to top,#dc2626,#f97316,#22c55e);
+}
+    
+    @media(max-width:900px){
     .login-container,
     .main-container{
         padding:35px 22px;
@@ -315,6 +379,30 @@ body{
 
 <body>
 
+<button class="compliance-btn" onclick="openComplianceMetrics()">
+    🌡️ Compliance
+</button>
+
+<div class="metrics-modal" id="metricsModal">
+    <div class="metrics-box">
+
+        <button class="close-metrics" onclick="closeComplianceMetrics()">×</button>
+
+        <h2>Compliance Thermometer</h2>
+
+        <div class="thermo">
+            <div class="thermo-fill" id="thermoFill"></div>
+        </div>
+
+        <h1 id="compliancePercent">0%</h1>
+
+        <p>Total Reports: <b id="totalReports">0</b></p>
+        <p>Closed Reports: <b id="closedReports">0</b></p>
+        <p>Open Reports: <b id="openReports">0</b></p>
+
+    </div>
+</div>
+    
 <div class="login-container" id="loginPage">
     <div class="content">
 
@@ -640,7 +728,49 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
+
+/* ===========================
+   COMPLIANCE THERMOMETER
+=========================== */
+
+window.openComplianceMetrics = function(){
+
+    const reportsRef = ref(database,"smsReports");
+
+    onValue(reportsRef,(snapshot)=>{
+
+        const data = snapshot.val() || {};
+        const reports = Object.values(data);
+
+        const total = reports.length;
+
+        const closed = reports.filter(report => {
+            return (report.status || "").toLowerCase() == "closed";
+        }).length;
+
+        const open = total - closed;
+
+        const compliance =
+        total > 0 ? Math.round((closed / total) * 100) : 0;
+
+        document.getElementById("totalReports").innerText = total;
+        document.getElementById("closedReports").innerText = closed;
+        document.getElementById("openReports").innerText = open;
+        document.getElementById("compliancePercent").innerText = compliance + "%";
+        document.getElementById("thermoFill").style.height = compliance + "%";
+
+        document.getElementById("metricsModal").style.display = "flex";
+
+    },{onlyOnce:true});
+
+}
+
+window.closeComplianceMetrics = function(){
+    document.getElementById("metricsModal").style.display = "none";
+}
+
 </script>
 
 </body>
 </html>
+
