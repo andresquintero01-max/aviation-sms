@@ -862,6 +862,7 @@ controlType:document.getElementById("controlType").value,
 actionPlan:document.getElementById("actionPlan").value,
 actionDate:document.getElementById("actionDate").value,
 emailTo:document.getElementById("emailTo").value,
+cpaStatus:"Open",
 attachments:{}
 }).then(()=>{
 get(ref(db,"smsReports/"+key+"/CPA")).then(s=>{
@@ -949,6 +950,24 @@ loadCPA(null);
 });
 };
 
+window.toggleCPAStatus = async function(id,button){
+
+const newStatus =
+button.innerText=="Open" ? "Closed" : "Open";
+
+await update(
+ref(db,"smsReports/"+key+"/CPA/"+id),
+{
+cpaStatus:newStatus
+}
+);
+
+button.innerText=newStatus;
+button.style.background=
+newStatus=="Open" ? "red" : "green";
+
+}
+  
 function loadCPA(data){
 const c=document.getElementById("cpaContainer");
 const a=document.getElementById("attachmentContainer");
@@ -970,6 +989,11 @@ div.className="cpa-item";
 div.innerHTML=`
 <button class="delete-btn" onclick="deleteCPA('${id}','${x.pdfPath||""}')">🗑️</button>
 <b>CPA ${i+1}</b><br>
+<button
+style="background:${(x.cpaStatus || 'Open')=='Open'?'red':'green'};color:white;font-weight:bold;"
+onclick="toggleCPAStatus('${id}',this)">
+${x.cpaStatus || "Open"}
+</button><br><br>
 Type: ${x.controlType || "N/A"}<br>
 Action: ${x.actionPlan || "N/A"}<br>
 Date: ${x.actionDate || "N/A"}<br>
